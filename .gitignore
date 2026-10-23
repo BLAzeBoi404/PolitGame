@@ -1,0 +1,10 @@
+build/
+artifacts/
+bin/
+obj/
+Saves/
+settings.xml
+error.log
+*.user
+*.tmp
+.vs/

@@ -1,0 +1,30 @@
+﻿PASS Real geography loads: countries and administrative regions
+PASS Region adjacency is symmetric
+PASS Allocated regional population conserves country population
+PASS Construction charges treasury exactly once
+PASS Construction completes and adds capacity
+PASS Player cannot build in another state
+PASS Insufficient funds reject construction
+PASS Research accepts one active program
+PASS Funded research completes
+PASS Adjacent friendly movement receives route
+PASS Army arrives at ordered destination
+PASS Neutral borders block movement
+PASS War opens adjacent enemy territory for movement
+PASS Arrival captures undefended enemy region
+PASS Combat and field wear reduce army strength
+PASS Medicine and social spending support demographic growth
+PASS War is bilateral
+PASS Peace clears war state
+PASS Trade agreement is bilateral
+PASS Tank design trades armor against speed, fuel and cost
+PASS Save/load preserves state and RNG
+PASS Simulation remains deterministic across save/load
+PASS Two-year simulation: finite finances and nonnegative stocks
+PASS Two-year simulation: valid ownership and capacities
+PASS Foreign AI researches technologies
+PASS World market matches real imports and exports
+PASS Final save state passes validation
+Simulated days: 818; wall seconds: 1,76
+Countries: 176; regions: 4136
+Failures: 0

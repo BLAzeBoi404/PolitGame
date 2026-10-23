@@ -1,0 +1,25 @@
+SOVEREIGN 0.2 — источники и происхождение данных
+
+География: Natural Earth, public domain.
+https://www.naturalearthdata.com/about/terms-of-use/
+https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson
+https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_admin_1_states_provinces.geojson
+Получено 23 октября 2026. Названия стран NAME_RU, регионов name_ru/name.
+Национальные оценки POP_EST и GDP_MD взяты непосредственно из набора.
+Региональные население, экономические мощности и ресурсы — модельные оценки.
+При обработке сохраняются внешние кольца, упрощённые с допуском 0.025 градуса.
+Соседство построено по общим вершинам исходных полигонов, округлённым до 0.001 градуса.
+Это приближённый граф; мосты, паромы и морские маршруты отдельно не включены.
+
+Референсы дизайна:
+https://www.paradoxinteractive.com/games/victoria-3/about
+https://www.paradoxinteractive.com/games/hearts-of-iron-iv/add-ons/hearts-of-iron-iv-no-step-back
+https://store.steampowered.com/app/3738130/Economic_Miracle/
+Предоставленные пользователем скриншоты используются только как ориентир.
+Программный код и визуальные материалы этих игр не включены в сборку.
+
+Подробные границы стран в 0.2:
+https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_admin_0_countries.geojson
+Идентификаторы стран сохранены от первой базы для совместимости сохранений.
+Оригинальная иллюстрация танка: imagegen. Запрос и происхождение — Sovereign-source/assets/ART.md.
+
