@@ -60,7 +60,7 @@ namespace Sovereign
             var members = new HashSet<int>(plan.ArmyIds);
             var units = S.Armies.Where(a => members.Contains(a.Id)).ToList();
             if (units.All(a => a.TrainingDays > 0)) return "Части проходят подготовку";
-            if (units.All(a => a.Supply < 45 || a.Strength < 45 || a.TrainingDays > 0)) return "Восстановление и снабжение";
+            if (units.All(a => a.Supply < 45 || a.Strength < 45 || a.TrainingDays > 0 || a.Organization < 40 || ManpowerRules.Manning(a) < .4)) return "Пополнение, организация и снабжение";
             return plan.Stance == FrontStance.Hold ? "Занять и удерживать границу" : "Наступать при перевесе сил";
         }
         private void ExecuteFronts() { foreach (var plan in S.Fronts) ExecuteFront(plan); }
@@ -85,7 +85,7 @@ namespace Sovereign
                 if (!stationed.ContainsKey(r)) stationed[r] = 0; stationed[r]++;
             }
             foreach (var unit in units) {
-                if (unit.Target >= 0 || unit.TrainingDays > 0 || unit.Strength < 45 || unit.Supply < 45) continue;
+                if (unit.Target >= 0 || unit.TrainingDays > 0 || unit.Strength < 45 || unit.Supply < 45 || unit.Organization < 40 || ManpowerRules.Manning(unit) < .4) continue;
                 if (borderSet.Contains(unit.Region)) {
                     if (plan.Stance == FrontStance.Hold) continue;
                     foreach (int target in World.Regions[unit.Region].Neighbors.Where(r => S.Provinces[r].Owner == plan.Enemy)) {

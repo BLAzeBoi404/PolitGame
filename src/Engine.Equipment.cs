@@ -132,7 +132,7 @@ namespace Sovereign
                     available -= line.Factories;
                     if (available < 0) continue;
                     Blueprint d = FindDesign(owner, line.DesignId).Blueprint;
-                    double potential = line.Factories * line.Efficiency * (1 + n.Tech[2] * 0.04) / d.WorkDays;
+                    double potential = line.Factories * line.Efficiency * (1 + n.Tech[2] * 0.04) * ManpowerRules.Output(n) / d.WorkDays;
                     double work = Math.Min(potential, line.Quantity - line.Completed - line.Progress);
                     work = Math.Min(work, Math.Max(0, n.Treasury) / d.Cost);
                     work = Math.Min(work, n.Stock[4] / d.Steel);
@@ -159,15 +159,18 @@ namespace Sovereign
         {
             if (owner < 0) owner = S.Player;
             if (region < 0 || region >= S.Provinces.Length || S.Provinces[region].Owner != owner) return "Выберите свой регион.";
+            if (!IsSupplied(owner, region, SupplyNetwork())) return "Набор требует сухопутного снабжения области.";
             var d = FindDesign(owner, designId);
             if (d == null || d.Retired || !d.Blueprint.Formation) return "Для новой части выберите танк, БМП или артиллерию.";
-            if (d.Stock < 1) return "Нет готовых комплектов этой модели. Закажите серию в производстве.";
-            Nation n = S.Nations[owner];
-            if (n.Treasury < 0.3) return "Для набора нужны 0,30 млрд.";
-            n.Treasury -= 0.3; d.Stock--;
-            S.Armies.Add(new Army { Id = S.NextArmy++, Owner = owner, Region = region, Strength = 60,
-                Design = d.Blueprint.Copy(), DesignId = d.Id, TrainingDays = 30 });
-            if (owner == S.Player) Notify("Соединение формируется: " + World.Regions[region].Name + ". Подготовка 30 дней.");
+            Nation n = S.Nations[owner]; var template = SelectedTemplate(owner);
+            int people = ManpowerRules.GroundSize(d.Blueprint.Kind, template.Battalions);
+            string reason = RecruitmentReason(owner, d.Id, template.Id); if (reason != null) return reason;
+            n.Treasury -= .3 * template.Battalions; d.Stock -= template.Battalions; n.Recruits -= people;
+            int days = ManpowerRules.TrainingDays(template.Battalions);
+            S.Armies.Add(new Army { Id = S.NextArmy++, Owner = owner, Region = region, Strength = 100, Personnel = people,
+                TemplateId = template.Id, Battalions = template.Battalions, Organization = 20,
+                Design = d.Blueprint.Copy(), DesignId = d.Id, TrainingDays = days });
+            if (owner == S.Player) Notify(template.Name + " формируется: " + World.Regions[region].Name + ". " + people + " чел., подготовка " + days + " дней.");
             Raise(); return null;
         }
         public string Refit(int armyId, int designId, bool support = false)
@@ -176,21 +179,26 @@ namespace Sovereign
             var d = FindDesign(S.Player, designId);
             if (a == null || d == null || d.Retired) return "Выберите свою часть и действующую модель.";
             if (a.Target >= 0 || a.TrainingDays > 0 || S.Provinces[a.Region].Owner != S.Player) return "Оснащение доступно подготовленной части на стоянке в своей области.";
-            if (d.Stock < 1) return "Нет готовых комплектов этой модели.";
+            int kits = support ? 1 : a.Battalions;
+            if (d.Stock < kits) return "Нужно комплектов этой модели: " + kits + ".";
             if (!support && !d.Blueprint.Formation) return "Этот класс устанавливается как поддержка.";
             if (support && (d.Blueprint.Kind == EquipmentKind.Tank || d.Blueprint.Kind == EquipmentKind.IFV)) return "Танк и БМП используются как основа соединения.";
             if (support && (a.Attachments.Count >= 3 || a.Attachments.Any(x => x.Blueprint.Kind == d.Blueprint.Kind))) return "До трёх разных классов поддержки на соединение.";
             if (!support && a.DesignId == d.Id) return "Эта модель уже установлена.";
-            double cost = d.Blueprint.Cost * 0.15;
+            int oldSize = ManpowerRules.Establishment(a);
+            int newSize = ManpowerRules.GroundSize(support ? a.Design.Kind : d.Blueprint.Kind, a.Battalions, a.Attachments.Count + (support ? 1 : 0));
+            int added = Math.Max(0, newSize - oldSize), released = Math.Max(0, a.Personnel - newSize);
+            if (Player.Recruits < added) return "Для нового штата нужно дополнительно людей: " + added + ".";
+            double cost = d.Blueprint.Cost * 0.15 * kits;
             if (Player.Treasury < cost) return "Недостаточно средств на переоснащение.";
-            Player.Treasury -= cost; d.Stock--;
+            Player.Treasury -= cost; d.Stock -= kits; Player.Recruits += released - added; a.Personnel += added - released;
             if (support) a.Attachments.Add(new EquipmentAttachment { DesignId = d.Id, Blueprint = d.Blueprint.Copy() });
             else {
                 var old = FindDesign(S.Player, a.DesignId);
-                if (old != null && a.Strength >= 90) old.Stock++;
-                a.Design = d.Blueprint.Copy(); a.DesignId = d.Id;
+                if (old != null && a.Strength >= 90) old.Stock += a.Battalions;
+                a.Design = d.Blueprint.Copy(); a.DesignId = d.Id; a.Strength = 100;
             }
-            a.TrainingDays = 14;
+            a.TrainingDays = 14; a.Organization = Math.Min(a.Organization, 60);
             Notify("Соединение №" + a.Id + ": освоение «" + d.Blueprint.Name + "», 14 дней.");
             Raise(); return null;
         }

@@ -11,7 +11,7 @@ namespace Sovereign
             var borders = controlled.Where(r => World.Regions[r].Neighbors.Any(n => AtWar(owner, S.Provinces[n].Owner))).ToList();
             if (borders.Count == 0) return;
             foreach (Army unit in S.Armies.Where(a => a.Owner == owner && a.Target < 0 && a.TrainingDays == 0).ToList()) {
-                if (unit.Strength < 35 || unit.Supply < 25) continue; // Recover before an offensive.
+                if (unit.Strength < 35 || unit.Supply < 25 || unit.Organization < 40 || ManpowerRules.Manning(unit) < .4) continue; // Recover before an offensive.
                 var targets = World.Regions[unit.Region].Neighbors.Where(r => AtWar(owner, S.Provinces[r].Owner))
                     .OrderBy(r => S.Armies.Where(a => a.Region == r && AtWar(owner, a.Owner)).Sum(a => a.Strength * a.Design.Power)).ToList();
                 if (targets.Count > 0) {

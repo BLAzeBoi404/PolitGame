@@ -17,7 +17,7 @@ namespace Sovereign
         public void Validate(Campaign s)
         {
             int nations = World.Countries.Length, regions = World.Regions.Length;
-            if (s == null || (s.Version < 1 || s.Version > 4) || s.Nations == null || s.Nations.Length != nations || s.Provinces == null || s.Provinces.Length != regions
+            if (s == null || (s.Version < 1 || s.Version > 5) || s.Nations == null || s.Nations.Length != nations || s.Provinces == null || s.Provinces.Length != regions
                 || s.Player < 0 || s.Player >= nations || s.StartYear < 1940 || s.StartYear > 2026 || s.Day < 0 || s.Day > 2000000 || s.RandomState == 0
                 || s.Difficulty < 0 || s.Difficulty > 2) throw new InvalidDataException("Несовместимое сохранение кампании.");
             int pairs = nations * nations;
@@ -50,6 +50,15 @@ namespace Sovereign
                         n.TradeBalance, n.Imports, n.Exports, n.Shortage, n.LastPrice, n.ResearchProgress, n.ProjectProgress }.All(IsFinite)
                     || n.History == null || n.StabilityHistory == null || n.History.Any(v => !IsFinite(v)) || n.StabilityHistory.Any(v => !IsFinite(v))
                     || EquipmentRules.Validate(n.Design) != null) throw new InvalidDataException("Повреждена экономика или проект.");
+                if (s.Version >= 5) {
+                    if (!Enum.IsDefined(typeof(ConscriptionLaw), n.Conscription) || n.Recruits < 0 || n.Recruits > 1000000000 || n.LawChangedDay < -90 || n.LawChangedDay > s.Day
+                        || n.Mobilized < 0 || n.Discharged < 0 || n.PersonnelLosses < 0 || n.Mobilized > 1000000000000000L || n.Discharged > n.Mobilized || n.PersonnelLosses > n.Mobilized)
+                        throw new InvalidDataException("Повреждён учёт личного состава.");
+                    if (n.Templates == null || n.Templates.Count < 1 || n.Templates.Count > 24 || n.Templates.Any(t => t == null || t.Id < 1 || t.Battalions < 1 || t.Battalions > 6
+                            || string.IsNullOrWhiteSpace(t.Name) || t.Name.Length > 32 || t.Name.Any(char.IsControl))
+                        || n.Templates.Select(t => t.Id).Distinct().Count() != n.Templates.Count || n.NextTemplate <= n.Templates.Max(t => t.Id)
+                        || !n.Templates.Any(t => t.Id == n.ActiveTemplate)) throw new InvalidDataException("Повреждены штаты соединений.");
+                }
                 if (s.Version == 1) continue;
                 if (n.Designs == null || n.Designs.Count < 1 || n.Designs.Count > 128 || n.Lines == null || n.Lines.Count > 64
                     || n.Designs.Any(d => d == null || d.Id <= 0 || d.Stock < 0 || EquipmentRules.Validate(d.Blueprint) != null)
@@ -65,7 +74,7 @@ namespace Sovereign
             foreach (var a in s.Armies) {
                 if (a.Id < 1 || a.Id >= s.NextArmy || a.Owner < 0 || a.Owner >= nations || a.Region < 0 || a.Region >= regions || a.Target < -1 || a.Target >= regions
                     || a.Route == null || a.Route.Any(r => r < 0 || r >= regions) || !new[] { a.Days, a.TotalDays, a.Strength, a.Supply, a.Experience, a.SupplyDays }.All(IsFinite)
-                    || a.Strength < 0 || a.Strength > 100 || a.Supply < 0 || a.Supply > 100 || a.TrainingDays < 0 || a.TrainingDays > 30
+                    || a.Strength < 0 || a.Strength > 100 || a.Supply < 0 || a.Supply > 100 || a.TrainingDays < 0 || a.TrainingDays > (s.Version >= 5 ? 60 : 30)
                     || EquipmentRules.Validate(a.Design) != null || !a.Design.Formation) throw new InvalidDataException("Повреждены армии.");
                 if (s.Version == 1) continue;
                 var n = s.Nations[a.Owner];
@@ -73,6 +82,9 @@ namespace Sovereign
                     || a.Attachments.Any(t => t == null || EquipmentRules.Validate(t.Blueprint) != null || !IsFinite(t.Condition) || t.Condition < 0 || t.Condition > 100
                         || t.Blueprint.Kind == EquipmentKind.Tank || t.Blueprint.Kind == EquipmentKind.IFV || !n.Designs.Any(d => d.Id == t.DesignId && SameDesign(d.Blueprint, t.Blueprint)))
                     || a.Attachments.Select(t => t.Blueprint.Kind).Distinct().Count() != a.Attachments.Count) throw new InvalidDataException("Повреждено оснащение частей.");
+                if (s.Version >= 5 && (a.Battalions < 1 || a.Battalions > 6 || a.Personnel < 0 || a.Personnel > ManpowerRules.Establishment(a)
+                    || !IsFinite(a.Organization) || a.Organization < 0 || a.Organization > 100 || !IsFinite(a.CasualtyRemainder) || a.CasualtyRemainder < 0 || a.CasualtyRemainder >= 1
+                    || !n.Templates.Any(t => t.Id == a.TemplateId && t.Battalions == a.Battalions))) throw new InvalidDataException("Повреждён штат или личный состав части.");
             }
             if (s.Version >= 3) {
                 if (s.Fronts == null || s.Fronts.Count > nations * 24 || s.Fronts.Any(p => p == null) || s.NextFront < 1
@@ -97,8 +109,18 @@ namespace Sovereign
                         || (a.Mission == AirMission.Reserve ? a.Target != -1 : a.Target < 0)
                         || s.Provinces[a.BaseRegion].Airfield < 1
                         || !s.Nations[a.Owner].Designs.Any(d => d.Id == a.DesignId && SameDesign(d.Blueprint, a.Design))) throw new InvalidDataException("Повреждены приказы или оснащение авиации.");
+                    if (s.Version >= 5 && (a.Personnel < 0 || a.Personnel > ManpowerRules.AirSize(a.Design.Kind) || !IsFinite(a.CasualtyRemainder) || a.CasualtyRemainder < 0 || a.CasualtyRemainder >= 1)) throw new InvalidDataException("Повреждены экипажи.");
                 }
                 if (s.AirWings.GroupBy(a => a.BaseRegion).Any(g => g.Count() > s.Provinces[g.Key].Airfield * 2)) throw new InvalidDataException("Превышена вместимость аэродрома.");
+            }
+            if (s.Version >= 5) {
+                var serving = new long[nations];
+                foreach (var a in s.Armies) serving[a.Owner] += a.Personnel;
+                foreach (var a in s.AirWings) serving[a.Owner] += a.Personnel;
+                for (int i = 0; i < nations; i++) {
+                    var n = s.Nations[i];
+                    if (n.Mobilized - n.Discharged != n.Recruits + serving[i] + n.PersonnelLosses) throw new InvalidDataException("Нарушен баланс резерва, военнослужащих и потерь.");
+                }
             }
             foreach (var p in s.Projects)
                 if (p == null || p.Owner < 0 || p.Owner >= nations || p.Region < 0 || p.Region >= regions || p.Sector < 0 || p.Sector > (s.Version >= 4 ? 9 : 8) || p.Days <= 0 || p.Total < p.Days || (p.Sector == 9 && p.Private))

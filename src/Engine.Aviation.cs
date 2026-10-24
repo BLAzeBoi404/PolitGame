@@ -33,9 +33,11 @@ namespace Sovereign
             if (design == null || !design.Blueprint.Air || design.Retired || design.Stock <= 0) return "Нужен готовый комплект самолётов действующего проекта.";
             if (!HasAirSpace(owner, region)) return "Нужен свой аэродром со свободным местом: два крыла на уровень.";
             if (S.AirWings.Count(a => a.Owner == owner) >= 48) return "Достигнут предел: 48 авиакрыльев.";
+            int crew = ManpowerRules.AirSize(design.Blueprint.Kind);
+            if (n.Recruits < crew) return "Для авиакрыла нужно людей из резерва: " + crew + ".";
             if (n.Treasury < .15) return "Подготовка авиакрыла стоит 0,15 млрд.";
-            n.Treasury -= .15; design.Stock--;
-            S.AirWings.Add(new AirWing { Id = S.NextAirWing++, Owner = owner, BaseRegion = region, DesignId = design.Id, Design = design.Blueprint.Copy() });
+            n.Treasury -= .15; design.Stock--; n.Recruits -= crew;
+            S.AirWings.Add(new AirWing { Id = S.NextAirWing++, Owner = owner, BaseRegion = region, DesignId = design.Id, Design = design.Blueprint.Copy(), Personnel = crew });
             if (owner == S.Player) Notify("Авиакрыло сформировано: " + design.Blueprint.Name + ". Подготовка 21 день.", 1);
             Raise(); return null;
         }
@@ -85,6 +87,7 @@ namespace Sovereign
             if (wing.TrainingDays > 0) return "Подготовка: " + wing.TrainingDays + " дн.";
             if (wing.Mission == AirMission.Reserve) return "Резерв / ремонт за оружие и деньги";
             string reason = AirTargetReason(wing, wing.Mission, wing.Target); if (reason != null) return reason;
+            if (ManpowerRules.AirManning(wing) < .5) return "Экипаж укомплектован менее чем на 50%: требуется пополнение в резерве";
             if (wing.Strength < 20) return "Готовность ниже 20%: отправьте на ремонт";
             if (S.Nations[wing.Owner].Treasury < wing.Design.Maintenance) return "Нет средств на обслуживание";
             if (S.Nations[wing.Owner].Stock[2] < AirFuel(wing)) return "Недостаточно топлива для вылета";
@@ -105,9 +108,9 @@ namespace Sovereign
                     int destination = Enumerable.Range(0, S.Provinces.Length).Where(r => HasAirSpace(wing.Owner, r, wing.Id) && AirDistance(wing.BaseRegion, r) <= wing.Design.Range * 2)
                         .OrderBy(r => AirDistance(wing.BaseRegion, r)).DefaultIfEmpty(-1).First();
                     if (destination < 0 || n.Stock[2] < wing.Design.Fuel) {
-                        S.AirWings.Remove(wing); if (wing.Owner == S.Player) Notify("Потеряно авиакрыло №" + wing.Id + ": эвакуация с захваченного аэродрома невозможна.", 2); continue;
+                        DestroyAirWing(wing); if (wing.Owner == S.Player) Notify("Потеряно авиакрыло №" + wing.Id + ": эвакуация с захваченного аэродрома невозможна.", 2); continue;
                     }
-                    n.Stock[2] -= wing.Design.Fuel; wing.BaseRegion = destination; wing.Strength = Math.Max(1, wing.Strength - 20); wing.TrainingDays = Math.Max(7, wing.TrainingDays);
+                    n.Stock[2] -= wing.Design.Fuel; wing.BaseRegion = destination; DamageAirWing(wing, 20, 1); wing.TrainingDays = Math.Max(7, wing.TrainingDays);
                     wing.Mission = AirMission.Reserve; wing.Target = -1;
                     if (wing.Owner == S.Player) Notify("Авиакрыло №" + wing.Id + " эвакуировано в " + World.Regions[destination].Name, 2);
                 }
@@ -119,7 +122,7 @@ namespace Sovereign
                     if (funded && n.Treasury >= cost && n.Stock[7] >= arms) { n.Treasury -= cost; n.Stock[7] -= arms; wing.Strength += repair; }
                     continue;
                 }
-                if (AirTargetReason(wing, wing.Mission, wing.Target) != null || wing.Strength < 20 || !funded || n.Stock[2] < AirFuel(wing)) continue;
+                if (AirTargetReason(wing, wing.Mission, wing.Target) != null || wing.Strength < 20 || ManpowerRules.AirManning(wing) < .5 || !funded || n.Stock[2] < AirFuel(wing)) continue;
                 if (wing.Mission == AirMission.Supply) {
                     if (n.Stock[0] < .02 || n.Stock[7] < .015) continue;
                     n.Stock[0] -= .02; n.Stock[7] -= .015;
@@ -129,7 +132,7 @@ namespace Sovereign
             // Resolve air cover from the same pre-combat snapshot for both sides.
             var cover = new Dictionary<int, Dictionary<int, double>>();
             foreach (var wing in flying.Where(a => a.Mission == AirMission.Superiority)) {
-                double power = wing.Design.Attack * wing.Strength / 100 * (wing.Design.SpeedKph / 360) * (1 + wing.Design.Electronics * .03);
+                double power = wing.Design.Attack * wing.Strength / 100 * ManpowerRules.AirManning(wing) * (wing.Design.SpeedKph / 360) * (1 + wing.Design.Electronics * .03);
                 foreach (int region in World.Regions[wing.Target].Neighbors.Concat(new[] { wing.Target }).Distinct()) {
                     if (AirDistance(wing.BaseRegion, region) > wing.Design.Range) continue;
                     Dictionary<int, double> owners; if (!cover.TryGetValue(region, out owners)) cover[region] = owners = new Dictionary<int, double>();
@@ -142,23 +145,25 @@ namespace Sovereign
                 double enemy = owners == null ? 0 : owners.Where(p => AtWar(wing.Owner, p.Key)).Sum(p => p.Value);
                 double escort = owners == null ? 0 : owners.Where(p => p.Key == wing.Owner || Allied(wing.Owner, p.Key)).Sum(p => p.Value);
                 double survival = 1 / (1 + enemy / (12 + escort));
-                double effect = wing.Strength / 100 * survival;
+                double effect = wing.Strength / 100 * ManpowerRules.AirManning(wing) * survival;
                 double loss = (100 - wing.Design.Reliability) * .003 + Math.Min(6, enemy / (12 + escort) * 2) / (1 + wing.Design.Protection / 80);
-                wing.Strength = Math.Max(0, wing.Strength - loss);
+                DamageAirWing(wing, loss);
                 List<Army> targets; units.TryGetValue(wing.Target, out targets);
                 if (wing.Mission == AirMission.Strike && targets != null) {
                     var enemies = targets.Where(a => AtWar(wing.Owner, a.Owner)).ToList();
-                    foreach (var a in enemies) a.Strength = Math.Max(8.1, a.Strength - Math.Min(4, wing.Design.Attack / 25) * effect / Math.Sqrt(Math.Max(1, enemies.Count)));
+                    int targetBattalions = Math.Max(1, enemies.Sum(a => a.Battalions));
+                    foreach (var a in enemies) DamageArmy(a, Math.Min(4, wing.Design.Attack / 25) * effect / targetBattalions, .3, 8.1);
                 } else if (wing.Mission == AirMission.Supply && targets != null) {
                     var friends = targets.Where(a => a.Owner == wing.Owner).ToList();
-                    foreach (var a in friends) { a.Supply = Math.Min(100, a.Supply + 12 * effect / Math.Max(1, friends.Count)); a.SupplyDays = Math.Max(a.SupplyDays, effect * 2); }
+                    int suppliedBattalions = Math.Max(1, friends.Sum(a => a.Battalions));
+                    foreach (var a in friends) { a.Supply = Math.Min(100, a.Supply + 12 * effect / suppliedBattalions); a.SupplyDays = Math.Max(a.SupplyDays, effect * 2 / suppliedBattalions); }
                 } else if (wing.Mission == AirMission.Recon) {
                     long key = AirKey(wing.Owner, wing.Target); double prior; airRecon.TryGetValue(key, out prior);
                     airRecon[key] = Math.Min(.15, prior + effect * (.04 + wing.Design.Electronics * .01));
                 }
             }
             foreach (var lost in S.AirWings.Where(a => a.Strength <= 0).ToList()) {
-                S.AirWings.Remove(lost); if (lost.Owner == S.Player) Notify("Авиакрыло №" + lost.Id + " потеряно в воздушной операции.", 2);
+                DestroyAirWing(lost); if (lost.Owner == S.Player) Notify("Авиакрыло №" + lost.Id + " потеряно в воздушной операции.", 2);
             }
         }
         internal void PlanAviation()

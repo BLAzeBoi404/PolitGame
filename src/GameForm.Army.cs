@@ -15,12 +15,14 @@ namespace Sovereign
             var units = E.S.Armies.Where(a => a.Owner == E.S.Player).ToList();
             selectedUnits.RemoveWhere(id => !units.Any(a => a.Id == id));
             var active = E.FindDesign(E.S.Player, E.Player.ActiveDesign);
+            Button(g, "Резерв и штаты →", x + w - 285, 178, 155, OpenManpower, false, "Управление личным составом", 25);
             Button(g, "Авиация →", x + w - 120, 178, 120, OpenAviation, false, "Самостоятельные воздушные операции", 25);
             PageTitle(g, "Командование сухопутными силами", "Выберите соединения и задайте фронт. Ручной приказ на карте снимает часть с фронта.");
-            AvailableButton(g, "Набрать часть · 0,30 млрд", x, 218, 245, () => Message(E.Recruit(OwnRegion())), active.Stock > 0 && active.Blueprint.Formation && !active.Retired,
-                "Нужен готовый комплект танков, БМП или артиллерии. Подготовка: 30 дней.", true);
+            var template = E.SelectedTemplate(E.S.Player); string recruitReason = E.RecruitmentReason(E.S.Player, active.Id, template.Id);
+            AvailableButton(g, RecruitButtonText(), x, 218, 245, () => Message(E.Recruit(OwnRegion())), recruitReason == null,
+                recruitReason ?? (template.Name + ": " + template.Battalions + " компл., " + People(ManpowerRules.GroundSize(active.Blueprint.Kind, template.Battalions)) + " чел., " + ManpowerRules.TrainingDays(template.Battalions) + " дней подготовки."), true);
             Button(g, "Склад и оснащение →", x + 258, 218, 215, () => { equipmentProduction = true; Navigate("Производство"); });
-            Txt(g, active.Blueprint.Name + " · " + active.Stock + " компл.", x + 488, 227, 12, Palette.Gold, false, w - 488);
+            Txt(g, template.Name + " · " + active.Stock + " компл. · резерв " + People(E.Player.Recruits), x + 488, 227, 12, Palette.Gold, false, w - 488);
             Section(g, "БОЕВОЙ СОСТАВ / " + units.Count + " СОЕДИНЕНИЙ", x, 274, listWidth);
             Button(g, selectedUnits.Count == units.Count && units.Count > 0 ? "Снять выбор" : "Выбрать все", x + listWidth - 127, 267, 127, () => {
                 if (selectedUnits.Count == units.Count) selectedUnits.Clear(); else foreach (var unit in units) selectedUnits.Add(unit.Id); Invalidate();
@@ -30,9 +32,9 @@ namespace Sovereign
                 var unit = units[i]; float y = 316 + (i - offset) * 114; bool chosen = selectedUnits.Contains(unit.Id);
                 Fill(g, chosen ? Palette.Selected : Palette.Card, x, y, listWidth, 103);
                 Button(g, chosen ? "✓" : "+", x + 10, y + 11, 30, () => { if (!selectedUnits.Add(unit.Id)) selectedUnits.Remove(unit.Id); Invalidate(); }, chosen, "Выбрать часть №" + unit.Id + " для фронта", 29);
-                Txt(g, "№" + unit.Id + "  /  " + unit.Design.Name, x + 51, y + 11, 14, Palette.Text, true, listWidth - 209);
+                Txt(g, "№" + unit.Id + "  /  " + unit.Design.Name + " · " + unit.Battalions + " бат.", x + 51, y + 11, 14, Palette.Text, true, listWidth - 209);
                 var plan = E.FrontFor(unit.Id);
-                Txt(g, W.Regions[unit.Region].Name + (plan == null ? "" : " · " + plan.Name), x + 51, y + 35, 11, Palette.Muted, false, listWidth - 209);
+                Txt(g, E.Player.Templates.First(t => t.Id == unit.TemplateId).Name + " · " + W.Regions[unit.Region].Name + (plan == null ? "" : " · " + plan.Name), x + 51, y + 35, 11, Palette.Muted, false, listWidth - 209);
                 float statW = Math.Max(80, (listWidth - 245) / 3);
                 Txt(g, "Готовность " + unit.Strength.ToString("0") + "%", x + 51, y + 58, 10, Palette.Teal);
                 Progress(g, x + 51, y + 80, statW - 15, unit.Strength / 100, Palette.Teal);
@@ -40,12 +42,13 @@ namespace Sovereign
                 Progress(g, x + 51 + statW, y + 80, statW - 15, unit.Supply / 100, Palette.Gold);
                 string status = unit.TrainingDays > 0 ? "Обучение " + unit.TrainingDays + " д." : unit.Target >= 0 ? "Марш " + Math.Ceiling(unit.Days) + " д." : "В резерве";
                 Txt(g, status, x + 51 + statW * 2, y + 58, 10, Palette.Muted, false, statW + 12);
-                Txt(g, "Поддержка " + unit.Attachments.Count + "/3", x + 51 + statW * 2, y + 79, 10, Palette.Muted);
+                Txt(g, People(unit.Personnel) + "/" + People(ManpowerRules.Establishment(unit)) + " чел. · орг. " + unit.Organization.ToString("0") + "%", x + 51 + statW * 2, y + 79, 10, unit.Organization < 40 ? Palette.Red : Palette.Muted, false, statW + 12);
                 float bx = x + listWidth - 146;
-                Button(g, "На карте →", bx, y + 8, 135, () => { army = unit.Id; selected = unit.Region; cx = (float)W.Regions[unit.Region].X; cy = (float)W.Regions[unit.Region].Y; scale = 30; Navigate("Карта"); }, false, "Выбрать соединение", 25);
+                Button(g, "На карте →", bx, y + 6, 135, () => { army = unit.Id; selected = unit.Region; cx = (float)W.Regions[unit.Region].X; cy = (float)W.Regions[unit.Region].Y; scale = 30; Navigate("Карта"); }, false, "Выбрать соединение", 20);
                 bool ready = unit.TrainingDays == 0 && unit.Target < 0 && E.S.Provinces[unit.Region].Owner == E.S.Player && active.Stock > 0 && !active.Retired;
-                AvailableButton(g, "Перевооружить", bx, y + 39, 135, () => { if (Confirm("Заменить технику на «" + active.Blueprint.Name + "»? 14 дней обучения; исправная старая техника вернётся на склад.")) Message(E.Refit(unit.Id, active.Id)); }, ready && active.Blueprint.Formation && unit.DesignId != active.Id, "Готовый комплект + 15% его стоимости; часть должна стоять в своей области.", false, 25);
-                AvailableButton(g, "+ Поддержка", bx, y + 70, 135, () => Message(E.Refit(unit.Id, active.Id, true)), ready && active.Blueprint.Kind != EquipmentKind.Tank && active.Blueprint.Kind != EquipmentKind.IFV && unit.Attachments.Count < 3 && !unit.Attachments.Any(t => t.Blueprint.Kind == active.Blueprint.Kind), "Выберите класс поддержки в каталоге; нужны комплект и 14 дней подготовки.", false, 25);
+                AvailableButton(g, "Перевооружить", bx, y + 30, 135, () => { if (Confirm("Заменить технику на «" + active.Blueprint.Name + "»? 14 дней обучения и " + unit.Battalions + " комплектов; исправная старая техника вернётся на склад.")) Message(E.Refit(unit.Id, active.Id)); }, ready && active.Stock >= unit.Battalions && active.Blueprint.Formation && unit.DesignId != active.Id, "Готовый комплект + 15% его стоимости; часть должна стоять в своей области.", false, 20);
+                AvailableButton(g, "+ Поддержка", bx, y + 54, 135, () => Message(E.Refit(unit.Id, active.Id, true)), ready && active.Blueprint.Kind != EquipmentKind.Tank && active.Blueprint.Kind != EquipmentKind.IFV && unit.Attachments.Count < 3 && !unit.Attachments.Any(t => t.Blueprint.Kind == active.Blueprint.Kind), "Выберите класс поддержки в каталоге; нужны комплект и 14 дней подготовки.", false, 20);
+                Button(g, "Расформировать", bx, y + 78, 135, () => { if (Confirm("Расформировать часть №" + unit.Id + "? Личный состав вернётся в резерв, уцелевшая техника — на склад.")) Message(E.DisbandArmy(unit.Id)); }, false, "Только на стоянке в своей снабжаемой области", 20);
             }
             Txt(g, "Колесо: список частей · Отмечено " + selectedUnits.Count + " · Авиация: отдельные крылья и группы поддержки", x, VH - 91, 11, Palette.Muted, false, listWidth);
             DrawFrontCommand(g, right, 273, fw);

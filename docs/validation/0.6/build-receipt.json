@@ -1,0 +1,13 @@
+{
+  "version": "0.6.0",
+  "tested_at_utc": "2026-10-24T22:38:05.749544+00:00",
+  "executable_sha256": "41d14ef0fee2caa8c365932a4235822d8e0b0f6fea6cd273d0805660e12e11df",
+  "source_sha256": "3918fcb545afcbe3052b5d754dc90dd137b004200eebe27e5c531b9609da3ac8",
+  "executable_bytes": 3122688,
+  "build": ".NET SDK 8.0.426 / Release net472",
+  "runtime": "Mono 6.12 / Debian 13 / libgdiplus / Xvfb",
+  "native_windows_tested": false,
+  "logic_passed": 206,
+  "ui_passed": 162,
+  "legacy_save": "Uploaded autosave and a version 0.5 aviation fixture each loaded and advanced 30 days without rewriting original"
+}

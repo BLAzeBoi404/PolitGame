@@ -85,7 +85,7 @@ namespace Sovereign
 			combat.Diplomacy(other, 3);
 			int num7 = w.Countries[combat.S.Player].Regions.First((int r) => w.Regions[r].Neighbors.Any((int q) => combat.S.Provinces[q].Owner == other));
 			int target = w.Regions[num7].Neighbors.First((int q) => combat.S.Provinces[q].Owner == other);
-			combat.S.Armies.RemoveAll((Army x) => x.Region == target);
+			foreach (var removed in combat.S.Armies.Where(x => x.Region == target).ToList()) combat.DestroyArmy(removed);
 			Army army2 = combat.S.Armies.First((Army x) => x.Owner == combat.S.Player);
 			army2.Region = num7;
 			army2.Strength = 100.0;
@@ -107,7 +107,7 @@ namespace Sovereign
 			army3.Strength = 100.0;
 			army3.Design = new Blueprint();
 			Army item = army3;
-			combat.S.Armies.Add(item);
+			combat.S.Armies.Add(item); combat.S.Nations[other].Mobilized += item.Personnel;
 			army2.Region = num7;
 			army2.Target = -1;
 			army2.Strength = 100.0;
@@ -174,6 +174,7 @@ namespace Sovereign
 			EquipmentTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
             CampaignSystemsTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
             AviationTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
+            ManpowerTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
 			report.Add("Simulated days: " + e.S.Day + "; wall seconds: " + stopwatch.Elapsed.TotalSeconds.ToString("0.00"));
 			report.Add("Countries: " + w.Countries.Length + "; regions: " + w.Regions.Length);
 			report.Add("Failures: " + failures);

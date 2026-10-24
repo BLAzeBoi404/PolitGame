@@ -93,7 +93,7 @@ namespace Sovereign
                 var e = fresh(); int region = baseFor(e, e.S.Player); var wing = ready(e, e.S.Player, region, EquipmentKind.Fighter);
                 e.SetAirMission(wing.Id, AirMission.Superiority, region); string path = Path.Combine(directory, "air-campaign.xml"); e.Save(path);
                 var loaded = fresh(); loaded.Load(path);
-                check(loaded.S.Version == 4 && loaded.S.AirWings.Single().Mission == AirMission.Superiority && loaded.S.Provinces[region].Airfield == 3, "Aircraft orders and airbases survive save/load");
+                check(loaded.S.Version == 5 && loaded.S.AirWings.Single().Mission == AirMission.Superiority && loaded.S.Provinces[region].Airfield == 3, "Aircraft orders and airbases survive save/load");
                 for (int i = 0; i < 35; i++) { e.Tick(); loaded.Tick(); }
                 check(e.S.AirWings.Single().Strength == loaded.S.AirWings.Single().Strength && e.Player.Stock[2] == loaded.Player.Stock[2] && e.S.RandomState == loaded.S.RandomState, "Air simulation remains deterministic after a save/load round trip");
                 var invalid = loaded.S.AirWings.Single(); invalid.Strength = double.NaN;
@@ -105,7 +105,7 @@ namespace Sovereign
                 invalid.DesignId = int.MaxValue; rejected = false; try { loaded.Validate(loaded.S); } catch (InvalidDataException) { rejected = true; }
                 check(rejected, "Save validator rejects orphan aircraft design references");
                 var old = fresh(); old.S.Version = 3; old.S.AirWings.Clear(); old.Save(path); loaded.Load(path);
-                check(loaded.S.Version == 4 && loaded.S.AirWings.Count == 0 && loaded.S.Provinces.All(p => p.Airfield == 0), "Version-three migration grants no free aircraft or airbases");
+                check(loaded.S.Version == 5 && loaded.S.AirWings.Count == 0 && loaded.S.Provinces.All(p => p.Airfield == 0), "Version-three migration grants no free aircraft or airbases");
             });
             scenario("Air strategy AI", () => {
                 var e = fresh(); int owner = world.ByCode("POL"); e.Diplomacy(owner, 3);

@@ -64,7 +64,7 @@ namespace Sovereign
                 var unit = e.S.Armies.First(a => a.Owner == me);
                 int border = world.Countries[me].Regions.First(r => world.Regions[r].Neighbors.Any(n => e.S.Provinces[n].Owner == pol));
                 int target = world.Regions[border].Neighbors.First(n => e.S.Provinces[n].Owner == pol);
-                e.S.Armies.RemoveAll(a => a.Region == target); unit.Region = border;
+                foreach (var removed in e.S.Armies.Where(a => a.Region == target).ToList()) e.DestroyArmy(removed); unit.Region = border;
                 check(e.Order(unit.Id, target, false, false) != null && unit.Target < 0, "Defensive repositioning forbids hostile transit");
                 check(e.CreateFront(pol, new int[0], FrontStance.Hold) != null && e.S.Fronts.Count == 0, "An empty front is rejected");
                 check(e.CreateFront(pol, new[] { unit.Id }, FrontStance.Hold) == null && unit.Target < 0, "Hold order occupies a border without launching an attack");
@@ -91,7 +91,7 @@ namespace Sovereign
                 var legacy = fresh(); legacy.S.Version = 2; legacy.S.Access = null; legacy.S.Alliances = null; legacy.S.WarStarted = null; legacy.S.TruceUntil = null;
                 string path = Path.Combine(directory, "v2-treaties.xml"); using (var file = File.Create(path)) new XmlSerializer(typeof(Campaign)).Serialize(file, legacy.S);
                 var e = fresh(); e.Load(path);
-                check(e.S.Version == 4 && !e.S.Alliances.Any(x => x) && e.S.Fronts.Count == 0 && e.S.Armies.Count == legacy.S.Armies.Count,
+                check(e.S.Version == 5 && !e.S.Alliances.Any(x => x) && e.S.Fronts.Count == 0 && e.S.Armies.Count == legacy.S.Armies.Count,
                     "Version 2 migration preserves forces and adds no unsolicited alliances");
                 e.S.Alliances[e.Pair(e.S.Player, pol)] = true; bool rejected = false;
                 try { e.Validate(e.S); } catch (InvalidDataException) { rejected = true; }

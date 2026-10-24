@@ -53,7 +53,7 @@ namespace Sovereign
                 Txt(g, model.Blueprint.Name, right + 29, y, 14, Palette.Text, true, rw - 313);
                 Txt(g, E.ProductionStatus(E.S.Player, line), right + 29, y + 23, 10, Palette.Muted, false, rw - 308);
                 Progress(g, right + 29, y + 49, rw - 310, (line.Completed + line.Progress) / line.Quantity, Palette.Teal);
-                double days = (1 - line.Progress) * model.Blueprint.WorkDays / (line.Factories * line.Efficiency * (1 + E.Player.Tech[2] * .04));
+                double days = (1 - line.Progress) * model.Blueprint.WorkDays / (line.Factories * line.Efficiency * (1 + E.Player.Tech[2] * .04) * ManpowerRules.Output(E.Player));
                 Txt(g, "Выпущено " + line.Completed + "/" + line.Quantity + (line.Completed < line.Quantity ? " · следующий ≈ " + Math.Ceiling(days) + " дн.*" : " · на складе"), right + 29, y + 61, 10, Palette.Muted, false, rw - 308);
                 float controls = right + rw - 265;
                 Txt(g, "Эффект. " + (line.Efficiency * 100).ToString("0") + "%", controls, y + 2, 10, Palette.Gold);

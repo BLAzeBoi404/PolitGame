@@ -36,7 +36,7 @@ namespace Sovereign
             if (wing == null) { Para(g, "Постройте аэродром, создайте авиационный проект, выпустите серию и сформируйте крыло. Для вылетов нужны топливо и подготовленный экипаж.", 20, 535, w, 135, 14); return; }
             selectedAirWing = wing.Id;
             Txt(g, "База: " + W.Regions[wing.BaseRegion].Name, 20, 532, 12, Palette.Text, false, w);
-            Txt(g, "Радиус " + wing.Design.Range.ToString("0") + " км · вылетов " + wing.Sorties, 20, 556, 11, Palette.Gold);
+            Txt(g, "Радиус " + wing.Design.Range.ToString("0") + " км · экипаж " + wing.Personnel + "/" + ManpowerRules.AirSize(wing.Design.Kind), 20, 556, 11, Palette.Gold);
             Para(g, E.AirStatus(wing), 20, 580, w, 43, 12, Palette.Muted);
             var mission = wing.Design.Kind == EquipmentKind.Fighter ? AirMission.Superiority : wing.Design.Kind == EquipmentKind.Bomber ? AirMission.Strike : wing.Design.Kind == EquipmentKind.Recon ? AirMission.Recon : AirMission.Supply;
             string reason = E.AirTargetReason(wing, mission, region);

@@ -163,6 +163,7 @@ namespace Sovereign
 			InitializeEquipment(S);
             InitializeTreaties(S);
             InitializeAviation(S);
+            InitializeManpower(S);
 			Notify("Кабинет сформирован. Проверьте баланс ресурсов и выберите программу развития.");
 			Notify("Учебная модель: современная география; региональная экономика и ресурсы оценочные. Исторические границы пока не включены.");
 			ComputeEconomy(apply: false);
@@ -215,9 +216,11 @@ namespace Sovereign
 				S.Projects.Remove(item);
 			}
 			TickProduction();
+            bool[] network = SupplyNetwork();
+            TickManpower(network);
             TickAviation();
             if (S.Day % 7 == 0) ExecuteFronts();
-			MoveArmies();
+			MoveArmies(network);
             PruneFronts();
 			if (S.Day % 7 == 0)
 			{
@@ -241,7 +244,7 @@ namespace Sovereign
 		{
 			int num = S.Nations.Length;
             var armyCount = new int[num]; var armyBudget = new double[num];
-            foreach (var unit in S.Armies) { armyCount[unit.Owner]++; armyBudget[unit.Owner] += 0.002 * unit.Design.Cost / 0.2; }
+            foreach (var unit in S.Armies) { armyCount[unit.Owner] += unit.Battalions; armyBudget[unit.Owner] += 0.002 * unit.Design.Cost / 0.2 * unit.Battalions; }
 			double[,] array = new double[num, 8];
 			double[] array2 = new double[num];
 			double[] array3 = new double[num];
@@ -314,7 +317,7 @@ namespace Sovereign
 						break;
 					}
 					int num10 = num9;
-					double num11 = array[c, l] * Rules.Output[l] * num8 * (1.0 + (double)nation.Tech[num10] * 0.05) * (1.0 - nation.Repression * 0.0015);
+					double num11 = array[c, l] * Rules.Output[l] * num8 * (1.0 + (double)nation.Tech[num10] * 0.05) * (1.0 - nation.Repression * 0.0015) * ManpowerRules.Output(nation);
 					double num12 = 1.0;
 					for (int m = 0; m < 8; m++)
 					{
@@ -586,7 +589,7 @@ namespace Sovereign
 			for (int i = 0; i < S.Nations.Length; i++)
 			{
 				Nation nation = S.Nations[i];
-				double num = Rules.Clamp(65.0 + nation.Social * 2.0 - nation.Tax * 0.5 - nation.Unemployment * 0.3 - nation.Shortage * 55.0 - Math.Max(0.0, nation.Inflation - 5.0) * 0.4 - nation.Repression * 0.16, 5.0, 95.0);
+				double num = Rules.Clamp(65.0 + nation.Social * 2.0 - nation.Tax * 0.5 - nation.Unemployment * 0.3 - nation.Shortage * 55.0 - Math.Max(0.0, nation.Inflation - 5.0) * 0.4 - nation.Repression * 0.16 - (int)nation.Conscription * 2, 5.0, 95.0);
 				nation.Living = Rules.Clamp(nation.Living + (num - nation.Living) * 0.025, 5.0, 95.0);
 				nation.Approval += (num - nation.Approval) * 0.07;
 				double num2 = Rules.Clamp(nation.Approval + nation.Repression * 0.22 - (double)(S.Wars.Skip(i * S.Nations.Length).Take(S.Nations.Length).Count((bool x) => x) * 4), 3.0, 96.0);
@@ -667,7 +670,8 @@ namespace Sovereign
 				{
 					continue;
 				}
-				EquipmentAI(c, list);
+				PlanManpower(c);
+                EquipmentAI(c, list);
 				if (n.Research < 0)
 				{
 					n.Research = ((S.Difficulty == 0) ? ((int)(S.Random() * 6.0)) : ((!(n.Shortage > 0.1)) ? (n.Focus++ % 6) : 0));
@@ -727,6 +731,7 @@ namespace Sovereign
 			}
 			if (army.TrainingDays > 0) return "Соединение проходит подготовку: " + army.TrainingDays + " дн.";
 			int owner = S.Provinces[target].Owner;
+            if (AtWar(army.Owner, owner) && (army.Organization < 25 || ManpowerRules.Manning(army) < .25)) return "Для атаки нужна организация от 25% и укомплектованность от 25%.";
 			if (!CanEnter(army.Owner, owner) || (!hostileTransit && AtWar(army.Owner, owner)))
 			{
 				return "Военный доступ отсутствует. Нельзя войти в нейтральную страну.";
@@ -788,22 +793,21 @@ namespace Sovereign
 			a.TotalDays = (a.Days = Math.Max(1.0, num3 / (45.0 * a.Design.Speed * num4 * (1 + EquipmentRules.Support(a, EquipmentKind.Truck)))));
 		}
 
-		private void MoveArmies()
+		private void MoveArmies(bool[] connected)
 		{
-            bool[] connected = SupplyNetwork();
             var live = new HashSet<Army>(S.Armies);
             var regionArmies = S.Armies.GroupBy(u => u.Region).ToDictionary(g => g.Key, g => g.ToList());
 			foreach (Army a in S.Armies.ToList())
 			{
                 if (!live.Contains(a)) continue; // A defender destroyed earlier this day must not act.
                 Nation nation = S.Nations[a.Owner];
-                double upkeep = a.Design.Maintenance + a.Attachments.Sum(x => x.Blueprint.Maintenance);
+                double upkeep = a.Design.Maintenance * a.Battalions + a.Attachments.Sum(x => x.Blueprint.Maintenance);
                 bool funded = nation.Treasury >= upkeep;
                 if (funded) nation.Treasury -= upkeep;
-                if (a.TrainingDays > 0) { a.TrainingDays--; continue; }
+                if (a.TrainingDays > 0) { if (funded) { a.Organization = Math.Min(100, a.Organization + (100 - a.Organization) / a.TrainingDays); a.TrainingDays--; } continue; }
                 foreach (var attachment in a.Attachments)
                     attachment.Condition = Rules.Clamp(attachment.Condition + (funded && a.Target < 0 ? 0.2 + attachment.Blueprint.Support * 0.06 : -(100 - attachment.Blueprint.Reliability) * 0.008 / (1 + attachment.Blueprint.Protection / 100)), 0, 100);
-				double num = ((a.Target < 0) ? 0.003 : a.Design.Fuel + a.Attachments.Sum(x => x.Blueprint.Fuel * 0.3));
+				double num = ((a.Target < 0) ? 0.003 * a.Battalions : a.Design.Fuel * a.Battalions + a.Attachments.Sum(x => x.Blueprint.Fuel * 0.3));
 				double num2 = Math.Min(nation.Stock[2], num);
 				nation.Stock[2] -= num2;
 				bool flag = IsSupplied(a.Owner, a.Region, connected);
@@ -813,16 +817,18 @@ namespace Sovereign
 				double num4 = (flag ? 100.0 : (a.SupplyDays > 0 ? 65.0 : 25.0)) * ((num > 0.0) ? (num2 / num) : 1.0) * Math.Min(1.0, num3);
 				num4 = Math.Min(100, num4 * (1 + EquipmentRules.Support(a, EquipmentKind.Truck) + EquipmentRules.Support(a, EquipmentKind.Transport)) * (funded ? 1 : 0.6));
                 a.Supply += (num4 - a.Supply) * 0.15;
-                if (!flag && a.SupplyDays <= 0) a.Strength = Math.Max(8.1, a.Strength - (100 - a.Supply) * 0.004);
+                if (!flag && a.SupplyDays <= 0) DamageArmy(a, (100 - a.Supply) * .004, .2, 8.1);
 				if (a.Target < 0)
 				{
-					double num5 = Math.Min(nation.Stock[7], 0.002 * num3);
+					double num5 = Math.Min(nation.Stock[7], 0.002 * num3 * a.Battalions);
 					nation.Stock[7] -= num5;
-					a.Strength = Math.Min(100.0, a.Strength + 0.4 * a.Supply / 100.0 * num3 * (num5 / 0.002));
+					a.Strength = Math.Min(100.0, a.Strength + 0.4 * a.Supply / 100.0 * num3 * (num5 / (0.002 * a.Battalions)));
 					continue;
 				}
 				a.Strength = Math.Max(8.1, a.Strength - (100.0 - a.Design.Reliability) * 0.002);
+                a.Organization = Math.Max(0, a.Organization - .2);
 				int owner = S.Provinces[a.Target].Owner;
+                if (AtWar(a.Owner, owner) && (a.Organization < 15 || ManpowerRules.Manning(a) < .2)) { a.Target = -1; a.Route.Clear(); continue; }
 				if (!CanEnter(a.Owner, owner))
 				{
 					a.Target = -1;
@@ -841,14 +847,14 @@ namespace Sovereign
 				{
 					double num6 = EquipmentRules.CombatPower(a, list[0], false) * (1 + AirReconBonus(a.Owner, a.Target));
 					double num7 = list.Sum(d => EquipmentRules.CombatPower(d, a, true) * (1 + AirReconBonus(d.Owner, a.Target))) * 1.15;
-					a.Strength -= Rules.Clamp(num7 / Math.Max(1.0, num6) * 9.0, 2.0, 28.0);
+					DamageArmy(a, Rules.Clamp(num7 / Math.Max(1.0, num6) * 9.0, 2.0, 28.0));
 					foreach (Army item in list)
 					{
-						item.Strength -= Rules.Clamp(num6 / Math.Max(1.0, num7) * 13.0, 2.0, 30.0);
+						DamageArmy(item, Rules.Clamp(num6 / Math.Max(1.0, num7) * 13.0, 2.0, 30.0));
 					}
 					foreach (Army item2 in list.Where((Army d) => d.Strength <= 8.0))
 					{
-						S.Armies.Remove(item2); live.Remove(item2);
+						DestroyArmy(item2); live.Remove(item2);
 						if (item2.Owner == S.Player)
 						{
 							Notify("Потеряно соединение №" + item2.Id + " в регионе " + World.Regions[item2.Region].Name, 2);
@@ -856,7 +862,7 @@ namespace Sovereign
 					}
 					if (a.Strength <= 8.0)
 					{
-						S.Armies.Remove(a); live.Remove(a);
+						DestroyArmy(a); live.Remove(a);
 						if (a.Owner == S.Player)
 						{
 							Notify("Соединение №" + a.Id + " потеряно в бою.", 2);
@@ -940,6 +946,7 @@ namespace Sovereign
             if (s.Version == 1) InitializeEquipment(s);
             if (s.Version == 2) InitializeTreaties(s);
             if (s.Version == 3) InitializeAviation(s);
+            if (s.Version == 4) InitializeManpower(s);
             Validate(s);
 			S = s;
 			Raise();

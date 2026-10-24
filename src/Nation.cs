@@ -5,6 +5,12 @@ namespace Sovereign
 	public class Nation
 	{
 		public double Treasury;
+        public int Recruits;
+        public long Mobilized, Discharged, PersonnelLosses;
+        public ConscriptionLaw Conscription;
+        public int LawChangedDay = -90;
+        public List<FormationTemplate> Templates = new List<FormationTemplate>();
+        public int ActiveTemplate = 1, NextTemplate = 4;
 
 		public double Debt;
 

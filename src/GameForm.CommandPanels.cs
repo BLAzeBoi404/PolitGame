@@ -18,9 +18,9 @@ namespace Sovereign
                 try { DrawPage(g); } finally { workspaceWidth = 0; g.Restore(state); }
                 Button(g, "Свернуть", width - 162, 111, 94, () => { detailPanel = false; Invalidate(); }, false, "Вернуть компактную панель", 28);
             } else {
-                DocketFrame(g, new RectangleF(0, 99, width, VH - 133), aviationPage ? "Воздушные силы" : page);
-                if (aviationPage) DrawAviationPanel(g); else DrawCompactPanel(g);
-                Button(g, aviationPage ? "Наземные войска →" : "Подробное управление →", 18, VH - 83, width - 36, () => { if (aviationPage) Navigate("Армия"); else detailPanel = true; Invalidate(); }, false, "Развернуть ведомость, сохранив карту на экране", 32);
+                DocketFrame(g, new RectangleF(0, 99, width, VH - 133), aviationPage ? "Воздушные силы" : manpowerPage ? "Личный состав" : page);
+                if (aviationPage) DrawAviationPanel(g); else if (manpowerPage) DrawManpowerPanel(g); else DrawCompactPanel(g);
+                Button(g, (aviationPage || manpowerPage) ? "Наземные войска →" : "Подробное управление →", 18, VH - 83, width - 36, () => { if (aviationPage || manpowerPage) Navigate("Армия"); else detailPanel = true; Invalidate(); }, false, "Развернуть ведомость, сохранив карту на экране", 32);
             }
             Button(g, "×", width - 48, 107, 32, () => Navigate("Карта"), false, "Закрыть панель", 29);
         }
@@ -78,6 +78,7 @@ namespace Sovereign
                 CompactPolicy(g, "Наука и образование", n.Science, 491, v => n.Science = v, 0, 10, .5, "Ускоряют исследования и рост образования.");
                 CompactPolicy(g, "Военный бюджет", n.Military, 574, v => n.Military = v, .5, 15, .5, "Снабжение и восстановление соединений.");
                 CompactPolicy(g, "Политическое давление", n.Repression, 657, v => n.Repression = v, 0, 100, 5, "Контроль ценой одобрения и выпуска.");
+                Button(g, "Призыв и резерв →", 20, 758, w, OpenManpower, false, "Мобилизация влияет на промышленность и одобрение", 30);
             } else if (page == "Производство") {
                 CompactSection(g, "ВОЕННО-ПРОМЫШЛЕННЫЙ КОМПЛЕКС", 160);
                 LedgerRow(g, "Занято / мощность", E.AssignedFactories(E.S.Player) + " / " + E.FactoryCapacity(E.S.Player), 205);
@@ -98,14 +99,15 @@ namespace Sovereign
                 }
             } else if (page == "Армия") {
                 var units = E.S.Armies.Where(a => a.Owner == E.S.Player).ToList();
-                CompactSection(g, "СУХОПУТНЫЕ СИЛЫ / " + units.Count, 160);
+                CompactSection(g, "ЧАСТИ / " + units.Count, 160);
+                Button(g, "Резерв →", 168, 151, 92, OpenManpower, false, "Личный состав, мобилизация и штаты", 27);
                 Button(g, "Авиация →", 270, 151, 106, OpenAviation, false, "Аэродромы, крылья и вылеты", 27);
                 int offset = Math.Min(scroll, Math.Max(0, units.Count - 6));
                 for (int i = offset; i < Math.Min(units.Count, offset + 6); i++) {
                     var a = units[i]; float y = 209 + (i - offset) * 80;
                     Button(g, "№" + a.Id + " · " + a.Design.Name, 20, y, w, () => FocusArmy(a), a.Id == army, "Выбрать на карте; ПКМ по области — приказ", 30);
                     Txt(g, W.Regions[a.Region].Name, 28, y + 36, 11, Palette.Muted, false, 190);
-                    Txt(g, a.Strength.ToString("0") + "% / снаб. " + a.Supply.ToString("0") + "%", 224, y + 36, 11, a.Supply < 45 ? Palette.Red : Palette.Teal);
+                    Txt(g, People(a.Personnel) + " чел. / орг. " + a.Organization.ToString("0") + "%", 208, y + 36, 11, a.Organization < 40 ? Palette.Red : Palette.Teal);
                     Progress(g, 28, y + 61, w - 16, a.Strength / 100, Palette.Teal);
                 }
                 Button(g, "Фронты и оснащение →", 20, 739, w, () => { detailPanel = true; Invalidate(); }, true);

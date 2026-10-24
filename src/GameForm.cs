@@ -125,7 +125,7 @@ namespace Sovereign
             InitializeAtlasColors();
 			E = new Engine(world);
 			base.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-			Text = "SOVEREIGN — Государство · 0.5";
+			Text = "SOVEREIGN — Государство · 0.6";
 			BackColor = Palette.Bg;
 			ForeColor = Palette.Text;
 			base.AutoScaleMode = AutoScaleMode.None;
@@ -270,7 +270,7 @@ namespace Sovereign
 		private void Navigate(string p)
 		{
 			page = p;
-            aviationPage = false;
+            aviationPage = false; manpowerPage = false;
             detailPanel = p == "Конструктор";
 			scroll = 0;
 			hoveredTip = "";
@@ -772,8 +772,8 @@ namespace Sovereign
 				draft = Engine.CopyDesign(E.Player.Design);
 			}
 			menuScreen = "";
-			page = p; detailPanel = p == "Конструктор"; aviationPage = p == "Авиация";
-            if (aviationPage) page = "Армия";
+			page = p; detailPanel = p == "Конструктор"; aviationPage = p == "Авиация"; manpowerPage = p == "Резерв";
+            if (aviationPage || manpowerPage) page = "Армия";
             if (p == "Серии") { page = "Производство"; equipmentProduction = true; }
 			LayoutMenuControls();
 			Invalidate();
@@ -1235,7 +1235,7 @@ namespace Sovereign
 			Txt(g, "государств и территорий", num2 + 22f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "областей", num2 + 175f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "ЭКОНОМИКА  /  ДИПЛОМАТИЯ  /  ТЕХНОЛОГИИ  /  СТРАТЕГИЯ", num, VH - 59f, 12f, Palette.Muted);
-			Txt(g, "0.5   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
+			Txt(g, "0.6   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
 		}
 
 
