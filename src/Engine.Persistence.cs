@@ -17,7 +17,7 @@ namespace Sovereign
         public void Validate(Campaign s)
         {
             int nations = World.Countries.Length, regions = World.Regions.Length;
-            if (s == null || (s.Version != 1 && s.Version != 2) || s.Nations == null || s.Nations.Length != nations || s.Provinces == null || s.Provinces.Length != regions
+            if (s == null || (s.Version < 1 || s.Version > 3) || s.Nations == null || s.Nations.Length != nations || s.Provinces == null || s.Provinces.Length != regions
                 || s.Player < 0 || s.Player >= nations || s.StartYear < 1940 || s.StartYear > 2026 || s.Day < 0 || s.Day > 2000000 || s.RandomState == 0
                 || s.Difficulty < 0 || s.Difficulty > 2) throw new InvalidDataException("Несовместимое сохранение кампании.");
             int pairs = nations * nations;
@@ -26,6 +26,18 @@ namespace Sovereign
             for (int i = 0; i < nations; i++) for (int j = 0; j < nations; j++)
                 if (s.Wars[i * nations + j] != s.Wars[j * nations + i] || s.Agreements[i * nations + j] != s.Agreements[j * nations + i]
                     || (i == j && (s.Wars[i * nations + j] || s.Agreements[i * nations + j]))) throw new InvalidDataException("Несогласованная дипломатия.");
+            if (s.Version >= 3) {
+                if (s.Access == null || s.Access.Length != pairs || s.Alliances == null || s.Alliances.Length != pairs
+                    || s.WarStarted == null || s.WarStarted.Length != pairs || s.TruceUntil == null || s.TruceUntil.Length != pairs)
+                    throw new InvalidDataException("Повреждены договоры.");
+                for (int i = 0; i < nations; i++) for (int j = 0; j < nations; j++) {
+                    int k = i * nations + j, reverse = j * nations + i;
+                    if (s.Alliances[k] != s.Alliances[reverse] || s.WarStarted[k] != s.WarStarted[reverse] || s.TruceUntil[k] != s.TruceUntil[reverse]
+                        || s.WarStarted[k] < 0 || s.WarStarted[k] > s.Day || s.TruceUntil[k] < 0 || s.TruceUntil[k] > s.Day + 180
+                        || (i == j && (s.Alliances[k] || s.Access[k])) || (s.Wars[k] && (s.Alliances[k] || s.Access[k] || s.TruceUntil[k] > s.Day)))
+                        throw new InvalidDataException("Несогласованные договоры.");
+                }
+            }
             foreach (var p in s.Provinces)
                 if (p == null || p.Owner < 0 || p.Owner >= nations || !Values(p.Public, 8) || !Values(p.Private, 8)
                     || !IsFinite(p.Population) || p.Population < 0 || !IsFinite(p.Infrastructure) || p.Infrastructure < 0 || p.Infrastructure > 100
@@ -61,6 +73,18 @@ namespace Sovereign
                     || a.Attachments.Any(t => t == null || EquipmentRules.Validate(t.Blueprint) != null || !IsFinite(t.Condition) || t.Condition < 0 || t.Condition > 100
                         || t.Blueprint.Kind == EquipmentKind.Tank || t.Blueprint.Kind == EquipmentKind.IFV || !n.Designs.Any(d => d.Id == t.DesignId && SameDesign(d.Blueprint, t.Blueprint)))
                     || a.Attachments.Select(t => t.Blueprint.Kind).Distinct().Count() != a.Attachments.Count) throw new InvalidDataException("Повреждено оснащение частей.");
+            }
+            if (s.Version >= 3) {
+                if (s.Fronts == null || s.Fronts.Count > nations * 24 || s.Fronts.Any(p => p == null) || s.NextFront < 1
+                    || s.Fronts.Select(p => p.Id).Distinct().Count() != s.Fronts.Count || s.Fronts.GroupBy(p => p.Owner).Any(g => g.Count() > 24)) throw new InvalidDataException("Повреждены фронты.");
+                var assigned = new System.Collections.Generic.HashSet<int>();
+                foreach (var p in s.Fronts) {
+                    if (p.Id < 1 || p.Id >= s.NextFront || p.Owner < 0 || p.Owner >= nations || p.Enemy < 0 || p.Enemy >= nations || p.Owner == p.Enemy
+                        || string.IsNullOrWhiteSpace(p.Name) || p.Name.Length > 100 || !Enum.IsDefined(typeof(FrontStance), p.Stance)
+                        || p.ArmyIds == null || (p.Active && !s.Wars[p.Owner * nations + p.Enemy])
+                        || p.ArmyIds.Any(id => !assigned.Add(id) || !s.Armies.Any(a => a.Id == id && a.Owner == p.Owner)))
+                        throw new InvalidDataException("Некорректный приказ фронту.");
+                }
             }
             foreach (var p in s.Projects)
                 if (p == null || p.Owner < 0 || p.Owner >= nations || p.Region < 0 || p.Region >= regions || p.Sector < 0 || p.Sector > 8 || p.Days <= 0 || p.Total < p.Days)

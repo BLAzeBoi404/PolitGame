@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace Sovereign
 {
-	public class Preferences
+	public partial class Preferences
 	{
 		public bool Labels = true;
 
@@ -28,7 +28,9 @@ namespace Sovereign
 			{
 				using (FileStream stream = File.OpenRead(PathName))
 				{
-					return (Preferences)new XmlSerializer(typeof(Preferences)).Deserialize(stream);
+					var result = (Preferences)new XmlSerializer(typeof(Preferences)).Deserialize(stream);
+                    result.NormalizeBindings();
+                    return result;
 				}
 			}
 			catch
@@ -39,6 +41,7 @@ namespace Sovereign
 
 		public void Save()
 		{
+            NormalizeBindings();
 			try
 			{
 				using (FileStream stream = File.Create(PathName))

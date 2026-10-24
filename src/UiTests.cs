@@ -37,7 +37,7 @@ namespace Sovereign
         {
             var results = new List<string>(); int failed = 0;
             Action<bool, string> check = (ok, name) => { results.Add((ok ? "PASS " : "FAIL ") + name); if (!ok) failed++; };
-            prefs.Autosave = false; prefs.Tutorial = false; prefs.Fullscreen = false;
+            prefs.Autosave = false; prefs.Tutorial = false; prefs.Fullscreen = false; prefs.Bindings = Preferences.DefaultBindings();
             E.AutoSaveEnabled = false;
             Show(); Application.DoEvents();
             menuCountry = W.ByCode("FRA"); BeginCampaign();
@@ -84,13 +84,13 @@ namespace Sovereign
             check(FindRegion(new PointF(cx, cy)) >= 0, "Territory hit testing resolves real geography");
             speed = 0; KeysDown(this, new KeyEventArgs(Keys.Space)); check(speed == 1, "Space resumes time");
             KeysDown(this, new KeyEventArgs(Keys.Escape)); check(speed == 0 && menuScreen == "main", "Menu pauses simulation");
-            string[] pages = { "Сводка", "Карта", "Экономика", "Производство", "Серии", "Исследования", "Дипломатия", "Армия", "Конструктор", "Политика", "Меню", "Новая игра", "Настройки" };
+            string[] pages = { "Сводка", "Карта", "Экономика", "Производство", "Серии", "Исследования", "Дипломатия", "Армия", "Конструктор", "Политика", "Меню", "Новая игра", "Настройки", "Клавиши" };
             var sizes = new[] { new Size(1280, 720), new Size(1600, 900), new Size(1920, 1080) };
             for (int s = 0; s < sizes.Length; s++) {
                 ClientSize = sizes[s];
                 for (int p = 0; p < pages.Length; p++) {
                     if (pages[p] == "Производство") equipmentProduction = false;
-                    PreviewPage(pages[p]); Application.DoEvents();
+                    PreviewPage(pages[p]); if (pages[p] == "Клавиши") OpenMenu("controls"); Application.DoEvents();
                     using (var frame = RenderFrame()) frame.Save(Path.Combine(directory, "screen-" + s + "-" + p + ".png"));
                     bool contained = hits.All(h => h.Rect.Left >= 0 && h.Rect.Top >= 0 && h.Rect.Right <= VW + 1 && h.Rect.Bottom <= VH + 1);
                     check(contained, pages[p] + " has visible action bounds at " + sizes[s].Width + "x" + sizes[s].Height);
@@ -105,7 +105,11 @@ namespace Sovereign
             check(MapCacheBuilds == cached, "Changing selection reuses cached geography");
             cx += 0.25f;
             using (var frame = RenderFrame()) { }
-            check(MapCacheBuilds == cached + 1, "Camera movement invalidates cached geography");
+            check(MapCacheBuilds == cached, "Small camera movements reuse accurate overscanned geography");
+            cx += CameraMargin / scale / UiScale + 2;
+            using (var frame = RenderFrame()) { }
+            check(MapCacheBuilds == cached + 1, "Leaving the overscan margin rebuilds geography");
+            cx -= CameraMargin / scale / UiScale + 2;
             foreach (string mode in MapLayers) {
                 click(mode);
                 using (var frame = RenderFrame()) frame.Save(Path.Combine(directory, "map-" + Array.IndexOf(MapLayers, mode) + ".png"));
@@ -117,16 +121,43 @@ namespace Sovereign
             for (int i = 0; i < 30; i++) using (var frame = RenderFrame()) { }
             results.Add("Map rendering mean: " + (watch.Elapsed.TotalMilliseconds / 30).ToString("0.0") + " ms, 1600x900, 30 frames, Mono/Xvfb");
             watch.Restart();
-            for (int i = 0; i < 12; i++) { cx += 0.15f; using (var frame = RenderFrame()) { } }
-            results.Add("Camera rebuild mean: " + (watch.Elapsed.TotalMilliseconds / 12).ToString("0.0") + " ms, 1600x900, 12 frames, Mono/Xvfb");
+            for (int i = 0; i < 12; i++) { mapCacheKey = null; cx += 0.15f; using (var frame = RenderFrame()) { } }
+            results.Add("Forced camera rebuild mean (including overscan): " + (watch.Elapsed.TotalMilliseconds / 12).ToString("0.0") + " ms, 1600x900, 12 frames, Mono/Xvfb");
             panning = true; int buildsBeforeDrag = MapCacheBuilds; watch.Restart();
             for (int i = 0; i < 20; i++) { cx += 0.1f; using (var frame = RenderFrame()) { } }
             results.Add("Drag frame mean: " + (watch.Elapsed.TotalMilliseconds / 20).ToString("0.0") + " ms, 1600x900, 20 frames, Mono/Xvfb");
             check(MapCacheBuilds == buildsBeforeDrag, "Dragging translates cached geometry without blocking on a rebuild");
             panning = false; using (var frame = RenderFrame()) { }
-            check(MapCacheBuilds == buildsBeforeDrag + 1, "Releasing the camera rebuilds accurate geography at the final position");
+            check(MapCacheBuilds == buildsBeforeDrag, "Releasing a short drag retains accurate overscanned geography");
+            results.Add("Raster stages: " + mapRasterProfile);
             results.Add("Terrain stages ms: geometry=" + mapGeometryMs.ToString("0.0") + " texture=" + mapTextureMs.ToString("0.0") + " labels=" + mapLabelsMs.ToString("0.0"));
             check(W.Countries.Sum(c => c.DisplayPath(6).PointCount) < W.Countries.Sum(c => c.Path.PointCount), "Overview geometry reduces vertices while retaining exact hit-test paths");
+            // Exercise new systems through the real hit regions and keyboard handler.
+            foreign = W.ByCode("POL"); PreviewPage("Дипломатия");
+            while (E.S.Relations[E.Pair(E.S.Player, foreign)] < 65) click("Отправить");
+            click("Предложить союз");
+            check(E.Allied(E.S.Player, foreign), "Diplomatic action establishes an actual defensive alliance");
+            click("Запросить");
+            check(E.S.Access[E.Pair(E.S.Player, foreign)], "Access treaty can be requested from the dossier");
+            E.Diplomacy(foreign, 5); E.Diplomacy(foreign, 3);
+            PreviewPage("Армия"); click("Выбрать все"); click("Удерживать");
+            check(E.S.Fronts.Count == 1 && E.S.Fronts[0].ArmyIds.Count == E.S.Armies.Count(a => a.Owner == E.S.Player), "Roster selection assigns actual formations to a front");
+            click("Наступление"); check(E.S.Fronts[0].Stance == FrontStance.Advance, "Front stance button changes the operational plan");
+            click("Остановить"); check(!E.S.Fronts[0].Active && E.S.Armies.Where(a => E.S.Fronts[0].ArmyIds.Contains(a.Id)).All(a => a.Target < 0), "Stopping a front cancels movement through the UI");
+            click("Продолжить");
+            using (var frame = RenderFrame()) frame.Save(Path.Combine(directory, "front-command.png"));
+            PreviewPage("Карта"); Home(); selected = own.Region;
+            using (var frame = RenderFrame()) frame.Save(Path.Combine(directory, "front-map.png"));
+            PreviewPage("Дипломатия");
+            using (var frame = RenderFrame()) frame.Save(Path.Combine(directory, "dossier-war.png"));
+            PreviewPage("Настройки"); click("Настроить клавиши →"); click("Пробел");
+            KeysDown(this, new KeyEventArgs(Keys.Control | Keys.P));
+            check(prefs.Binding("Pause") == (Keys.Control | Keys.P) && pendingBinding == null, "Binding editor captures a new modifier shortcut");
+            PreviewPage("Карта"); speed = 0; KeysDown(this, new KeyEventArgs(Keys.Space));
+            check(speed == 0, "Old pause key no longer triggers after reassignment");
+            KeysDown(this, new KeyEventArgs(Keys.Control | Keys.P));
+            check(speed == 1, "Reassigned pause key controls the live simulation");
+            speed = 0; prefs.Bindings = Preferences.DefaultBindings(); prefs.Save();
             results.Add("Failures: " + failed); File.WriteAllLines(Path.Combine(directory, "ui-results.txt"), results);
             Console.WriteLine(string.Join(Environment.NewLine, results));
             return failed == 0 ? 0 : 2;

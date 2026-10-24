@@ -1,0 +1,100 @@
+PASS Country selection starts a paused campaign
+PASS Starting another country resets campaign state
+PASS Designer category responds to a mouse click
+PASS Module control changes the actual blueprint
+PASS Designer saves a paid project through the UI
+PASS Production order button creates a real line
+PASS Production pause button releases the line
+PASS Production resume button restarts the line
+PASS Recruit button consumes manufactured equipment
+PASS Mouse wheel zooms the map
+PASS Mouse drag pans the map
+PASS Territory hit testing resolves real geography
+PASS Space resumes time
+PASS Menu pauses simulation
+PASS Сводка has visible action bounds at 1280x720
+PASS Setup controls hidden during Сводка
+PASS Карта has visible action bounds at 1280x720
+PASS Setup controls hidden during Карта
+PASS Экономика has visible action bounds at 1280x720
+PASS Setup controls hidden during Экономика
+PASS Производство has visible action bounds at 1280x720
+PASS Setup controls hidden during Производство
+PASS Серии has visible action bounds at 1280x720
+PASS Setup controls hidden during Серии
+PASS Исследования has visible action bounds at 1280x720
+PASS Setup controls hidden during Исследования
+PASS Дипломатия has visible action bounds at 1280x720
+PASS Setup controls hidden during Дипломатия
+PASS Армия has visible action bounds at 1280x720
+PASS Setup controls hidden during Армия
+PASS Конструктор has visible action bounds at 1280x720
+PASS Setup controls hidden during Конструктор
+PASS Политика has visible action bounds at 1280x720
+PASS Setup controls hidden during Политика
+PASS Меню has visible action bounds at 1280x720
+PASS Новая игра has visible action bounds at 1280x720
+PASS Настройки has visible action bounds at 1280x720
+PASS Сводка has visible action bounds at 1600x900
+PASS Setup controls hidden during Сводка
+PASS Карта has visible action bounds at 1600x900
+PASS Setup controls hidden during Карта
+PASS Экономика has visible action bounds at 1600x900
+PASS Setup controls hidden during Экономика
+PASS Производство has visible action bounds at 1600x900
+PASS Setup controls hidden during Производство
+PASS Серии has visible action bounds at 1600x900
+PASS Setup controls hidden during Серии
+PASS Исследования has visible action bounds at 1600x900
+PASS Setup controls hidden during Исследования
+PASS Дипломатия has visible action bounds at 1600x900
+PASS Setup controls hidden during Дипломатия
+PASS Армия has visible action bounds at 1600x900
+PASS Setup controls hidden during Армия
+PASS Конструктор has visible action bounds at 1600x900
+PASS Setup controls hidden during Конструктор
+PASS Политика has visible action bounds at 1600x900
+PASS Setup controls hidden during Политика
+PASS Меню has visible action bounds at 1600x900
+PASS Новая игра has visible action bounds at 1600x900
+PASS Настройки has visible action bounds at 1600x900
+PASS Сводка has visible action bounds at 1920x1080
+PASS Setup controls hidden during Сводка
+PASS Карта has visible action bounds at 1920x1080
+PASS Setup controls hidden during Карта
+PASS Экономика has visible action bounds at 1920x1080
+PASS Setup controls hidden during Экономика
+PASS Производство has visible action bounds at 1920x1080
+PASS Setup controls hidden during Производство
+PASS Серии has visible action bounds at 1920x1080
+PASS Setup controls hidden during Серии
+PASS Исследования has visible action bounds at 1920x1080
+PASS Setup controls hidden during Исследования
+PASS Дипломатия has visible action bounds at 1920x1080
+PASS Setup controls hidden during Дипломатия
+PASS Армия has visible action bounds at 1920x1080
+PASS Setup controls hidden during Армия
+PASS Конструктор has visible action bounds at 1920x1080
+PASS Setup controls hidden during Конструктор
+PASS Политика has visible action bounds at 1920x1080
+PASS Setup controls hidden during Политика
+PASS Меню has visible action bounds at 1920x1080
+PASS Новая игра has visible action bounds at 1920x1080
+PASS Настройки has visible action bounds at 1920x1080
+PASS Changing selection reuses cached geography
+PASS Camera movement invalidates cached geography
+PASS Map mode click selects Политика
+PASS Map mode click selects Дипломатия
+PASS Map mode click selects Армии
+PASS Map mode click selects Экономика
+PASS Map mode click selects Ресурсы
+PASS Map mode click selects Инфраструктура
+PASS Map mode click selects Настроения
+Map rendering mean: 7.5 ms, 1600x900, 30 frames, Mono/Xvfb
+Camera rebuild mean: 154.5 ms, 1600x900, 12 frames, Mono/Xvfb
+Drag frame mean: 7.3 ms, 1600x900, 20 frames, Mono/Xvfb
+PASS Dragging translates cached geometry without blocking on a rebuild
+PASS Releasing the camera rebuilds accurate geography at the final position
+Terrain stages ms: geometry=145.8 texture=0.7 labels=2.0
+PASS Overview geometry reduces vertices while retaining exact hit-test paths
+Failures: 0

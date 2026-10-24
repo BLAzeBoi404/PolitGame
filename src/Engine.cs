@@ -161,6 +161,7 @@ namespace Sovereign
 				}
 			}
 			InitializeEquipment(S);
+            InitializeTreaties(S);
 			Notify("Кабинет сформирован. Проверьте баланс ресурсов и выберите программу развития.");
 			Notify("Учебная модель: современная география; региональная экономика и ресурсы оценочные. Исторические границы пока не включены.");
 			ComputeEconomy(apply: false);
@@ -212,7 +213,9 @@ namespace Sovereign
 				S.Projects.Remove(item);
 			}
 			TickProduction();
+            if (S.Day % 7 == 0) ExecuteFronts();
 			MoveArmies();
+            PruneFronts();
 			if (S.Day % 7 == 0)
 			{
 				ComputeEconomy(apply: true);
@@ -233,6 +236,8 @@ namespace Sovereign
 		public void ComputeEconomy(bool apply)
 		{
 			int num = S.Nations.Length;
+            var armyCount = new int[num]; var armyBudget = new double[num];
+            foreach (var unit in S.Armies) { armyCount[unit.Owner]++; armyBudget[unit.Owner] += 0.002 * unit.Design.Cost / 0.2; }
 			double[,] array = new double[num, 8];
 			double[] array2 = new double[num];
 			double[] array3 = new double[num];
@@ -334,7 +339,7 @@ namespace Sovereign
 					double num17 = nation.Population * array5[num16] * ((num16 == 6) ? (0.6 + nation.Living / 100.0) : 1.0);
 					if (num16 == 7)
 					{
-						num17 += (double)S.Armies.Count((Army a) => a.Owner == c) * 0.045;
+						num17 += (double)armyCount[c] * 0.045;
 					}
 					nation.Demand[num16] += num17;
 					double num18 = Math.Min(array4[num16], num17);
@@ -388,7 +393,7 @@ namespace Sovereign
 				}
 				double num25 = nation2.GDP / 52.0;
 				nation2.Revenue = num25 * (nation2.Tax / 100.0) * (0.82 - nation2.Repression * 0.001);
-				nation2.Spending = num25 * (0.08 + (nation2.Social + nation2.Science + nation2.Military) / 100.0) + nation2.Debt * nation2.Interest / 100.0 / 52.0 + S.Armies.Where((Army a) => a.Owner == c2).Sum((Army a) => 0.002 * a.Design.Cost / 0.2);
+				nation2.Spending = num25 * (0.08 + (nation2.Social + nation2.Science + nation2.Military) / 100.0) + nation2.Debt * nation2.Interest / 100.0 / 52.0 + armyBudget[c2];
 				nation2.TradeBalance = nation2.Exports - nation2.Imports;
 				if (!apply)
 				{
@@ -619,13 +624,14 @@ namespace Sovereign
 
 		private void AI()
 		{
-			int c;
+			var controlled = new List<int>[S.Nations.Length];
+            for (int i = 0; i < controlled.Length; i++) controlled[i] = new List<int>();
+            for (int i = 0; i < S.Provinces.Length; i++) controlled[S.Provinces[i].Owner].Add(i);
+            int c;
 			for (c = 0; c < S.Nations.Length; c++)
 			{
 				Nation n = S.Nations[c];
-				List<int> list = (from r in Enumerable.Range(0, S.Provinces.Length)
-					where S.Provinces[r].Owner == c
-					select r).ToList();
+				List<int> list = controlled[c];
 				if (list.Count == 0)
 				{
 					continue;
@@ -693,86 +699,13 @@ namespace Sovereign
 			}
 		}
 
-		public string Diplomacy(int other, int action)
-		{
-			int me = S.Player;
-            if (other < 0 || other >= S.Nations.Length || action < 0 || action > 4) return "Неизвестная страна или действие.";
-			if (other == me)
-			{
-				return "Выберите другую страну.";
-			}
-			int num = Pair(me, other);
-			int num2 = Pair(other, me);
-			if (action == 0)
-			{
-				if (Player.Treasury < 0.1)
-				{
-					return "Нужно 0,10 млрд для дипломатической миссии.";
-				}
-				Player.Treasury -= 0.1;
-				S.Relations[num] = (S.Relations[num2] = Math.Min(100, S.Relations[num] + 15));
-				Notify("Дипломатическая миссия: " + World.Countries[other].Name + ". Отношения улучшились.", 1);
-			}
-			if (action == 1)
-			{
-				if (AtWar(me, other))
-				{
-					return "Сначала заключите мир.";
-				}
-				if (S.Relations[num] < 20)
-				{
-					return "Для торгового договора нужны отношения не ниже +20.";
-				}
-				S.Agreements[num] = (S.Agreements[num2] = !S.Agreements[num]);
-				Notify("Торговый договор с " + World.Countries[other].Name + (S.Agreements[num] ? " заключён." : " прекращён."));
-			}
-			if (action == 2)
-			{
-				S.Embargo[num] = !S.Embargo[num];
-				S.Relations[num] = (S.Relations[num2] = Math.Max(-100, S.Relations[num] - 15));
-				Notify((S.Embargo[num] ? "Введено" : "Отменено") + " эмбарго: " + World.Countries[other].Name);
-			}
-			if (action == 3)
-			{
-				if (AtWar(me, other))
-				{
-					return "Война уже идёт.";
-				}
-				DeclareWar(me, other);
-			}
-			if (action == 4)
-			{
-				if (!AtWar(me, other))
-				{
-					return "Между странами нет войны.";
-				}
-				S.Wars[num] = (S.Wars[num2] = false);
-				S.Relations[num] = (S.Relations[num2] = -20);
-				foreach (Army item in S.Armies.Where((Army a) => a.Owner == me || a.Owner == other))
-				{
-					item.Target = -1;
-					item.Route.Clear();
-				}
-				Notify("Подписано перемирие с " + World.Countries[other].Name + ". Линия контроля сохранена.", 1);
-			}
-			Raise();
-			return null;
-		}
-
-		private void DeclareWar(int a, int b)
-		{
-			S.Wars[Pair(a, b)] = (S.Wars[Pair(b, a)] = true);
-			S.Agreements[Pair(a, b)] = (S.Agreements[Pair(b, a)] = false);
-			S.Relations[Pair(a, b)] = (S.Relations[Pair(b, a)] = -100);
-			Notify(World.Countries[a].Name + " и " + World.Countries[b].Name + ": объявлена война.", 2);
-		}
 
 		public string Recruit(int region)
 		{
             return RecruitWithDesign(region, Player.ActiveDesign);
         }
 
-		public string Order(int id, int target, bool playerOrder = true)
+		public string Order(int id, int target, bool playerOrder = true, bool hostileTransit = true)
 		{
 			Army army = S.Armies.FirstOrDefault((Army x) => x.Id == id);
 			if (army == null || target < 0 || target >= S.Provinces.Length)
@@ -783,13 +716,14 @@ namespace Sovereign
 			{
 				return "Это чужое соединение.";
 			}
+			if (!CanEnter(army.Owner, S.Provinces[army.Region].Owner)) return "Часть интернирована: нет доступа к территории.";
 			if (target == army.Region)
 			{
 				return "Соединение уже в этом регионе.";
 			}
 			if (army.TrainingDays > 0) return "Соединение проходит подготовку: " + army.TrainingDays + " дн.";
 			int owner = S.Provinces[target].Owner;
-			if (owner != army.Owner && !AtWar(army.Owner, owner))
+			if (!CanEnter(army.Owner, owner) || (!hostileTransit && AtWar(army.Owner, owner)))
 			{
 				return "Военный доступ отсутствует. Нельзя войти в нейтральную страну.";
 			}
@@ -804,7 +738,7 @@ namespace Sovereign
 				foreach (int num3 in neighbors)
 				{
 					int owner2 = S.Provinces[num3].Owner;
-					if (array[num3] == -2 && (owner2 == army.Owner || AtWar(army.Owner, owner2)))
+					if (array[num3] == -2 && CanEnter(army.Owner, owner2) && (hostileTransit || !AtWar(army.Owner, owner2)))
 					{
 						array[num3] = num;
 						queue.Enqueue(num3);
@@ -821,7 +755,8 @@ namespace Sovereign
 				list.Add(num4);
 			}
 			list.Reverse();
-			army.Route = list;
+			if (playerOrder) DetachFromFront(army.Id);
+            army.Route = list;
 			BeginLeg(army);
 			if (playerOrder)
 			{
@@ -852,9 +787,11 @@ namespace Sovereign
 		private void MoveArmies()
 		{
             bool[] connected = SupplyNetwork();
+            var live = new HashSet<Army>(S.Armies);
+            var regionArmies = S.Armies.GroupBy(u => u.Region).ToDictionary(g => g.Key, g => g.ToList());
 			foreach (Army a in S.Armies.ToList())
 			{
-                if (!S.Armies.Contains(a)) continue; // A defender destroyed earlier this day must not act.
+                if (!live.Contains(a)) continue; // A defender destroyed earlier this day must not act.
                 Nation nation = S.Nations[a.Owner];
                 double upkeep = a.Design.Maintenance + a.Attachments.Sum(x => x.Blueprint.Maintenance);
                 bool funded = nation.Treasury >= upkeep;
@@ -865,7 +802,7 @@ namespace Sovereign
 				double num = ((a.Target < 0) ? 0.003 : a.Design.Fuel + a.Attachments.Sum(x => x.Blueprint.Fuel * 0.3));
 				double num2 = Math.Min(nation.Stock[2], num);
 				nation.Stock[2] -= num2;
-				bool flag = S.Provinces[a.Region].Owner == a.Owner && connected[a.Region];
+				bool flag = IsSupplied(a.Owner, a.Region, connected);
                 if (flag) a.SupplyDays = a.Design.Range / (45 * a.Design.Speed);
                 else a.SupplyDays = System.Math.Max(0, a.SupplyDays - 1);
 				double num3 = Rules.Clamp(nation.Military / 2.5, 0.2, 1.35);
@@ -882,7 +819,7 @@ namespace Sovereign
 				}
 				a.Strength = Math.Max(8.1, a.Strength - (100.0 - a.Design.Reliability) * 0.002);
 				int owner = S.Provinces[a.Target].Owner;
-				if (owner != a.Owner && !AtWar(a.Owner, owner))
+				if (!CanEnter(a.Owner, owner))
 				{
 					a.Target = -1;
 					a.Route.Clear();
@@ -893,7 +830,9 @@ namespace Sovereign
 				{
 					continue;
 				}
-				List<Army> list = S.Armies.Where((Army d) => d.Region == a.Target && AtWar(a.Owner, d.Owner)).ToList();
+				List<Army> occupants;
+                regionArmies.TryGetValue(a.Target, out occupants);
+                List<Army> list = occupants == null ? new List<Army>() : occupants.Where(d => live.Contains(d) && AtWar(a.Owner, d.Owner)).ToList();
 				if (list.Count > 0)
 				{
 					double num6 = EquipmentRules.CombatPower(a, list[0], false);
@@ -905,7 +844,7 @@ namespace Sovereign
 					}
 					foreach (Army item2 in list.Where((Army d) => d.Strength <= 8.0))
 					{
-						S.Armies.Remove(item2);
+						S.Armies.Remove(item2); live.Remove(item2);
 						if (item2.Owner == S.Player)
 						{
 							Notify("Потеряно соединение №" + item2.Id + " в регионе " + World.Regions[item2.Region].Name, 2);
@@ -913,7 +852,7 @@ namespace Sovereign
 					}
 					if (a.Strength <= 8.0)
 					{
-						S.Armies.Remove(a);
+						S.Armies.Remove(a); live.Remove(a);
 						if (a.Owner == S.Player)
 						{
 							Notify("Соединение №" + a.Id + " потеряно в бою.", 2);
@@ -926,7 +865,7 @@ namespace Sovereign
 					continue;
 				}
 				int owner2 = S.Provinces[a.Target].Owner;
-				if (owner2 != a.Owner)
+				if (AtWar(a.Owner, owner2))
 				{
 					S.Provinces[a.Target].Owner = a.Owner;
 					S.Provinces[a.Target].Infrastructure = Math.Max(10.0, S.Provinces[a.Target].Infrastructure - 12.0);
@@ -935,7 +874,10 @@ namespace Sovereign
 						Notify(World.Regions[a.Target].Name + ": контроль перешёл к " + World.Countries[a.Owner].Name, 2);
 					}
 				}
-				a.Region = a.Target;
+				regionArmies[a.Region].Remove(a);
+                a.Region = a.Target;
+                if (!regionArmies.ContainsKey(a.Region)) regionArmies[a.Region] = new List<Army>();
+                regionArmies[a.Region].Add(a);
 				BeginLeg(a);
 			}
 		}
@@ -992,6 +934,7 @@ namespace Sovereign
 			}
 			Validate(s);
             if (s.Version == 1) InitializeEquipment(s);
+            if (s.Version == 2) InitializeTreaties(s);
             Validate(s);
 			S = s;
 			Raise();

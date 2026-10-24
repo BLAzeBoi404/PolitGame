@@ -172,6 +172,7 @@ namespace Sovereign
 			e.Validate(e.S);
 			Check(pass: true, "Final save state passes validation");
 			EquipmentTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
+            CampaignSystemsTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
 			report.Add("Simulated days: " + e.S.Day + "; wall seconds: " + stopwatch.Elapsed.TotalSeconds.ToString("0.00"));
 			report.Add("Countries: " + w.Countries.Length + "; regions: " + w.Regions.Length);
 			report.Add("Failures: " + failures);

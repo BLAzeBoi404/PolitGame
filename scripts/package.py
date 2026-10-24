@@ -1,18 +1,36 @@
 """Package a previously built and tested Windows executable; never include saves."""
 from pathlib import Path
 import hashlib
+import json
 import zipfile
 
 root = Path(__file__).resolve().parent.parent
-output = root / 'releases' / 'Sovereign-0.3-windows.zip'
+output = root / 'releases' / 'Sovereign-0.4-windows.zip'
 files = {
     'Sovereign.exe': root / 'bin/Release/net472/Sovereign.exe',
     'Sovereign.exe.config': root / 'bin/Release/net472/Sovereign.exe.config',
     'НАЧАТЬ ЗДЕСЬ.md': root / 'docs/PLAYER-GUIDE.md',
+    'docs/CHANGES-0.4.md': root / 'docs/CHANGES-0.4.md',
+    'docs/REQUIREMENTS-STATUS.md': root / 'docs/REQUIREMENTS-STATUS.md',
+    'docs/PRODUCT-BRIEF.md': root / 'docs/PRODUCT-BRIEF.md',
+    'docs/validation/0.4/README.md': root / 'docs/validation/0.4/README.md',
     'ИСТОЧНИКИ.txt': root / 'docs/archive-0.2/ИСТОЧНИКИ.txt',
-    'ПРОВЕРКИ-СИМУЛЯЦИИ.txt': root / 'docs/validation/tests-sdk.txt',
-    'ПРОВЕРКИ-ИНТЕРФЕЙСА.txt': root / 'docs/validation/ui-results.txt',
+    'ПРОВЕРКИ-СИМУЛЯЦИИ.txt': root / 'docs/validation/0.4/tests-sdk.txt',
+    'ПРОВЕРКИ-ИНТЕРФЕЙСА.txt': root / 'docs/validation/0.4/ui-results.txt',
 }
+for evidence in (root / 'docs/validation/0.4').iterdir():
+    if evidence.suffix in ('.txt', '.json'):
+        files[evidence.relative_to(root).as_posix()] = evidence
+receipt = json.loads((root / 'docs/validation/0.4/build-receipt.json').read_text())
+exe = files['Sovereign.exe']
+if hashlib.sha256(exe.read_bytes()).hexdigest() != receipt['executable_sha256']:
+    raise SystemExit('Executable differs from the tested build')
+source_files = sorted([*root.glob('src/*.cs'), root / 'Sovereign.csproj', root / 'assets/world.bin', root / 'assets/app.ico'], key=lambda p: p.relative_to(root).as_posix())
+digest = hashlib.sha256()
+for source in source_files:
+    digest.update(source.relative_to(root).as_posix().encode() + b'\0' + source.read_bytes() + b'\0')
+if digest.hexdigest() != receipt['source_sha256']:
+    raise SystemExit('Sources changed after validation; rebuild and test before packaging')
 for source in files.values():
     if not source.is_file():
         raise SystemExit(f'Missing build or validation file: {source}')
@@ -23,7 +41,7 @@ for name in ('ПРОВЕРКИ-СИМУЛЯЦИИ.txt', 'ПРОВЕРКИ-ИНТ
 output.parent.mkdir(exist_ok=True)
 with zipfile.ZipFile(output, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
     for name, source in files.items():
-        archive.write(source, 'Sovereign-0.3/' + name)
+        archive.write(source, 'Sovereign-0.4/' + name)
 with zipfile.ZipFile(output) as archive:
     if archive.testzip() is not None:
         raise SystemExit('ZIP integrity check failed')

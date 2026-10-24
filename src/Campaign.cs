@@ -33,6 +33,14 @@ namespace Sovereign
 
 		public bool[] Agreements;
 
+        // Access[guest, host] grants the guest transit and land supply through the host.
+        public bool[] Access;
+        public bool[] Alliances;
+        public int[] WarStarted;
+        public int[] TruceUntil;
+        public List<FrontPlan> Fronts = new List<FrontPlan>();
+        public int NextFront = 1;
+
 		public List<Bulletin> News = new List<Bulletin>();
 
 		public int NextArmy = 1;

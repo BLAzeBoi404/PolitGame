@@ -6,7 +6,6 @@ using System.Drawing.Text;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace Sovereign
@@ -59,7 +58,7 @@ namespace Sovereign
 
 		private bool moved;
 
-		private int sidebar = 204;
+		private int sidebar = 176;
 
 		private Blueprint draft = new Blueprint();
 
@@ -91,7 +90,6 @@ namespace Sovereign
 
 		private List<int> countryList;
 
-		private Image tankArt;
 
 		private Bitmap terrainTexture;
 
@@ -121,7 +119,7 @@ namespace Sovereign
 			W = world;
 			E = new Engine(world);
 			base.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-			Text = "SOVEREIGN — Государство · 0.3";
+			Text = "SOVEREIGN — Государство · 0.4";
 			BackColor = Palette.Bg;
 			ForeColor = Palette.Text;
 			base.AutoScaleMode = AutoScaleMode.None;
@@ -220,30 +218,22 @@ namespace Sovereign
 			}
 		}
 
-		private void Card(Graphics g, float x, float y, float w, float h)
-		{
-			RectangleF r = new RectangleF(x, y, w, h);
-			Round(g, Palette.Card, r, 2f);
-			RoundBorder(g, Palette.Line, r, 2f, 1f);
-		}
+        private void Card(Graphics g, float x, float y, float w, float h)
+        {
+            Fill(g, Palette.Card, x, y, w, h);
+            Line(g, Palette.Line, x, y + h, x + w, y + h);
+        }
 
-		private void Button(Graphics g, string text, float x, float y, float w, Action action, bool active = false, string tooltip = null, float h = 34f)
-		{
-			RectangleF rectangleF = new RectangleF(x, y, w, h);
-			bool flag = rectangleF.Contains(mouse);
-			Color c = (active ? Color.FromArgb(71, 70, 55) : (flag ? Color.FromArgb(57, 66, 63) : Color.FromArgb(37, 47, 47)));
-			Round(g, c, rectangleF, 2f);
-			RoundBorder(g, active ? Palette.Gold : (flag ? Color.FromArgb(108, 126, 117) : Palette.Line), rectangleF, 2f, 1f);
-			Line(g, Color.FromArgb(35, 234, 231, 211), x + 2f, y + 1f, x + w - 2f, y + 1f);
-			Txt(g, text, x + 11f, y + (h - 19f) / 2f, 14f, active ? Palette.Gold : Palette.Text, active, w - 18f);
-			hits.Add(new Hit
-			{
-				Rect = rectangleF,
-                Label = text,
-				Action = action,
-				Tip = (tooltip ?? text)
-			});
-		}
+        private void Button(Graphics g, string text, float x, float y, float w, Action action, bool active = false, string tooltip = null, float h = 34f)
+        {
+            var rect = new RectangleF(x, y, w, h);
+            bool hover = rect.Contains(mouse);
+            Fill(g, active ? Palette.Selected : hover ? Palette.Hover : Palette.Card, x, y, w, h);
+            Line(g, active ? Palette.Gold : hover ? Palette.Muted : Palette.Line, x, y + h, x + w, y + h);
+            if (active) Fill(g, Palette.Gold, x, y + 6, 2, h - 12);
+            Txt(g, text, x + 10, y + (h - 18) / 2, 13, active ? Palette.Gold : Palette.Text, active, w - 18);
+            hits.Add(new Hit { Rect = rect, Label = text, Action = action, Tip = tooltip ?? text });
+        }
 
 		private void Progress(Graphics g, float x, float y, float w, double fraction, Color color)
 		{
@@ -295,7 +285,7 @@ namespace Sovereign
 			}
 			DrawHeader(graphics);
 			DrawNav(graphics);
-			float num = VH - 83f;
+			float num = VH - 52f;
 			mapRect = new RectangleF(sidebar, 99f, VW - (float)sidebar - 318f, num - 99f);
 			if (page == "Карта")
 			{
@@ -304,10 +294,7 @@ namespace Sovereign
 			}
 			else
 			{
-				using (LinearGradientBrush brush = new LinearGradientBrush(new RectangleF(sidebar, 99f, VW - (float)sidebar, num - 99f), Color.FromArgb(35, 42, 43), Palette.Bg, 90f))
-				{
-					graphics.FillRectangle(brush, sidebar, 99f, VW - (float)sidebar, num - 99f);
-				}
+                Fill(graphics, Palette.Bg, sidebar, 99, VW - sidebar, num - 99);
 				DrawPage(graphics);
 			}
 			DrawFooter(graphics, num);
@@ -324,61 +311,6 @@ namespace Sovereign
 			}
 		}
 
-		private void DrawHeader(Graphics g)
-		{
-			Nation player = E.Player;
-			Fill(g, Palette.Panel, 0f, 0f, VW, 99f);
-			Line(g, Palette.Line, 0f, 98f, VW, 98f);
-			Crest(g, 18f, 16f, 27f, Palette.Gold);
-			Book(g, "SOVEREIGN", 54f, 16f, 17f, Palette.Text, bold: true, 143f);
-			Txt(g, "ГОСУДАРСТВО", 55f, 41f, 9f, Palette.Gold, bold: true);
-			Txt(g, W.Countries[E.S.Player].Name, 20f, 69f, 14f, Palette.Text, bold: true, 172f);
-			Line(g, Palette.Line, sidebar - 1, 15f, sidebar - 1, 84f);
-			float num = sidebar + 23;
-			float num2 = VW - (float)sidebar - 300f;
-			float num3 = num2 / 5f;
-			string[] array = new string[5] { "КАЗНА", "ВВП / ГОД", "БАЛАНС / НЕД.", "СТАБИЛЬНОСТЬ", "НАСЕЛЕНИЕ" };
-			string[] array2 = new string[5]
-			{
-				Money(player.Treasury),
-				Money(player.GDP),
-				((player.Revenue - player.Spending >= 0.0) ? "+" : "") + Money(player.Revenue - player.Spending),
-				Num(player.Stability) + "%",
-				Num(player.Population) + " млн"
-			};
-			for (int i = 0; i < 5; i++)
-			{
-				Txt(g, array[i], num + num3 * (float)i, 18f, 10f, Palette.Muted, bold: true);
-				Book(g, array2[i], num + num3 * (float)i, 39f, 21f, (i == 2) ? ((player.Revenue >= player.Spending) ? Palette.Teal : Palette.Red) : Palette.Text, bold: false, num3 - 9f);
-			}
-			string[] array3 = new string[5] { "Деньги государства для строительства, исследований и содержания страны. Суммы в млрд расчётных долларов.", "Годовой объём экономики. Это не деньги в распоряжении правительства.", "Доходы минус расходы государства за одну игровую неделю. Отрицательное значение означает дефицит.", "Устойчивость государства по шкале от 0 до 100. Зависит от политики и положения населения.", "Общая численность населения страны, в миллионах." };
-			for (int j = 0; j < 5; j++)
-			{
-				int stat = j;
-				hits.Add(new Hit
-				{
-					Rect = new RectangleF(num + num3 * (float)j, 13f, num3 - 6f, 51f),
-					Action = delegate
-					{
-						Navigate((stat == 3) ? "Политика" : "Сводка");
-					},
-					Tip = array3[j]
-				});
-			}
-			Txt(g, "Кабинет №" + player.Leader + "   •   " + ((speed == 0) ? "Симуляция приостановлена" : "Время идёт") + "   •   Модельные данные", num, 76f, 11f, Palette.Muted);
-			float num4 = VW - 247f;
-			Txt(g, E.S.Date.ToString("dd MMMM yyyy", new CultureInfo("ru-RU")), num4, 15f, 18f, Palette.Gold, bold: true);
-			string[] array4 = new string[4] { "Пауза", "1×", "3×", "7×" };
-			for (int num5 = 0; num5 < 4; num5++)
-			{
-				int val = num5;
-				Button(g, array4[num5], num4 + (float)((num5 != 0) ? (70 + (num5 - 1) * 48) : 0), 48f, (num5 == 0) ? 64 : 42, delegate
-				{
-					speed = val;
-					Invalidate();
-				}, speed == num5, "Скорость времени", 32f);
-			}
-		}
 
 		private PointF Screen(double x, double y)
 		{
@@ -414,14 +346,13 @@ namespace Sovereign
 			return Color.FromArgb((int)(140.0 - 75.0 * v), (int)(80.0 + 70.0 * v), (int)(75.0 + 54.0 * v));
 		}
 
-		private void PageTitle(Graphics g, string title, string subtitle)
-		{
-			Book(g, title, sidebar + 34, 122f, 31f, Palette.Text, bold: false, VW - (float)sidebar - 245f);
-			if (page != "Производство") Para(g, subtitle, sidebar + 35, 169f, VW - (float)sidebar - 80f, 42f);
-			Line(g, Palette.Line, sidebar + 34, 204f, VW - 34f, 204f);
-			Line(g, Palette.Gold, sidebar + 34, 204f, sidebar + 102, 204f, 2f);
-			Txt(g, "КАБИНЕТ  /  " + E.Player.Leader.ToString("00"), VW - 184f, 133f, 10f, Palette.Gold, bold: true);
-		}
+        private void PageTitle(Graphics g, string title, string subtitle)
+        {
+            Txt(g, page.ToUpperInvariant() + "  /  " + W.Countries[E.S.Player].Code, sidebar + 28, 116, 10, Palette.Gold, true);
+            Txt(g, title, sidebar + 26, 137, 27, Palette.Text, true, VW - sidebar - 60);
+            if (page != "Производство") Txt(g, subtitle, sidebar + 28, 178, 12, Palette.Muted, false, VW - sidebar - 60);
+            Line(g, Palette.Line, sidebar + 28, 204, VW - 28, 204);
+        }
 
 		private void Stat(Graphics g, string label, string value, float x, float y, float w, Color? color = null)
 		{
@@ -567,76 +498,6 @@ namespace Sovereign
 			return Enumerable.Range(0, W.Regions.Length).FirstOrDefault((int r) => E.S.Provinces[r].Owner == E.S.Player);
 		}
 
-		private void DrawDiplomacy(Graphics g)
-		{
-			if (foreign < 0 || foreign == E.S.Player)
-			{
-				foreign = (from c in Enumerable.Range(0, W.Countries.Length)
-					where c != E.S.Player
-					orderby E.S.Nations[c].GDP descending
-					select c).First();
-			}
-			int other = foreign;
-			Nation nation = E.S.Nations[other];
-			int num = E.Pair(E.S.Player, other);
-			float num2 = sidebar + 34;
-			float num3 = VW - (float)sidebar - 68f;
-			PageTitle(g, "Дипломатия", W.Countries[other].Name + " · выберите государство на карте или в списке.");
-			Button(g, "Выбрать государство…", num2, 217f, 230f, ChooseForeign);
-			float num4 = (num3 - 24f) / 3f;
-			Stat(g, "ОТНОШЕНИЯ", E.S.Relations[num].ToString("+0;-0;0"), num2, 271f, num4, (E.S.Relations[num] < 0) ? Palette.Red : Palette.Teal);
-			Stat(g, "СОСТОЯНИЕ", E.AtWar(E.S.Player, other) ? "Война" : "Мир", num2 + num4 + 12f, 271f, num4, E.AtWar(E.S.Player, other) ? Palette.Red : Palette.Teal);
-			Stat(g, "ЭКОНОМИКА ПАРТНЁРА", Money(nation.GDP), num2 + (num4 + 12f) * 2f, 271f, num4);
-			string[] array = new string[5] { "Дипломатическая миссия", "Торговое соглашение", "Торговое эмбарго", "Объявление войны", "Предложить перемирие" };
-			string[] array2 = new string[5]
-			{
-				"0,10 млрд · отношения +15",
-				E.S.Agreements[num] ? "Действует · нажмите, чтобы отменить" : "Нужны отношения +20 · снижает стоимость перевозки",
-				E.S.Embargo[num] ? "Действует · нажмите, чтобы снять" : "Останавливает торговлю между странами",
-				"Открывает вход армии на территорию противника",
-				"В этой версии принимается автоматически; контроль сохраняется"
-			};
-			for (int num5 = 0; num5 < 5; num5++)
-			{
-				int action = num5;
-				float num6 = 384 + num5 * 73;
-				Card(g, num2, num6, num3, 62f);
-				Txt(g, array[num5], num2 + 18f, num6 + 10f, 16f, (num5 == 3) ? Palette.Red : Palette.Text, bold: true);
-				Txt(g, array2[num5], num2 + 18f, num6 + 34f, 12f, Palette.Muted, bold: false, num3 - 200f);
-				object obj;
-				switch (num5)
-				{
-				default:
-					obj = "Предложить";
-					break;
-				case 3:
-					obj = "Объявить";
-					break;
-				case 2:
-					obj = (E.S.Embargo[num] ? "Снять" : "Ввести");
-					break;
-				case 1:
-					obj = (E.S.Agreements[num] ? "Расторгнуть" : "Заключить");
-					break;
-				case 0:
-					obj = "Отправить";
-					break;
-				}
-				Button(g, (string)obj, num2 + num3 - 143f, num6 + 14f, 125f, delegate
-				{
-					if (action == 3)
-					{
-						speed = 0;
-						if (MessageBox.Show(this, "Объявить войну: " + W.Countries[other].Name + "?", "Решение государства", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
-						{
-							return;
-						}
-					}
-					Message(E.Diplomacy(other, action));
-				});
-			}
-		}
-
 
 		private void Adjust(Graphics g, string label, int value, float x, float y, float width, Action<int> change)
 		{
@@ -720,17 +581,6 @@ namespace Sovereign
 			}
 		}
 
-		private void DrawFooter(Graphics g, float y)
-		{
-			Fill(g, Palette.Panel, sidebar, y, VW - (float)sidebar, 83f);
-			Line(g, Palette.Line, sidebar, y, VW, y);
-			Txt(g, "ОБЗОР СОБЫТИЙ", sidebar + 23, y + 13f, 10f, Palette.Gold, bold: true);
-			if (E.S.News.Count > 0)
-			{
-				Txt(g, E.S.News[0].Date + "  /  " + E.S.News[0].Text, sidebar + 23, y + 36f, 13f, Palette.Text, bold: false, VW - (float)sidebar - 50f);
-			}
-			Txt(g, "Пробел — пауза   •   F5 — сохранить   •   F9 — загрузить   •   Полностью офлайн", sidebar + 23, y + 61f, 10f, Palette.Muted);
-		}
 
 		private void DrawHelp(Graphics g)
 		{
@@ -739,12 +589,12 @@ namespace Sovereign
 			float x = sidebar + 55;
 			float width = VW - (float)sidebar - 110f;
 			Txt(g, "Ваш первый год у власти", x, 145f, 32f, Palette.Gold, bold: true);
-			string[] array = new string[7] { "1. Начните со «Сводки»: она показывает бюджет, баланс товаров и текущие проекты.", "2. Выберите свою область на карте → «Строить и развивать». Постройте недостающие мощности.", "3. Откройте «Политика»: согласуйте налоги, социальные расходы и науку с бюджетом.", "4. Запустите исследование. Частные компании инвестируют автоматически каждые 30 дней.", "5. Улучшайте отношения и заключайте торговые договоры. Автоторговля работает раз в неделю.", "6. Выберите свою армию и нажмите ПКМ по области. В нейтральные страны войти нельзя.", "7. F5 сохраняет кампанию локально; F9 загружает. Автосохранение — каждые 90 игровых дней." };
+			string[] array = new string[7] { "1. Начните со «Сводки»: она показывает бюджет, баланс товаров и текущие проекты.", "2. Выберите свою область на карте → «Строить и развивать». Постройте недостающие мощности.", "3. Откройте «Политика»: согласуйте налоги, социальные расходы и науку с бюджетом.", "4. Запустите исследование. Частные компании инвестируют автоматически каждые 30 дней.", "5. Улучшайте отношения и заключайте торговые договоры. Автоторговля работает раз в неделю.", "6. Выберите армию и нажмите ПКМ по области или создайте фронт. Для прохода через мирную страну нужен военный доступ.", "7. F5 сохраняет кампанию локально; F9 загружает. Автосохранение — каждые 90 игровых дней." };
 			for (int i = 0; i < array.Length; i++)
 			{
 				Para(g, array[i], x, 218 + i * 59, width, 51f, 16f, Palette.Text);
 			}
-			Para(g, "Это первая играбельная сборка. География современная; данные экономики оценочные. Исторические карты, флот, авиация и полная финансовая система запланированы. Все расчёты выполняются на вашем компьютере.", x, 661f, width, 75f, 14f, Palette.Muted);
+			Para(g, "География современная; данные экономики оценочные. Союзы, доступ и условия мира — в дипломатии. Управление можно переназначить в настройках. Авиация пока поддерживает сухопутные части; отдельные миссии и морская война ещё не реализованы.", x, 661f, width, 75f, 14f, Palette.Muted);
 			Button(g, "Понятно, к управлению", x, 755f, 260f, delegate
 			{
 				showHelp = false;
@@ -871,71 +721,24 @@ namespace Sovereign
 			Invalidate();
 		}
 
-		private void KeysDown(object sender, KeyEventArgs e)
-		{
-			if (e.KeyCode == Keys.F11)
-			{
-				ToggleFullScreen();
-				e.Handled = true;
-				return;
-			}
-			if (menuScreen != "")
-			{
-				if (e.KeyCode == Keys.Escape)
-				{
-					if (menuScreen == "main" && campaignStarted)
-					{
-						ContinueGame();
-					}
-					else
-					{
-						OpenMenu("main");
-					}
-					e.Handled = true;
-				}
-				return;
-			}
-			if (e.KeyCode >= Keys.D1 && e.KeyCode <= Keys.D9)
-			{
-				string[] array = new string[9] { "Сводка", "Карта", "Экономика", "Производство", "Исследования", "Дипломатия", "Армия", "Конструктор", "Политика" };
-				Navigate(array[(int)(e.KeyCode - 49)]);
-				e.Handled = true;
-			}
-			if (e.KeyCode == Keys.Space)
-			{
-				speed = ((speed == 0) ? 1 : 0);
-				e.Handled = true;
-			}
-			if (e.KeyCode == Keys.F5)
-			{
-				Save();
-			}
-			if (e.KeyCode == Keys.F9)
-			{
-				LoadCampaign();
-			}
-			if (e.KeyCode == Keys.Escape)
-			{
-				if (showHelp)
-				{
-					showHelp = false;
-				}
-				else
-				{
-					OpenMenu("main");
-				}
-			}
-			if (e.KeyCode == Keys.Home)
-			{
-				Home();
-			}
-			if (e.KeyCode == Keys.OemQuestion)
-			{
-				speed = 0;
-				showHelp = !showHelp;
-			}
-			Invalidate();
-		}
+        private void KeysDown(object sender, KeyEventArgs e)
+        {
+            if (CaptureBinding(e)) return;
+            if (e.KeyData == prefs.Binding("Fullscreen")) { ToggleFullScreen(); e.Handled = true; return; }
+            if (menuScreen != "") {
+                if (e.KeyCode == Keys.Escape) { if (menuScreen == "main" && campaignStarted) ContinueGame(); else OpenMenu(menuScreen == "controls" ? "settings" : "main"); e.Handled = true; }
+                return;
+            }
+            for (int i = 0; i < 9; i++) if (e.KeyData == prefs.Binding("Page" + i)) { Navigate(Navigation[i]); e.Handled = true; }
+            if (e.KeyData == prefs.Binding("Pause")) { speed = speed == 0 ? 1 : 0; e.Handled = true; }
+            if (e.KeyData == prefs.Binding("Save")) { Save(); e.Handled = true; }
+            if (e.KeyData == prefs.Binding("Load")) { LoadCampaign(); e.Handled = true; }
+            if (e.KeyCode == Keys.Escape) { if (showHelp) showHelp = false; else OpenMenu("main"); e.Handled = true; }
+            if (e.KeyData == prefs.Binding("Home")) { Home(); e.Handled = true; }
+            if (e.KeyData == prefs.Binding("Help")) { speed = 0; showHelp = !showHelp; e.Handled = true; }
+            if (e.Handled) e.SuppressKeyPress = true;
+            Invalidate();
+        }
 
 		public void PreviewPage(string p)
 		{
@@ -1042,10 +845,7 @@ namespace Sovereign
 				clock.Dispose();
                 cameraRefresh.Dispose();
                 if (mapCache != null) mapCache.Dispose();
-				if (tankArt != null)
-				{
-					tankArt.Dispose();
-				}
+
 				if (terrainTexture != null)
 				{
 					terrainTexture.Dispose();
@@ -1064,13 +864,7 @@ namespace Sovereign
 			countryList = (from c in Enumerable.Range(0, W.Countries.Length)
 				orderby W.Countries[c].Name
 				select c).ToList();
-			using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("tank.png"))
-			{
-				if (stream != null)
-				{
-					tankArt = new Bitmap(stream);
-				}
-			}
+
 			countrySearch = new TextBox
 			{
 				BorderStyle = BorderStyle.None,
@@ -1206,6 +1000,7 @@ namespace Sovereign
 
 		private void BeginCampaign()
 		{
+            selectedUnits.Clear(); frontOffset = 0; compareDesignId = 0;
 			if (campaignStarted && E.S != null && prefs.Autosave)
 			{
 				E.Autosave();
@@ -1368,7 +1163,8 @@ namespace Sovereign
 			{
 				DrawCampaignSetup(g);
 			}
-			else if (menuScreen == "settings")
+			else if (menuScreen == "controls") { DrawBindings(g); }
+            else if (menuScreen == "settings")
 			{
 				DrawSettings(g);
 			}
@@ -1429,7 +1225,7 @@ namespace Sovereign
 			Txt(g, "государств и территорий", num2 + 22f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "областей", num2 + 175f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "ЭКОНОМИКА  /  ДИПЛОМАТИЯ  /  ТЕХНОЛОГИИ  /  СТРАТЕГИЯ", num, VH - 59f, 12f, Palette.Muted);
-			Txt(g, "0.3   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
+			Txt(g, "0.4   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
 		}
 
 		private void DrawCampaignSetup(Graphics g)
@@ -1564,7 +1360,7 @@ namespace Sovereign
 			float num = 48f;
 			float num2 = VW - 96f;
 			float num3 = (num2 - 20f) / 2f;
-			SettingRow(g, "Полноэкранное окно", "Также переключается клавишей F11.", num, 215f, num3, fullScreen, ToggleFullScreen);
+			SettingRow(g, "Полноэкранное окно", "Клавиша: " + prefs.KeyLabel("Fullscreen"), num, 215f, num3, fullScreen, ToggleFullScreen);
 			SettingRow(g, "Подписи на карте", "Названия стран и областей с учётом масштаба.", num + num3 + 20f, 215f, num3, prefs.Labels, delegate
 			{
 				prefs.Labels = !prefs.Labels;
@@ -1589,7 +1385,8 @@ namespace Sovereign
 			{
 				prefs.Tutorial = !prefs.Tutorial;
 			});
-			Para(g, "Размер интерфейса подстраивается под окно. Звук пока не добавлен. Настройки не меняют расчёты экономики или сложность уже начатой кампании.", num, 685f, num2, 80f, 15f);
+			Button(g, "Настроить клавиши →", num + num3 + 20, 559, num3, () => OpenMenu("controls"), true);
+            Para(g, "Размер интерфейса подстраивается под окно. Звук пока не добавлен. Настройки не меняют расчёты экономики или сложность уже начатой кампании.", num, 685f, num2, 80f, 15f);
 		}
 
 		private void DrawLoadMenu(Graphics g)
@@ -1818,69 +1615,16 @@ namespace Sovereign
 			}
 		}
 
-		private void DrawNav(Graphics g)
-		{
-			Fill(g, Palette.Panel, 0f, 99f, sidebar, VH - 99f);
-			Line(g, Palette.Line, sidebar - 1, 99f, sidebar - 1, VH);
-			Txt(g, "ГОСУДАРСТВО", 20f, 117f, 10f, Palette.Muted, bold: true);
-			string[] array = new string[10] { "Сводка", "Карта", "Экономика", "Производство", "Исследования", "Дипломатия", "Армия", "Конструктор", "Политика", "Хроника" };
-			for (int i = 0; i < array.Length; i++)
-			{
-				string p = array[i];
-				float num = 145 + i * 43;
-				RectangleF rect = new RectangleF(0f, num, sidebar - 1, 38f);
-				bool flag = page == p;
-				bool flag2 = rect.Contains(mouse);
-				if (flag || flag2)
-				{
-					Fill(g, flag ? Color.FromArgb(37, 52, 57) : Color.FromArgb(27, 40, 49), 0f, num, sidebar - 1, 38f);
-				}
-				if (flag)
-				{
-					Fill(g, Palette.Gold, 0f, num + 7f, 3f, 24f);
-				}
-				NavIcon(g, (i == 0) ? 8 : (i - 1), 22f, num + 10f, 18f, flag ? Palette.Gold : Palette.Muted);
-				Txt(g, p, 53f, num + 9f, 15f, flag ? Palette.Gold : Palette.Text, flag, sidebar - 65);
-				hits.Add(new Hit
-				{
-					Rect = rect,
-					Action = delegate
-					{
-						Navigate(p);
-					},
-					Tip = ((i == 0) ? "Бюджет, нехватка товаров и текущие задачи страны. Клавиша 1." : NavDescription(i - 1))
-				});
-			}
-			float num2 = VH - 207f;
-			Button(g, "Главное меню", 12f, num2, sidebar - 24, delegate
-			{
-				OpenMenu("main");
-			}, active: false, "Пауза и возврат в главное меню. Кампания остаётся открытой.");
-			Button(g, "Сохранить  ·  F5", 12f, num2 + 43f, sidebar - 24, Save, active: false, "Сохранить текущую кампанию на компьютере.");
-			Button(g, "Настройки", 12f, num2 + 86f, sidebar - 24, delegate
-			{
-				menuBack = "game";
-				OpenMenu("settings");
-			});
-			Button(g, "Как играть  ·  ?", 12f, num2 + 129f, sidebar - 24, delegate
-			{
-				speed = 0;
-				showHelp = !showHelp;
-				Invalidate();
-			});
-		}
 
-		private string NavDescription(int i)
-		{
-			return (new string[9] { "Карта мира, области, ресурсы и управление армиями.", "Запасы, производство, потребление и торговля.", "Постройте предприятие или развивайте выбранную область.", "Выберите научную программу и следите за её прогрессом.", "Отношения, торговые соглашения, эмбарго и война.", "Соединения, готовность, снабжение и перемещение.", "Спроектируйте бронетехнику или поручите выбор модулей автоматически.", "Налоги, расходы государства и политическое давление.", "История событий и результатов ваших решений." })[i];
-		}
+
 
 		private Color Mix(Color a, Color b, float t)
 		{
 			return Color.FromArgb((int)((float)(int)a.R + (float)(b.R - a.R) * t), (int)((float)(int)a.G + (float)(b.G - a.G) * t), (int)((float)(int)a.B + (float)(b.B - a.B) * t));
 		}
 
-		private void DrawMapTerrain(Graphics g)
+		private string mapRasterProfile;
+        private void DrawMapTerrain(Graphics g)
         {
             if (layer == "Армии") {
                 if (militaryIntensity == null) militaryIntensity = new double[W.Regions.Length];
@@ -1919,18 +1663,11 @@ namespace Sovereign
 			{
 				Matrix transform2 = g.Transform;
 				g.Transform = transform;
-				CountryInfo[] countries = W.Countries;
-				foreach (CountryInfo countryInfo in countries)
-				{
-					if (countryInfo.Bounds.IntersectsWith(rect))
-					{
-						using (Pen pen = new Pen(Color.FromArgb(85, 226, 226, 200), 7f / scale))
-						{
-							if (visiblePath(countryInfo).PointCount > 0) g.DrawPath(pen, visiblePath(countryInfo));
-						}
-					}
-				}
-				for (int l = 0; l < W.Countries.Length; l++)
+				var rasterWatch = System.Diagnostics.Stopwatch.StartNew();
+                CountryInfo[] countries = W.Countries;
+
+				mapRasterProfile = "coast=" + rasterWatch.Elapsed.TotalMilliseconds.ToString("0.0"); rasterWatch.Restart();
+                for (int l = 0; l < W.Countries.Length; l++)
 				{
 					CountryInfo countryInfo2 = W.Countries[l];
 					if (countryInfo2.Bounds.IntersectsWith(rect))
@@ -1941,7 +1678,9 @@ namespace Sovereign
 						}
 					}
 				}
-				if (scale > 4f || layer != "Политика" || E.S.Provinces.Where((p, i) => p.Owner != W.Regions[i].Country).Any())
+				mapRasterProfile += " country=" + rasterWatch.Elapsed.TotalMilliseconds.ToString("0.0"); rasterWatch.Restart();
+                using (var provinceBorders = new GraphicsPath()) {
+                if (scale > 4f || layer != "Политика" || E.S.Provinces.Where((p, i) => p.Owner != W.Regions[i].Country).Any())
 				{
 					for (int m = 0; m < W.Regions.Length; m++)
 					{
@@ -1950,22 +1689,26 @@ namespace Sovereign
 						{
 							continue;
 						}
-						Color a = RegionColor(m);
-						a = Mix(a, Color.FromArgb(227, 222, 193), (float)(m * 17 % 11) * 0.004f);
-						using (SolidBrush brush3 = new SolidBrush(a))
-						{
-							if (visiblePath(regionInfo).PointCount > 0) g.FillPath(brush3, visiblePath(regionInfo));
-						}
-						if (prefs.RegionBorders && scale > 11f)
-						{
-							using (Pen pen2 = new Pen(Color.FromArgb(100, 79, 90, 75), 0.6f / scale))
-							{
-								if (visiblePath(regionInfo).PointCount > 0) g.DrawPath(pen2, visiblePath(regionInfo));
-							}
-						}
+                        // The national base already covers unoccupied political provinces.
+                        // Avoid repainting it thousands of times for imperceptible shade variation.
+                        if (layer != "Политика" || E.S.Provinces[m].Owner != regionInfo.Country) {
+                            using (var brush = new SolidBrush(RegionColor(m))) {
+                                var path = visiblePath(regionInfo); if (path.PointCount > 0) g.FillPath(brush, path);
+                            }
+                        }
+                        if (prefs.RegionBorders && scale > 18f && regionInfo.Bounds.Width * regionInfo.Bounds.Height * scale * scale >= 35) {
+                            var borderPath = visiblePath(regionInfo);
+                            if (borderPath.PointCount > 0) provinceBorders.AddPath(borderPath, false);
+                        }
 					}
 				}
-				countries = W.Countries;
+                g.SmoothingMode = SmoothingMode.None;
+                using (var borderPen = new Pen(Color.FromArgb(64, 64, 79, 76), 0.65f / scale))
+                    if (provinceBorders.PointCount > 0) g.DrawPath(borderPen, provinceBorders);
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                }
+				mapRasterProfile += " provinces=" + rasterWatch.Elapsed.TotalMilliseconds.ToString("0.0"); rasterWatch.Restart();
+                countries = W.Countries;
 				foreach (CountryInfo countryInfo3 in countries)
 				{
 					if (countryInfo3.Bounds.IntersectsWith(rect))
@@ -1976,7 +1719,8 @@ namespace Sovereign
 						}
 					}
 				}
-				g.Transform = transform2;
+				mapRasterProfile += " borders=" + rasterWatch.Elapsed.TotalMilliseconds.ToString("0.0");
+                g.Transform = transform2;
 				transform2.Dispose();
 			}
 			foreach (var clipped in clippedPaths.Values) clipped.Dispose();
@@ -2071,6 +1815,7 @@ namespace Sovereign
 						g.DrawPath(pen5, W.Regions[selected].Path);
 					}
 				}
+                DrawFrontRegions(g);
                 g.Restore(highlightState);
             }
 			foreach (Army army in E.S.Armies)
@@ -2127,6 +1872,7 @@ namespace Sovereign
 					});
 				}
 			}
+            DrawBattleMarkers(g);
 			Compass(g, mapRect.X + 52f, mapRect.Bottom - 123f);
 			g.Restore(gstate);
             DrawMapLayerPicker(g);
@@ -2159,138 +1905,13 @@ namespace Sovereign
 		}
 
 
-		private void DrawInspector(Graphics g)
-		{
-			float num = VW - 318f;
-			float num2 = 99f;
-			Fill(g, Palette.Panel, num, num2, 318f, VH - 182f);
-			Line(g, Palette.Line, num, num2, num, VH - 83f);
-			if (selected < 0)
-			{
-				Para(g, "Выберите область на карте", num + 24f, num2 + 32f, 270f, 80f, 22f, Palette.Text);
-				return;
-			}
-			Province r = E.S.Provinces[selected];
-			bool flag = r.Owner == E.S.Player;
-			Txt(g, flag ? "ВАША ОБЛАСТЬ" : "ДРУГОЕ ГОСУДАРСТВО", num + 23f, num2 + 24f, 10f, Palette.Gold, bold: true);
-			Book(g, W.Regions[selected].Name, num + 22f, num2 + 52f, 24f, Palette.Text, bold: false, 274f);
-			Txt(g, W.Countries[r.Owner].Name, num + 23f, num2 + 122f, 14f, Palette.Muted, bold: false, 270f);
-			Line(g, Palette.Line, num + 23f, num2 + 152f, num + 295f, num2 + 152f);
-			Txt(g, "НАСЕЛЕНИЕ", num + 23f, num2 + 174f, 10f, Palette.Muted, bold: true);
-			Txt(g, Num(r.Population) + " млн", num + 22f, num2 + 197f, 29f, Palette.Text, bold: true);
-			string[] array = new string[2] { "Инфраструктура", "Общественное спокойствие" };
-			double[] array2 = new double[2]
-			{
-				r.Infrastructure,
-				100.0 - r.Unrest
-			};
-			for (int i = 0; i < 2; i++)
-			{
-				float num3 = num2 + 255f + (float)(i * 55);
-				Txt(g, array[i], num + 23f, num3, 12f, Palette.Muted);
-				Txt(g, Num(array2[i]) + "%", num + 236f, num3, 13f, Palette.Text, bold: true);
-				Progress(g, num + 23f, num3 + 25f, 272f, array2[i] / 100.0, (i == 0) ? Palette.Gold : Palette.Teal);
-			}
-			Txt(g, "РЕСУРСНЫЙ ПОТЕНЦИАЛ", num + 23f, num2 + 383f, 10f, Palette.Gold, bold: true);
-			string[] array3 = new string[3] { "Почва", "Нефть", "Руда" };
-			double[] array4 = new double[3] { r.Soil, r.Oil, r.Ore };
-			for (int j = 0; j < 3; j++)
-			{
-				Card(g, num + 22f + (float)(j * 94), num2 + 409f, 85f, 71f);
-				Txt(g, array3[j], num + 34f + (float)(j * 94), num2 + 421f, 11f, Palette.Muted);
-				Txt(g, Num(array4[j]), num + 33f + (float)(j * 94), num2 + 444f, 20f, Palette.Text, bold: true);
-			}
-			Txt(g, "ГЛАВНЫЕ ОТРАСЛИ", num + 23f, num2 + 504f, 10f, Palette.Gold, bold: true);
-			int[] array5 = (from k in Enumerable.Range(0, 8)
-				orderby r.Public[k] + r.Private[k] descending
-				select k).Take(2).ToArray();
-			for (int num4 = 0; num4 < 2; num4++)
-			{
-				Txt(g, Rules.Goods[array5[num4]], num + 23f, num2 + 531f + (float)(num4 * 27), 13f, Palette.Text);
-				Txt(g, Num(r.Public[array5[num4]] + r.Private[array5[num4]]), num + 255f, num2 + 531f + (float)(num4 * 27), 13f, Palette.Muted);
-			}
-			float num5 = VH - 225f;
-			if (flag)
-			{
-				Button(g, "Строить и развивать →", num + 23f, num5, 272f, delegate
-				{
-					Navigate("Производство");
-				}, active: true, "Открыть строительство в выбранной области", 41f);
-				Button(g, "Сформировать соединение", num + 23f, num5 + 49f, 272f, delegate
-				{
-					Message(E.Recruit(selected));
-				}, active: false, "Стоимость: 0,30 млрд и 1 единица вооружения.", 36f);
-			}
-			else
-			{
-				Button(g, "Отношения и дипломатия →", num + 23f, num5, 272f, delegate
-				{
-					foreign = r.Owner;
-					Navigate("Дипломатия");
-				}, active: true, "Перейти к отношениям с выбранной страной", 41f);
-			}
-			Txt(g, "Нажмите на армию → ПКМ по цели", num + 23f, VH - 119f, 11f, Palette.Muted);
-		}
-
-		private void Module(Graphics g, string title, string description, int value, float x, float y, float w, Action<int> change)
-		{
-			int num = Math.Min(8, 2 + E.Player.Tech[5]);
-			Line(g, Palette.Line, x, y - 5f, x + w, y - 5f);
-			Txt(g, title, x, y + 8f, 17f, Palette.Text, bold: true);
-			Txt(g, description, x, y + 61f, 12f, Palette.Muted, bold: false, w);
-			for (int i = 0; i < num; i++)
-			{
-				Fill(g, (i < value) ? Palette.Gold : Palette.Line, x + (float)(i * 21), y + 42f, 16f, 5f);
-			}
-			Button(g, "−", x + w - 104f, y + 8f, 30f, delegate
-			{
-				change(-1);
-				Invalidate();
-			}, active: false, "Уменьшить уровень модуля", 30f);
-			Book(g, value.ToString("00"), x + w - 66f, y + 10f, 19f, Palette.Gold, bold: false, 40f);
-			Button(g, "+", x + w - 30f, y + 8f, 30f, delegate
-			{
-				change(1);
-				Invalidate();
-			}, active: false, "Увеличить уровень модуля", 30f);
-		}
-
-		private void DesignMetric(Graphics g, string title, string value, string note, float x, float y, float w, Color color)
-		{
-			Line(g, Palette.Line, x, y, x + w, y);
-			Txt(g, title, x + 1f, y + 11f, 10f, Palette.Muted, bold: true);
-			Book(g, value, x, y + 29f, 24f, color, bold: false, w - 10f);
-			Txt(g, note, x + 1f, y + 62f, 10f, Palette.Muted, bold: false, w - 12f);
-		}
 
 
-		private void DrawTank(Graphics g, RectangleF box)
-		{
-			if (tankArt != null)
-			{
-				float num = Math.Min(box.Width / (float)tankArt.Width, box.Height / (float)tankArt.Height);
-				float num2 = (float)tankArt.Width * num;
-				float num3 = (float)tankArt.Height * num;
-				GraphicsState gstate = g.Save();
-				g.SetClip(box);
-				for (int i = 0; i < 6; i++)
-				{
-					Line(g, Color.FromArgb(18, 143, 168, 157), box.Left, box.Top + (float)(i * 40), box.Right, box.Top + (float)(i * 40));
-				}
-				for (int j = 0; j < 10; j++)
-				{
-					Line(g, Color.FromArgb(13, 143, 168, 157), box.Left + (float)(j * 75), box.Top, box.Left + (float)(j * 75), box.Bottom);
-				}
-				using (Pen pen = new Pen(Color.FromArgb(33, 210, 185, 125), 1f))
-				{
-					g.DrawEllipse(pen, box.X + box.Width * 0.15f, box.Bottom - 39f, box.Width * 0.72f, 26f);
-					g.DrawEllipse(pen, box.X + box.Width * 0.11f, box.Bottom - 43f, box.Width * 0.8f, 34f);
-				}
-				g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-				g.DrawImage(tankArt, box.X + (box.Width - num2) / 2f, box.Y + (box.Height - num3) / 2f, num2, num3);
-				g.Restore(gstate);
-			}
-		}
+
+
+
+
+
 
 		private void DrawTooltip(Graphics g)
 		{
@@ -2316,27 +1937,14 @@ namespace Sovereign
 			Line(g, Palette.Line, x, y + 26f, x + w, y + 26f);
 		}
 
-		private void AvailableButton(Graphics g, string label, float x, float y, float w, Action action, bool enabled, string reason, bool active = false, float h = 34f)
-		{
-			if (enabled)
-			{
-				Button(g, label, x, y, w, action, active, reason, h);
-				return;
-			}
-			RectangleF rectangleF = new RectangleF(x, y, w, h);
-			Round(g, Color.FromArgb(24, 34, 43), rectangleF, 4f);
-			RoundBorder(g, Palette.Line, rectangleF, 4f, 1f);
-			Txt(g, label, x + 11f, y + (h - 19f) / 2f, 14f, Palette.Muted, bold: false, w - 18f);
-			hits.Add(new Hit
-			{
-				Rect = rectangleF,
-				Action = delegate
-				{
-					Message(reason);
-				},
-				Tip = reason
-			});
-		}
+        private void AvailableButton(Graphics g, string label, float x, float y, float w, Action action, bool enabled, string reason, bool active = false, float h = 34f)
+        {
+            if (enabled) { Button(g, label, x, y, w, action, active, reason, h); return; }
+            Fill(g, Palette.Panel, x, y, w, h);
+            Line(g, Palette.Line, x, y + h, x + w, y + h);
+            Txt(g, label, x + 10, y + (h - 18) / 2, 13, Palette.Muted, false, w - 18);
+            hits.Add(new Hit { Rect = new RectangleF(x, y, w, h), Label = label, Action = () => Message(reason), Tip = reason });
+        }
 
 		private void DrawOverview(Graphics g)
 		{
@@ -2485,57 +2093,6 @@ namespace Sovereign
 			}
 		}
 
-		private void DrawResearch(Graphics g)
-		{
-			Nation player = E.Player;
-			float num = sidebar + 34;
-			float num2 = VW - (float)sidebar - 68f;
-			PageTitle(g, "Наука и технологии", "Выберите одну программу. Её внедрение улучшит отрасль во всей стране.");
-			float num3 = num2 * 0.62f;
-			float num4 = num + num3 + 34f;
-			float num5 = num2 - num3 - 34f;
-			Section(g, "НАПРАВЛЕНИЯ РАЗВИТИЯ", num, 228f, num3);
-			string[] array = new string[6] { "Больше продовольствия с существующих земель.", "Рост выработки действующих электростанций.", "Производительность, двигатели, корпуса и ремонтные модули.", "Строительство, ходовая часть и топливные баки.", "Снижение смертности и рост населения.", "Броня, оружие, электроника; авиация с уровня 2." };
-			for (int i = 0; i < 6; i++)
-			{
-				int tech = i;
-				float num6 = 279 + i * 80;
-				bool flag = player.Research == i;
-				if (flag)
-				{
-					Fill(g, Color.FromArgb(31, 46, 49), num - 12f, num6 - 6f, num3 + 12f, 73f);
-				}
-				Txt(g, Rules.Techs[i], num, num6, 19f, flag ? Palette.Gold : Palette.Text, bold: true, num3 - 182f);
-				Txt(g, array[i], num, num6 + 29f, 13f, Palette.Muted, bold: false, num3 - 182f);
-				Txt(g, "Ур. " + player.Tech[i], num + num3 - 166f, num6 + 5f, 13f, Palette.Muted);
-				AvailableButton(g, flag ? "В работе" : "Начать", num + num3 - 100f, num6 + 6f, 100f, delegate
-				{
-					Message(E.StartResearch(tech));
-				}, player.Research < 0, flag ? "Эта программа уже выполняется." : ((player.Research >= 0) ? "Сначала завершите текущую программу." : ("Запустить программу: " + Rules.Techs[i])), flag);
-				Line(g, Palette.Line, num, num6 + 66f, num + num3, num6 + 66f);
-			}
-			Section(g, "ТЕКУЩАЯ ПРОГРАММА", num4, 228f, num5);
-			NavIcon(g, 3, num4, 282f, 22f, Palette.Gold);
-			Txt(g, (player.Research < 0) ? "Ожидает решения" : Rules.Techs[player.Research], num4, 330f, 25f, Palette.Text, bold: true, num5);
-			if (player.Research >= 0)
-			{
-				Txt(g, Num(player.ResearchProgress) + "%", num4, 389f, 46f, Palette.Gold, bold: true);
-				Progress(g, num4, 457f, num5, player.ResearchProgress / 100.0, Palette.Teal);
-				Para(g, "После завершения уровень отрасли повысится на один. Эффект применяется ко всей стране.", num4, 480f, num5, 80f, 15f);
-			}
-			else
-			{
-				Para(g, "Выделенный научный бюджет начнёт работать после выбора программы слева. Продвижение рассчитывается каждую игровую неделю.", num4, 389f, num5, 135f, 16f);
-			}
-			Line(g, Palette.Line, num4, 582f, num4 + num5, 582f);
-			Txt(g, "Наука и образование", num4, 610f, 15f, Palette.Text);
-			Txt(g, Num(player.Science) + "% ВВП", num4, 640f, 22f, Palette.Gold, bold: true);
-			Txt(g, "Уровень образования: " + Num(player.Education) + " / 100", num4, 684f, 13f, Palette.Muted, bold: false, num5);
-			Button(g, "Изменить финансирование →", num4, 737f, num5, delegate
-			{
-				Navigate("Политика");
-			});
-		}
 
 		private Font BookFont(float size, bool bold = false)
 		{
@@ -2606,30 +2163,6 @@ namespace Sovereign
 			Book(g, "N", x - 6f, y - 46f, 13f, color, bold: true, 25f);
 		}
 
-		private void TechnicalFrame(Graphics g, RectangleF r)
-		{
-			Color color = Color.FromArgb(213, 208, 188);
-			Color color2 = Color.FromArgb(116, 122, 110);
-			using (LinearGradientBrush brush = new LinearGradientBrush(r, Color.FromArgb(231, 225, 206), color, 90f))
-			{
-				g.FillRectangle(brush, r);
-			}
-			GraphicsState gstate = g.Save();
-			g.SetClip(r);
-			for (float num = r.X; num < r.Right; num += 22f)
-			{
-				Line(g, Color.FromArgb(20, 69, 80, 71), num, r.Top, num, r.Bottom);
-			}
-			for (float num2 = r.Y; num2 < r.Bottom; num2 += 22f)
-			{
-				Line(g, Color.FromArgb(20, 69, 80, 71), r.Left, num2, r.Right, num2);
-			}
-			HairlineFrame(g, new RectangleF(r.X + 14f, r.Y + 14f, r.Width - 28f, r.Height - 28f), Color.FromArgb(110, 133, 136, 119));
-			for (float num3 = r.X + 42f; num3 < r.Right - 30f; num3 += 22f)
-			{
-				Line(g, color2, num3, r.Bottom - 14f, num3, r.Bottom - 19f);
-			}
-			g.Restore(gstate);
-		}
+
 	}
 }

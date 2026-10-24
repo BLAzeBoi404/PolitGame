@@ -1,0 +1,11 @@
+{
+  "version": "0.4.0",
+  "executable_sha256": "d13d85d769ecb24481d230a4a771c1a0882af35f65be82812bc884737acb1374",
+  "source_sha256": "2daa557d1daa3df25ebb3bb8805e25a829bd047a6a65aae1ddf9d221f78d48d3",
+  "executable_bytes": 3019776,
+  "build": "NET SDK 8.0.426, net472 Release",
+  "runtime_validation": "Mono 6.12 / libgdiplus / Xvfb, Debian 13",
+  "native_windows_tested": false,
+  "logic_checks": 126,
+  "ui_checks": 107
+}
