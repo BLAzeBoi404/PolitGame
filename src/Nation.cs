@@ -80,6 +80,12 @@ namespace Sovereign
 
 		public Blueprint Design = new Blueprint();
 
+        public List<EquipmentDesign> Designs = new List<EquipmentDesign>();
+        public List<ProductionLine> Lines = new List<ProductionLine>();
+        public int NextDesign = 1;
+        public int NextLine = 1;
+        public int ActiveDesign;
+
 		public List<double> History = new List<double>();
 
 		public List<double> StabilityHistory = new List<double>();

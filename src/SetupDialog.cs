@@ -25,7 +25,6 @@ namespace Sovereign
 
 		public SetupDialog(World w, bool campaign, int selected)
 		{
-			SetupDialog setupDialog = this;
 			Text = (campaign ? "Новая кампания" : "Выбор государства");
 			base.ClientSize = new Size(630, campaign ? 508 : 210);
 			base.StartPosition = FormStartPosition.CenterParent;

@@ -8,7 +8,7 @@ if command -v mcs >/dev/null && [[ ! -f /workspace/tooling/sysroot/usr/lib/mono/
 else
   compiler=(mono /workspace/tooling/sysroot/usr/lib/mono/4.5/mcs.exe)
 fi
-"${compiler[@]}" -langversion:7.2 -target:winexe -optimize+ -out:build/Sovereign.exe \
+"${compiler[@]}" -langversion:7.2 -sdk:4.7.2 -target:winexe -optimize+ -out:build/Sovereign.exe \
   -r:System.Windows.Forms -r:System.Drawing -r:System.Xml -r:System.Core \
   -resource:assets/world.bin,world.bin -resource:assets/tank.png,tank.png \
   -win32icon:assets/app.ico src/*.cs

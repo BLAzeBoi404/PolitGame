@@ -1,0 +1,95 @@
+﻿PASS Real geography loads: countries and administrative regions
+PASS Region adjacency is symmetric
+PASS Allocated regional population conserves country population
+PASS Construction charges treasury exactly once
+PASS Construction completes and adds capacity
+PASS Player cannot build in another state
+PASS Insufficient funds reject construction
+PASS Research accepts one active program
+PASS Funded research completes
+PASS Adjacent friendly movement receives route
+PASS Army arrives at ordered destination
+PASS Neutral borders block movement
+PASS War opens adjacent enemy territory for movement
+PASS Arrival captures undefended enemy region
+PASS Combat and field wear reduce army strength
+PASS Medicine and social spending support demographic growth
+PASS War is bilateral
+PASS Peace clears war state
+PASS Trade agreement is bilateral
+PASS Tank design trades armor against speed, fuel and cost
+PASS Save/load preserves state and RNG
+PASS Simulation remains deterministic across save/load
+PASS Two-year simulation: finite finances and nonnegative stocks
+PASS Two-year simulation: valid ownership and capacities
+PASS Foreign AI researches technologies
+PASS World market matches real imports and exports
+PASS Final save state passes validation
+PASS Map clipping preserves the visible polygon interior
+PASS Rendering simplification never mutates exact selection geometry
+PASS Paid design adoption: Tank
+PASS Adoption snapshots modules: Tank
+PASS Paid design adoption: IFV
+PASS Adoption snapshots modules: IFV
+PASS Paid design adoption: Truck
+PASS Adoption snapshots modules: Truck
+PASS Paid design adoption: Artillery
+PASS Adoption snapshots modules: Artillery
+PASS Paid design adoption: Fighter
+PASS Adoption snapshots modules: Fighter
+PASS Paid design adoption: Bomber
+PASS Adoption snapshots modules: Bomber
+PASS Paid design adoption: Recon
+PASS Adoption snapshots modules: Recon
+PASS Paid design adoption: Transport
+PASS Adoption snapshots modules: Transport
+PASS Locked module does not charge or mutate state
+PASS Incompatible weapons rejected
+PASS Invalid names and null designs rejected
+PASS Aircraft gated by military research
+PASS Military research unlocks aircraft
+PASS Armor tradeoff is consistent across five stats
+PASS Engine gains speed at a material and fuel cost
+PASS Fuel tanks trade mobility for real supply endurance
+PASS Duplicate names rejected without replacing existing designs
+PASS Factory over-allocation is rejected
+PASS Invalid production requests are rejected
+PASS Production line can be created
+PASS Pause preserves progress and releases capacity without spending
+PASS Missing steel blocks all associated costs and explains the shortage
+PASS Serial production completes exact ordered quantity
+PASS Completed kits conserve money and all three material inputs
+PASS Completed line cannot duplicate stock and frees capacity
+PASS Removing completed line retains manufactured stock
+PASS Cancelling unfinished kit neither refunds spent inputs nor creates stock
+PASS Losing factories stops existing production
+PASS Rebuilt capacity resumes the original line
+PASS Recruitment cannot invent equipment
+PASS Cannot recruit in a foreign province
+PASS Recruitment consumes exactly one stored kit
+PASS New formations cannot move during training
+PASS Trained formation accepts movement orders
+PASS Moving formation cannot refit
+PASS Refit swaps inventory, returns intact old equipment and requires training
+PASS Support installation consumes a produced kit
+PASS Duplicate support classes cannot stack
+PASS Bomber support improves attacks; enemy fighters counter it
+PASS Truck loadout contributes to movement and supply calculations
+PASS Save/load retains exact partial production and efficiency
+PASS Entire campaign remains bit-for-bit deterministic after save/load
+PASS Atomic save retains previous backup
+PASS Nonfinite save is rejected atomically without losing the active campaign
+PASS Dangling production references rejected
+PASS Version 1 migration creates catalogs and retains existing armies
+PASS Repeated loading cannot duplicate migrated designs or equipment
+PASS Largest controlled home region is a supply hub
+PASS Hostile territory cuts off an isolated province from supply
+PASS Encircled formation loses supply and suffers attrition
+PASS Out-of-range strategic actions are rejected
+PASS Penetration and attack improve performance against heavy armor
+PASS Five-year simulation produces player equipment and passes full state validation
+PASS AI operates real production lines and inventory
+PASS Five-year economy retains finite nonnegative material stocks
+Simulated days: 818; wall seconds: 14.71
+Countries: 176; regions: 4136
+Failures: 0

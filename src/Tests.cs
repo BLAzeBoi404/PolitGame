@@ -33,6 +33,7 @@ namespace Sovereign
 
 		public static int Run(World w, string path)
 		{
+			report.Clear(); failures = 0;
 			Stopwatch stopwatch = Stopwatch.StartNew();
 			Engine e = new Engine(w);
 			e.AutoSaveEnabled = false;
@@ -170,10 +171,12 @@ namespace Sovereign
 			Check(e.S.Nations.Any((Nation n) => n.Imports > 0.0) && e.S.Nations.Any((Nation n) => n.Exports > 0.0), "World market matches real imports and exports");
 			e.Validate(e.S);
 			Check(pass: true, "Final save state passes validation");
+			EquipmentTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
 			report.Add("Simulated days: " + e.S.Day + "; wall seconds: " + stopwatch.Elapsed.TotalSeconds.ToString("0.00"));
 			report.Add("Countries: " + w.Countries.Length + "; regions: " + w.Regions.Length);
 			report.Add("Failures: " + failures);
 			File.WriteAllLines(path, report, Encoding.UTF8);
+            Console.WriteLine(string.Join(Environment.NewLine, report));
 			if (failures != 0)
 			{
 				return 2;

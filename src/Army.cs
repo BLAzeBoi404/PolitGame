@@ -25,5 +25,10 @@ namespace Sovereign
 		public double Experience;
 
 		public Blueprint Design = new Blueprint();
+
+        public int DesignId;
+        public int TrainingDays;
+        public double SupplyDays = 5;
+        public List<EquipmentAttachment> Attachments = new List<EquipmentAttachment>();
 	}
 }

@@ -1,0 +1,41 @@
+name: Build and test Sovereign
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build and run simulation tests
+        shell: pwsh
+        run: ./scripts/build-windows.ps1
+      - name: Upload Windows build and test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Sovereign-windows
+          path: |
+            bin/Release/net472/Sovereign.exe
+            bin/Release/net472/Sovereign.exe.config
+            artifacts/tests-windows.txt
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y mono-devel libgdiplus xvfb xauth fonts-dejavu-core
+      - name: Simulation and real WinForms UI tests
+        run: bash scripts/test.sh --ui
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: validation-linux
+          path: |
+            artifacts/tests.txt
+            artifacts/ui/
+            artifacts/simulation-performance.txt

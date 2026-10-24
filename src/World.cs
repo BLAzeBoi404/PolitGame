@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Sovereign
 {
-	public class World
+	public class World : IDisposable
 	{
 		public CountryInfo[] Countries;
 
@@ -25,8 +25,7 @@ namespace Sovereign
 				array[i] = new PointF[b.ReadInt32()];
 				for (int j = 0; j < array[i].Length; j++)
 				{
-					ref PointF reference = ref array[i][j];
-					reference = new PointF(b.ReadSingle(), 0f - b.ReadSingle());
+					array[i][j] = new PointF(b.ReadSingle(), 0f - b.ReadSingle());
 				}
 			}
 			return array;
@@ -79,6 +78,12 @@ namespace Sovereign
 				return world;
 			}
 		}
+
+        public void Dispose()
+        {
+            foreach (var country in Countries) country.Dispose();
+            foreach (var region in Regions) region.Dispose();
+        }
 
 		public int ByCode(string code)
 		{

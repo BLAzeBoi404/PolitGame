@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 namespace Sovereign
 {
-	public class Engine
+	public partial class Engine
 	{
 		public World World;
 
@@ -160,6 +160,7 @@ namespace Sovereign
 					});
 				}
 			}
+			InitializeEquipment(S);
 			Notify("Кабинет сформирован. Проверьте баланс ресурсов и выберите программу развития.");
 			Notify("Учебная модель: современная география; региональная экономика и ресурсы оценочные. Исторические границы пока не включены.");
 			ComputeEconomy(apply: false);
@@ -168,13 +169,7 @@ namespace Sovereign
 
 		public static Blueprint CopyDesign(Blueprint d)
 		{
-			Blueprint blueprint = new Blueprint();
-			blueprint.Name = d.Name;
-			blueprint.Armor = d.Armor;
-			blueprint.Gun = d.Gun;
-			blueprint.Engine = d.Engine;
-			blueprint.Electronics = d.Electronics;
-			return blueprint;
+            return d.Copy();
 		}
 
 		public void Raise()
@@ -216,6 +211,7 @@ namespace Sovereign
 				}
 				S.Projects.Remove(item);
 			}
+			TickProduction();
 			MoveArmies();
 			if (S.Day % 7 == 0)
 			{
@@ -661,6 +657,7 @@ namespace Sovereign
 				{
 					continue;
 				}
+				EquipmentAI(c, list);
 				if (n.Research < 0)
 				{
 					n.Research = ((S.Difficulty == 0) ? ((int)(S.Random() * 6.0)) : ((!(n.Shortage > 0.1)) ? (n.Focus++ % 6) : 0));
@@ -676,15 +673,7 @@ namespace Sovereign
 						n.Social = Math.Min(10.0, n.Social + 0.5);
 					}
 				}
-				List<Army> list2 = S.Armies.Where((Army a) => a.Owner == c && a.Target < 0).ToList();
-				foreach (Army item2 in list2)
-				{
-					List<int> list3 = World.Regions[item2.Region].Neighbors.Where((int r) => AtWar(c, S.Provinces[r].Owner)).ToList();
-					if (list3.Count > 0)
-					{
-						Order(item2.Id, list3[(int)(S.Random() * (double)list3.Count)], playerOrder: false);
-					}
-				}
+                StrategicOrders(c, list);
 				if (S.Difficulty <= 0 || S.Day <= 180 || !(S.Random() < 0.012 * (double)S.Difficulty))
 				{
 					continue;
@@ -707,6 +696,7 @@ namespace Sovereign
 		public string Diplomacy(int other, int action)
 		{
 			int me = S.Player;
+            if (other < 0 || other >= S.Nations.Length || action < 0 || action > 4) return "Неизвестная страна или действие.";
 			if (other == me)
 			{
 				return "Выберите другую страну.";
@@ -779,28 +769,8 @@ namespace Sovereign
 
 		public string Recruit(int region)
 		{
-			if (region < 0 || S.Provinces[region].Owner != S.Player)
-			{
-				return "Выберите свой регион.";
-			}
-			if (Player.Treasury < 0.3 || Player.Stock[7] < 1.0)
-			{
-				return "Для формирования нужны 0,30 млрд и 1 ед. вооружения.";
-			}
-			Player.Treasury -= 0.3;
-			Player.Stock[7] -= 1.0;
-			S.Armies.Add(new Army
-			{
-				Id = S.NextArmy++,
-				Owner = S.Player,
-				Region = region,
-				Strength = 60.0,
-				Design = CopyDesign(Player.Design)
-			});
-			Notify("Новое соединение сформировано: " + World.Regions[region].Name);
-			Raise();
-			return null;
-		}
+            return RecruitWithDesign(region, Player.ActiveDesign);
+        }
 
 		public string Order(int id, int target, bool playerOrder = true)
 		{
@@ -817,6 +787,7 @@ namespace Sovereign
 			{
 				return "Соединение уже в этом регионе.";
 			}
+			if (army.TrainingDays > 0) return "Соединение проходит подготовку: " + army.TrainingDays + " дн.";
 			int owner = S.Provinces[target].Owner;
 			if (owner != army.Owner && !AtWar(army.Owner, owner))
 			{
@@ -875,21 +846,33 @@ namespace Sovereign
 			double num2 = regionInfo.Y - regionInfo2.Y;
 			double num3 = Math.Sqrt(num * num + num2 * num2) * 111.0;
 			double num4 = 0.5 + S.Provinces[a.Region].Infrastructure / 100.0;
-			a.TotalDays = (a.Days = Math.Max(1.0, num3 / (45.0 * a.Design.Speed * num4)));
+			a.TotalDays = (a.Days = Math.Max(1.0, num3 / (45.0 * a.Design.Speed * num4 * (1 + EquipmentRules.Support(a, EquipmentKind.Truck)))));
 		}
 
 		private void MoveArmies()
 		{
+            bool[] connected = SupplyNetwork();
 			foreach (Army a in S.Armies.ToList())
 			{
-				Nation nation = S.Nations[a.Owner];
-				double num = ((a.Target < 0) ? 0.003 : a.Design.Fuel);
+                if (!S.Armies.Contains(a)) continue; // A defender destroyed earlier this day must not act.
+                Nation nation = S.Nations[a.Owner];
+                double upkeep = a.Design.Maintenance + a.Attachments.Sum(x => x.Blueprint.Maintenance);
+                bool funded = nation.Treasury >= upkeep;
+                if (funded) nation.Treasury -= upkeep;
+                if (a.TrainingDays > 0) { a.TrainingDays--; continue; }
+                foreach (var attachment in a.Attachments)
+                    attachment.Condition = Rules.Clamp(attachment.Condition + (funded && a.Target < 0 ? 0.2 + attachment.Blueprint.Support * 0.06 : -(100 - attachment.Blueprint.Reliability) * 0.008 / (1 + attachment.Blueprint.Protection / 100)), 0, 100);
+				double num = ((a.Target < 0) ? 0.003 : a.Design.Fuel + a.Attachments.Sum(x => x.Blueprint.Fuel * 0.3));
 				double num2 = Math.Min(nation.Stock[2], num);
 				nation.Stock[2] -= num2;
-				bool flag = S.Provinces[a.Region].Owner == a.Owner;
+				bool flag = S.Provinces[a.Region].Owner == a.Owner && connected[a.Region];
+                if (flag) a.SupplyDays = a.Design.Range / (45 * a.Design.Speed);
+                else a.SupplyDays = System.Math.Max(0, a.SupplyDays - 1);
 				double num3 = Rules.Clamp(nation.Military / 2.5, 0.2, 1.35);
-				double num4 = (double)(flag ? 100 : 60) * ((num > 0.0) ? (num2 / num) : 1.0) * Math.Min(1.0, num3);
-				a.Supply += (num4 - a.Supply) * 0.15;
+				double num4 = (flag ? 100.0 : (a.SupplyDays > 0 ? 65.0 : 25.0)) * ((num > 0.0) ? (num2 / num) : 1.0) * Math.Min(1.0, num3);
+				num4 = Math.Min(100, num4 * (1 + EquipmentRules.Support(a, EquipmentKind.Truck) + EquipmentRules.Support(a, EquipmentKind.Transport)) * (funded ? 1 : 0.6));
+                a.Supply += (num4 - a.Supply) * 0.15;
+                if (!flag && a.SupplyDays <= 0) a.Strength = Math.Max(8.1, a.Strength - (100 - a.Supply) * 0.004);
 				if (a.Target < 0)
 				{
 					double num5 = Math.Min(nation.Stock[7], 0.002 * num3);
@@ -913,8 +896,8 @@ namespace Sovereign
 				List<Army> list = S.Armies.Where((Army d) => d.Region == a.Target && AtWar(a.Owner, d.Owner)).ToList();
 				if (list.Count > 0)
 				{
-					double num6 = a.Strength * a.Design.Power * (0.3 + a.Supply / 100.0);
-					double num7 = list.Sum((Army d) => d.Strength * d.Design.Power * (0.5 + d.Supply / 100.0)) * 1.15;
+					double num6 = EquipmentRules.CombatPower(a, list[0], false);
+					double num7 = list.Sum(d => EquipmentRules.CombatPower(d, a, true)) * 1.15;
 					a.Strength -= Rules.Clamp(num7 / Math.Max(1.0, num6) * 9.0, 2.0, 28.0);
 					foreach (Army item in list)
 					{
@@ -959,7 +942,7 @@ namespace Sovereign
 
 		public string Subsidize(int region)
 		{
-			if (region < 0 || S.Provinces[region].Owner != S.Player)
+			if (region < 0 || region >= S.Provinces.Length || S.Provinces[region].Owner != S.Player)
 			{
 				return "Выберите свой регион.";
 			}
@@ -977,30 +960,17 @@ namespace Sovereign
 
 		public string Adopt(Blueprint d)
 		{
-			int max = Math.Min(8, 2 + Player.Tech[5]);
-			if (new int[4] { d.Armor, d.Gun, d.Engine, d.Electronics }.Any((int x) => x < 1 || x > max))
-			{
-				return "Модули превышают технологический уровень.";
-			}
-			double num = d.Cost * 2.0;
-			if (Player.Treasury < num)
-			{
-				return "Недостаточно средств на испытания: " + num.ToString("0.00") + " млрд.";
-			}
-			Player.Treasury -= num;
-			Player.Design = CopyDesign(d);
-			Notify("Проект «" + d.Name + "» принят. Новые соединения получат эту технику.", 1);
-			Raise();
-			return null;
-		}
+            return AdoptDesign(d, S.Player);
+        }
 
 		public void Save(string path)
 		{
+            Validate(S);
 			Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(path)));
 			string text = path + ".tmp";
 			using (FileStream stream = File.Create(text))
 			{
-				new XmlSerializer(typeof(Campaign)).Serialize(stream, S);
+				CampaignSerializer.Serialize(stream, S);
 			}
 			if (File.Exists(path))
 			{
@@ -1017,49 +987,16 @@ namespace Sovereign
 			Campaign s;
 			using (FileStream stream = File.OpenRead(path))
 			{
-				s = (Campaign)new XmlSerializer(typeof(Campaign)).Deserialize(stream);
+				using (var reader = System.Xml.XmlReader.Create(stream, new System.Xml.XmlReaderSettings { DtdProcessing = System.Xml.DtdProcessing.Prohibit, XmlResolver = null, MaxCharactersInDocument = 64000000 }))
+                    s = (Campaign)CampaignSerializer.Deserialize(reader);
 			}
 			Validate(s);
+            if (s.Version == 1) InitializeEquipment(s);
+            Validate(s);
 			S = s;
 			Raise();
 		}
 
-		public void Validate(Campaign s)
-		{
-			int num = World.Countries.Length;
-			int r = World.Regions.Length;
-			if (s == null || s.Version != 1 || s.Nations == null || s.Nations.Length != num || s.Provinces == null || s.Provinces.Length != r || s.Player < 0 || s.Player >= num || s.StartYear < 1940 || s.StartYear > 2026 || s.Day < 0 || s.Day > 2000000)
-			{
-				throw new InvalidDataException("Несовместимое сохранение.");
-			}
-			if (s.Relations.Length != num * num || s.Wars.Length != num * num || s.Embargo.Length != num * num || s.Agreements.Length != num * num)
-			{
-				throw new InvalidDataException("Повреждена дипломатия.");
-			}
-			Province[] provinces = s.Provinces;
-			foreach (Province province in provinces)
-			{
-				if (province.Owner < 0 || province.Owner >= num || province.Public.Length != 8 || province.Private.Length != 8)
-				{
-					throw new InvalidDataException("Повреждены регионы.");
-				}
-			}
-			Nation[] nations = s.Nations;
-			foreach (Nation nation in nations)
-			{
-				if (nation.Stock.Length != 8 || nation.Price.Length != 8 || nation.Tech.Length != 6 || double.IsNaN(nation.Treasury) || double.IsInfinity(nation.GDP))
-				{
-					throw new InvalidDataException("Повреждена экономика.");
-				}
-			}
-			foreach (Army army in s.Armies)
-			{
-				if (army.Owner < 0 || army.Owner >= num || army.Region < 0 || army.Region >= r || army.Target >= r || army.Target < -1 || army.Route.Any((int x) => x < 0 || x >= r))
-				{
-					throw new InvalidDataException("Повреждены армии.");
-				}
-			}
-		}
 
 		public void Autosave()
 		{

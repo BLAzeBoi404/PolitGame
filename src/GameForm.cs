@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Sovereign
 {
-	public class GameForm : Form
+	public partial class GameForm : Form
 	{
 		public Engine E;
 
@@ -105,7 +105,7 @@ namespace Sovereign
 
 		private string hoveredTip = "";
 
-		private float UiScale => Math.Min(1f, (float)base.ClientSize.Height / 900f);
+		private float UiScale => Math.Min(1f, Math.Min((float)base.ClientSize.Height / 900f, (float)base.ClientSize.Width / 1440f));
 
 		private float VW => (float)base.ClientSize.Width / UiScale;
 
@@ -121,16 +121,18 @@ namespace Sovereign
 			W = world;
 			E = new Engine(world);
 			base.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-			Text = "SOVEREIGN — Государство · 0.2";
+			Text = "SOVEREIGN — Государство · 0.3";
 			BackColor = Palette.Bg;
 			ForeColor = Palette.Text;
 			base.AutoScaleMode = AutoScaleMode.None;
 			base.ClientSize = new Size(1540, 900);
-			MinimumSize = new Size(1200, 760);
+			MinimumSize = new Size(1000, 640);
 			base.StartPosition = FormStartPosition.CenterScreen;
 			base.KeyPreview = true;
 			SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, value: true);
 			InitializePresentation();
+            cameraRefresh.Interval = 100;
+            cameraRefresh.Tick += delegate { cameraRefresh.Stop(); deferMapRefresh = false; Invalidate(); };
 			Engine e = E;
 			Action value = delegate
 			{
@@ -237,6 +239,7 @@ namespace Sovereign
 			hits.Add(new Hit
 			{
 				Rect = rectangleF,
+                Label = text,
 				Action = action,
 				Tip = (tooltip ?? text)
 			});
@@ -399,6 +402,9 @@ namespace Sovereign
 		private Color RegionColor(int i)
 		{
 			Province province = E.S.Provinces[i];
+            if (layer == "Дипломатия") return DiplomaticColor(province.Owner);
+            if (layer == "Армии") return Mix(Color.FromArgb(119, 131, 130), Color.FromArgb(234, 195, 131), (float)Math.Min(1, militaryIntensity[i] / 300));
+            if (layer == "Экономика") return Mix(Color.FromArgb(125, 119, 104), Color.FromArgb(192, 213, 169), (float)Math.Min(1, (province.Public.Sum() + province.Private.Sum()) / Math.Max(0.001, province.Population) / 4));
 			if (layer == "Политика")
 			{
 				return CountryColor(province.Owner);
@@ -411,7 +417,7 @@ namespace Sovereign
 		private void PageTitle(Graphics g, string title, string subtitle)
 		{
 			Book(g, title, sidebar + 34, 122f, 31f, Palette.Text, bold: false, VW - (float)sidebar - 245f);
-			Para(g, subtitle, sidebar + 35, 169f, VW - (float)sidebar - 80f, 42f);
+			if (page != "Производство") Para(g, subtitle, sidebar + 35, 169f, VW - (float)sidebar - 80f, 42f);
 			Line(g, Palette.Line, sidebar + 34, 204f, VW - 34f, 204f);
 			Line(g, Palette.Gold, sidebar + 34, 204f, sidebar + 102, 204f, 2f);
 			Txt(g, "КАБИНЕТ  /  " + E.Player.Leader.ToString("00"), VW - 184f, 133f, 10f, Palette.Gold, bold: true);
@@ -631,46 +637,6 @@ namespace Sovereign
 			}
 		}
 
-		private void DrawArmy(Graphics g)
-		{
-			float num = sidebar + 34;
-			float num2 = VW - (float)sidebar - 68f;
-			List<Army> list = E.S.Armies.Where((Army army) => army.Owner == E.S.Player).ToList();
-			PageTitle(g, "Вооружённые силы", "Выберите соединение, затем укажите область правой кнопкой мыши. Бои разрешаются автоматически.");
-			Button(g, "Новое соединение · 0,30 млрд", num, 217f, 287f, delegate
-			{
-				Message(E.Recruit(OwnRegion()));
-			});
-			Button(g, "Открыть конструктор →", num + 301f, 217f, 235f, delegate
-			{
-				draft = Engine.CopyDesign(E.Player.Design);
-				Navigate("Конструктор");
-			});
-			int num3 = (int)Math.Max(1f, (VH - 410f) / 82f);
-			int num4 = Math.Min(scroll, Math.Max(0, list.Count - num3));
-			for (int num5 = num4; num5 < Math.Min(list.Count, num4 + num3); num5++)
-			{
-				Army a = list[num5];
-				float num6 = 275 + (num5 - num4) * 82;
-				Card(g, num, num6, num2, 70f);
-				Txt(g, "СОЕДИНЕНИЕ №" + a.Id, num + 16f, num6 + 10f, 12f, Palette.Gold, bold: true);
-				Txt(g, W.Regions[a.Region].Name, num + 16f, num6 + 34f, 15f, Palette.Text, bold: false, 210f);
-				Txt(g, "Готовность " + Num(a.Strength) + "%", num + 240f, num6 + 12f, 13f, Palette.Text);
-				Txt(g, "Снабжение " + Num(a.Supply) + "%", num + 240f, num6 + 37f, 13f, Palette.Muted);
-				Txt(g, (a.Target >= 0) ? ("В пути · " + Math.Ceiling(a.Days) + " дн.") : a.Design.Name, num + 440f, num6 + 24f, 14f, Palette.Muted, bold: false, num2 - 610f);
-				int id = a.Id;
-				Button(g, "На карте →", num + num2 - 145f, num6 + 18f, 126f, delegate
-				{
-					army = id;
-					selected = a.Region;
-					cx = (float)W.Regions[a.Region].X;
-					cy = (float)W.Regions[a.Region].Y;
-					scale = 30f;
-					Navigate("Карта");
-				});
-			}
-			Txt(g, "Сухопутные соединения · флот и авиация — следующий этап. Колесо прокручивает список.", num, VH - 126f, 12f, Palette.Muted);
-		}
 
 		private void Adjust(Graphics g, string label, int value, float x, float y, float width, Action<int> change)
 		{
@@ -791,7 +757,8 @@ namespace Sovereign
 			base.OnMouseMove(e);
 			mouse = Logical(e.Location);
 			Hit hit = hits.LastOrDefault((Hit h) => h.Rect.Contains(mouse));
-			string text = ((hit == null) ? "" : hit.Tip);
+			hoveredRegion = menuScreen == "" && page == "Карта" && mapRect.Contains(mouse) && hit == null && !panning ? FindRegion(Geo(mouse)) : -1;
+            string text = hit == null ? (hoveredRegion >= 0 ? W.Regions[hoveredRegion].Name + " · " + W.Countries[E.S.Provinces[hoveredRegion].Owner].Name : "") : hit.Tip;
 			if (text != hoveredTip)
 			{
 				hoveredTip = text;
@@ -890,7 +857,8 @@ namespace Sovereign
 			}
 			if (page == "Карта" && mapRect.Contains(Logical(e.Location)))
 			{
-				PointF pointF = Geo(Logical(e.Location));
+				deferMapRefresh = true; cameraRefresh.Stop(); cameraRefresh.Start();
+                PointF pointF = Geo(Logical(e.Location));
 				scale = Math.Max(2f, Math.Min(100f, scale * ((e.Delta > 0) ? 1.18f : 0.84745765f)));
 				PointF pointF2 = Geo(Logical(e.Location));
 				cx += pointF.X - pointF2.X;
@@ -995,6 +963,7 @@ namespace Sovereign
 			}
 			menuScreen = "";
 			page = p;
+            if (p == "Серии") { page = "Производство"; equipmentProduction = true; }
 			LayoutMenuControls();
 			Invalidate();
 		}
@@ -1071,6 +1040,8 @@ namespace Sovereign
 			if (disposing)
 			{
 				clock.Dispose();
+                cameraRefresh.Dispose();
+                if (mapCache != null) mapCache.Dispose();
 				if (tankArt != null)
 				{
 					tankArt.Dispose();
@@ -1458,7 +1429,7 @@ namespace Sovereign
 			Txt(g, "государств и территорий", num2 + 22f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "областей", num2 + 175f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "ЭКОНОМИКА  /  ДИПЛОМАТИЯ  /  ТЕХНОЛОГИИ  /  СТРАТЕГИЯ", num, VH - 59f, 12f, Palette.Muted);
-			Txt(g, "0.2   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
+			Txt(g, "0.3   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
 		}
 
 		private void DrawCampaignSetup(Graphics g)
@@ -1722,14 +1693,14 @@ namespace Sovereign
 				});
 				g.DrawLines(pen, new PointF[8]
 				{
-					new PointF(x + size * 0.22f, y + size * 0.58f),
-					new PointF(x + size * 0.22f, y + size * 0.3f),
+					new PointF(x + size * 0.32f, y + size * 0.58f),
+					new PointF(x + size * 0.32f, y + size * 0.3f),
 					new PointF(x + size * 0.4f, y + size * 0.43f),
-					new PointF(x + size * 0.5f, y + size * 0.24f),
+					new PointF(x + size * 0.5f, y + size * 0.34f),
 					new PointF(x + size * 0.6f, y + size * 0.43f),
 					new PointF(x + size * 0.78f, y + size * 0.3f),
 					new PointF(x + size * 0.78f, y + size * 0.58f),
-					new PointF(x + size * 0.22f, y + size * 0.58f)
+					new PointF(x + size * 0.32f, y + size * 0.58f)
 				});
 			}
 		}
@@ -1909,9 +1880,15 @@ namespace Sovereign
 			return Color.FromArgb((int)((float)(int)a.R + (float)(b.R - a.R) * t), (int)((float)(int)a.G + (float)(b.G - a.G) * t), (int)((float)(int)a.B + (float)(b.B - a.B) * t));
 		}
 
-		private void DrawMap(Graphics g)
-		{
-			GraphicsState gstate = g.Save();
+		private void DrawMapTerrain(Graphics g)
+        {
+            if (layer == "Армии") {
+                if (militaryIntensity == null) militaryIntensity = new double[W.Regions.Length];
+                Array.Clear(militaryIntensity, 0, militaryIntensity.Length);
+                foreach (var unit in E.S.Armies) militaryIntensity[unit.Region] += unit.Strength;
+            }
+			var terrainWatch = System.Diagnostics.Stopwatch.StartNew();
+            GraphicsState gstate = g.Save();
 			g.SetClip(mapRect);
 			using (LinearGradientBrush brush = new LinearGradientBrush(mapRect, Color.FromArgb(142, 163, 165), Color.FromArgb(104, 132, 142), 90f))
 			{
@@ -1928,6 +1905,16 @@ namespace Sovereign
 				Line(g, Color.FromArgb(45, 45, 77, 85), mapRect.Left, pointF2.Y, mapRect.Right, pointF2.Y);
 			}
 			RectangleF rect = new RectangleF(cx - mapRect.Width / scale / 2f, cy - mapRect.Height / scale / 2f, mapRect.Width / scale, mapRect.Height / scale);
+            RectangleF clippedView = rect; clippedView.Inflate(10 / scale, 10 / scale);
+            var clippedPaths = new Dictionary<Land, GraphicsPath>();
+            Func<Land, GraphicsPath> visiblePath = land => {
+                if (clippedView.Contains(land.Bounds)) return land.DisplayPath(scale);
+                GraphicsPath path;
+                if (!clippedPaths.TryGetValue(land, out path)) {
+                    path = land.ClipDisplayPath(clippedView, scale); clippedPaths.Add(land, path);
+                }
+                return path;
+            };
 			using (Matrix transform = new Matrix(scale * UiScale, 0f, 0f, scale * UiScale, (mapRect.X + mapRect.Width / 2f - cx * scale) * UiScale, (mapRect.Y + mapRect.Height / 2f - cy * scale) * UiScale))
 			{
 				Matrix transform2 = g.Transform;
@@ -1939,7 +1926,7 @@ namespace Sovereign
 					{
 						using (Pen pen = new Pen(Color.FromArgb(85, 226, 226, 200), 7f / scale))
 						{
-							g.DrawPath(pen, countryInfo.Path);
+							if (visiblePath(countryInfo).PointCount > 0) g.DrawPath(pen, visiblePath(countryInfo));
 						}
 					}
 				}
@@ -1950,16 +1937,16 @@ namespace Sovereign
 					{
 						using (SolidBrush brush2 = new SolidBrush(CountryColor(l)))
 						{
-							g.FillPath(brush2, countryInfo2.Path);
+							if (visiblePath(countryInfo2).PointCount > 0) g.FillPath(brush2, visiblePath(countryInfo2));
 						}
 					}
 				}
-				if (scale > 4f)
+				if (scale > 4f || layer != "Политика" || E.S.Provinces.Where((p, i) => p.Owner != W.Regions[i].Country).Any())
 				{
 					for (int m = 0; m < W.Regions.Length; m++)
 					{
 						RegionInfo regionInfo = W.Regions[m];
-						if (!regionInfo.Bounds.IntersectsWith(rect))
+						if (!regionInfo.Bounds.IntersectsWith(rect) || (scale <= 4f && layer == "Политика" && E.S.Provinces[m].Owner == regionInfo.Country))
 						{
 							continue;
 						}
@@ -1967,13 +1954,13 @@ namespace Sovereign
 						a = Mix(a, Color.FromArgb(227, 222, 193), (float)(m * 17 % 11) * 0.004f);
 						using (SolidBrush brush3 = new SolidBrush(a))
 						{
-							g.FillPath(brush3, regionInfo.Path);
+							if (visiblePath(regionInfo).PointCount > 0) g.FillPath(brush3, visiblePath(regionInfo));
 						}
 						if (prefs.RegionBorders && scale > 11f)
 						{
 							using (Pen pen2 = new Pen(Color.FromArgb(100, 79, 90, 75), 0.6f / scale))
 							{
-								g.DrawPath(pen2, regionInfo.Path);
+								if (visiblePath(regionInfo).PointCount > 0) g.DrawPath(pen2, visiblePath(regionInfo));
 							}
 						}
 					}
@@ -1985,36 +1972,24 @@ namespace Sovereign
 					{
 						using (Pen pen3 = new Pen(Color.FromArgb(91, 103, 91), 1.1f / scale))
 						{
-							g.DrawPath(pen3, countryInfo3.Path);
+							if (visiblePath(countryInfo3).PointCount > 0) g.DrawPath(pen3, visiblePath(countryInfo3));
 						}
-					}
-				}
-				if (selected >= 0)
-				{
-					using (SolidBrush brush4 = new SolidBrush(Color.FromArgb(43, 246, 238, 181)))
-					{
-						g.FillPath(brush4, W.Regions[selected].Path);
-					}
-					using (Pen pen4 = new Pen(Color.FromArgb(120, 100, 98, 64), 4f / scale))
-					{
-						g.DrawPath(pen4, W.Regions[selected].Path);
-					}
-					using (Pen pen5 = new Pen(Color.FromArgb(99, 93, 54), 1.6f / scale))
-					{
-						g.DrawPath(pen5, W.Regions[selected].Path);
 					}
 				}
 				g.Transform = transform2;
 				transform2.Dispose();
 			}
-			if (prefs.Texture)
+			foreach (var clipped in clippedPaths.Values) clipped.Dispose();
+            mapGeometryMs = terrainWatch.Elapsed.TotalMilliseconds; terrainWatch.Restart();
+            if (prefs.Texture)
 			{
 				using (TextureBrush brush5 = new TextureBrush(terrainTexture, WrapMode.Tile))
 				{
 					g.FillRectangle(brush5, mapRect);
 				}
 			}
-			List<RectangleF> list = new List<RectangleF>();
+			mapTextureMs = terrainWatch.Elapsed.TotalMilliseconds; terrainWatch.Restart();
+            List<RectangleF> list = new List<RectangleF>();
 			if (prefs.Labels)
 			{
 				RectangleF bounds = default(RectangleF);
@@ -2029,8 +2004,7 @@ namespace Sovereign
 						string s = countryInfo4.Name.ToUpperInvariant();
 						float num = ((item == E.S.Player) ? 15 : 12);
 						SizeF sizeF = g.MeasureString(s, BookFont(num, bold: true));
-						ref RectangleF reference = ref bounds;
-						reference = new RectangleF(pt.X - sizeF.Width / 2f - 8f, pt.Y - 3f, sizeF.Width + 16f, num + 13f);
+						bounds = new RectangleF(pt.X - sizeF.Width / 2f - 8f, pt.Y - 3f, sizeF.Width + 16f, num + 13f);
 						if (!list.Any((RectangleF b) => b.IntersectsWith(bounds)) && !((double)sizeF.Width > (double)(countryInfo4.Bounds.Width * scale) * 1.35))
 						{
 							list.Add(bounds);
@@ -2051,8 +2025,7 @@ namespace Sovereign
 						}
 						PointF pointF3 = Screen(regionInfo2.X, regionInfo2.Y);
 						SizeF sizeF2 = g.MeasureString(regionInfo2.Name, F(11f));
-						ref RectangleF reference2 = ref bounds2;
-						reference2 = new RectangleF(pointF3.X - 3f, pointF3.Y + 9f, Math.Min(sizeF2.Width, 150f) + 8f, 22f);
+						bounds2 = new RectangleF(pointF3.X - 3f, pointF3.Y + 9f, Math.Min(sizeF2.Width, 150f) + 8f, 22f);
 						if (!list.Any((RectangleF b) => b.IntersectsWith(bounds2)))
 						{
 							list.Add(bounds2);
@@ -2065,6 +2038,41 @@ namespace Sovereign
 					}
 				}
 			}
+            mapLabelsMs = terrainWatch.Elapsed.TotalMilliseconds;
+            g.Restore(gstate);
+        }
+
+        private void DrawMap(Graphics g)
+        {
+            var gstate = g.Save();
+            g.SetClip(mapRect);
+            DrawCachedMap(g);
+            using (var transform = new Matrix(scale * UiScale, 0, 0, scale * UiScale,
+                (mapRect.X + mapRect.Width / 2 - cx * scale) * UiScale,
+                (mapRect.Y + mapRect.Height / 2 - cy * scale) * UiScale)) {
+                var highlightState = g.Save();
+                g.Transform = transform;
+                if (hoveredRegion >= 0 && hoveredRegion != selected) {
+                    using (var highlight = new SolidBrush(Color.FromArgb(65, 255, 245, 199))) g.FillPath(highlight, W.Regions[hoveredRegion].Path);
+                    using (var border = new Pen(Color.FromArgb(85, 91, 70), 1.6f / scale)) g.DrawPath(border, W.Regions[hoveredRegion].Path);
+                }
+				if (selected >= 0)
+				{
+					using (SolidBrush brush4 = new SolidBrush(Color.FromArgb(43, 246, 238, 181)))
+					{
+						g.FillPath(brush4, W.Regions[selected].Path);
+					}
+					using (Pen pen4 = new Pen(Color.FromArgb(120, 100, 98, 64), 4f / scale))
+					{
+						g.DrawPath(pen4, W.Regions[selected].Path);
+					}
+					using (Pen pen5 = new Pen(Color.FromArgb(99, 93, 54), 1.6f / scale))
+					{
+						g.DrawPath(pen5, W.Regions[selected].Path);
+					}
+				}
+                g.Restore(highlightState);
+            }
 			foreach (Army army in E.S.Armies)
 			{
 				if (army.Owner != E.S.Player && !E.AtWar(army.Owner, E.S.Player) && scale < 25f)
@@ -2086,6 +2094,11 @@ namespace Sovereign
 						using (Pen pen7 = pen6)
 						{
 							g.DrawLine(pen7, pointF4, pt2);
+                            PointF legStart = pt2;
+                            foreach (int stop in army.Route) {
+                                PointF legEnd = Screen(W.Regions[stop].X, W.Regions[stop].Y);
+                                g.DrawLine(pen7, legStart, legEnd); legStart = legEnd;
+                            }
 						}
 					}
 				}
@@ -2095,9 +2108,9 @@ namespace Sovereign
 					RectangleF rectangleF = new RectangleF(pointF4.X - 26f, pointF4.Y - 14f, 61f, 30f);
 					Round(g, (army.Id == this.army) ? Color.FromArgb(204, 185, 135) : Color.FromArgb(18, 32, 38), rectangleF, 4f);
 					RoundBorder(g, (army.Id == this.army) ? Palette.Gold : Color.FromArgb(92, 113, 111), rectangleF, 4f, 1f);
-					NavIcon(g, 6, rectangleF.X + 5f, rectangleF.Y + 5f, 17f, (army.Id == this.army) ? Palette.Bg : (flag ? Palette.Teal : Palette.Red));
+					NavIcon(g, 6, rectangleF.X + 5f, rectangleF.Y + 5f, 17f, (army.Id == this.army) ? Palette.Bg : (flag ? Palette.Teal : (E.AtWar(E.S.Player, army.Owner) ? Palette.Red : Palette.Muted)));
 					Txt(g, army.Id.ToString(), rectangleF.X + 29f, rectangleF.Y + 6f, 12f, (army.Id == this.army) ? Palette.Bg : Palette.Text, bold: true);
-					Progress(g, rectangleF.X + 3f, rectangleF.Bottom - 3f, 55f, army.Strength / 100.0, flag ? Palette.Teal : Palette.Red);
+					Progress(g, rectangleF.X + 3f, rectangleF.Bottom - 3f, 55f, army.Strength / 100.0, flag ? Palette.Teal : (E.AtWar(E.S.Player, army.Owner) ? Palette.Red : Palette.Muted));
 					int id = army.Id;
 					int ri = army.Region;
 					hits.Add(new Hit
@@ -2116,36 +2129,7 @@ namespace Sovereign
 			}
 			Compass(g, mapRect.X + 52f, mapRect.Bottom - 123f);
 			g.Restore(gstate);
-			float width = Math.Min(mapRect.Width - 36f, 554f);
-			Round(g, Color.FromArgb(246, 30, 38, 39), new RectangleF(mapRect.X + 18f, mapRect.Y + 17f, width, 75f), 7f);
-			Txt(g, "АТЛАС МИРА", mapRect.X + 31f, mapRect.Y + 28f, 10f, Palette.Gold, bold: true);
-			string[] array = new string[4] { "Страны", "Ресурсы", "Инфраструктура", "Настроения" };
-			string[] array2 = new string[4] { "Политика", "Ресурсы", "Инфраструктура", "Настроения" };
-			float num3 = mapRect.X + 28f;
-			for (int num4 = 0; num4 < 4; num4++)
-			{
-				string l2 = array2[num4];
-				int num5;
-				switch (num4)
-				{
-				default:
-					num5 = 121;
-					break;
-				case 0:
-					num5 = 92;
-					break;
-				case 2:
-					num5 = 143;
-					break;
-				}
-				float num6 = num5;
-				Button(g, array[num4], num3, mapRect.Y + 49f, num6, delegate
-				{
-					layer = l2;
-					Invalidate();
-				}, layer == l2, LayerHelp(num4), 28f);
-				num3 += num6 + 4f;
-			}
+            DrawMapLayerPicker(g);
 			float x = mapRect.Right - 57f;
 			Button(g, "+", x, mapRect.Bottom - 157f, 38f, delegate
 			{
@@ -2160,21 +2144,20 @@ namespace Sovereign
 			Button(g, "⌂", x, mapRect.Bottom - 73f, 38f, Home, active: false, "Вернуться к своей стране", 36f);
 			Round(g, Color.FromArgb(246, 30, 38, 39), new RectangleF(mapRect.X + 18f, mapRect.Bottom - 50f, Math.Min(515f, mapRect.Width - 100f), 32f), 5f);
 			Txt(g, "Колесо: масштаб    •    Потяните карту мышью    •    ПКМ: приказ армии", mapRect.X + 31f, mapRect.Bottom - 42f, 11f, Palette.Muted);
-			if (layer != "Политика")
+			if (layer != "Политика" && layer != "Дипломатия")
 			{
 				Round(g, Palette.Panel, new RectangleF(mapRect.X + 18f, mapRect.Bottom - 116f, 252f, 52f), 5f);
 				Txt(g, layer + " · индекс модели", mapRect.X + 30f, mapRect.Bottom - 107f, 11f, Palette.Text);
 				for (int num7 = 0; num7 < 100; num7++)
 				{
-					Fill(g, Color.FromArgb(140 - num7 * 75 / 100, 80 + num7 * 70 / 100, 75 + num7 * 54 / 100), mapRect.X + 30f + (float)num7 * 2.2f, mapRect.Bottom - 82f, 2.3f, 5f);
+					Color legend = layer == "Армии" ? Mix(Color.FromArgb(119, 131, 130), Color.FromArgb(234, 195, 131), num7 / 100f)
+                        : layer == "Экономика" ? Mix(Color.FromArgb(125, 119, 104), Color.FromArgb(192, 213, 169), num7 / 100f)
+                        : Color.FromArgb(140 - num7 * 75 / 100, 80 + num7 * 70 / 100, 75 + num7 * 54 / 100);
+                    Fill(g, legend, mapRect.X + 30f + (float)num7 * 2.2f, mapRect.Bottom - 82f, 2.3f, 5f);
 				}
 			}
 		}
 
-		private string LayerHelp(int i)
-		{
-			return (new string[4] { "Политическое владение территориями. Области видны при приближении.", "Совокупная модельная обеспеченность нефтью, рудой и плодородной землёй.", "Развитость инфраструктуры: влияет на выпуск, строительство и перемещение.", "Общественное спокойствие. Низкие значения означают высокое недовольство." })[i];
-		}
 
 		private void DrawInspector(Graphics g)
 		{
@@ -2280,66 +2263,6 @@ namespace Sovereign
 			Txt(g, note, x + 1f, y + 62f, 10f, Palette.Muted, bold: false, w - 12f);
 		}
 
-		private void DrawDesigner(Graphics g)
-		{
-			float num = sidebar + 34;
-			float num2 = VW - (float)sidebar - 68f;
-			float num3 = 340f;
-			float num4 = 18f;
-			float num5 = num + num3 + num4;
-			float num6 = num2 - num3 - num4;
-			int max = Math.Min(8, 2 + E.Player.Tech[5]);
-			PageTitle(g, "Конструктор техники", "Спроектируйте машину под свою стратегию. Сильнее не всегда означает эффективнее.");
-			Txt(g, "КОМПОНОВКА И МОДУЛИ", num, 218f, 11f, Palette.Gold, bold: true);
-			Txt(g, "Доступен уровень " + max + " · зависит от военных технологий", num, 244f, 12f, Palette.Muted);
-			Module(g, "Бронезащита", "Защита ↑   Масса и расход топлива ↑", draft.Armor, num, 278f, num3, delegate(int d)
-			{
-				draft.Armor = Math.Max(1, Math.Min(max, draft.Armor + d));
-			});
-			Module(g, "Вооружение", "Огневая мощь ↑   Стоимость и масса ↑", draft.Gun, num, 375f, num3, delegate(int d)
-			{
-				draft.Gun = Math.Max(1, Math.Min(max, draft.Gun + d));
-			});
-			Module(g, "Двигатель", "Подвижность ↑   Расход топлива ↑", draft.Engine, num, 472f, num3, delegate(int d)
-			{
-				draft.Engine = Math.Max(1, Math.Min(max, draft.Engine + d));
-			});
-			Module(g, "Электроника", "Эффективность ↑   Сложность и цена ↑", draft.Electronics, num, 569f, num3, delegate(int d)
-			{
-				draft.Electronics = Math.Max(1, Math.Min(max, draft.Electronics + d));
-			});
-			Button(g, "Подобрать модули автоматически", num, 678f, num3, delegate
-			{
-				draft = new Blueprint
-				{
-					Name = "Баланс-" + E.S.Date.Year,
-					Armor = Math.Max(1, max - 1),
-					Gun = max,
-					Engine = max,
-					Electronics = Math.Max(1, max - 2)
-				};
-				Invalidate();
-			}, active: false, "Сбалансированный проект на основе доступных технологий.", 39f);
-			TechnicalFrame(g, new RectangleF(num5, 215f, num6, 327f));
-			Txt(g, "ОСНОВНОЙ БОЕВОЙ ТАНК  /  ПРОЕКТ", num5 + 26f, 237f, 10f, Color.FromArgb(81, 94, 81), bold: true);
-			Book(g, draft.Name, num5 + 25f, 261f, 28f, Color.FromArgb(49, 66, 58), bold: false, num6 - 50f);
-			RectangleF box = new RectangleF(num5 + 23f, 295f, num6 - 46f, 223f);
-			DrawTank(g, box);
-			Txt(g, "ИЛЛЮСТРАЦИЯ КЛАССА  ·  МОДУЛИ ОПРЕДЕЛЯЮТ ХАРАКТЕРИСТИКИ", num5 + 26f, 518f, 9f, Color.FromArgb(75, 87, 77), bold: false, num6 - 50f);
-			float num7 = (num6 - 20f) / 3f;
-			DesignMetric(g, "БОЕВАЯ МОЩЬ", draft.Power.ToString("0.00") + "×", "броня + орудие + электроника", num5, 558f, num7, Palette.Gold);
-			DesignMetric(g, "ПОДВИЖНОСТЬ", draft.Speed.ToString("0.00") + "×", "двигатель с учётом массы", num5 + num7 + 10f, 558f, num7, Palette.Teal);
-			DesignMetric(g, "НАДЁЖНОСТЬ", draft.Reliability.ToString("0") + "%", "меньше потерь в походе", num5 + (num7 + 10f) * 2f, 558f, num7, (draft.Reliability < 70.0) ? Palette.Red : Palette.Text);
-			DesignMetric(g, "ТОПЛИВО", draft.Fuel.ToString("0.000"), "единиц на день движения", num5, 647f, num7, Palette.Text);
-			DesignMetric(g, "ИСПЫТАНИЯ", Money(draft.Cost * 2.0), "разовая стоимость утверждения", num5 + num7 + 10f, 647f, num7, Palette.Text);
-			DesignMetric(g, "ПРИМЕНЕНИЕ", "Новые части", "действующие части без изменений", num5 + (num7 + 10f) * 2f, 647f, num7, Palette.Text);
-			Button(g, "Утвердить проект  ·  " + Money(draft.Cost * 2.0), num5, VH - 149f, num6, delegate
-			{
-				draft.Name = "Серия " + E.S.Date.Year + "-" + (E.S.Day + 1);
-				string text = E.Adopt(draft);
-				Message(text ?? "Проект утверждён. Он будет установлен на новые соединения.");
-			}, active: true, "Оплатить испытания. Новые соединения используют характеристики этого проекта.", 42f);
-		}
 
 		private void DrawTank(Graphics g, RectangleF box)
 		{
@@ -2492,7 +2415,7 @@ namespace Sovereign
 			});
 		}
 
-		private void DrawProduction(Graphics g)
+		private void DrawConstruction(Graphics g)
 		{
 			float num = sidebar + 34;
 			float num2 = VW - (float)sidebar - 68f;
@@ -2538,7 +2461,7 @@ namespace Sovereign
 			AvailableButton(g, "Помочь бизнесу · 0,20 млрд", x, 453f, num4, delegate
 			{
 				Message(E.Subsidize(ri));
-			}, E.Player.Treasury >= 0.2, "Средства передаются частному сектору. Компании сами выбирают, куда инвестировать.");
+			}, E.Player.Treasury >= 0.3, "Средства передаются частному сектору. Компании сами выбирают, куда инвестировать.");
 			Section(g, "ОЧЕРЕДЬ СТРОИТЕЛЬСТВА", x, 523f, num4);
 			List<Construction> list = E.S.Projects.Where((Construction j) => j.Region == ri).ToList();
 			if (list.Count == 0)
@@ -2572,7 +2495,7 @@ namespace Sovereign
 			float num4 = num + num3 + 34f;
 			float num5 = num2 - num3 - 34f;
 			Section(g, "НАПРАВЛЕНИЯ РАЗВИТИЯ", num, 228f, num3);
-			string[] array = new string[6] { "Больше продовольствия с существующих земель.", "Рост выработки действующих электростанций.", "Повышение производительности предприятий.", "Более быстрое строительство и развитие дорог.", "Снижение смертности и рост населения.", "Новые уровни модулей для военной техники." };
+			string[] array = new string[6] { "Больше продовольствия с существующих земель.", "Рост выработки действующих электростанций.", "Производительность, двигатели, корпуса и ремонтные модули.", "Строительство, ходовая часть и топливные баки.", "Снижение смертности и рост населения.", "Броня, оружие, электроника; авиация с уровня 2." };
 			for (int i = 0; i < 6; i++)
 			{
 				int tech = i;
