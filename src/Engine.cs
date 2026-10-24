@@ -162,6 +162,7 @@ namespace Sovereign
 			}
 			InitializeEquipment(S);
             InitializeTreaties(S);
+            InitializeAviation(S);
 			Notify("Кабинет сформирован. Проверьте баланс ресурсов и выберите программу развития.");
 			Notify("Учебная модель: современная география; региональная экономика и ресурсы оценочные. Исторические границы пока не включены.");
 			ComputeEconomy(apply: false);
@@ -193,7 +194,8 @@ namespace Sovereign
 				Province province = S.Provinces[item.Region];
 				if (province.Owner == item.Owner)
 				{
-					if (item.Sector == 8)
+					if (item.Sector == 9) { province.Airfield = Math.Min(3, province.Airfield + 1); }
+                    else if (item.Sector == 8)
 					{
 						province.Infrastructure = Math.Min(100.0, province.Infrastructure + 12.0);
 					}
@@ -207,12 +209,13 @@ namespace Sovereign
 					}
 					if (item.Owner == S.Player)
 					{
-						Notify((item.Private ? "Бизнес: " : "Завершено: ") + ((item.Sector == 8) ? "транспортная инфраструктура" : Rules.Plants[item.Sector]) + " · " + World.Regions[item.Region].Name, 1);
+						Notify((item.Private ? "Бизнес: " : "Завершено: ") + ((item.Sector == 9) ? "аэродром" : (item.Sector == 8) ? "транспортная инфраструктура" : Rules.Plants[item.Sector]) + " · " + World.Regions[item.Region].Name, 1);
 					}
 				}
 				S.Projects.Remove(item);
 			}
 			TickProduction();
+            TickAviation();
             if (S.Day % 7 == 0) ExecuteFronts();
 			MoveArmies();
             PruneFronts();
@@ -225,6 +228,7 @@ namespace Sovereign
 			if (S.Day % 30 == 0)
 			{
 				AI();
+                PlanAviation();
 			}
 			if (S.Day % 90 == 0 && AutoSaveEnabled)
 			{
@@ -835,8 +839,8 @@ namespace Sovereign
                 List<Army> list = occupants == null ? new List<Army>() : occupants.Where(d => live.Contains(d) && AtWar(a.Owner, d.Owner)).ToList();
 				if (list.Count > 0)
 				{
-					double num6 = EquipmentRules.CombatPower(a, list[0], false);
-					double num7 = list.Sum(d => EquipmentRules.CombatPower(d, a, true)) * 1.15;
+					double num6 = EquipmentRules.CombatPower(a, list[0], false) * (1 + AirReconBonus(a.Owner, a.Target));
+					double num7 = list.Sum(d => EquipmentRules.CombatPower(d, a, true) * (1 + AirReconBonus(d.Owner, a.Target))) * 1.15;
 					a.Strength -= Rules.Clamp(num7 / Math.Max(1.0, num6) * 9.0, 2.0, 28.0);
 					foreach (Army item in list)
 					{
@@ -935,6 +939,7 @@ namespace Sovereign
 			Validate(s);
             if (s.Version == 1) InitializeEquipment(s);
             if (s.Version == 2) InitializeTreaties(s);
+            if (s.Version == 3) InitializeAviation(s);
             Validate(s);
 			S = s;
 			Raise();

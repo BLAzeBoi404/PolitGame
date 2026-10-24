@@ -17,7 +17,7 @@ namespace Sovereign
         public void Validate(Campaign s)
         {
             int nations = World.Countries.Length, regions = World.Regions.Length;
-            if (s == null || (s.Version < 1 || s.Version > 3) || s.Nations == null || s.Nations.Length != nations || s.Provinces == null || s.Provinces.Length != regions
+            if (s == null || (s.Version < 1 || s.Version > 4) || s.Nations == null || s.Nations.Length != nations || s.Provinces == null || s.Provinces.Length != regions
                 || s.Player < 0 || s.Player >= nations || s.StartYear < 1940 || s.StartYear > 2026 || s.Day < 0 || s.Day > 2000000 || s.RandomState == 0
                 || s.Difficulty < 0 || s.Difficulty > 2) throw new InvalidDataException("Несовместимое сохранение кампании.");
             int pairs = nations * nations;
@@ -40,7 +40,7 @@ namespace Sovereign
             }
             foreach (var p in s.Provinces)
                 if (p == null || p.Owner < 0 || p.Owner >= nations || !Values(p.Public, 8) || !Values(p.Private, 8)
-                    || !IsFinite(p.Population) || p.Population < 0 || !IsFinite(p.Infrastructure) || p.Infrastructure < 0 || p.Infrastructure > 100
+                    || (s.Version >= 4 && (p.Airfield < 0 || p.Airfield > 3)) || !IsFinite(p.Population) || p.Population < 0 || !IsFinite(p.Infrastructure) || p.Infrastructure < 0 || p.Infrastructure > 100
                     || !IsFinite(p.Unrest) || !IsFinite(p.Soil) || !IsFinite(p.Oil) || !IsFinite(p.Ore)) throw new InvalidDataException("Повреждены регионы.");
             foreach (var n in s.Nations) {
                 if (n == null || !Values(n.Stock, 8) || !Values(n.Price, 8) || !Values(n.Production, 8) || !Values(n.Demand, 8) || !Values(n.Consumed, 8)
@@ -86,8 +86,22 @@ namespace Sovereign
                         throw new InvalidDataException("Некорректный приказ фронту.");
                 }
             }
+            if (s.Version >= 4) {
+                if (s.AirWings == null || s.AirWings.Count > nations * 48 || s.AirWings.Any(a => a == null) || s.NextAirWing < 1
+                    || s.AirWings.Select(a => a.Id).Distinct().Count() != s.AirWings.Count || s.AirWings.GroupBy(a => a.Owner).Any(g => g.Count() > 48)) throw new InvalidDataException("Повреждены авиакрылья.");
+                foreach (var a in s.AirWings) {
+                    if (a.Id < 1 || a.Id >= s.NextAirWing || a.Owner < 0 || a.Owner >= nations || a.BaseRegion < 0 || a.BaseRegion >= regions
+                        || a.Target < -1 || a.Target >= regions || a.TrainingDays < 0 || a.TrainingDays > 21 || a.Sorties < 0
+                        || !IsFinite(a.Strength) || a.Strength < 0 || a.Strength > 100 || EquipmentRules.Validate(a.Design) != null || !a.Design.Air
+                        || !Enum.IsDefined(typeof(AirMission), a.Mission) || !AirMissionCompatible(a.Design, a.Mission)
+                        || (a.Mission == AirMission.Reserve ? a.Target != -1 : a.Target < 0)
+                        || s.Provinces[a.BaseRegion].Airfield < 1
+                        || !s.Nations[a.Owner].Designs.Any(d => d.Id == a.DesignId && SameDesign(d.Blueprint, a.Design))) throw new InvalidDataException("Повреждены приказы или оснащение авиации.");
+                }
+                if (s.AirWings.GroupBy(a => a.BaseRegion).Any(g => g.Count() > s.Provinces[g.Key].Airfield * 2)) throw new InvalidDataException("Превышена вместимость аэродрома.");
+            }
             foreach (var p in s.Projects)
-                if (p == null || p.Owner < 0 || p.Owner >= nations || p.Region < 0 || p.Region >= regions || p.Sector < 0 || p.Sector > 8 || p.Days <= 0 || p.Total < p.Days)
+                if (p == null || p.Owner < 0 || p.Owner >= nations || p.Region < 0 || p.Region >= regions || p.Sector < 0 || p.Sector > (s.Version >= 4 ? 9 : 8) || p.Days <= 0 || p.Total < p.Days || (p.Sector == 9 && p.Private))
                     throw new InvalidDataException("Повреждена очередь строительства.");
         }
     }

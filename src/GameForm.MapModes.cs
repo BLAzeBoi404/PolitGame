@@ -11,7 +11,7 @@ namespace Sovereign
         private static readonly string[] MapLayers = { "Политика", "Дипломатия", "Армии", "Экономика", "Ресурсы", "Инфраструктура", "Настроения" };
         private static readonly string[] MapDescriptions = {
             "Текущее владение, включая занятые области.", "Зелёный: свои; золотой: союз; бирюзовый: доступ; красный: война; синий: торговля; серый: нейтралитет.",
-            "Концентрация боеспособных частей: светлее — больше сил. Значки показывают принадлежность.", "Производственные мощности на миллион жителей: светлее — больше.",
+            "Концентрация боеспособных частей: светлее — больше сил.", "Производственные мощности на миллион жителей: светлее — больше.",
             "Нефть, руда и плодородие: модельная обеспеченность.", "Дороги влияют на выпуск, строительство и скорость движения.", "Спокойствие населения; низкий индекс означает недовольство."
         };
         private Color DiplomaticColor(int owner)
@@ -25,14 +25,17 @@ namespace Sovereign
         }
         private void DrawMapLayerPicker(Graphics g)
         {
-            float x = mapRect.X + 14, y = mapRect.Y + 14, width = mapRect.Width - 28;
-            Fill(g, Color.FromArgb(248, 16, 25, 32), x, y, width, 67);
-            Txt(g, "АТЛАС  /  " + layer.ToUpperInvariant(), x + 12, y + 9, 9, Palette.Gold, true);
-            Txt(g, "МАСШТАБ " + scale.ToString("0.0") + "×", x + width - 115, y + 9, 9, Palette.Muted);
-            float tab = (width - 16) / MapLayers.Length;
+            float x = VW - 314, y = VH - 118;
+            Fill(g, Palette.Panel, x, y, 302, 73);
+            Txt(g, layer.ToUpperInvariant(), x + 10, y + 10, 10, Palette.Gold, true, 185);
+            Button(g, "+", x + 192, y + 4, 29, () => { scale = Math.Min(100, scale * 1.3f); Invalidate(); }, false, "Приблизить", 26); hits[hits.Count - 1].Label = "map:zoom-in";
+            Button(g, "−", x + 228, y + 4, 29, () => { scale = Math.Max(2, scale / 1.3f); Invalidate(); }, false, "Отдалить", 26); hits[hits.Count - 1].Label = "map:zoom-out";
+            Button(g, "⌂", x + 264, y + 4, 29, Home, false, "К своей стране", 26);
+            string[] abbreviations = { "ПЛ", "ДП", "ВЧ", "ЭК", "РС", "ИН", "НС" };
             for (int i = 0; i < MapLayers.Length; i++) {
                 string value = MapLayers[i];
-                Button(g, value, x + 8 + i * tab, y + 31, tab - 2, () => { layer = value; Invalidate(); }, layer == value, MapDescriptions[i], 28);
+                Button(g, abbreviations[i], x + 7 + i * 41, y + 37, 38, () => { layer = value; Invalidate(); }, layer == value, value + ": " + MapDescriptions[i], 28);
+                hits[hits.Count - 1].Label = value;
             }
         }
     }

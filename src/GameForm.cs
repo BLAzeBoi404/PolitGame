@@ -53,12 +53,17 @@ namespace Sovereign
 		private Point mouse;
 
 		private Point last;
+        private Point panOrigin;
 
 		private bool panning;
 
 		private bool moved;
 
-		private int sidebar = 176;
+		private const int sidebar = 0;
+        private float workspaceWidth;
+        private bool detailPanel;
+        private const float DocketWidth = 396;
+        private const float OutlinerWidth = 262;
 
 		private Blueprint draft = new Blueprint();
 
@@ -105,7 +110,7 @@ namespace Sovereign
 
 		private float UiScale => Math.Min(1f, Math.Min((float)base.ClientSize.Height / 900f, (float)base.ClientSize.Width / 1440f));
 
-		private float VW => (float)base.ClientSize.Width / UiScale;
+		private float VW => workspaceWidth > 0 ? workspaceWidth : (float)base.ClientSize.Width / UiScale;
 
 		private float VH => (float)base.ClientSize.Height / UiScale;
 
@@ -117,9 +122,10 @@ namespace Sovereign
 		public GameForm(World world)
 		{
 			W = world;
+            InitializeAtlasColors();
 			E = new Engine(world);
 			base.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-			Text = "SOVEREIGN — Государство · 0.4";
+			Text = "SOVEREIGN — Государство · 0.5";
 			BackColor = Palette.Bg;
 			ForeColor = Palette.Text;
 			base.AutoScaleMode = AutoScaleMode.None;
@@ -264,6 +270,8 @@ namespace Sovereign
 		private void Navigate(string p)
 		{
 			page = p;
+            aviationPage = false;
+            detailPanel = p == "Конструктор";
 			scroll = 0;
 			hoveredTip = "";
 			Invalidate();
@@ -277,27 +285,21 @@ namespace Sovereign
 			graphics.SmoothingMode = SmoothingMode.AntiAlias;
 			graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 			hits.Clear();
+            SynchronizeAtlasCamera();
 			if (menuScreen != "")
 			{
 				DrawMenu(graphics);
 				DrawTooltip(graphics);
 				return;
 			}
-			DrawHeader(graphics);
-			DrawNav(graphics);
-			float num = VH - 52f;
-			mapRect = new RectangleF(sidebar, 99f, VW - (float)sidebar - 318f, num - 99f);
-			if (page == "Карта")
-			{
-				DrawMap(graphics);
-				DrawInspector(graphics);
-			}
-			else
-			{
-                Fill(graphics, Palette.Bg, sidebar, 99, VW - sidebar, num - 99);
-				DrawPage(graphics);
-			}
-			DrawFooter(graphics, num);
+            float num = VH - 34;
+            mapRect = new RectangleF(0, 99, VW, num - 99);
+            DrawMap(graphics);
+            DrawCommandPanel(graphics);
+            if (!detailPanel || page == "Карта") DrawOutliner(graphics);
+            DrawHeader(graphics);
+            DrawNav(graphics);
+            DrawFooter(graphics, num);
 			if (showHelp)
 			{
 				DrawHelp(graphics);
@@ -322,14 +324,7 @@ namespace Sovereign
 			return new PointF(cx + ((float)p.X - mapRect.X - mapRect.Width / 2f) / scale, cy + ((float)p.Y - mapRect.Y - mapRect.Height / 2f) / scale);
 		}
 
-		private Color CountryColor(int c)
-		{
-			if ((E.S != null && c == E.S.Player) || (E.S == null && c == menuCountry))
-			{
-				return Color.FromArgb(165, 187, 153);
-			}
-			return Palette.Nations[(c * 7 + c / 8) % Palette.Nations.Length];
-		}
+        private Color CountryColor(int c) => atlasColors[c];
 
 		private Color RegionColor(int i)
 		{
@@ -594,7 +589,7 @@ namespace Sovereign
 			{
 				Para(g, array[i], x, 218 + i * 59, width, 51f, 16f, Palette.Text);
 			}
-			Para(g, "География современная; данные экономики оценочные. Союзы, доступ и условия мира — в дипломатии. Управление можно переназначить в настройках. Авиация пока поддерживает сухопутные части; отдельные миссии и морская война ещё не реализованы.", x, 661f, width, 75f, 14f, Palette.Muted);
+			Para(g, "География современная; данные экономики оценочные. Союзы, доступ и условия мира — в дипломатии. Управление можно переназначить в настройках. Авиация: Армия → Авиация. Постройте аэродром, выпустите самолёты и назначьте область вылетов. Морская война ещё не реализована.", x, 661f, width, 75f, 14f, Palette.Muted);
 			Button(g, "Понятно, к управлению", x, 755f, 260f, delegate
 			{
 				showHelp = false;
@@ -607,8 +602,9 @@ namespace Sovereign
 			base.OnMouseMove(e);
 			mouse = Logical(e.Location);
 			Hit hit = hits.LastOrDefault((Hit h) => h.Rect.Contains(mouse));
-			hoveredRegion = menuScreen == "" && page == "Карта" && mapRect.Contains(mouse) && hit == null && !panning ? FindRegion(Geo(mouse)) : -1;
-            string text = hit == null ? (hoveredRegion >= 0 ? W.Regions[hoveredRegion].Name + " · " + W.Countries[E.S.Provinces[hoveredRegion].Owner].Name : "") : hit.Tip;
+			hoveredRegion = menuScreen == "" && MapInputAllowed(mouse) && hit == null && !panning ? FindRegion(Geo(mouse)) : -1;
+            if (menuScreen == "new") hoveredCountry = MapInputAllowed(mouse) && !panning ? FindCountry(Geo(mouse)) : -1;
+            string text = menuScreen == "new" && hit == null ? (hoveredCountry >= 0 ? W.Countries[hoveredCountry].Name + " · нажмите для выбора" : "") : hit == null ? (hoveredRegion >= 0 ? W.Regions[hoveredRegion].Name + " · " + W.Countries[E.S.Provinces[hoveredRegion].Owner].Name : "") : hit.Tip;
 			if (text != hoveredTip)
 			{
 				hoveredTip = text;
@@ -618,12 +614,13 @@ namespace Sovereign
 			{
 				int num = mouse.X - last.X;
 				int num2 = mouse.Y - last.Y;
-				if (Math.Abs(num) + Math.Abs(num2) > 2)
+				if (Math.Abs(mouse.X - panOrigin.X) + Math.Abs(mouse.Y - panOrigin.Y) > 4)
 				{
 					moved = true;
 				}
 				cx -= (float)num / scale;
 				cy -= (float)num2 / scale;
+                ClampCamera();
 				last = Logical(e.Location);
 			}
 			Cursor = (hits.Any((Hit h) => h.Rect.Contains(mouse)) ? Cursors.Hand : Cursors.Default);
@@ -633,11 +630,11 @@ namespace Sovereign
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			base.OnMouseDown(e);
-			if (e.Button == MouseButtons.Left && menuScreen == "" && page == "Карта" && mapRect.Contains(Logical(e.Location)) && !hits.Any((Hit h) => h.Rect.Contains(Logical(e.Location))) && !showHelp)
+			if (e.Button == MouseButtons.Left && MapInputAllowed(Logical(e.Location)) && !hits.Any((Hit h) => h.Rect.Contains(Logical(e.Location))) && !showHelp)
 			{
 				panning = true;
 				moved = false;
-				last = Logical(e.Location);
+				last = Logical(e.Location); panOrigin = last;
 				base.Capture = true;
 			}
 		}
@@ -650,6 +647,7 @@ namespace Sovereign
 			if (moved)
 			{
 				moved = false;
+                Invalidate();
 				return;
 			}
 			if (e.Button == MouseButtons.Left)
@@ -661,7 +659,12 @@ namespace Sovereign
 					return;
 				}
 			}
-			if (menuScreen != "" || page != "Карта" || showHelp || !mapRect.Contains(Logical(e.Location)))
+			if (menuScreen == "new" && MapInputAllowed(Logical(e.Location)) && e.Button == MouseButtons.Left) {
+                int country = FindCountry(Geo(Logical(e.Location)));
+                if (country >= 0) { menuCountry = country; Invalidate(); }
+                return;
+            }
+            if (menuScreen != "" || showHelp || !MapInputAllowed(Logical(e.Location)))
 			{
 				return;
 			}
@@ -699,13 +702,13 @@ namespace Sovereign
 			{
 				return;
 			}
-			if (menuScreen != "")
+			if (menuScreen != "" && !MapInputAllowed(Logical(e.Location)))
 			{
 				menuScroll = Math.Max(0, menuScroll + ((e.Delta < 0) ? 2 : (-2)));
 				Invalidate();
 				return;
 			}
-			if (page == "Карта" && mapRect.Contains(Logical(e.Location)))
+			if (MapInputAllowed(Logical(e.Location)))
 			{
 				deferMapRefresh = true; cameraRefresh.Stop(); cameraRefresh.Start();
                 PointF pointF = Geo(Logical(e.Location));
@@ -713,6 +716,7 @@ namespace Sovereign
 				PointF pointF2 = Geo(Logical(e.Location));
 				cx += pointF.X - pointF2.X;
 				cy += pointF.Y - pointF2.Y;
+                ClampCamera();
 			}
 			else
 			{
@@ -746,6 +750,7 @@ namespace Sovereign
 			{
 			case "Меню":
 				menuScreen = "main";
+                LayoutMenuControls();
 				return;
 			case "Новая игра":
 				menuScreen = "new";
@@ -753,9 +758,11 @@ namespace Sovereign
 				return;
 			case "Настройки":
 				menuScreen = "settings";
+                LayoutMenuControls();
 				return;
 			case "Сохранения":
 				menuScreen = "load";
+                LayoutMenuControls();
 				return;
 			}
 			if (E.S == null)
@@ -765,7 +772,8 @@ namespace Sovereign
 				draft = Engine.CopyDesign(E.Player.Design);
 			}
 			menuScreen = "";
-			page = p;
+			page = p; detailPanel = p == "Конструктор"; aviationPage = p == "Авиация";
+            if (aviationPage) page = "Армия";
             if (p == "Серии") { page = "Производство"; equipmentProduction = true; }
 			LayoutMenuControls();
 			Invalidate();
@@ -930,8 +938,8 @@ namespace Sovereign
 				startYear.Visible = flag;
 				if (flag)
 				{
-					countrySearch.SetBounds((int)(64f * UiScale), (int)(206f * UiScale), (int)(290f * UiScale), (int)(27f * UiScale));
-					startYear.SetBounds((int)((VW - 340f) * UiScale), (int)(258f * UiScale), (int)(230f * UiScale), (int)(36f * UiScale));
+					countrySearch.SetBounds((int)(24 * UiScale), (int)(142 * UiScale), (int)(270 * UiScale), (int)(29 * UiScale));
+					startYear.SetBounds((int)((VW - 290) * UiScale), (int)(390 * UiScale), (int)(258 * UiScale), (int)(32 * UiScale));
 					startYear.Enabled = experimentalYear;
 				}
 			}
@@ -1000,7 +1008,7 @@ namespace Sovereign
 
 		private void BeginCampaign()
 		{
-            selectedUnits.Clear(); frontOffset = 0; compareDesignId = 0;
+            selectedUnits.Clear(); frontOffset = 0; compareDesignId = 0; selectedAirWing = -1; airRosterOffset = 0;
 			if (campaignStarted && E.S != null && prefs.Autosave)
 			{
 				E.Autosave();
@@ -1012,7 +1020,9 @@ namespace Sovereign
 			menuScreen = "";
 			LayoutMenuControls();
 			Home();
-			Navigate("Сводка");
+			SynchronizeAtlasCamera();
+            Home();
+            Navigate("Карта");
 			draft = Engine.CopyDesign(E.Player.Design);
 			showHelp = prefs.Tutorial;
 		}
@@ -1225,114 +1235,9 @@ namespace Sovereign
 			Txt(g, "государств и территорий", num2 + 22f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "областей", num2 + 175f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "ЭКОНОМИКА  /  ДИПЛОМАТИЯ  /  ТЕХНОЛОГИИ  /  СТРАТЕГИЯ", num, VH - 59f, 12f, Palette.Muted);
-			Txt(g, "0.4   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
+			Txt(g, "0.5   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
 		}
 
-		private void DrawCampaignSetup(Graphics g)
-		{
-			Fill(g, Palette.Bg, 0f, 0f, VW, VH);
-			Button(g, "← Главное меню", 44f, 28f, 190f, delegate
-			{
-				OpenMenu("main");
-			});
-			Txt(g, "Новая кампания", 44f, 91f, 35f, Palette.Text, bold: true);
-			Txt(g, "Выберите страну и условия начала кампании", 46f, 142f, 15f, Palette.Muted);
-			float num = 44f;
-			float num2 = 334f;
-			float num3 = 188f;
-			float num4 = VH - 107f;
-			Card(g, num, num3, num2, num4 - num3);
-			Round(g, Palette.Bg, new RectangleF(num + 13f, num3 + 10f, num2 - 26f, 43f), 5f);
-			Txt(g, "ПОИСК ПО НАЗВАНИЮ ИЛИ КОДУ", num + 18f, num3 + 64f, 10f, Palette.Muted, bold: true);
-			List<int> list = countryList.Where((int c) => W.Countries[c].Name.IndexOf(countryQuery, StringComparison.OrdinalIgnoreCase) >= 0 || W.Countries[c].Code.IndexOf(countryQuery, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
-			int num5 = (int)((num4 - 278f) / 43f);
-			int num6 = Math.Min(menuScroll, Math.Max(0, list.Count - num5));
-			for (int num7 = num6; num7 < Math.Min(list.Count, num6 + num5); num7++)
-			{
-				int country = list[num7];
-				float num8 = 278 + (num7 - num6) * 43;
-				bool flag = country == menuCountry;
-				if (flag)
-				{
-					Round(g, Color.FromArgb(55, 70, 67), new RectangleF(num + 10f, num8 - 3f, num2 - 20f, 39f), 5f);
-				}
-				using (SolidBrush brush = new SolidBrush(CountryColor(country)))
-				{
-					g.FillEllipse(brush, num + 22f, num8 + 10f, 9f, 9f);
-				}
-				Txt(g, W.Countries[country].Name, num + 43f, num8 + 4f, 15f, flag ? Palette.Gold : Palette.Text, flag, num2 - 65f);
-				hits.Add(new Hit
-				{
-					Rect = new RectangleF(num + 10f, num8 - 3f, num2 - 20f, 39f),
-					Action = delegate
-					{
-						menuCountry = country;
-						Invalidate();
-					},
-					Tip = "Выбрать государство"
-				});
-			}
-			if (list.Count == 0)
-			{
-				Para(g, "Ничего не найдено. Попробуйте другое название или код страны, например UKR.", num + 20f, 291f, num2 - 40f, 110f, 15f);
-			}
-			else
-			{
-				Txt(g, num6 + 1 + "–" + Math.Min(list.Count, num6 + num5) + " из " + list.Count + "  ·  колесо — прокрутка", num + 18f, num4 + 9f, 12f, Palette.Muted);
-			}
-			float num9 = 400f;
-			float num10 = VW - 790f;
-			CountryInfo countryInfo = W.Countries[menuCountry];
-			Card(g, num9, 188f, num10, VH - 295f);
-			AtlasBackdrop(g, new RectangleF(num9 + 1f, 189f, num10 - 2f, 350f), focusCountry: true);
-			Fill(g, Color.FromArgb(210, 19, 31, 40), num9 + 1f, 463f, num10 - 2f, 75f);
-			Txt(g, countryInfo.Name, num9 + 20f, 475f, 25f, Palette.Text, bold: true, num10 - 40f);
-			Txt(g, countryInfo.Code + "   /   " + countryInfo.Regions.Count + " областей", num9 + 21f, 512f, 12f, Palette.Gold);
-			Txt(g, "О ГОСУДАРСТВЕ", num9 + 22f, 566f, 11f, Palette.Gold, bold: true);
-			Txt(g, "Население базы", num9 + 22f, 604f, 14f, Palette.Muted);
-			Txt(g, Num(countryInfo.Population / 1000000.0) + " млн", num9 + num10 - 147f, 603f, 18f, Palette.Text, bold: true);
-			Txt(g, "Экономика базы", num9 + 22f, 646f, 14f, Palette.Muted);
-			Txt(g, Money(countryInfo.GDP / 1000.0), num9 + num10 - 177f, 645f, 18f, Palette.Text, bold: true);
-			Para(g, "Значения — исходные оценки географической базы. После старта мир развивается самостоятельно.", num9 + 22f, 698f, num10 - 44f, 75f, 13f);
-			float num11 = VW - 368f;
-			float num12 = 324f;
-			Card(g, num11, 188f, num12, VH - 295f);
-			Txt(g, "УСЛОВИЯ КАМПАНИИ", num11 + 22f, 211f, 11f, Palette.Gold, bold: true);
-			Txt(g, "Начальный год", num11 + 22f, 237f, 13f, Palette.Muted);
-			Button(g, experimentalYear ? "✓ Экспериментальная эпоха" : "○ Экспериментальная эпоха", num11 + 20f, 317f, num12 - 40f, delegate
-			{
-				experimentalYear = !experimentalYear;
-				if (!experimentalYear)
-				{
-					newYear = 2026;
-					startYear.Value = 2026m;
-				}
-				LayoutMenuControls();
-				Invalidate();
-			}, experimentalYear, "Меняет дату и технологии. Исторические границы пока не включены.", 32f);
-			Para(g, "Карта пока современная для любого года. Исторические границы пока не реализованы.", num11 + 22f, 364f, num12 - 44f, 64f, 13f, Palette.Gold);
-			Txt(g, "Поведение других стран", num11 + 22f, 443f, 14f, Palette.Text, bold: true);
-			string[] array = new string[3] { "Спокойное", "Стратегическое", "Конкурентное" };
-			for (int num13 = 0; num13 < 3; num13++)
-			{
-				int v = num13;
-				Button(g, array[num13], num11 + 20f, 477 + num13 * 42, num12 - 40f, delegate
-				{
-					newDifficulty = v;
-					Invalidate();
-				}, newDifficulty == num13, array[num13] + " поведение ИИ");
-			}
-			Para(g, (newDifficulty == 0) ? "Меньше внешнего давления. Подходит для знакомства с экономикой." : ((newDifficulty == 1) ? "Страны развивают экономику и реагируют на международную ситуацию." : "Более конфликтный мир. Внимательнее следите за снабжением и соседями."), num11 + 22f, 619f, num12 - 44f, 87f, 13f);
-			Button(g, prefs.Tutorial ? "✓ Подсказки в начале" : "○ Подсказки в начале", num11 + 20f, 723f, num12 - 40f, delegate
-			{
-				prefs.Tutorial = !prefs.Tutorial;
-				prefs.Save();
-				Invalidate();
-			}, prefs.Tutorial, "Показать руководство после старта");
-			Line(g, Palette.Line, 44f, VH - 84f, VW - 44f, VH - 84f);
-			Txt(g, "Одиночная игра  •  Локальные сохранения  •  Без подключения к сети", 45f, VH - 57f, 13f, Palette.Muted);
-			Button(g, "Начать игру →", VW - 368f, VH - 67f, 324f, BeginCampaign, active: true, "Создать новую кампанию с выбранными настройками", 44f);
-		}
 
 		private void SettingRow(Graphics g, string label, string detail, float x, float y, float w, bool enabled, Action toggle)
 		{
@@ -1860,7 +1765,7 @@ namespace Sovereign
 					int ri = army.Region;
 					hits.Add(new Hit
 					{
-						Rect = rectangleF,
+						Rect = RectangleF.Intersect(rectangleF, mapRect),
 						Action = delegate
 						{
 							this.army = id;
@@ -1873,44 +1778,9 @@ namespace Sovereign
 				}
 			}
             DrawBattleMarkers(g);
-			Compass(g, mapRect.X + 52f, mapRect.Bottom - 123f);
-			g.Restore(gstate);
-            DrawMapLayerPicker(g);
-			float x = mapRect.Right - 57f;
-			Button(g, "+", x, mapRect.Bottom - 157f, 38f, delegate
-			{
-				scale = Math.Min(100f, scale * 1.3f);
-				Invalidate();
-			}, active: false, "Приблизить карту", 36f);
-			Button(g, "−", x, mapRect.Bottom - 115f, 38f, delegate
-			{
-				scale = Math.Max(2f, scale / 1.3f);
-				Invalidate();
-			}, active: false, "Отдалить карту", 36f);
-			Button(g, "⌂", x, mapRect.Bottom - 73f, 38f, Home, active: false, "Вернуться к своей стране", 36f);
-			Round(g, Color.FromArgb(246, 30, 38, 39), new RectangleF(mapRect.X + 18f, mapRect.Bottom - 50f, Math.Min(515f, mapRect.Width - 100f), 32f), 5f);
-			Txt(g, "Колесо: масштаб    •    Потяните карту мышью    •    ПКМ: приказ армии", mapRect.X + 31f, mapRect.Bottom - 42f, 11f, Palette.Muted);
-			if (layer != "Политика" && layer != "Дипломатия")
-			{
-				Round(g, Palette.Panel, new RectangleF(mapRect.X + 18f, mapRect.Bottom - 116f, 252f, 52f), 5f);
-				Txt(g, layer + " · индекс модели", mapRect.X + 30f, mapRect.Bottom - 107f, 11f, Palette.Text);
-				for (int num7 = 0; num7 < 100; num7++)
-				{
-					Color legend = layer == "Армии" ? Mix(Color.FromArgb(119, 131, 130), Color.FromArgb(234, 195, 131), num7 / 100f)
-                        : layer == "Экономика" ? Mix(Color.FromArgb(125, 119, 104), Color.FromArgb(192, 213, 169), num7 / 100f)
-                        : Color.FromArgb(140 - num7 * 75 / 100, 80 + num7 * 70 / 100, 75 + num7 * 54 / 100);
-                    Fill(g, legend, mapRect.X + 30f + (float)num7 * 2.2f, mapRect.Bottom - 82f, 2.3f, 5f);
-				}
-			}
-		}
-
-
-
-
-
-
-
-
+            DrawAirOperations(g);
+            g.Restore(gstate);
+        }
 
 
 		private void DrawTooltip(Graphics g)
@@ -2082,7 +1952,7 @@ namespace Sovereign
 				{
 					Construction construction = list[num7];
 					float num8 = 566 + num7 * 64;
-					Txt(g, (construction.Sector == 8) ? "Инфраструктура" : Rules.Plants[construction.Sector], x, num8, 14f, Palette.Text, bold: true, num4);
+					Txt(g, (construction.Sector == 8) ? "Инфраструктура" : (construction.Sector == 9 ? "Аэродром" : Rules.Plants[construction.Sector]), x, num8, 14f, Palette.Text, bold: true, num4);
 					Txt(g, (construction.Private ? "Частная" : "Государственная") + " · " + construction.Days + " дн.", x, num8 + 23f, 12f, Palette.Muted);
 					Progress(g, x, num8 + 44f, num4, 1.0 - (double)construction.Days / (double)Math.Max(1, construction.Total), Palette.Teal);
 				}

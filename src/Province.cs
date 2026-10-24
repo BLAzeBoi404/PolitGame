@@ -3,6 +3,7 @@ namespace Sovereign
 	public class Province
 	{
 		public int Owner;
+        public int Airfield;
 
 		public double Population;
 

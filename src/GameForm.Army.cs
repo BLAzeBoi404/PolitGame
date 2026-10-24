@@ -15,6 +15,7 @@ namespace Sovereign
             var units = E.S.Armies.Where(a => a.Owner == E.S.Player).ToList();
             selectedUnits.RemoveWhere(id => !units.Any(a => a.Id == id));
             var active = E.FindDesign(E.S.Player, E.Player.ActiveDesign);
+            Button(g, "Авиация →", x + w - 120, 178, 120, OpenAviation, false, "Самостоятельные воздушные операции", 25);
             PageTitle(g, "Командование сухопутными силами", "Выберите соединения и задайте фронт. Ручной приказ на карте снимает часть с фронта.");
             AvailableButton(g, "Набрать часть · 0,30 млрд", x, 218, 245, () => Message(E.Recruit(OwnRegion())), active.Stock > 0 && active.Blueprint.Formation && !active.Retired,
                 "Нужен готовый комплект танков, БМП или артиллерии. Подготовка: 30 дней.", true);
@@ -46,7 +47,7 @@ namespace Sovereign
                 AvailableButton(g, "Перевооружить", bx, y + 39, 135, () => { if (Confirm("Заменить технику на «" + active.Blueprint.Name + "»? 14 дней обучения; исправная старая техника вернётся на склад.")) Message(E.Refit(unit.Id, active.Id)); }, ready && active.Blueprint.Formation && unit.DesignId != active.Id, "Готовый комплект + 15% его стоимости; часть должна стоять в своей области.", false, 25);
                 AvailableButton(g, "+ Поддержка", bx, y + 70, 135, () => Message(E.Refit(unit.Id, active.Id, true)), ready && active.Blueprint.Kind != EquipmentKind.Tank && active.Blueprint.Kind != EquipmentKind.IFV && unit.Attachments.Count < 3 && !unit.Attachments.Any(t => t.Blueprint.Kind == active.Blueprint.Kind), "Выберите класс поддержки в каталоге; нужны комплект и 14 дней подготовки.", false, 25);
             }
-            Txt(g, "Колесо: список частей · Отмечено " + selectedUnits.Count + " · Авиация пока представлена группами поддержки", x, VH - 91, 11, Palette.Muted, false, listWidth);
+            Txt(g, "Колесо: список частей · Отмечено " + selectedUnits.Count + " · Авиация: отдельные крылья и группы поддержки", x, VH - 91, 11, Palette.Muted, false, listWidth);
             DrawFrontCommand(g, right, 273, fw);
         }
         private void DrawFrontCommand(Graphics g, float x, float y, float w)

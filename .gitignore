@@ -8,3 +8,6 @@ error.log
 *.user
 *.tmp
 .vs/
+
+# Generated simulation fixtures belong in artifacts/, never in validation reports.
+docs/validation/**/*.xml*

@@ -40,6 +40,8 @@ namespace Sovereign
         public int[] TruceUntil;
         public List<FrontPlan> Fronts = new List<FrontPlan>();
         public int NextFront = 1;
+        public List<AirWing> AirWings = new List<AirWing>();
+        public int NextAirWing = 1;
 
 		public List<Bulletin> News = new List<Bulletin>();
 

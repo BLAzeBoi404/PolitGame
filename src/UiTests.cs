@@ -37,6 +37,7 @@ namespace Sovereign
         {
             var results = new List<string>(); int failed = 0;
             Action<bool, string> check = (ok, name) => { results.Add((ok ? "PASS " : "FAIL ") + name); if (!ok) failed++; };
+            Action<string> preview = p => { PreviewPage(p); detailPanel = menuScreen == "" && page != "Карта"; };
             prefs.Autosave = false; prefs.Tutorial = false; prefs.Fullscreen = false; prefs.Bindings = Preferences.DefaultBindings();
             E.AutoSaveEnabled = false;
             Show(); Application.DoEvents();
@@ -44,7 +45,7 @@ namespace Sovereign
             check(E.S.Player == W.ByCode("FRA") && speed == 0, "Country selection starts a paused campaign");
             menuCountry = W.ByCode("UKR"); BeginCampaign();
             check(E.S.Player == W.ByCode("UKR") && E.S.Day == 0, "Starting another country resets campaign state");
-            PreviewPage("Конструктор");
+            preview("Конструктор");
             using (var image = RenderFrame()) { }
             Action<string> click = label => {
                 using (var image = RenderFrame()) { }
@@ -59,15 +60,15 @@ namespace Sovereign
             using (var frame = RenderFrame()) { }
             click("Испытать и сохранить · " + Money(draft.Cost * 2));
             check(E.Player.Designs.Any(d => d.Blueprint.Name == "UI Expedition") && E.Player.Treasury < treasury, "Designer saves a paid project through the UI");
-            PreviewPage("Серии"); click("Заказать " + orderQuantity + " компл. · всего " + Money(E.Player.Design.Cost * orderQuantity));
+            preview("Серии"); click("Заказать " + orderQuantity + " компл. · всего " + Money(E.Player.Design.Cost * orderQuantity));
             check(E.Player.Lines.Count == 1, "Production order button creates a real line");
             var line = E.Player.Lines[0]; click("Пауза"); check(line.Paused, "Production pause button releases the line");
             click("Пуск"); check(!line.Paused, "Production resume button restarts the line");
             for (int i = 0; i < 250 && E.FindDesign(E.S.Player, E.Player.ActiveDesign).Stock == 0; i++) E.Tick();
-            PreviewPage("Армия"); int armyCount = E.S.Armies.Count;
+            preview("Армия"); int armyCount = E.S.Armies.Count;
             click("Набрать часть · 0,30 млрд");
             check(E.S.Armies.Count == armyCount + 1 && E.S.Armies.Last().TrainingDays == 30, "Recruit button consumes manufactured equipment");
-            PreviewPage("Карта");
+            preview("Карта");
             using (var frame = RenderFrame()) { }
             Point center = new Point((int)(mapRect.X + mapRect.Width / 2), (int)(mapRect.Y + mapRect.Height / 2));
             float before = scale;
@@ -97,7 +98,7 @@ namespace Sovereign
                     if (menuScreen == "") check(!countrySearch.Visible && !startYear.Visible, "Setup controls hidden during " + pages[p]);
                 }
             }
-            PreviewPage("Карта"); ClientSize = new Size(1600, 900);
+            preview("Карта"); ClientSize = new Size(1600, 900);
             using (var frame = RenderFrame()) { }
             int cached = MapCacheBuilds;
             selected = selected == 0 ? 1 : 0;
@@ -133,31 +134,32 @@ namespace Sovereign
             results.Add("Terrain stages ms: geometry=" + mapGeometryMs.ToString("0.0") + " texture=" + mapTextureMs.ToString("0.0") + " labels=" + mapLabelsMs.ToString("0.0"));
             check(W.Countries.Sum(c => c.DisplayPath(6).PointCount) < W.Countries.Sum(c => c.Path.PointCount), "Overview geometry reduces vertices while retaining exact hit-test paths");
             // Exercise new systems through the real hit regions and keyboard handler.
-            foreign = W.ByCode("POL"); PreviewPage("Дипломатия");
+            foreign = W.ByCode("POL"); preview("Дипломатия");
             while (E.S.Relations[E.Pair(E.S.Player, foreign)] < 65) click("Отправить");
             click("Предложить союз");
             check(E.Allied(E.S.Player, foreign), "Diplomatic action establishes an actual defensive alliance");
             click("Запросить");
             check(E.S.Access[E.Pair(E.S.Player, foreign)], "Access treaty can be requested from the dossier");
             E.Diplomacy(foreign, 5); E.Diplomacy(foreign, 3);
-            PreviewPage("Армия"); click("Выбрать все"); click("Удерживать");
+            preview("Армия"); click("Выбрать все"); click("Удерживать");
             check(E.S.Fronts.Count == 1 && E.S.Fronts[0].ArmyIds.Count == E.S.Armies.Count(a => a.Owner == E.S.Player), "Roster selection assigns actual formations to a front");
             click("Наступление"); check(E.S.Fronts[0].Stance == FrontStance.Advance, "Front stance button changes the operational plan");
             click("Остановить"); check(!E.S.Fronts[0].Active && E.S.Armies.Where(a => E.S.Fronts[0].ArmyIds.Contains(a.Id)).All(a => a.Target < 0), "Stopping a front cancels movement through the UI");
             click("Продолжить");
             using (var frame = RenderFrame()) frame.Save(Path.Combine(directory, "front-command.png"));
-            PreviewPage("Карта"); Home(); selected = own.Region;
+            preview("Карта"); Home(); selected = own.Region;
             using (var frame = RenderFrame()) frame.Save(Path.Combine(directory, "front-map.png"));
-            PreviewPage("Дипломатия");
+            preview("Дипломатия");
             using (var frame = RenderFrame()) frame.Save(Path.Combine(directory, "dossier-war.png"));
-            PreviewPage("Настройки"); click("Настроить клавиши →"); click("Пробел");
+            preview("Настройки"); click("Настроить клавиши →"); click("Пробел");
             KeysDown(this, new KeyEventArgs(Keys.Control | Keys.P));
             check(prefs.Binding("Pause") == (Keys.Control | Keys.P) && pendingBinding == null, "Binding editor captures a new modifier shortcut");
-            PreviewPage("Карта"); speed = 0; KeysDown(this, new KeyEventArgs(Keys.Space));
+            preview("Карта"); speed = 0; KeysDown(this, new KeyEventArgs(Keys.Space));
             check(speed == 0, "Old pause key no longer triggers after reassignment");
             KeysDown(this, new KeyEventArgs(Keys.Control | Keys.P));
             check(speed == 1, "Reassigned pause key controls the live simulation");
             speed = 0; prefs.Bindings = Preferences.DefaultBindings(); prefs.Save();
+            TestAtlasInterface(directory, check, click);
             results.Add("Failures: " + failed); File.WriteAllLines(Path.Combine(directory, "ui-results.txt"), results);
             Console.WriteLine(string.Join(Environment.NewLine, results));
             return failed == 0 ? 0 : 2;

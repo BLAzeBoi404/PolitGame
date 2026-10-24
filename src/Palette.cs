@@ -4,25 +4,25 @@ namespace Sovereign
 {
     public static class Palette
     {
-        // Night atlas: cool ink, warm paper and a single brass interaction accent.
-        public static readonly Color Bg = Color.FromArgb(23, 32, 39);
-        public static readonly Color Panel = Color.FromArgb(16, 25, 32);
-        public static readonly Color Card = Color.FromArgb(29, 40, 48);
-        public static readonly Color Hover = Color.FromArgb(43, 56, 64);
-        public static readonly Color Selected = Color.FromArgb(55, 57, 48);
-        public static readonly Color Line = Color.FromArgb(60, 76, 85);
-        public static readonly Color Text = Color.FromArgb(225, 231, 230);
-        public static readonly Color Muted = Color.FromArgb(155, 173, 183);
-        public static readonly Color Gold = Color.FromArgb(224, 184, 112);
+        // Field atlas: warm ink, aged paper and restrained brass accents.
+        public static readonly Color Bg = Color.FromArgb(29, 33, 29);
+        public static readonly Color Panel = Color.FromArgb(23, 28, 26);
+        public static readonly Color Card = Color.FromArgb(39, 45, 37);
+        public static readonly Color Hover = Color.FromArgb(55, 62, 48);
+        public static readonly Color Selected = Color.FromArgb(67, 65, 43);
+        public static readonly Color Line = Color.FromArgb(78, 85, 65);
+        public static readonly Color Text = Color.FromArgb(233, 229, 211);
+        public static readonly Color Muted = Color.FromArgb(166, 175, 158);
+        public static readonly Color Gold = Color.FromArgb(216, 190, 125);
         public static readonly Color Teal = Color.FromArgb(124, 187, 172);
         public static readonly Color Red = Color.FromArgb(230, 140, 122);
         public static readonly Color Paper = Color.FromArgb(216, 220, 205);
         public static readonly Color Ink = Color.FromArgb(47, 66, 69);
         public static readonly Color[] Nations = {
-            Color.FromArgb(191, 190, 159), Color.FromArgb(155, 180, 166), Color.FromArgb(198, 169, 143),
-            Color.FromArgb(157, 178, 188), Color.FromArgb(184, 159, 161), Color.FromArgb(199, 190, 148),
-            Color.FromArgb(147, 178, 173), Color.FromArgb(172, 164, 187), Color.FromArgb(183, 195, 173),
-            Color.FromArgb(196, 178, 171), Color.FromArgb(165, 182, 148), Color.FromArgb(183, 184, 192)
+            Color.FromArgb(194, 173, 121), Color.FromArgb(146, 176, 137), Color.FromArgb(193, 142, 123),
+            Color.FromArgb(129, 161, 183), Color.FromArgb(182, 133, 147), Color.FromArgb(198, 187, 131),
+            Color.FromArgb(132, 172, 161), Color.FromArgb(164, 144, 176), Color.FromArgb(169, 186, 157),
+            Color.FromArgb(198, 164, 149), Color.FromArgb(160, 166, 116), Color.FromArgb(158, 170, 181)
         };
     }
 }

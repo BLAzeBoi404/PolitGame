@@ -40,6 +40,7 @@ namespace Sovereign
 						{
 							gameForm.PreviewPage(args[1]);
 						}
+                        if (args.Contains("--expanded")) gameForm.ExpandPreview();
                         gameForm.Show();
                         Application.DoEvents();
                         using (Bitmap bitmap = gameForm.RenderFrame()) bitmap.Save(args[args.Length - 1]);

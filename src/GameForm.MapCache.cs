@@ -22,18 +22,19 @@ namespace Sovereign
 
         private void DrawCachedMap(Graphics g)
         {
+            bool setup = menuScreen == "new";
             int ownership = 17, diplomacy = 17;
             unchecked {
-                foreach (var province in E.S.Provinces) ownership = ownership * 31 + province.Owner;
-                if (layer == "Дипломатия") for (int i = 0; i < E.S.Nations.Length; i++) {
+                if (!setup) foreach (var province in E.S.Provinces) ownership = ownership * 31 + province.Owner;
+                if (!setup && layer == "Дипломатия") for (int i = 0; i < E.S.Nations.Length; i++) {
                     int pair = E.Pair(E.S.Player, i);
                     diplomacy = diplomacy * 31 + (E.AtWar(E.S.Player, i) ? 1 : 0) + (E.S.Agreements[pair] ? 2 : 0)
                         + (E.Allied(E.S.Player, i) ? 4 : 0) + (E.S.Access[pair] ? 8 : 0);
                 }
             }
-            string key = ClientSize + "/" + mapRect + "/" + scale + "/" + layer + "/" + ownership + "/" + diplomacy + "/" + E.S.Player
-                + "/" + prefs.Labels + "/" + prefs.RegionBorders + "/" + prefs.Texture + "/" + ((layer == "Политика" || layer == "Дипломатия") ? 0 : E.S.Day);
-            bool compatible = mapCache != null && ReferenceEquals(mapCampaign, E.S) && cachedLayer == layer && cachedClientSize == ClientSize && cachedMapRect == mapRect;
+            string key = ClientSize + "/" + mapRect + "/" + scale + "/" + layer + "/" + ownership + "/" + diplomacy + "/" + (setup ? -1 : E.S.Player)
+                + "/" + prefs.Labels + "/" + prefs.RegionBorders + "/" + prefs.Texture + "/" + ((setup || layer == "Политика" || layer == "Дипломатия") ? 0 : E.S.Day);
+            bool compatible = mapCache != null && ReferenceEquals(mapCampaign, setup ? null : E.S) && cachedLayer == layer && cachedClientSize == ClientSize && cachedMapRect == mapRect;
             bool gesture = compatible && (panning || deferMapRefresh);
             bool insideMargin = compatible && cachedScale == scale && Math.Abs(cachedCx - cx) * scale * UiScale <= CameraMargin - 2
                 && Math.Abs(cachedCy - cy) * scale * UiScale <= CameraMargin - 2;
@@ -50,12 +51,12 @@ namespace Sovereign
                         surface.ScaleTransform(UiScale, UiScale);
                         surface.SmoothingMode = SmoothingMode.AntiAlias;
                         surface.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-                        DrawMapTerrain(surface);
+                        if (setup) DrawSelectionTerrain(surface); else DrawMapTerrain(surface);
                     }
                 } catch { next.Dispose(); throw; }
                 finally { mapRect = viewport; }
                 if (mapCache != null) mapCache.Dispose(); mapCache = next;
-                mapCacheKey = key; mapCampaign = E.S; MapCacheBuilds++;
+                mapCacheKey = key; mapCampaign = setup ? null : E.S; MapCacheBuilds++;
                 cachedCx = cx; cachedCy = cy; cachedScale = scale; cachedMapRect = mapRect; cachedLayer = layer; cachedClientSize = ClientSize;
             }
             float ratio = scale / cachedScale;

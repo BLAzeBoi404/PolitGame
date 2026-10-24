@@ -1,0 +1,13 @@
+{
+  "version": "0.5.0",
+  "tested_at_utc": "2026-10-24T17:41:58.142630+00:00",
+  "executable_sha256": "8dd86ce5d012dca6b1cf98bceae06e47d222e8effb4473f504337c80cb43c191",
+  "source_sha256": "b5719beb893b2ec91c67f5237f4b0b3b4dc10bfe31a4d155f3abb58af9ece7cb",
+  "executable_bytes": 3078144,
+  "build": ".NET SDK 8.0.426 / Release net472",
+  "runtime": "Mono 6.12 / Debian 13 / libgdiplus / Xvfb",
+  "native_windows_tested": false,
+  "logic_passed": 158,
+  "ui_passed": 151,
+  "legacy_save": "Uploaded autosave loaded and advanced 30 days without rewriting original"
+}

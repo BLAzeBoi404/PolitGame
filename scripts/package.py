@@ -5,23 +5,23 @@ import json
 import zipfile
 
 root = Path(__file__).resolve().parent.parent
-output = root / 'releases' / 'Sovereign-0.4-windows.zip'
+output = root / 'releases' / 'Sovereign-0.5-windows.zip'
 files = {
     'Sovereign.exe': root / 'bin/Release/net472/Sovereign.exe',
     'Sovereign.exe.config': root / 'bin/Release/net472/Sovereign.exe.config',
     'НАЧАТЬ ЗДЕСЬ.md': root / 'docs/PLAYER-GUIDE.md',
-    'docs/CHANGES-0.4.md': root / 'docs/CHANGES-0.4.md',
+    'docs/CHANGES-0.5.md': root / 'docs/CHANGES-0.5.md',
     'docs/REQUIREMENTS-STATUS.md': root / 'docs/REQUIREMENTS-STATUS.md',
     'docs/PRODUCT-BRIEF.md': root / 'docs/PRODUCT-BRIEF.md',
-    'docs/validation/0.4/README.md': root / 'docs/validation/0.4/README.md',
+    'docs/validation/0.5/README.md': root / 'docs/validation/0.5/README.md',
     'ИСТОЧНИКИ.txt': root / 'docs/archive-0.2/ИСТОЧНИКИ.txt',
-    'ПРОВЕРКИ-СИМУЛЯЦИИ.txt': root / 'docs/validation/0.4/tests-sdk.txt',
-    'ПРОВЕРКИ-ИНТЕРФЕЙСА.txt': root / 'docs/validation/0.4/ui-results.txt',
+    'ПРОВЕРКИ-СИМУЛЯЦИИ.txt': root / 'docs/validation/0.5/tests-sdk.txt',
+    'ПРОВЕРКИ-ИНТЕРФЕЙСА.txt': root / 'docs/validation/0.5/ui-results.txt',
 }
-for evidence in (root / 'docs/validation/0.4').iterdir():
+for evidence in (root / 'docs/validation/0.5').iterdir():
     if evidence.suffix in ('.txt', '.json'):
         files[evidence.relative_to(root).as_posix()] = evidence
-receipt = json.loads((root / 'docs/validation/0.4/build-receipt.json').read_text())
+receipt = json.loads((root / 'docs/validation/0.5/build-receipt.json').read_text())
 exe = files['Sovereign.exe']
 if hashlib.sha256(exe.read_bytes()).hexdigest() != receipt['executable_sha256']:
     raise SystemExit('Executable differs from the tested build')
@@ -41,7 +41,7 @@ for name in ('ПРОВЕРКИ-СИМУЛЯЦИИ.txt', 'ПРОВЕРКИ-ИНТ
 output.parent.mkdir(exist_ok=True)
 with zipfile.ZipFile(output, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
     for name, source in files.items():
-        archive.write(source, 'Sovereign-0.4/' + name)
+        archive.write(source, 'Sovereign-0.5/' + name)
 with zipfile.ZipFile(output) as archive:
     if archive.testzip() is not None:
         raise SystemExit('ZIP integrity check failed')
