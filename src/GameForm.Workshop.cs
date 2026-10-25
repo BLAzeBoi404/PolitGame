@@ -15,7 +15,7 @@ namespace Sovereign
         {
             int previousSpeed = speed;
             speed = 0;
-            try { return MessageBox.Show(this, text, "Подтверждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK; }
+            try { return confirmationForTests != null ? confirmationForTests(text) : MessageBox.Show(this, text, "Подтверждение", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK; }
             finally { speed = previousSpeed; }
         }
         private void RenameDraft()

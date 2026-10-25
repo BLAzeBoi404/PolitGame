@@ -18,6 +18,7 @@ namespace Sovereign
     }
     public partial class GameForm
     {
+        private Func<string, bool> confirmationForTests;
         public Bitmap RenderFrame()
         {
             var frame = new Bitmap(ClientSize.Width, ClientSize.Height);
@@ -164,6 +165,7 @@ namespace Sovereign
             TestNationalPolicyInterface(directory, check, click);
             TestResearchInterface(directory, check, click);
             TestExpandedResearchInterface(directory, check, click);
+            TestDoctrineInterface(directory, check, click);
             results.Add("Failures: " + failed); File.WriteAllLines(Path.Combine(directory, "ui-results.txt"), results);
             Console.WriteLine(string.Join(Environment.NewLine, results));
             return failed == 0 ? 0 : 2;

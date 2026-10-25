@@ -5,12 +5,14 @@ import json
 import zipfile
 
 root = Path(__file__).resolve().parent.parent
-output = root / 'releases' / 'Sovereign-0.9-windows.zip'
+output = root / 'releases' / 'Sovereign-0.10-windows.zip'
 files = {
     'Sovereign.exe': root / 'bin/Release/net472/Sovereign.exe',
     'Sovereign.exe.config': root / 'bin/Release/net472/Sovereign.exe.config',
     'НАЧАТЬ ЗДЕСЬ.md': root / 'docs/PLAYER-GUIDE.md',
+    'docs/DOCTRINES.md': root / 'docs/DOCTRINES.md',
     'docs/CHANGES-0.9.md': root / 'docs/CHANGES-0.9.md',
+    'docs/CHANGES-0.10.md': root / 'docs/CHANGES-0.10.md',
     'docs/CHANGES-0.5.md': root / 'docs/CHANGES-0.5.md',
     'docs/TECHNOLOGIES.md': root / 'docs/TECHNOLOGIES.md',
     'docs/CHANGES-0.8.md': root / 'docs/CHANGES-0.8.md',
@@ -18,15 +20,15 @@ files = {
     'docs/CHANGES-0.6.md': root / 'docs/CHANGES-0.6.md',
     'docs/REQUIREMENTS-STATUS.md': root / 'docs/REQUIREMENTS-STATUS.md',
     'docs/PRODUCT-BRIEF.md': root / 'docs/PRODUCT-BRIEF.md',
-    'docs/validation/0.9/README.md': root / 'docs/validation/0.9/README.md',
+    'docs/validation/0.10/README.md': root / 'docs/validation/0.10/README.md',
     'ИСТОЧНИКИ.txt': root / 'docs/archive-0.2/ИСТОЧНИКИ.txt',
-    'ПРОВЕРКИ-СИМУЛЯЦИИ.txt': root / 'docs/validation/0.9/tests-sdk.txt',
-    'ПРОВЕРКИ-ИНТЕРФЕЙСА.txt': root / 'docs/validation/0.9/ui-results.txt',
+    'ПРОВЕРКИ-СИМУЛЯЦИИ.txt': root / 'docs/validation/0.10/tests-sdk.txt',
+    'ПРОВЕРКИ-ИНТЕРФЕЙСА.txt': root / 'docs/validation/0.10/ui-results.txt',
 }
-for evidence in (root / 'docs/validation/0.9').iterdir():
+for evidence in (root / 'docs/validation/0.10').iterdir():
     if evidence.suffix in ('.txt', '.json', '.png'):
         files[evidence.relative_to(root).as_posix()] = evidence
-receipt = json.loads((root / 'docs/validation/0.9/build-receipt.json').read_text())
+receipt = json.loads((root / 'docs/validation/0.10/build-receipt.json').read_text())
 exe = files['Sovereign.exe']
 if hashlib.sha256(exe.read_bytes()).hexdigest() != receipt['executable_sha256']:
     raise SystemExit('Executable differs from the tested build')
@@ -46,7 +48,7 @@ for name in ('ПРОВЕРКИ-СИМУЛЯЦИИ.txt', 'ПРОВЕРКИ-ИНТ
 output.parent.mkdir(exist_ok=True)
 with zipfile.ZipFile(output, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
     for name, source in files.items():
-        archive.write(source, 'Sovereign-0.9/' + name)
+        archive.write(source, 'Sovereign-0.10/' + name)
 with zipfile.ZipFile(output) as archive:
     if archive.testzip() is not None:
         raise SystemExit('ZIP integrity check failed')

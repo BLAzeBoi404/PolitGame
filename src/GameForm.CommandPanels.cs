@@ -57,6 +57,7 @@ namespace Sovereign
                 Button(g, n.AutoTrade ? "Автоторговля: включена" : "Автоторговля: выключена", 20, 761, w, () => { n.AutoTrade = !n.AutoTrade; Invalidate(); }, n.AutoTrade, "Торговля использует капитал бизнеса", 31);
             } else if (page == "Исследования") {
                 Txt(g, "НАУЧНАЯ ПРОГРАММА", 20, 160, 10, Palette.Gold, true);
+                DoctrineLink(g, 202, 151, 174);
                 Para(g, n.Research < 0 ? "Выберите фундаментальную отрасль или прикладную технологию." : E.ResearchStatus(E.S.Player), 20, 186, w, 56, 16, Palette.Text);
                 Progress(g, 20, 249, w, n.Research < 0 ? 0 : n.ResearchProgress / 100, Palette.Gold);
                 Button(g, "Технологии и план →", 20, 278, w, () => OpenResearchProject(researchSelection), true, "72 прикладные технологии, предпосылки и план работы", 32);
@@ -113,7 +114,7 @@ namespace Sovereign
                     Progress(g, 28, y + 61, w - 16, a.Strength / 100, Palette.Teal);
                 }
                 Button(g, "Фронты и оснащение →", 20, 739, w, () => { detailPanel = true; Invalidate(); }, true);
-                Txt(g, "Колесо: список соединений", 22, 786, 11, Palette.Muted);
+                DoctrineLink(g, 20, 782, w);
             } else if (page == "Дипломатия") {
                 if (foreign < 0 || foreign == E.S.Player) foreign = Enumerable.Range(0, W.Countries.Length).First(c => c != E.S.Player);
                 var other = W.Countries[foreign]; int pair = E.Pair(E.S.Player, foreign);

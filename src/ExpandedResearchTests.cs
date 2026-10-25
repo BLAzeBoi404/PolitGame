@@ -52,14 +52,14 @@ namespace Sovereign
                 e.S.Version = 7; foreach (var n in e.S.Nations) { Array.Resize(ref n.ScienceTree.Known, 24); Array.Resize(ref n.ScienceTree.StoredProgress, 30); }
                 string file = Path.Combine(directory, "research-version7.xml"); e.Save(file);
                 var loaded = fresh(); loaded.Load(file); var agenda = loaded.Player.ScienceTree;
-                check(loaded.S.Version == 8 && agenda.Known.Length == 72 && agenda.StoredProgress.Length == 78 && agenda.Known[8] && !agenda.Known.Skip(24).Any(k => k), "Version-seven migration extends research arrays without replacing old discoveries or gifting new ones");
+                check(loaded.S.Version == 9 && agenda.Known.Length == 72 && agenda.StoredProgress.Length == 78 && agenda.Known[8] && !agenda.Known.Skip(24).Any(k => k), "Version-seven migration extends research arrays without replacing old discoveries or gifting new ones");
                 check(agenda.ActiveProject == 6 && loaded.Player.ResearchProgress == 48.25 && agenda.StoredProgress[0] == 17.5 && agenda.Paused && agenda.Queue.Single() == 7 && loaded.Player.Treasury == money && loaded.S.RandomState == random, "Migration preserves active and stored progress, queue, pause, treasury and random state exactly");
                 loaded.PauseResearch(false); loaded.Player.ResearchProgress = 99.9; loaded.S.Day = 6; loaded.Tick();
                 check(agenda.Known[0] && agenda.ActiveProject == 7, "A migrated research queue continues through its original stable project identifiers");
                 loaded.SelectResearch(0); ResearchTests.Learn(loaded.Player, 31);
                 check(loaded.SelectResearch(6 + 71) != null, "A completed agricultural revolution does not bypass military prerequisites");
                 loaded.Save(Path.Combine(directory, "expanded-research.xml")); var roundtrip = fresh(); roundtrip.Load(Path.Combine(directory, "expanded-research.xml"));
-                check(roundtrip.Player.ScienceTree.Known.SequenceEqual(agenda.Known), "New revolution discoveries survive format-eight save and load");
+                check(roundtrip.Player.ScienceTree.Known.SequenceEqual(agenda.Known), "New revolution discoveries survive current-format save and load");
             });
             scenario("Combined-arms combat", () => {
                 int enemy = world.ByCode("POL");

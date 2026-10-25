@@ -19,7 +19,7 @@ namespace Sovereign
             };
             scenario("Decisions and state limits", () => {
                 var e = fresh(); var n = e.Player;
-                check(e.S.Version == 8 && e.S.Nations.All(c => c.Politics != null && c.Politics.Decisions.Count == 6 && c.Politics.Pending == null), "New campaign initializes a neutral cabinet for every country without free programs");
+                check(e.S.Version == 9 && e.S.Nations.All(c => c.Politics != null && c.Politics.Decisions.Count == 6 && c.Politics.Pending == null), "New campaign initializes a neutral cabinet for every country without free programs");
                 n.Stability = 70; n.Treasury = 0; int history = n.Politics.History.Count;
                 check(e.TakeDecision(NationalDecision.Industry) != null && n.Treasury == 0 && n.Politics.History.Count == history && n.Politics.Decisions.All(s => s.StartedDay == -1), "Unaffordable national decision changes neither resources nor timers");
                 rich(e); double money = n.Treasury, cost = PolicyRules.DecisionCost(PolicyRules.Decisions[1], n);
@@ -127,7 +127,7 @@ namespace Sovereign
                 try { loaded.Load(path); } catch { rejected = true; }
                 check(rejected && ReferenceEquals(oldCampaign, loaded.S), "A corrupt political save cannot replace the running campaign");
                 var legacy = fresh(); legacy.S.Version = 5; var cash = legacy.Player.Treasury; var reserve = legacy.Player.Recruits; uint rng = legacy.S.RandomState; legacy.Player.Politics = null; legacy.Save(path); loaded.Load(path);
-                check(loaded.S.Version == 8 && loaded.Player.Treasury == cash && loaded.Player.Recruits == reserve && loaded.S.RandomState == rng && loaded.Player.Politics.Decisions.All(s => s.StartedDay == -1), "Version-five migration preserves economy, manpower and random state and grants no free programs");
+                check(loaded.S.Version == 9 && loaded.Player.Treasury == cash && loaded.Player.Recruits == reserve && loaded.S.RandomState == rng && loaded.Player.Politics.Decisions.All(s => s.StartedDay == -1), "Version-five migration preserves economy, manpower and random state and grants no free programs");
             });
             scenario("AI uses real cabinet rules", () => {
                 var e = fresh(); int owner = world.ByCode("POL"); var n = e.S.Nations[owner]; n.Treasury = 100; n.Stability = 70; n.Approval = 70; n.Shortage = 0; n.Research = -1;

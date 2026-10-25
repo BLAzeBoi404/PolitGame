@@ -92,7 +92,7 @@ namespace Sovereign
                         List<Army> defenders;
                         occupancy.TryGetValue(target, out defenders);
                         defenders = defenders == null ? new List<Army>() : defenders.Where(a => AtWar(unit.Owner, a.Owner)).ToList();
-                        if (defenders.Count > 0 && EquipmentRules.CombatPower(unit, defenders[0], false) * GroundTechnologyFactor(unit.Owner) < defenders.Sum(a => EquipmentRules.CombatPower(a, unit, true) * GroundTechnologyFactor(a.Owner)) * 1.2) continue;
+                        if (defenders.Count > 0 && EquipmentRules.CombatPower(unit, defenders[0], false) * GroundCombatFactor(unit.Owner, false) < defenders.Sum(a => EquipmentRules.CombatPower(a, unit, true) * GroundCombatFactor(a.Owner, true)) * 1.2) continue;
                         Order(unit.Id, target, false); break;
                     }
                     continue;

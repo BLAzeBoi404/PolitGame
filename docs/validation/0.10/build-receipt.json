@@ -1,0 +1,15 @@
+{
+  "version": "0.10.0",
+  "tested_at_utc": "2026-10-25T22:16:37.879256+00:00",
+  "executable_sha256": "f102936340d48ea2d81f63b0f1b19f3d52fbf2a0cf888086588f91759f875545",
+  "source_sha256": "6473275757cf91323ba5ce201d45d3d60cb6ca7aeb6474309bc74deaadc0aea2",
+  "executable_bytes": 3323392,
+  "build": ".NET SDK 8.0.426 / Release net472",
+  "runtime": "Mono 6.12 / Debian 13 / libgdiplus / Xvfb",
+  "native_windows_tested": false,
+  "logic_passed": 406,
+  "ui_passed": 407,
+  "legacy_save": "Uploaded autosave and version 0.9 expanded-research fixture each loaded and advanced 30 days without rewriting original",
+  "ui_confirmation_note": "Real WinForms mouse events; modal confirmation answers injected for acceptance and cancellation. Native dialog rendering not tested.",
+  "performance_note": "One standalone run after functional jobs finished; CPU input and paint times, not display FPS. No before/after performance claim for version 0.10."
+}

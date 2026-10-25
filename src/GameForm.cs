@@ -125,7 +125,7 @@ namespace Sovereign
             InitializeAtlasColors();
 			E = new Engine(world);
 			base.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-			Text = "SOVEREIGN — Государство · 0.9";
+			Text = "SOVEREIGN — Государство · 0.10";
 			BackColor = Palette.Bg;
 			ForeColor = Palette.Text;
 			base.AutoScaleMode = AutoScaleMode.None;
@@ -257,7 +257,7 @@ namespace Sovereign
 		private void Navigate(string p)
 		{
 			page = p;
-            aviationPage = false; manpowerPage = false; nationalPolicyPage = false;
+            aviationPage = false; manpowerPage = false; nationalPolicyPage = false; doctrinePage = false;
             detailPanel = p == "Конструктор";
 			scroll = 0;
 			hoveredTip = "";
@@ -332,7 +332,7 @@ namespace Sovereign
         {
             Txt(g, page.ToUpperInvariant() + "  /  " + W.Countries[E.S.Player].Code, sidebar + 28, 116, 10, Palette.Gold, true);
             Txt(g, title, sidebar + 26, 137, 27, Palette.Text, true, VW - sidebar - 60);
-            if (page != "Производство") Txt(g, subtitle, sidebar + 28, 178, 12, Palette.Muted, false, VW - sidebar - 60);
+            if (page != "Производство") Txt(g, subtitle, sidebar + 28, 178, 12, Palette.Muted, false, VW - sidebar - (page == "Исследования" ? 300 : 60));
             Line(g, Palette.Line, sidebar + 28, 204, VW - 28, 204);
         }
 
@@ -359,7 +359,7 @@ namespace Sovereign
 			}
 			else if (page == "Исследования")
 			{
-				DrawResearch(g);
+				if (doctrinePage) DrawDoctrines(g); else DrawResearch(g);
 			}
 			else if (page == "Дипломатия")
 			{
@@ -766,6 +766,8 @@ namespace Sovereign
 			menuScreen = "";
 			page = p; detailPanel = p == "Конструктор"; aviationPage = p == "Авиация"; manpowerPage = p == "Резерв";
             if (aviationPage || manpowerPage) page = "Армия";
+            doctrinePage = p == "Доктрины";
+            if (doctrinePage) { page = "Исследования"; detailPanel = true; }
             nationalPolicyPage = p == "Решения" || p == "События";
             if (nationalPolicyPage) { page = "Политика"; detailPanel = true; policyTab = p == "События" ? 1 : 0; }
             if (p == "Серии") { page = "Производство"; equipmentProduction = true; }
@@ -1231,7 +1233,7 @@ namespace Sovereign
 			Txt(g, "государств и территорий", num2 + 22f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "областей", num2 + 175f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "ЭКОНОМИКА  /  ДИПЛОМАТИЯ  /  ТЕХНОЛОГИИ  /  СТРАТЕГИЯ", num, VH - 59f, 12f, Palette.Muted);
-			Txt(g, "0.9   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
+			Txt(g, "0.10   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
 		}
 
 

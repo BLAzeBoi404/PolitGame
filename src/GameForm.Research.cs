@@ -14,7 +14,8 @@ namespace Sovereign
         private void DrawResearch(Graphics g)
         {
             var n = E.Player; var a = n.ScienceTree;
-            PageTitle(g, "Наука и технологическое развитие", "Фундаментальные уровни и прикладные технологии. Смена программы сохраняет накопленный прогресс.");
+            PageTitle(g, "Наука и технологическое развитие", "Фундаментальная наука и прикладные открытия. Прогресс при смене программы сохраняется.");
+            DoctrineLink(g, VW - 244, 178, 216);
             string[] tabs = { "Технологии", "Фундаментальная наука", "План / " + a.Queue.Count };
             float[] starts = { 28, 199, 452 }, widths = { 159, 241, 138 };
             for (int i = 0; i < tabs.Length; i++) {

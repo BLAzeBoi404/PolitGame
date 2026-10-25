@@ -166,6 +166,7 @@ namespace Sovereign
             InitializeManpower(S);
             InitializeNationalPolitics(S);
             InitializeTechnology(S, false);
+            InitializeDoctrines(S);
 			Notify("Кабинет сформирован. Проверьте баланс ресурсов и выберите программу развития.");
 			Notify("Учебная модель: современная география; региональная экономика и ресурсы оценочные. Исторические границы пока не включены.");
 			ComputeEconomy(apply: false);
@@ -189,6 +190,7 @@ namespace Sovereign
 		{
 			S.Day++;
             TickNationalPolitics();
+            TickDoctrines();
 			foreach (Construction item in S.Projects.ToList())
 			{
 				if (--item.Days > 0)
@@ -637,6 +639,7 @@ namespace Sovereign
 					continue;
 				}
 				PlanNationalPolicy(c);
+                PlanDoctrines(c);
                 PlanManpower(c);
                 EquipmentAI(c, list);
                 PlanResearch(c);
@@ -754,7 +757,7 @@ namespace Sovereign
 			double num2 = regionInfo.Y - regionInfo2.Y;
 			double num3 = Math.Sqrt(num * num + num2 * num2) * 111.0;
 			double num4 = 0.5 + S.Provinces[a.Region].Infrastructure / 100.0;
-			a.TotalDays = (a.Days = Math.Max(1.0, num3 / (45.0 * a.Design.Speed * num4 * (1 + EquipmentRules.Support(a, EquipmentKind.Truck)))));
+			a.TotalDays = (a.Days = Math.Max(1.0, num3 / (45.0 * a.Design.Speed * num4 * (1 + EquipmentRules.Support(a, EquipmentKind.Truck)) * (1 + DoctrineRules.Effects(S.Nations[a.Owner], S.Day).Speed))));
 		}
 
 		private void MoveArmies(bool[] connected)
@@ -765,18 +768,19 @@ namespace Sovereign
 			{
                 if (!live.Contains(a)) continue; // A defender destroyed earlier this day must not act.
                 Nation nation = S.Nations[a.Owner];
-                double upkeep = a.Design.Maintenance * a.Battalions + a.Attachments.Sum(x => x.Blueprint.Maintenance);
+                var doctrine = DoctrineRules.Effects(nation, S.Day);
+                double upkeep = GroundUpkeep(a);
                 bool funded = nation.Treasury >= upkeep;
                 if (funded) nation.Treasury -= upkeep;
                 if (a.TrainingDays > 0) { if (funded) { a.Organization = Math.Min(100, a.Organization + (100 - a.Organization) / a.TrainingDays); a.TrainingDays--; } continue; }
                 foreach (var attachment in a.Attachments)
                     attachment.Condition = Rules.Clamp(attachment.Condition + (funded && a.Target < 0 ? 0.2 + attachment.Blueprint.Support * 0.06 : -(100 - attachment.Blueprint.Reliability) * 0.008 / (1 + attachment.Blueprint.Protection / 100)), 0, 100);
 				double num = ((a.Target < 0) ? 0.003 * a.Battalions : a.Design.Fuel * a.Battalions + a.Attachments.Sum(x => x.Blueprint.Fuel * 0.3));
-				num *= 1 + TechnologyRules.Effects(nation).GroundFuel;
+				num *= (1 + TechnologyRules.Effects(nation).GroundFuel) * (1 + doctrine.Fuel);
 				double num2 = Math.Min(nation.Stock[2], num);
 				nation.Stock[2] -= num2;
 				bool flag = IsSupplied(a.Owner, a.Region, connected);
-                if (flag) a.SupplyDays = a.Design.Range / (45 * a.Design.Speed) + TechnologyRules.Effects(nation).SupplyDays;
+                if (flag) a.SupplyDays = a.Design.Range / (45 * a.Design.Speed) + TechnologyRules.Effects(nation).SupplyDays + doctrine.SupplyDays;
                 else a.SupplyDays = System.Math.Max(0, a.SupplyDays - 1);
 				double num3 = Rules.Clamp(nation.Military / 2.5, 0.2, 1.35);
 				double num4 = (flag ? 100.0 : (a.SupplyDays > 0 ? 65.0 : 25.0)) * ((num > 0.0) ? (num2 / num) : 1.0) * Math.Min(1.0, num3);
@@ -810,8 +814,8 @@ namespace Sovereign
                 List<Army> list = occupants == null ? new List<Army>() : occupants.Where(d => live.Contains(d) && AtWar(a.Owner, d.Owner)).ToList();
 				if (list.Count > 0)
 				{
-					double num6 = EquipmentRules.CombatPower(a, list[0], false) * GroundTechnologyFactor(a.Owner) * (1 + AirReconBonus(a.Owner, a.Target));
-					double num7 = list.Sum(d => EquipmentRules.CombatPower(d, a, true) * GroundTechnologyFactor(d.Owner) * (1 + AirReconBonus(d.Owner, a.Target))) * 1.15;
+					double num6 = EquipmentRules.CombatPower(a, list[0], false) * GroundCombatFactor(a.Owner, false) * (1 + AirReconBonus(a.Owner, a.Target));
+					double num7 = list.Sum(d => EquipmentRules.CombatPower(d, a, true) * GroundCombatFactor(d.Owner, true) * (1 + AirReconBonus(d.Owner, a.Target))) * 1.15;
 					DamageArmy(a, Rules.Clamp(num7 / Math.Max(1.0, num6) * 9.0, 2.0, 28.0));
 					foreach (Army item in list)
 					{
@@ -915,6 +919,7 @@ namespace Sovereign
             if (s.Version == 5) InitializeNationalPolitics(s);
             if (s.Version == 6) InitializeTechnology(s, true);
             if (s.Version == 7) ExpandTechnology(s);
+            if (s.Version == 8) InitializeDoctrines(s);
             Validate(s);
 			S = s;
 			Raise();

@@ -13,7 +13,7 @@ namespace Sovereign
         private Point researchLast, researchOrigin;
         private RectangleF researchViewport;
         private const float TechColumn = 214, TechRow = 100, TechWidth = 184, TechHeight = 84;
-        private bool ResearchCanvasActive => menuScreen == "" && page == "Исследования" && detailPanel && researchTab == 0;
+        private bool ResearchCanvasActive => menuScreen == "" && page == "Исследования" && detailPanel && researchTab == 0 && !doctrinePage;
         private float ResearchContentWidth => (TechnologyRules.Branches[researchBranch].Max(d => d.Column) + 1) * TechColumn;
         private void ClampResearchOffset() { researchOffset = Math.Max(0, Math.Min(Math.Max(0, ResearchContentWidth * researchZoom - researchViewport.Width), researchOffset)); }
         private void FocusResearchSelection()

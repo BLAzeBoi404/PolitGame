@@ -89,12 +89,12 @@ namespace Sovereign
             string reason = AirTargetReason(wing, wing.Mission, wing.Target); if (reason != null) return reason;
             if (ManpowerRules.AirManning(wing) < .5) return "Экипаж укомплектован менее чем на 50%: требуется пополнение в резерве";
             if (wing.Strength < 20) return "Готовность ниже 20%: отправьте на ремонт";
-            if (S.Nations[wing.Owner].Treasury < wing.Design.Maintenance) return "Нет средств на обслуживание";
+            if (S.Nations[wing.Owner].Treasury < AirUpkeep(wing)) return "Нет средств на обслуживание";
             if (S.Nations[wing.Owner].Stock[2] < AirFuel(wing)) return "Недостаточно топлива для вылета";
             if (wing.Mission == AirMission.Supply && (S.Nations[wing.Owner].Stock[0] < .02 || S.Nations[wing.Owner].Stock[7] < .015)) return "Нет продовольствия или оружия для груза";
             return "Вылеты: " + AirMissionNames[(int)wing.Mission];
         }
-        private double AirFuel(AirWing wing) => wing.Design.Fuel * Math.Max(.2, wing.Strength / 100) * (1 + TechnologyRules.Effects(S.Nations[wing.Owner]).AirFuel);
+        private double AirFuel(AirWing wing) => wing.Design.Fuel * Math.Max(.2, wing.Strength / 100) * (1 + TechnologyRules.Effects(S.Nations[wing.Owner]).AirFuel) * (1 + DoctrineRules.Effects(S.Nations[wing.Owner], S.Day).AirFuel);
         private long AirKey(int owner, int region) => (long)owner * S.Provinces.Length + region;
         public double AirReconBonus(int owner, int region) { double value; return airRecon.TryGetValue(AirKey(owner, region), out value) ? Math.Min(.15, value) : 0; }
         public void TickAviation()
@@ -114,8 +114,8 @@ namespace Sovereign
                     wing.Mission = AirMission.Reserve; wing.Target = -1;
                     if (wing.Owner == S.Player) Notify("Авиакрыло №" + wing.Id + " эвакуировано в " + World.Regions[destination].Name, 2);
                 }
-                bool funded = n.Treasury >= wing.Design.Maintenance;
-                if (funded) n.Treasury -= wing.Design.Maintenance;
+                bool funded = n.Treasury >= AirUpkeep(wing);
+                if (funded) n.Treasury -= AirUpkeep(wing);
                 if (wing.TrainingDays > 0) { if (funded) wing.TrainingDays--; continue; }
                 if (wing.Mission == AirMission.Reserve) {
                     double repair = Math.Min(1, 100 - wing.Strength), cost = wing.Design.Cost * repair / 100, arms = wing.Design.Arms * repair / 100;
@@ -132,7 +132,7 @@ namespace Sovereign
             // Resolve air cover from the same pre-combat snapshot for both sides.
             var cover = new Dictionary<int, Dictionary<int, double>>();
             foreach (var wing in flying.Where(a => a.Mission == AirMission.Superiority)) {
-                double power = wing.Design.Attack * wing.Strength / 100 * ManpowerRules.AirManning(wing) * (wing.Design.SpeedKph / 360) * (1 + wing.Design.Electronics * .03) * (1 + TechnologyRules.Effects(S.Nations[wing.Owner]).AirOperations);
+                double power = wing.Design.Attack * wing.Strength / 100 * ManpowerRules.AirManning(wing) * (wing.Design.SpeedKph / 360) * (1 + wing.Design.Electronics * .03) * (1 + TechnologyRules.Effects(S.Nations[wing.Owner]).AirOperations) * AirDoctrineFactor(wing.Owner, AirMission.Superiority);
                 foreach (int region in World.Regions[wing.Target].Neighbors.Concat(new[] { wing.Target }).Distinct()) {
                     if (AirDistance(wing.BaseRegion, region) > wing.Design.Range) continue;
                     Dictionary<int, double> owners; if (!cover.TryGetValue(region, out owners)) cover[region] = owners = new Dictionary<int, double>();
@@ -145,7 +145,7 @@ namespace Sovereign
                 double enemy = owners == null ? 0 : owners.Where(p => AtWar(wing.Owner, p.Key)).Sum(p => p.Value);
                 double escort = owners == null ? 0 : owners.Where(p => p.Key == wing.Owner || Allied(wing.Owner, p.Key)).Sum(p => p.Value);
                 double survival = 1 / (1 + enemy / (12 + escort));
-                double effect = wing.Strength / 100 * ManpowerRules.AirManning(wing) * survival * (1 + TechnologyRules.Effects(S.Nations[wing.Owner]).AirOperations);
+                double effect = wing.Strength / 100 * ManpowerRules.AirManning(wing) * survival * (1 + TechnologyRules.Effects(S.Nations[wing.Owner]).AirOperations) * AirDoctrineFactor(wing.Owner, wing.Mission);
                 double loss = (100 - wing.Design.Reliability) * .003 + Math.Min(6, enemy / (12 + escort) * 2) / (1 + wing.Design.Protection / 80);
                 DamageAirWing(wing, loss);
                 List<Army> targets; units.TryGetValue(wing.Target, out targets);

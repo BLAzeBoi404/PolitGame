@@ -107,8 +107,8 @@ namespace Sovereign
                     a.Personnel += replacements;
                     if (replacements > 0) a.Organization = Math.Max(0, a.Organization - replacements * 20.0 / ManpowerRules.Establishment(a));
                 }
-                if (supplied && S.Nations[a.Owner].Treasury >= a.Design.Maintenance * a.Battalions)
-                    a.Organization = Math.Min(100, a.Organization + 2 * a.Supply / 100 * (1 + TechnologyRules.Effects(S.Nations[a.Owner]).OrganizationRecovery));
+                if (supplied && S.Nations[a.Owner].Treasury >= GroundUpkeep(a))
+                    a.Organization = Math.Min(100, a.Organization + 2 * a.Supply / 100 * (1 + TechnologyRules.Effects(S.Nations[a.Owner]).OrganizationRecovery) * (1 + DoctrineRules.Effects(S.Nations[a.Owner], S.Day).Organization));
                 else a.Organization = Math.Max(0, a.Organization - .4);
             }
             foreach (var a in S.AirWings) if (a.Mission == AirMission.Reserve && a.TrainingDays == 0 && S.Provinces[a.BaseRegion].Owner == a.Owner && IsSupplied(a.Owner, a.BaseRegion, network))
@@ -127,7 +127,7 @@ namespace Sovereign
         {
             double applied = Math.Max(0, Math.Min(a.Strength - floor, damage));
             a.Strength -= applied; a.Organization = Math.Max(0, a.Organization - applied * 1.2);
-            double casualties = a.CasualtyRemainder + ManpowerRules.Establishment(a) * applied / 100 * casualtyRate * (1 + TechnologyRules.Effects(S.Nations[a.Owner]).Casualties);
+            double casualties = a.CasualtyRemainder + ManpowerRules.Establishment(a) * applied / 100 * casualtyRate * (1 + TechnologyRules.Effects(S.Nations[a.Owner]).Casualties) * (1 + DoctrineRules.Effects(S.Nations[a.Owner], S.Day).Casualties);
             int losses = Math.Min(a.Personnel, (int)Math.Floor(casualties)); a.CasualtyRemainder = casualties - Math.Floor(casualties);
             a.Personnel -= losses; S.Nations[a.Owner].PersonnelLosses += losses;
         }
