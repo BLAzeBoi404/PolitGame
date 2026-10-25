@@ -127,12 +127,13 @@ namespace Sovereign
             for (int owner = 0; owner < S.Nations.Length; owner++) {
                 Nation n = S.Nations[owner];
                 int available = Math.Min(500, (int)Math.Floor(capacity[owner]));
+                double policyFactor = PolicyRules.Effects(n, S.Day).EquipmentFactor;
                 foreach (var line in n.Lines) {
                     if (!line.Active) continue;
                     available -= line.Factories;
                     if (available < 0) continue;
                     Blueprint d = FindDesign(owner, line.DesignId).Blueprint;
-                    double potential = line.Factories * line.Efficiency * (1 + n.Tech[2] * 0.04) * ManpowerRules.Output(n) / d.WorkDays;
+                    double potential = line.Factories * line.Efficiency * (1 + n.Tech[2] * 0.04) * ManpowerRules.Output(n) * policyFactor / d.WorkDays;
                     double work = Math.Min(potential, line.Quantity - line.Completed - line.Progress);
                     work = Math.Min(work, Math.Max(0, n.Treasury) / d.Cost);
                     work = Math.Min(work, n.Stock[4] / d.Steel);

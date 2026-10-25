@@ -175,6 +175,7 @@ namespace Sovereign
             CampaignSystemsTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
             AviationTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
             ManpowerTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
+            NationalPolicyTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
 			report.Add("Simulated days: " + e.S.Day + "; wall seconds: " + stopwatch.Elapsed.TotalSeconds.ToString("0.00"));
 			report.Add("Countries: " + w.Countries.Length + "; regions: " + w.Regions.Length);
 			report.Add("Failures: " + failures);

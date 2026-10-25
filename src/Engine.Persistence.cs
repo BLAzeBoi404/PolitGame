@@ -17,7 +17,7 @@ namespace Sovereign
         public void Validate(Campaign s)
         {
             int nations = World.Countries.Length, regions = World.Regions.Length;
-            if (s == null || (s.Version < 1 || s.Version > 5) || s.Nations == null || s.Nations.Length != nations || s.Provinces == null || s.Provinces.Length != regions
+            if (s == null || (s.Version < 1 || s.Version > 6) || s.Nations == null || s.Nations.Length != nations || s.Provinces == null || s.Provinces.Length != regions
                 || s.Player < 0 || s.Player >= nations || s.StartYear < 1940 || s.StartYear > 2026 || s.Day < 0 || s.Day > 2000000 || s.RandomState == 0
                 || s.Difficulty < 0 || s.Difficulty > 2) throw new InvalidDataException("Несовместимое сохранение кампании.");
             int pairs = nations * nations;
@@ -50,6 +50,7 @@ namespace Sovereign
                         n.TradeBalance, n.Imports, n.Exports, n.Shortage, n.LastPrice, n.ResearchProgress, n.ProjectProgress }.All(IsFinite)
                     || n.History == null || n.StabilityHistory == null || n.History.Any(v => !IsFinite(v)) || n.StabilityHistory.Any(v => !IsFinite(v))
                     || EquipmentRules.Validate(n.Design) != null) throw new InvalidDataException("Повреждена экономика или проект.");
+                if (s.Version >= 6) ValidateNationalPolitics(n, s);
                 if (s.Version >= 5) {
                     if (!Enum.IsDefined(typeof(ConscriptionLaw), n.Conscription) || n.Recruits < 0 || n.Recruits > 1000000000 || n.LawChangedDay < -90 || n.LawChangedDay > s.Day
                         || n.Mobilized < 0 || n.Discharged < 0 || n.PersonnelLosses < 0 || n.Mobilized > 1000000000000000L || n.Discharged > n.Mobilized || n.PersonnelLosses > n.Mobilized)

@@ -164,6 +164,7 @@ namespace Sovereign
             InitializeTreaties(S);
             InitializeAviation(S);
             InitializeManpower(S);
+            InitializeNationalPolitics(S);
 			Notify("Кабинет сформирован. Проверьте баланс ресурсов и выберите программу развития.");
 			Notify("Учебная модель: современная география; региональная экономика и ресурсы оценочные. Исторические границы пока не включены.");
 			ComputeEconomy(apply: false);
@@ -186,6 +187,7 @@ namespace Sovereign
 		public void Tick()
 		{
 			S.Day++;
+            TickNationalPolitics();
 			foreach (Construction item in S.Projects.ToList())
 			{
 				if (--item.Days > 0)
@@ -282,6 +284,7 @@ namespace Sovereign
 			for (c = 0; c < num; c++)
 			{
 				Nation nation = S.Nations[c];
+                var policyEffects = PolicyRules.Effects(nation, S.Day);
 				nation.Population = Math.Max(0.001, array3[c]);
 				nation.Production = new double[8];
 				nation.Demand = new double[8];
@@ -317,7 +320,7 @@ namespace Sovereign
 						break;
 					}
 					int num10 = num9;
-					double num11 = array[c, l] * Rules.Output[l] * num8 * (1.0 + (double)nation.Tech[num10] * 0.05) * (1.0 - nation.Repression * 0.0015) * ManpowerRules.Output(nation);
+					double num11 = array[c, l] * Rules.Output[l] * num8 * (1.0 + (double)nation.Tech[num10] * 0.05) * (1.0 - nation.Repression * 0.0015) * ManpowerRules.Output(nation) * policyEffects.GoodsFactor;
 					double num12 = 1.0;
 					for (int m = 0; m < 8; m++)
 					{
@@ -344,7 +347,8 @@ namespace Sovereign
 				{
 					array4[num16] += nation.Production[num16];
 					double num17 = nation.Population * array5[num16] * ((num16 == 6) ? (0.6 + nation.Living / 100.0) : 1.0);
-					if (num16 == 7)
+					if (num16 == 0 || num16 == 6) num17 *= policyEffects.ConsumptionFactor;
+                    if (num16 == 7)
 					{
 						num17 += (double)armyCount[c] * 0.045;
 					}
@@ -399,7 +403,7 @@ namespace Sovereign
 					nation2.LastPrice = num20;
 				}
 				double num25 = nation2.GDP / 52.0;
-				nation2.Revenue = num25 * (nation2.Tax / 100.0) * (0.82 - nation2.Repression * 0.001);
+				nation2.Revenue = num25 * (nation2.Tax / 100.0) * (0.82 - nation2.Repression * 0.001) * PolicyRules.Effects(nation2, S.Day).RevenueFactor;
 				nation2.Spending = num25 * (0.08 + (nation2.Social + nation2.Science + nation2.Military) / 100.0) + nation2.Debt * nation2.Interest / 100.0 / 52.0 + armyBudget[c2];
 				nation2.TradeBalance = nation2.Exports - nation2.Imports;
 				if (!apply)
@@ -569,7 +573,7 @@ namespace Sovereign
 					continue;
 				}
 				double num = (1.0 + nation.Science * 0.7) * (nation.Education / 60.0) / (1.0 + (double)nation.Tech[nation.Research] * 0.18);
-				nation.ResearchProgress += num;
+				nation.ResearchProgress += num * PolicyRules.Effects(nation, S.Day).ResearchFactor;
 				if (nation.ResearchProgress >= 100.0)
 				{
 					int research = nation.Research;
@@ -589,7 +593,7 @@ namespace Sovereign
 			for (int i = 0; i < S.Nations.Length; i++)
 			{
 				Nation nation = S.Nations[i];
-				double num = Rules.Clamp(65.0 + nation.Social * 2.0 - nation.Tax * 0.5 - nation.Unemployment * 0.3 - nation.Shortage * 55.0 - Math.Max(0.0, nation.Inflation - 5.0) * 0.4 - nation.Repression * 0.16 - (int)nation.Conscription * 2, 5.0, 95.0);
+				double num = Rules.Clamp(65.0 + nation.Social * 2.0 - nation.Tax * 0.5 - nation.Unemployment * 0.3 - nation.Shortage * 55.0 - Math.Max(0.0, nation.Inflation - 5.0) * 0.4 - nation.Repression * 0.16 - (int)nation.Conscription * 2 + PolicyRules.Effects(nation, S.Day).Approval, 5.0, 95.0);
 				nation.Living = Rules.Clamp(nation.Living + (num - nation.Living) * 0.025, 5.0, 95.0);
 				nation.Approval += (num - nation.Approval) * 0.07;
 				double num2 = Rules.Clamp(nation.Approval + nation.Repression * 0.22 - (double)(S.Wars.Skip(i * S.Nations.Length).Take(S.Nations.Length).Count((bool x) => x) * 4), 3.0, 96.0);
@@ -670,7 +674,8 @@ namespace Sovereign
 				{
 					continue;
 				}
-				PlanManpower(c);
+				PlanNationalPolicy(c);
+                PlanManpower(c);
                 EquipmentAI(c, list);
 				if (n.Research < 0)
 				{
@@ -947,6 +952,7 @@ namespace Sovereign
             if (s.Version == 2) InitializeTreaties(s);
             if (s.Version == 3) InitializeAviation(s);
             if (s.Version == 4) InitializeManpower(s);
+            if (s.Version == 5) InitializeNationalPolitics(s);
             Validate(s);
 			S = s;
 			Raise();

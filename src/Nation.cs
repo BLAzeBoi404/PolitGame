@@ -5,6 +5,7 @@ namespace Sovereign
 	public class Nation
 	{
 		public double Treasury;
+        public NationalPolitics Politics;
         public int Recruits;
         public long Mobilized, Discharged, PersonnelLosses;
         public ConscriptionLaw Conscription;

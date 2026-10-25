@@ -72,12 +72,13 @@ namespace Sovereign
                 LedgerRow(g, "Стабильность", Num(n.Stability) + "%", 166, Palette.Teal);
                 LedgerRow(g, "Одобрение", Num(n.Approval) + "%", 195);
                 LedgerRow(g, "Уровень жизни", Num(n.Living) + " / 100", 224);
-                CompactSection(g, "БЮДЖЕТ И ГОСУДАРСТВО", 275);
-                CompactPolicy(g, "Налоги", n.Tax, 325, v => n.Tax = v, 5, 50, 1, "Высокие налоги сдерживают инвестиции.");
-                CompactPolicy(g, "Социальные расходы", n.Social, 408, v => n.Social = v, 0, 15, .5, "Поддерживают уровень жизни и одобрение.");
-                CompactPolicy(g, "Наука и образование", n.Science, 491, v => n.Science = v, 0, 10, .5, "Ускоряют исследования и рост образования.");
-                CompactPolicy(g, "Военный бюджет", n.Military, 574, v => n.Military = v, .5, 15, .5, "Снабжение и восстановление соединений.");
-                CompactPolicy(g, "Политическое давление", n.Repression, 657, v => n.Repression = v, 0, 100, 5, "Контроль ценой одобрения и выпуска.");
+                Button(g, "Решения и события →", 20, 254, w, () => OpenNationalPolicy(), false, "Программы кабинета, повестка и действующие меры", 32);
+                CompactSection(g, "БЮДЖЕТ И ГОСУДАРСТВО", 303);
+                CompactPolicy(g, "Налоги", n.Tax, 350, v => n.Tax = v, 5, 50, 1, "Высокие налоги сдерживают инвестиции.");
+                CompactPolicy(g, "Социальные расходы", n.Social, 433, v => n.Social = v, 0, 15, .5, "Поддерживают уровень жизни и одобрение.");
+                CompactPolicy(g, "Наука и образование", n.Science, 516, v => n.Science = v, 0, 10, .5, "Ускоряют исследования и рост образования.");
+                CompactPolicy(g, "Военный бюджет", n.Military, 599, v => n.Military = v, .5, 15, .5, "Снабжение и восстановление соединений.");
+                CompactPolicy(g, "Политическое давление", n.Repression, 682, v => n.Repression = v, 0, 100, 5, "Контроль ценой одобрения и выпуска.");
                 Button(g, "Призыв и резерв →", 20, 758, w, OpenManpower, false, "Мобилизация влияет на промышленность и одобрение", 30);
             } else if (page == "Производство") {
                 CompactSection(g, "ВОЕННО-ПРОМЫШЛЕННЫЙ КОМПЛЕКС", 160);
@@ -172,14 +173,15 @@ namespace Sovereign
             if (lines.Count == 0) Txt(g, "Нет действующих серий", x + 14, y + 158, 12, Palette.Muted);
             for (int i = 0; i < lines.Count; i++) {
                 var line = lines[i]; var b = E.FindDesign(E.S.Player, line.DesignId).Blueprint;
-                Button(g, b.Name + "  " + line.Completed + "/" + line.Quantity, x + 12, y + 152 + i * 32, w - 24, () => { equipmentProduction = true; Navigate("Производство"); }, false, E.ProductionStatus(E.S.Player, line), 27);
+                Button(g, b.Name + "  " + line.Completed + "/" + line.Quantity, x + 12, y + 150 + i * 29, w - 24, () => { equipmentProduction = true; Navigate("Производство"); }, false, E.ProductionStatus(E.S.Player, line), 25);
             }
-            Txt(g, "СОЕДИНЕНИЯ", x + 14, y + 232, 9, Palette.Gold, true);
+            Button(g, n.Politics.Pending == null ? "Программы кабинета →" : "Событие: " + PolicyRules.Events[(int)n.Politics.Pending.Kind].Name, x + 12, y + 208, w - 24, () => OpenNationalPolicy(n.Politics.Pending == null ? 0 : 1), n.Politics.Pending != null, "Национальные решения и события", 28); hits[hits.Count - 1].Label = "policy:outliner";
+            Txt(g, "СОЕДИНЕНИЯ", x + 14, y + 246, 9, Palette.Gold, true);
             var units = E.S.Armies.Where(a => a.Owner == E.S.Player).Take(3).ToList();
             for (int i = 0; i < units.Count; i++) {
-                var a = units[i]; Button(g, "№" + a.Id + " · " + W.Regions[a.Region].Name, x + 12, y + 252 + i * 31, w - 24, () => FocusArmy(a), a.Id == army, a.Design.Name + "; готовность " + a.Strength.ToString("0") + "%, снабжение " + a.Supply.ToString("0") + "%", 27);
+                var a = units[i]; Button(g, "№" + a.Id + " · " + W.Regions[a.Region].Name, x + 12, y + 266 + i * 31, w - 24, () => FocusArmy(a), a.Id == army, a.Design.Name + "; готовность " + a.Strength.ToString("0") + "%, снабжение " + a.Supply.ToString("0") + "%", 27);
             }
-            Button(g, "Все войска и фронты →", x + 12, y + 351, w - 24, () => Navigate("Армия"), false, "Командование", 27);
+            Button(g, "Все войска и фронты →", x + 12, y + 365, w - 24, () => Navigate("Армия"), false, "Командование", 27);
             Line(g, Palette.Line, x + 12, y + 393, x + w - 12, y + 393);
             if (selected >= 0) {
                 var p = E.S.Provinces[selected];
