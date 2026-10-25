@@ -47,7 +47,7 @@ namespace Sovereign
         }
         public static int Cap(Blueprint d, int slot, Nation n)
         {
-            int cap = Math.Min(8, 2 + n.Tech[(slot == 2 || slot == 4 || slot == 7) ? 2 : (slot == 5 || slot == 6) ? 3 : 5]);
+            int cap = TechnologyRules.ModuleCap(n, slot);
             if (slot == 0 && d.Air) cap = Math.Min(3, cap);
             if (slot == 0 && d.Kind == EquipmentKind.Truck) cap = Math.Min(2, cap);
             if (slot == 1 && (d.Kind == EquipmentKind.Truck || d.Kind == EquipmentKind.Transport || d.Kind == EquipmentKind.Recon)) cap = 1;
@@ -66,7 +66,7 @@ namespace Sovereign
             if (n != null) {
                 if (d.Air && n.Tech[5] < 2) return "Авиации нужны военные технологии уровня 2.";
                 for (int i = 0; i < values.Length; i++)
-                    if (values[i] > Cap(d, i, n)) return ModuleNames[i] + ": нужен более высокий уровень исследований.";
+                    if (values[i] > Cap(d, i, n)) return ModuleNames[i] + ": требуется " + TechnologyRules.ModuleRequirement(i, values[i]) + ".";
             }
             return null;
         }

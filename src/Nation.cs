@@ -74,6 +74,7 @@ namespace Sovereign
 		public int[] Tech = new int[6];
 
 		public int Research = -1;
+        public ResearchAgenda ScienceTree;
 
 		public int Leader = 1;
 

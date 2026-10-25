@@ -125,7 +125,7 @@ namespace Sovereign
             InitializeAtlasColors();
 			E = new Engine(world);
 			base.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-			Text = "SOVEREIGN — Государство · 0.7";
+			Text = "SOVEREIGN — Государство · 0.8";
 			BackColor = Palette.Bg;
 			ForeColor = Palette.Text;
 			base.AutoScaleMode = AutoScaleMode.None;
@@ -1239,7 +1239,7 @@ namespace Sovereign
 			Txt(g, "государств и территорий", num2 + 22f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "областей", num2 + 175f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "ЭКОНОМИКА  /  ДИПЛОМАТИЯ  /  ТЕХНОЛОГИИ  /  СТРАТЕГИЯ", num, VH - 59f, 12f, Palette.Muted);
-			Txt(g, "0.7   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
+			Txt(g, "0.8   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
 		}
 
 
@@ -1867,7 +1867,7 @@ namespace Sovereign
 			});
 			Section(g, "ДЕЛА ГОСУДАРСТВА", num4, 222f, num5);
 			Txt(g, "Научная программа", num4, 272f, 13f, Palette.Muted);
-			Txt(g, (n.Research < 0) ? "Не выбрана" : Rules.Techs[n.Research], num4, 299f, 22f, Palette.Text, bold: true, num5);
+			Txt(g, (n.Research < 0) ? "Не выбрана" : TechnologyRules.CurrentName(n), num4, 299f, 22f, Palette.Text, bold: true, num5);
 			if (n.Research >= 0)
 			{
 				Progress(g, num4, 339f, num5, n.ResearchProgress / 100.0, Palette.Teal);

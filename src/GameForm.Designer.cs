@@ -31,9 +31,10 @@ namespace Sovereign
                 Txt(g, notes[i], x + 26, y + 23, 9, Palette.Muted, false, lw - 142);
                 AvailableButton(g, "−", x + lw - 108, y + 19, 27, () => { focusedModule = slot; EquipmentRules.SetModule(draft, slot, modules[slot] - 1); Invalidate(); }, modules[i] > 1, "Уменьшить уровень: " + EquipmentRules.ModuleNames[i], false, 26);
                 Txt(g, modules[i] + "/" + cap, x + lw - 73, y + 25, 12, Palette.Gold, true);
-                AvailableButton(g, "+", x + lw - 27, y + 19, 27, () => { focusedModule = slot; EquipmentRules.SetModule(draft, slot, modules[slot] + 1); Invalidate(); }, modules[i] < cap, "Лимит модуля связан с исследованиями. Откройте технологии для повышения.", false, 26);
+                AvailableButton(g, "+", x + lw - 27, y + 19, 27, () => { focusedModule = slot; EquipmentRules.SetModule(draft, slot, modules[slot] + 1); Invalidate(); }, modules[i] < cap, cap < TechnologyRules.ModuleCap(E.Player, i) ? "Предел этого класса техники: " + cap : cap < 8 ? "Следующий уровень: " + TechnologyRules.ModuleRequirement(i, cap + 1) : "Достигнут предельный уровень.", false, 26);
             }
             Button(g, "Автокомпоновка", x, 774, lw, () => { draft = EquipmentRules.Balanced(draft.Kind, E.Player, draft.Name); Invalidate(); }, false, "Сбалансированные модули до уровня 4. Более высокий уровень может увеличить расходы.");
+            Button(g, "Исследования модулей →", x, 818, lw, () => { int cap = EquipmentRules.Cap(draft, focusedModule, E.Player); OpenResearchProject(cap >= 6 && cap < 8 ? TechnologyRules.ModuleTechnology(focusedModule, cap + 1) + 6 : TechnologyRules.ModuleBranch(focusedModule)); }, false, "Требования к следующему уровню выбранного модуля; ограничения класса сохраняются", 25);
             DrawBlueprintSheet(g, new RectangleF(center, 278, cw, 365), draft, focusedModule);
             Txt(g, "ПРОЕКТ / " + EquipmentRules.Names[(int)draft.Kind].ToUpperInvariant(), center, 663, 10, Palette.Gold, true);
             Txt(g, draft.Name, center, 686, 23, Palette.Text, true, cw - 115);

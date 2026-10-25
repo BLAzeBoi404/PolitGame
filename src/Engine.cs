@@ -165,6 +165,7 @@ namespace Sovereign
             InitializeAviation(S);
             InitializeManpower(S);
             InitializeNationalPolitics(S);
+            InitializeTechnology(S, false);
 			Notify("Кабинет сформирован. Проверьте баланс ресурсов и выберите программу развития.");
 			Notify("Учебная модель: современная география; региональная экономика и ресурсы оценочные. Исторические границы пока не включены.");
 			ComputeEconomy(apply: false);
@@ -285,6 +286,7 @@ namespace Sovereign
 			{
 				Nation nation = S.Nations[c];
                 var policyEffects = PolicyRules.Effects(nation, S.Day);
+                var technologyEffects = TechnologyRules.Effects(nation);
 				nation.Population = Math.Max(0.001, array3[c]);
 				nation.Production = new double[8];
 				nation.Demand = new double[8];
@@ -320,11 +322,11 @@ namespace Sovereign
 						break;
 					}
 					int num10 = num9;
-					double num11 = array[c, l] * Rules.Output[l] * num8 * (1.0 + (double)nation.Tech[num10] * 0.05) * (1.0 - nation.Repression * 0.0015) * ManpowerRules.Output(nation) * policyEffects.GoodsFactor;
+					double num11 = array[c, l] * Rules.Output[l] * num8 * (1.0 + (double)nation.Tech[num10] * 0.05) * (1.0 - nation.Repression * 0.0015) * ManpowerRules.Output(nation) * policyEffects.GoodsFactor * TechnologyRules.GoodsFactor(technologyEffects, l);
 					double num12 = 1.0;
 					for (int m = 0; m < 8; m++)
 					{
-						double num13 = Rules.Inputs[l, m] * num11;
+						double num13 = Rules.Inputs[l, m] * TechnologyRules.InputFactor(technologyEffects, l, m) * num11;
 						nation.Demand[m] += num13;
 						if (num13 > 0.0)
 						{
@@ -335,7 +337,7 @@ namespace Sovereign
 					num11 *= num12;
 					for (int n = 0; n < 8; n++)
 					{
-						double num14 = Rules.Inputs[l, n] * num11;
+						double num14 = Rules.Inputs[l, n] * TechnologyRules.InputFactor(technologyEffects, l, n) * num11;
 						array4[n] = Math.Max(0.0, array4[n] - num14);
 						nation.Consumed[n] += num14;
 					}
@@ -348,6 +350,7 @@ namespace Sovereign
 					array4[num16] += nation.Production[num16];
 					double num17 = nation.Population * array5[num16] * ((num16 == 6) ? (0.6 + nation.Living / 100.0) : 1.0);
 					if (num16 == 0 || num16 == 6) num17 *= policyEffects.ConsumptionFactor;
+                    if (num16 == 0) num17 *= 1 + technologyEffects.HouseholdFood;
                     if (num16 == 7)
 					{
 						num17 += (double)armyCount[c] * 0.045;
@@ -528,7 +531,7 @@ namespace Sovereign
 			{
 				nation.Treasury -= num;
 			}
-			int num2 = (int)((double)((sector == 8) ? 90 : (60 + sector * 15)) / (1.0 + (double)nation.Tech[3] * 0.06));
+			int num2 = Math.Max(1, (int)((double)((sector == 8) ? 90 : (60 + sector * 15)) / ((1.0 + (double)nation.Tech[3] * 0.06) * (1 + TechnologyRules.Effects(nation).Construction))));
 			S.Projects.Add(new Construction
 			{
 				Owner = owner,
@@ -546,50 +549,9 @@ namespace Sovereign
 			return null;
 		}
 
-		public string StartResearch(int tech)
-		{
-			if (tech < 0 || tech >= 6)
-			{
-				return "Неизвестная отрасль";
-			}
-			if (Player.Research >= 0)
-			{
-				return "Сначала завершите текущую программу.";
-			}
-			Player.Research = tech;
-			Player.ResearchProgress = 0.0;
-			Notify("Программа исследований: " + Rules.Techs[tech]);
-			Raise();
-			return null;
-		}
-
-		private void Research()
-		{
-			for (int i = 0; i < S.Nations.Length; i++)
-			{
-				Nation nation = S.Nations[i];
-				if (nation.Research < 0)
-				{
-					continue;
-				}
-				double num = (1.0 + nation.Science * 0.7) * (nation.Education / 60.0) / (1.0 + (double)nation.Tech[nation.Research] * 0.18);
-				nation.ResearchProgress += num * PolicyRules.Effects(nation, S.Day).ResearchFactor;
-				if (nation.ResearchProgress >= 100.0)
-				{
-					int research = nation.Research;
-					nation.Tech[research]++;
-					nation.Research = -1;
-					nation.ResearchProgress = 0.0;
-					if (i == S.Player)
-					{
-						Notify("Внедрена технология: " + Rules.Techs[research] + " · уровень " + nation.Tech[research], 1);
-					}
-				}
-			}
-		}
-
 		private void Politics()
 		{
+            var growthBonus = S.Nations.Select(n => TechnologyRules.Effects(n).PopulationGrowth).ToArray();
 			for (int i = 0; i < S.Nations.Length; i++)
 			{
 				Nation nation = S.Nations[i];
@@ -624,7 +586,7 @@ namespace Sovereign
 			{
 				Nation nation2 = S.Nations[province.Owner];
 				province.Unrest = Rules.Clamp(100.0 - nation2.Stability - nation2.Repression * 0.15, 0.0, 100.0);
-				double num4 = 0.002 + (double)nation2.Tech[4] * 0.0006 + nation2.Social * 0.0002 - nation2.Shortage * 0.035 - Math.Max(0.0, nation2.Inflation - 15.0) * 0.0001;
+				double num4 = 0.002 + growthBonus[province.Owner] + (double)nation2.Tech[4] * 0.0006 + nation2.Social * 0.0002 - nation2.Shortage * 0.035 - Math.Max(0.0, nation2.Inflation - 15.0) * 0.0001;
 				province.Population *= 1.0 + num4 / 52.0;
 			}
 			if (S.Day % 28 == 0 && Player.Shortage > 0.15)
@@ -677,10 +639,7 @@ namespace Sovereign
 				PlanNationalPolicy(c);
                 PlanManpower(c);
                 EquipmentAI(c, list);
-				if (n.Research < 0)
-				{
-					n.Research = ((S.Difficulty == 0) ? ((int)(S.Random() * 6.0)) : ((!(n.Shortage > 0.1)) ? (n.Focus++ % 6) : 0));
-				}
+                PlanResearch(c);
 				if (S.Difficulty > 0)
 				{
 					if (n.Revenue < n.Spending)
@@ -813,10 +772,11 @@ namespace Sovereign
                 foreach (var attachment in a.Attachments)
                     attachment.Condition = Rules.Clamp(attachment.Condition + (funded && a.Target < 0 ? 0.2 + attachment.Blueprint.Support * 0.06 : -(100 - attachment.Blueprint.Reliability) * 0.008 / (1 + attachment.Blueprint.Protection / 100)), 0, 100);
 				double num = ((a.Target < 0) ? 0.003 * a.Battalions : a.Design.Fuel * a.Battalions + a.Attachments.Sum(x => x.Blueprint.Fuel * 0.3));
+				num *= 1 + TechnologyRules.Effects(nation).GroundFuel;
 				double num2 = Math.Min(nation.Stock[2], num);
 				nation.Stock[2] -= num2;
 				bool flag = IsSupplied(a.Owner, a.Region, connected);
-                if (flag) a.SupplyDays = a.Design.Range / (45 * a.Design.Speed);
+                if (flag) a.SupplyDays = a.Design.Range / (45 * a.Design.Speed) + TechnologyRules.Effects(nation).SupplyDays;
                 else a.SupplyDays = System.Math.Max(0, a.SupplyDays - 1);
 				double num3 = Rules.Clamp(nation.Military / 2.5, 0.2, 1.35);
 				double num4 = (flag ? 100.0 : (a.SupplyDays > 0 ? 65.0 : 25.0)) * ((num > 0.0) ? (num2 / num) : 1.0) * Math.Min(1.0, num3);
@@ -953,6 +913,7 @@ namespace Sovereign
             if (s.Version == 3) InitializeAviation(s);
             if (s.Version == 4) InitializeManpower(s);
             if (s.Version == 5) InitializeNationalPolitics(s);
+            if (s.Version == 6) InitializeTechnology(s, true);
             Validate(s);
 			S = s;
 			Raise();

@@ -162,6 +162,7 @@ namespace Sovereign
             TestAtlasInterface(directory, check, click);
             TestManpowerInterface(directory, check, click);
             TestNationalPolicyInterface(directory, check, click);
+            TestResearchInterface(directory, check, click);
             results.Add("Failures: " + failed); File.WriteAllLines(Path.Combine(directory, "ui-results.txt"), results);
             Console.WriteLine(string.Join(Environment.NewLine, results));
             return failed == 0 ? 0 : 2;

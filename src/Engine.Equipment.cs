@@ -127,7 +127,8 @@ namespace Sovereign
             for (int owner = 0; owner < S.Nations.Length; owner++) {
                 Nation n = S.Nations[owner];
                 int available = Math.Min(500, (int)Math.Floor(capacity[owner]));
-                double policyFactor = PolicyRules.Effects(n, S.Day).EquipmentFactor;
+                var technology = TechnologyRules.Effects(n);
+                double policyFactor = PolicyRules.Effects(n, S.Day).EquipmentFactor * (1 + technology.Equipment);
                 foreach (var line in n.Lines) {
                     if (!line.Active) continue;
                     available -= line.Factories;
@@ -136,12 +137,12 @@ namespace Sovereign
                     double potential = line.Factories * line.Efficiency * (1 + n.Tech[2] * 0.04) * ManpowerRules.Output(n) * policyFactor / d.WorkDays;
                     double work = Math.Min(potential, line.Quantity - line.Completed - line.Progress);
                     work = Math.Min(work, Math.Max(0, n.Treasury) / d.Cost);
-                    work = Math.Min(work, n.Stock[4] / d.Steel);
+                    work = Math.Min(work, n.Stock[4] / (d.Steel * (1 + technology.EquipmentSteel)));
                     work = Math.Min(work, n.Stock[5] / d.Machines);
                     work = Math.Max(0, Math.Min(work, n.Stock[7] / d.Arms));
                     if (work <= 1e-12) continue;
                     n.Treasury -= work * d.Cost;
-                    n.Stock[4] = Math.Max(0, n.Stock[4] - work * d.Steel);
+                    n.Stock[4] = Math.Max(0, n.Stock[4] - work * d.Steel * (1 + technology.EquipmentSteel));
                     n.Stock[5] = Math.Max(0, n.Stock[5] - work * d.Machines);
                     n.Stock[7] = Math.Max(0, n.Stock[7] - work * d.Arms);
                     line.Progress += work;

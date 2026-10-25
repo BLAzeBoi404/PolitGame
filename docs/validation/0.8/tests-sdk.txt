@@ -1,0 +1,317 @@
+﻿PASS Real geography loads: countries and administrative regions
+PASS Region adjacency is symmetric
+PASS Allocated regional population conserves country population
+PASS Construction charges treasury exactly once
+PASS Construction completes and adds capacity
+PASS Player cannot build in another state
+PASS Insufficient funds reject construction
+PASS Research accepts one active program
+PASS Funded research completes
+PASS Adjacent friendly movement receives route
+PASS Army arrives at ordered destination
+PASS Neutral borders block movement
+PASS War opens adjacent enemy territory for movement
+PASS Arrival captures undefended enemy region
+PASS Combat and field wear reduce army strength
+PASS Medicine and social spending support demographic growth
+PASS War is bilateral
+PASS Peace clears war state
+PASS Trade agreement is bilateral
+PASS Tank design trades armor against speed, fuel and cost
+PASS Save/load preserves state and RNG
+PASS Simulation remains deterministic across save/load
+PASS Two-year simulation: finite finances and nonnegative stocks
+PASS Two-year simulation: valid ownership and capacities
+PASS Foreign AI researches technologies
+PASS World market matches real imports and exports
+PASS Final save state passes validation
+PASS Map clipping preserves the visible polygon interior
+PASS Rendering simplification never mutates exact selection geometry
+PASS Paid design adoption: Tank
+PASS Adoption snapshots modules: Tank
+PASS Paid design adoption: IFV
+PASS Adoption snapshots modules: IFV
+PASS Paid design adoption: Truck
+PASS Adoption snapshots modules: Truck
+PASS Paid design adoption: Artillery
+PASS Adoption snapshots modules: Artillery
+PASS Paid design adoption: Fighter
+PASS Adoption snapshots modules: Fighter
+PASS Paid design adoption: Bomber
+PASS Adoption snapshots modules: Bomber
+PASS Paid design adoption: Recon
+PASS Adoption snapshots modules: Recon
+PASS Paid design adoption: Transport
+PASS Adoption snapshots modules: Transport
+PASS Locked module does not charge or mutate state
+PASS Incompatible weapons rejected
+PASS Invalid names and null designs rejected
+PASS Aircraft gated by military research
+PASS Military research unlocks aircraft
+PASS Armor tradeoff is consistent across five stats
+PASS Engine gains speed at a material and fuel cost
+PASS Fuel tanks trade mobility for real supply endurance
+PASS Duplicate names rejected without replacing existing designs
+PASS Factory over-allocation is rejected
+PASS Invalid production requests are rejected
+PASS Production line can be created
+PASS Pause preserves progress and releases capacity without spending
+PASS Missing steel blocks all associated costs and explains the shortage
+PASS Serial production completes exact ordered quantity
+PASS Completed kits conserve money and all three material inputs
+PASS Completed line cannot duplicate stock and frees capacity
+PASS Removing completed line retains manufactured stock
+PASS Cancelling unfinished kit neither refunds spent inputs nor creates stock
+PASS Losing factories stops existing production
+PASS Rebuilt capacity resumes the original line
+PASS Recruitment cannot invent equipment
+PASS Cannot recruit in a foreign province
+PASS Recruitment consumes exactly one stored kit
+PASS New formations cannot move during training
+PASS Trained formation accepts movement orders
+PASS Moving formation cannot refit
+PASS Refit swaps inventory, returns intact old equipment and requires training
+PASS Support installation consumes a produced kit
+PASS Duplicate support classes cannot stack
+PASS Bomber support improves attacks; enemy fighters counter it
+PASS Truck loadout contributes to movement and supply calculations
+PASS Save/load retains exact partial production and efficiency
+PASS Entire campaign remains bit-for-bit deterministic after save/load
+PASS Atomic save retains previous backup
+PASS Nonfinite save is rejected atomically without losing the active campaign
+PASS Dangling production references rejected
+PASS Version 1 migration creates catalogs and retains existing armies
+PASS Repeated loading cannot duplicate migrated designs or equipment
+PASS Largest controlled home region is a supply hub
+PASS Hostile territory cuts off an isolated province from supply
+PASS Encircled formation loses supply and suffers attrition
+PASS Out-of-range strategic actions are rejected
+PASS Penetration and attack improve performance against heavy armor
+PASS Five-year simulation produces player equipment and passes full state validation
+PASS AI operates real production lines and inventory
+PASS Five-year economy retains finite nonnegative material stocks
+PASS Alliance requires positive relations and does not partially mutate on rejection
+PASS Defensive alliance grants reciprocal land access
+PASS Cannot attack an ally
+PASS Attacking a country calls its defensive ally into the war
+PASS War cancels transit and trade
+PASS An alliance can be explicitly dissolved
+PASS Neutral border rejects movement before access treaty
+PASS Requested access is directional
+PASS Transit movement never captures friendly territory
+PASS Transit treaty supplies troops through connected friendly land
+PASS Revoked access repatriates troops with a recovery delay
+PASS Premature white peace can be rejected without ending war
+PASS Negotiated return of homeland restores occupied bilateral territory
+PASS Peace enforces a 180-day truce
+PASS War is available when a truce expires
+PASS Peace by control line preserves acquired territory
+PASS Defensive repositioning forbids hostile transit
+PASS An empty front is rejected
+PASS Hold order occupies a border without launching an attack
+PASS Advance order attacks an undefended neighboring enemy province
+PASS Pausing a front stops its existing routes
+PASS Manual orders detach a formation from automatic command
+PASS Reassignment cannot give one army conflicting fronts
+PASS Save/load retains front membership and stance
+PASS War and automatic fronts remain deterministic across save/load
+PASS Peace stops fronts against the former enemy
+PASS Version 2 migration preserves forces and adds no unsolicited alliances
+PASS Asymmetric alliance data is rejected
+PASS Dangling front membership is rejected before saving
+PASS Controls accept modifier shortcuts
+PASS Binding conflicts preserve the previous shortcut
+PASS Escape remains available for menu navigation and cancellation
+PASS User controls survive serialization
+PASS Invalid control settings recover usable defaults
+PASS Airfield enters a paid construction queue without instant capacity
+PASS Duplicate airfield construction is rejected without charging twice
+PASS Completed level-one airfield provides two wing slots
+PASS Aircraft cannot deploy before production provides an equipment kit
+PASS Produced aircraft flow from factory stock into a paid standalone wing
+PASS Training blocks sorties and progresses with funded maintenance
+PASS Airfield capacity rejection preserves equipment and money
+PASS Fighter cannot accept bomber missions
+PASS Combat radius rejects distant targets
+PASS Unknown air mission is rejected
+PASS Bombing neutral territory is prohibited
+PASS Strike consumes fuel and damages actual enemy formations
+PASS Enemy fighter cover reduces bombing and inflicts aircraft losses
+PASS Fuel shortage grounds the mission without damaging the target
+PASS Unfunded maintenance grounds aircraft
+PASS Reserve repair consumes spare equipment resources
+PASS Reconnaissance feeds a bounded bonus into ground combat
+PASS Reconnaissance bonus expires when sorties stop
+PASS Air supply consumes real cargo and replenishes ground formations
+PASS Missing cargo prevents a supply sortie
+PASS Rebasing requires a destination airfield
+PASS Rebasing spends fuel and temporarily suspends readiness
+PASS Captured base triggers evacuation with losses and reorganization
+PASS Aircraft are lost when no valid evacuation airfield remains
+PASS Aircraft orders and airbases survive save/load
+PASS Air simulation remains deterministic after a save/load round trip
+PASS Save validator rejects non-finite aircraft readiness
+PASS Save validator rejects aircraft stationed without an airbase
+PASS Save validator rejects orphan aircraft design references
+PASS Version-three migration grants no free aircraft or airbases
+PASS Wartime AI funds airbases and aircraft production through the same rules
+PASS Air planning preserves AI ground recruitment project
+PASS New campaign initializes a conserved reserve, service and loss ledger
+PASS Recruitment without personnel preserves money, equipment and armies
+PASS Large formation cannot be recruited with fewer kits than battalions
+PASS Recruitment without money does not consume people or equipment
+PASS Four-battalion division consumes four kits, 2600 people and the scaled recruitment budget
+PASS Training is distinct from intact equipment and preserves personnel accounting
+PASS New named template does not silently alter existing formations
+PASS Invalid or duplicate templates are rejected atomically
+PASS Unfunded ground training does not advance
+PASS Wartime conscription is unavailable in peace
+PASS Conscription expands eligibility with political cost but creates no instant reserve
+PASS Higher conscription reduces real industrial output
+PASS Ninety-day cooldown prevents instant mobilization toggling
+PASS Weekly mustering transfers people into the accounted reserve
+PASS Occupied foreign populations do not become free recruits
+PASS Losing home territory reduces the available mobilization base
+PASS Demobilization releases excess reserves without deleting active soldiers
+PASS Battle losses remove real soldiers and reduce organization without changing total accounting
+PASS Stationary supplied formation receives paid replacements from the finite reserve
+PASS Moving formations cannot receive replacements
+PASS Poorly supplied formations cannot receive replacements
+PASS Repairs and organization recovery cannot invent missing soldiers
+PASS Replacements require actual equipment resources
+PASS Unfunded replacements preserve a negative treasury and consume no resources
+PASS Disorganized formations cannot launch a new attack
+PASS Disbanding returns surviving soldiers and intact equipment exactly once
+PASS Repeated disbanding cannot duplicate equipment
+PASS Destroyed formation accounts for remaining personnel only once
+PASS Refitting into a more manpower-intensive class consumes the additional crew
+PASS Support company draws its own personnel from the reserve
+PASS Aircraft cannot deploy without pilots and ground crews
+PASS Aircraft deployment consumes an accounted crew
+PASS Aircraft crews replenish from the same reserve while grounded
+PASS Destroyed aircraft account for surviving crew as losses
+PASS Reorganization with insufficient equipment preserves all resources
+PASS Existing formation expansion consumes missing battalions and personnel and requires retraining
+PASS A formation cannot bypass ongoing retraining by changing templates again
+PASS Shrinking an intact formation returns its actual excess personnel and equipment
+PASS Reorganizing a damaged formation does not recreate destroyed equipment
+PASS Four fully manned battalions provide four times the same-model combat power
+PASS Moving division consumes four battalions of fuel in the real daily simulation
+PASS Formation upkeep scales with every fielded battalion
+PASS Personnel, fractional casualties, templates and reserves remain deterministic across save/load
+PASS Save validator rejects a duplicated or unaccounted recruit
+PASS Save validator rejects a broken formation template reference
+PASS Version-four migration preserves units and equipment while initializing a balanced personnel ledger
+PASS Wartime AI raises conscription under the same costs and restrictions
+PASS Two-year wartime simulation preserves every nation's personnel balance
+PASS New campaign initializes a neutral cabinet for every country without free programs
+PASS Unaffordable national decision changes neither resources nor timers
+PASS Industrial program charges its quoted cost once and starts the exact duration
+PASS An active decision cannot be purchased twice
+PASS Research grants require an actual active research program
+PASS Research grants accept an eligible funded program
+PASS The two-program cabinet limit is enforced before charging money
+PASS A program stops exactly on its end date while its cooldown remains
+PASS A completed program becomes available at its cooldown boundary
+PASS Unknown national decisions are rejected safely
+PASS Industrial program increases actual unconstrained goods output by six percent
+PASS Industrial program accelerates actual equipment assembly by ten percent
+PASS Faster equipment output still spends extra materials and money
+PASS Audit changes real tax collection and applies its initial political cost
+PASS Grants multiply actual weekly research progress by twenty percent
+PASS Relief affects the weekly approval target beyond its immediate grant
+PASS War bonds are unavailable in peacetime without side effects
+PASS Bond issuance respects the debt ceiling after the proposed loan
+PASS Bond proceeds exactly equal the additional government debt
+PASS New bonds immediately enter ordinary weekly interest spending
+PASS Peacetime dialogue cannot start during a war
+PASS The initial grace period prevents immediate crises
+PASS Events retain a fixed deadline and never overwrite a pending choice or consume random draws
+PASS Event costs retain their original economic quote as GDP changes
+PASS An unaffordable incident choice preserves pending event and all resources
+PASS Reserve distribution requires real food stocks before charging money
+PASS Reserve distribution spends quoted money and actual goods and applies its stated consequence
+PASS A resolved event cannot be claimed again
+PASS Incident resolution starts national and per-event cooldowns
+PASS Rationing reduces actual household food demand without creating or consuming phantom stocks
+PASS Expired rationing restores ordinary food demand exactly
+PASS An ignored event applies the advertised free default on its deadline without erasing a negative treasury
+PASS A deadline consequence is applied only once
+PASS Conditional event resolves through real engine rules: Shortages
+PASS Conditional event resolves through real engine rules: LaborDispute
+PASS Conditional event resolves through real engine rules: WarWeariness
+PASS Conditional event resolves through real engine rules: Procurement
+PASS Conditional event resolves through real engine rules: ResearchOffer
+PASS Conditional event resolves through real engine rules: Investment
+PASS Scientific exchange needs an actual peaceful trade partner
+PASS An event option rechecks research prerequisites at the moment of choice
+PASS Eligible exchange installs its limited research modifier
+PASS Countries without controlled territory cannot issue new programs or incidents
+PASS Pending quotes, decision deadlines and cabinet history survive saving
+PASS Full campaign remains byte-identical across saved policy choices and 150 subsequent days
+PASS Save validation rejects fabricated program duration
+PASS A corrupt political save cannot replace the running campaign
+PASS Version-five migration preserves economy, manpower and random state and grants no free programs
+PASS AI funds the same industrial program at the same cost as the player
+PASS An insolvent AI chooses an affordable crisis response without free emergency goods
+PASS Two-year political simulation retains bounded histories and valid cabinet limits for all countries
+PASS New campaigns initialize independent research agendas without granting applied discoveries
+PASS All 24 technologies are reachable through an acyclic prerequisite graph
+PASS Unavailable or unknown research is rejected without changing money, random state or active work
+PASS Switching from an applied project preserves its exact accumulated progress
+PASS Returning restores progress once without spending money or raising fundamental levels
+PASS Research pause stops actual weekly progress
+PASS Zero science funding halts the selected program
+PASS Applied completion grants one discovery without a fundamental level or leftover active progress
+PASS Completed applied technologies cannot be researched or queued again
+PASS Completing another program does not erase stored fundamental progress
+PASS Fundamental completion increments its branch exactly once
+PASS Queue rejects an applied technology missing a prerequisite even after current work finishes
+PASS Four-step plan accepts prerequisites provided by current and earlier queued research
+PASS Research plan enforces its four-program limit
+PASS Queue rejects duplicate projects without removing existing work
+PASS Pausing leaves both almost-completed work and the planned queue untouched
+PASS Completion starts the next available program without granting a second weekly tick
+PASS Switching away from a prerequisite leaves the dependent queue safely blocked
+PASS Completing the missing prerequisite resumes the blocked plan
+PASS One additional fundamental level may follow the same active branch without duplicate queue entries
+PASS Removing prerequisite queue items never auto-unlocks their dependent discovery
+PASS Selection stations raise actual unconstrained food output by five percent
+PASS Agrarian mechanization changes actual industrial fuel consumption as well as output
+PASS Cold chains reduce real household food consumption without reducing production
+PASS Route planning shortens actual new construction while retaining its full price
+PASS Construction research also shortens paid airfield projects
+PASS Applied machining, automation and additive production accelerate real equipment assembly by eighteen percent
+PASS Additive production reduces steel actually spent per equipment kit by five percent
+PASS Biomedical networks multiply the real funded research rate by eight percent
+PASS Energy and alloy discoveries change actual electricity, fuel and steel output by their combined stated factors
+PASS Smart grids reduce actual industrial electricity consumption without applying the discount to households
+PASS Medical discoveries add their annual growth bonus to actual weekly province population
+PASS Applied aviation fixture issues actual valid reconnaissance missions
+PASS Fuel standards reduce fuel actually spent on aircraft sorties by five percent
+PASS Digital avionics increases the real reconnaissance effect by eight percent
+PASS Field medicine also reduces actual aircrew casualties by ten percent
+PASS Field medicine reduces personnel casualties by ten percent while equipment damage remains unchanged
+PASS Destruction still accounts for every remaining person after medical casualty reduction
+PASS Public health raises actual weekly recruit intake within the existing population capacity
+PASS Teaching hospitals speed real replacements while spending the corresponding recruits and money
+PASS Fuel standards reduce actual daily ground-unit fuel use by eight percent
+PASS Mobile depots add two actual days of autonomy to supplied ground units
+PASS Fundamental levels alone cannot bypass advanced applied module requirements
+PASS Composite armor unlocks armor seven without granting advanced guns
+PASS Integrated protection unlocks only its named level-eight modules
+PASS New discoveries leave previously designed and issued equipment unchanged
+PASS Applied discoveries still obey the underlying fundamental level cap
+PASS Version-six migration preserves active fundamental progress, treasury and deterministic random state
+PASS Legacy migration preserves all previously available module levels without gifting applied technologies
+PASS Full research save round-trips byte-identically with paused applied work, queued dependencies and stored progress
+PASS Research decisions and AI remain byte-identical for 150 days after save/load
+PASS A fabricated advanced cached progress entry is rejected without replacing the running campaign
+PASS Unknown queued project IDs cannot enter the active campaign through loading
+PASS Save validation rejects learned technologies without their prerequisites
+PASS AI starts the missing military foundation instead of receiving an advanced technology for free
+PASS Two-year simulation makes AI countries complete real applied research
+PASS Two-year research simulation retains valid bounded agendas in every country
+Simulated days: 818; wall seconds: 38.90
+Countries: 176; regions: 4136
+Failures: 0

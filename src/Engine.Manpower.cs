@@ -36,7 +36,7 @@ namespace Sovereign
         public int WeeklyIntake(int owner)
         {
             var n = S.Nations[owner]; long cap = ManpowerCapacity(owner);
-            return (int)Math.Min(ManpowerHeadroom(owner), Math.Max(0, cap / 52.0 * Rules.Clamp(n.Education / 70, .5, 1.3) * Rules.Clamp(n.Military / 2.5, .4, 1.3)));
+            return (int)Math.Min(ManpowerHeadroom(owner), Math.Max(0, cap / 52.0 * Rules.Clamp(n.Education / 70, .5, 1.3) * Rules.Clamp(n.Military / 2.5, .4, 1.3) * (1 + TechnologyRules.Effects(n).Intake)));
         }
         public FormationTemplate SelectedTemplate(int owner) => S.Nations[owner].Templates.First(t => t.Id == S.Nations[owner].ActiveTemplate);
         public string RecruitmentReason(int owner, int designId, int templateId)
@@ -103,7 +103,7 @@ namespace Sovereign
                 if (a.TrainingDays > 0 || a.Target >= 0) continue;
                 bool supplied = IsSupplied(a.Owner, a.Region, network);
                 if (supplied && a.Supply >= 60 && S.Provinces[a.Region].Owner == a.Owner) {
-                    int replacements = DrawReplacements(a.Owner, ManpowerRules.Establishment(a) - a.Personnel, Math.Max(1, ManpowerRules.Establishment(a) / 100));
+                    int replacements = DrawReplacements(a.Owner, ManpowerRules.Establishment(a) - a.Personnel, Math.Max(1, (int)(ManpowerRules.Establishment(a) / 100.0 * (1 + TechnologyRules.Effects(S.Nations[a.Owner]).Replacements))));
                     a.Personnel += replacements;
                     if (replacements > 0) a.Organization = Math.Max(0, a.Organization - replacements * 20.0 / ManpowerRules.Establishment(a));
                 }
@@ -127,14 +127,14 @@ namespace Sovereign
         {
             double applied = Math.Max(0, Math.Min(a.Strength - floor, damage));
             a.Strength -= applied; a.Organization = Math.Max(0, a.Organization - applied * 1.2);
-            double casualties = a.CasualtyRemainder + ManpowerRules.Establishment(a) * applied / 100 * casualtyRate;
+            double casualties = a.CasualtyRemainder + ManpowerRules.Establishment(a) * applied / 100 * casualtyRate * (1 + TechnologyRules.Effects(S.Nations[a.Owner]).Casualties);
             int losses = Math.Min(a.Personnel, (int)Math.Floor(casualties)); a.CasualtyRemainder = casualties - Math.Floor(casualties);
             a.Personnel -= losses; S.Nations[a.Owner].PersonnelLosses += losses;
         }
         internal void DamageAirWing(AirWing a, double damage, double floor = 0)
         {
             double applied = Math.Max(0, Math.Min(a.Strength - floor, damage)); a.Strength -= applied;
-            double casualties = a.CasualtyRemainder + ManpowerRules.AirSize(a.Design.Kind) * applied / 100 * .3;
+            double casualties = a.CasualtyRemainder + ManpowerRules.AirSize(a.Design.Kind) * applied / 100 * .3 * (1 + TechnologyRules.Effects(S.Nations[a.Owner]).Casualties);
             int losses = Math.Min(a.Personnel, (int)Math.Floor(casualties)); a.CasualtyRemainder = casualties - Math.Floor(casualties);
             a.Personnel -= losses; S.Nations[a.Owner].PersonnelLosses += losses;
         }

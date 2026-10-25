@@ -57,14 +57,15 @@ namespace Sovereign
                 Button(g, n.AutoTrade ? "Автоторговля: включена" : "Автоторговля: выключена", 20, 761, w, () => { n.AutoTrade = !n.AutoTrade; Invalidate(); }, n.AutoTrade, "Торговля использует капитал бизнеса", 31);
             } else if (page == "Исследования") {
                 Txt(g, "НАУЧНАЯ ПРОГРАММА", 20, 160, 10, Palette.Gold, true);
-                Para(g, n.Research < 0 ? "Выберите отрасль для следующего уровня технологии." : Rules.Techs[n.Research] + " · " + n.ResearchProgress.ToString("0") + "%", 20, 186, w, 56, 16, Palette.Text);
+                Para(g, n.Research < 0 ? "Выберите фундаментальную отрасль или прикладную технологию." : E.ResearchStatus(E.S.Player), 20, 186, w, 56, 16, Palette.Text);
                 Progress(g, 20, 249, w, n.Research < 0 ? 0 : n.ResearchProgress / 100, Palette.Gold);
+                Button(g, "Технологии и план →", 20, 278, w, () => OpenResearchProject(researchSelection), true, "24 прикладные технологии, предпосылки и план работы", 32);
                 string[] effect = { "Урожайность", "Выработка энергии", "Двигатели и корпуса", "Ходовая, баки, строительство", "Уровень жизни", "Броня, оружие, электроника" };
                 for (int i = 0; i < 6; i++) {
-                    int tech = i; float y = 282 + i * 74;
+                    int tech = i; float y = 326 + i * 67;
                     Txt(g, Rules.Techs[i] + "  /  " + n.Tech[i], 21, y, 14, Palette.Text, true, 245);
                     Txt(g, effect[i], 21, y + 26, 11, Palette.Muted, false, 245);
-                    AvailableButton(g, n.Research == i ? "В работе" : "Начать", 281, y + 4, 95, () => Message(E.StartResearch(tech)), n.Research < 0, "Одна программа за раз; скорость зависит от научного бюджета.", n.Research == i, 30);
+                    AvailableButton(g, n.ScienceTree.ActiveProject == i ? "В работе" : "Начать", 281, y + 4, 95, () => Message(E.StartResearch(tech)), n.Research < 0, "Одна программа за раз; скорость зависит от научного бюджета.", n.ScienceTree.ActiveProject == i, 30);
                     Line(g, Palette.Line, 20, y + 61, 376, y + 61);
                 }
                 Button(g, "Научный бюджет: " + Num(n.Science) + "% ВВП →", 20, 761, w, () => Navigate("Политика"), false, "Изменить финансирование", 31);
@@ -143,7 +144,7 @@ namespace Sovereign
                 LedgerRow(g, "Безработица", Num(n.Unemployment) + "%", 537);
                 LedgerRow(g, "Инфляция", Num(n.Inflation) + "%", 571);
                 CompactSection(g, "ПРИОРИТЕТЫ", 622);
-                Button(g, n.Research < 0 ? "Выбрать научную программу →" : "Исследования: " + Rules.Techs[n.Research], 20, 669, w, () => Navigate("Исследования"), n.Research < 0);
+                Button(g, n.Research < 0 ? "Выбрать научную программу →" : "Исследования: " + TechnologyRules.CurrentName(n), 20, 669, w, () => Navigate("Исследования"), n.Research < 0);
                 Button(g, "Производство и строительство →", 20, 716, w, () => Navigate("Производство"));
             }
         }
@@ -166,7 +167,7 @@ namespace Sovereign
             DocketFrame(g, box, "Текущие дела");
             var n = E.Player;
             Txt(g, "ИССЛЕДОВАНИЯ", x + 14, y + 57, 9, Palette.Gold, true);
-            Button(g, n.Research < 0 ? "Выбрать программу →" : Rules.Techs[n.Research] + "  " + n.ResearchProgress.ToString("0") + "%", x + 12, y + 76, w - 24, () => Navigate("Исследования"), false, "Технологическая программа", 28);
+            Button(g, n.Research < 0 ? "Выбрать программу →" : TechnologyRules.CurrentName(n) + "  " + n.ResearchProgress.ToString("0") + "%", x + 12, y + 76, w - 24, () => Navigate("Исследования"), false, "Технологическая программа", 28);
             Progress(g, x + 14, y + 109, w - 28, n.Research < 0 ? 0 : n.ResearchProgress / 100, Palette.Gold);
             Txt(g, "ПРОИЗВОДСТВО", x + 14, y + 132, 9, Palette.Gold, true);
             var lines = n.Lines.Where(l => l.Active).Take(2).ToList();

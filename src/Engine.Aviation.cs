@@ -94,7 +94,7 @@ namespace Sovereign
             if (wing.Mission == AirMission.Supply && (S.Nations[wing.Owner].Stock[0] < .02 || S.Nations[wing.Owner].Stock[7] < .015)) return "Нет продовольствия или оружия для груза";
             return "Вылеты: " + AirMissionNames[(int)wing.Mission];
         }
-        private double AirFuel(AirWing wing) => wing.Design.Fuel * Math.Max(.2, wing.Strength / 100);
+        private double AirFuel(AirWing wing) => wing.Design.Fuel * Math.Max(.2, wing.Strength / 100) * (1 + TechnologyRules.Effects(S.Nations[wing.Owner]).AirFuel);
         private long AirKey(int owner, int region) => (long)owner * S.Provinces.Length + region;
         public double AirReconBonus(int owner, int region) { double value; return airRecon.TryGetValue(AirKey(owner, region), out value) ? Math.Min(.15, value) : 0; }
         public void TickAviation()
@@ -132,7 +132,7 @@ namespace Sovereign
             // Resolve air cover from the same pre-combat snapshot for both sides.
             var cover = new Dictionary<int, Dictionary<int, double>>();
             foreach (var wing in flying.Where(a => a.Mission == AirMission.Superiority)) {
-                double power = wing.Design.Attack * wing.Strength / 100 * ManpowerRules.AirManning(wing) * (wing.Design.SpeedKph / 360) * (1 + wing.Design.Electronics * .03);
+                double power = wing.Design.Attack * wing.Strength / 100 * ManpowerRules.AirManning(wing) * (wing.Design.SpeedKph / 360) * (1 + wing.Design.Electronics * .03) * (1 + TechnologyRules.Effects(S.Nations[wing.Owner]).AirOperations);
                 foreach (int region in World.Regions[wing.Target].Neighbors.Concat(new[] { wing.Target }).Distinct()) {
                     if (AirDistance(wing.BaseRegion, region) > wing.Design.Range) continue;
                     Dictionary<int, double> owners; if (!cover.TryGetValue(region, out owners)) cover[region] = owners = new Dictionary<int, double>();
@@ -145,7 +145,7 @@ namespace Sovereign
                 double enemy = owners == null ? 0 : owners.Where(p => AtWar(wing.Owner, p.Key)).Sum(p => p.Value);
                 double escort = owners == null ? 0 : owners.Where(p => p.Key == wing.Owner || Allied(wing.Owner, p.Key)).Sum(p => p.Value);
                 double survival = 1 / (1 + enemy / (12 + escort));
-                double effect = wing.Strength / 100 * ManpowerRules.AirManning(wing) * survival;
+                double effect = wing.Strength / 100 * ManpowerRules.AirManning(wing) * survival * (1 + TechnologyRules.Effects(S.Nations[wing.Owner]).AirOperations);
                 double loss = (100 - wing.Design.Reliability) * .003 + Math.Min(6, enemy / (12 + escort) * 2) / (1 + wing.Design.Protection / 80);
                 DamageAirWing(wing, loss);
                 List<Army> targets; units.TryGetValue(wing.Target, out targets);
@@ -205,7 +205,7 @@ namespace Sovereign
             if (S.Projects.Count(c => c.Region == region) >= 4) return "В регионе уже четыре стройки.";
             if (S.Nations[owner].Treasury < .6) return "Аэродром стоит 0,60 млрд.";
             S.Nations[owner].Treasury -= .6;
-            int days = Math.Max(1, (int)(120 / (1 + S.Nations[owner].Tech[3] * .06)));
+            int days = Math.Max(1, (int)(120 / ((1 + S.Nations[owner].Tech[3] * .06) * (1 + TechnologyRules.Effects(S.Nations[owner]).Construction))));
             S.Projects.Add(new Construction { Owner = owner, Region = region, Sector = 9, Days = days, Total = days });
             if (owner == S.Player) Notify("Строится аэродром: " + World.Regions[region].Name + ". " + days + " дн.");
             Raise(); return null;

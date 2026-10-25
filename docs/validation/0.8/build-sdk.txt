@@ -1,0 +1,9 @@
+  Determining projects to restore...
+  Restored /workspace/PolitGame/Sovereign.csproj (in 1.21 sec).
+  Sovereign -> /workspace/PolitGame/bin/Release/net472/Sovereign.exe
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:05.28
