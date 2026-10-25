@@ -108,7 +108,7 @@ namespace Sovereign
                     if (replacements > 0) a.Organization = Math.Max(0, a.Organization - replacements * 20.0 / ManpowerRules.Establishment(a));
                 }
                 if (supplied && S.Nations[a.Owner].Treasury >= a.Design.Maintenance * a.Battalions)
-                    a.Organization = Math.Min(100, a.Organization + 2 * a.Supply / 100);
+                    a.Organization = Math.Min(100, a.Organization + 2 * a.Supply / 100 * (1 + TechnologyRules.Effects(S.Nations[a.Owner]).OrganizationRecovery));
                 else a.Organization = Math.Max(0, a.Organization - .4);
             }
             foreach (var a in S.AirWings) if (a.Mission == AirMission.Reserve && a.TrainingDays == 0 && S.Provinces[a.BaseRegion].Owner == a.Owner && IsSupplied(a.Owner, a.BaseRegion, network))

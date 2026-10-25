@@ -17,7 +17,7 @@ namespace Sovereign
                 if (targets.Count > 0) {
                     int target = targets[0];
                     var defenders = S.Armies.Where(a => a.Region == target && AtWar(owner, a.Owner)).ToList();
-                    if (defenders.Count == 0 || EquipmentRules.CombatPower(unit, defenders[0], false) > defenders.Sum(a => EquipmentRules.CombatPower(a, unit, true)) * 1.1)
+                    if (defenders.Count == 0 || EquipmentRules.CombatPower(unit, defenders[0], false) * GroundTechnologyFactor(unit.Owner) > defenders.Sum(a => EquipmentRules.CombatPower(a, unit, true) * GroundTechnologyFactor(a.Owner)) * 1.1)
                         Order(unit.Id, target, false);
                     continue;
                 }

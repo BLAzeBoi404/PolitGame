@@ -23,9 +23,19 @@ namespace Sovereign
         private void DrawCachedMap(Graphics g)
         {
             bool setup = menuScreen == "new";
-            int ownership = 17, diplomacy = 17;
+            int ownership = 17, diplomacy = 17, thematic = 17;
             unchecked {
-                if (!setup) foreach (var province in E.S.Provinces) ownership = ownership * 31 + province.Owner;
+                if (!setup) foreach (var province in E.S.Provinces) {
+                    ownership = ownership * 31 + province.Owner;
+                    if (layer == "Ресурсы") thematic = thematic * 31 + (province.Oil + province.Ore + province.Soil).GetHashCode();
+                    else if (layer == "Инфраструктура") thematic = thematic * 31 + province.Infrastructure.GetHashCode();
+                    else if (layer == "Настроения") thematic = thematic * 31 + province.Unrest.GetHashCode();
+                    else if (layer == "Экономика") {
+                        double plants = 0; for (int i = 0; i < 8; i++) plants += province.Public[i] + province.Private[i];
+                        thematic = thematic * 31 + (plants / Math.Max(.001, province.Population)).GetHashCode();
+                    }
+                }
+                if (!setup && layer == "Армии") foreach (var unit in E.S.Armies) thematic = thematic * 31 + unit.Region * 397 + unit.Strength.GetHashCode();
                 if (!setup && layer == "Дипломатия") for (int i = 0; i < E.S.Nations.Length; i++) {
                     int pair = E.Pair(E.S.Player, i);
                     diplomacy = diplomacy * 31 + (E.AtWar(E.S.Player, i) ? 1 : 0) + (E.S.Agreements[pair] ? 2 : 0)
@@ -33,7 +43,7 @@ namespace Sovereign
                 }
             }
             string key = ClientSize + "/" + mapRect + "/" + scale + "/" + layer + "/" + ownership + "/" + diplomacy + "/" + (setup ? -1 : E.S.Player)
-                + "/" + prefs.Labels + "/" + prefs.RegionBorders + "/" + prefs.Texture + "/" + ((setup || layer == "Политика" || layer == "Дипломатия") ? 0 : E.S.Day);
+                + "/" + prefs.Labels + "/" + prefs.RegionBorders + "/" + prefs.Texture + "/" + thematic;
             bool compatible = mapCache != null && ReferenceEquals(mapCampaign, setup ? null : E.S) && cachedLayer == layer && cachedClientSize == ClientSize && cachedMapRect == mapRect;
             bool gesture = compatible && (panning || deferMapRefresh);
             bool insideMargin = compatible && cachedScale == scale && Math.Abs(cachedCx - cx) * scale * UiScale <= CameraMargin - 2
@@ -42,7 +52,7 @@ namespace Sovereign
                 var viewport = mapRect;
                 int width = (int)Math.Ceiling(viewport.Width * UiScale) + CameraMargin * 2;
                 int height = (int)Math.Ceiling(viewport.Height * UiScale) + CameraMargin * 2;
-                var next = new Bitmap(width, height);
+                var next = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
                 try {
                     // Local bitmap coordinates preserve the camera center; the extra
                     // border is real geography, not stretched pixels or blank ocean.

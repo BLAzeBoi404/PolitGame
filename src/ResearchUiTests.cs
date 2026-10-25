@@ -26,7 +26,7 @@ namespace Sovereign
             check(E.Player.ScienceTree.Queue.SequenceEqual(new[] { 14, 7 }), "UI plan admits dependencies supplied by the active and preceding queued programs");
             click("research:tab:2"); click("research:remove:0");
             check(E.Player.ScienceTree.Queue.Single() == 7, "Removing a prerequisite from the visible plan retains its dependent work for later");
-            click("research:tab:0"); click("research:branch:5"); click("technology:23");
+            click("research:tab:0"); click("research:branch:5"); click("research:pan:right"); click("research:pan:right"); click("technology:23");
             var active = E.Player.ScienceTree.ActiveProject; click("research:start");
             check(E.Player.ScienceTree.ActiveProject == active && !E.Player.ScienceTree.Known[23], "Locked advanced technology cannot start through its disabled interface button");
             toastUntil = DateTime.MinValue;

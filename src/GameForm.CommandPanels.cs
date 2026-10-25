@@ -59,7 +59,7 @@ namespace Sovereign
                 Txt(g, "НАУЧНАЯ ПРОГРАММА", 20, 160, 10, Palette.Gold, true);
                 Para(g, n.Research < 0 ? "Выберите фундаментальную отрасль или прикладную технологию." : E.ResearchStatus(E.S.Player), 20, 186, w, 56, 16, Palette.Text);
                 Progress(g, 20, 249, w, n.Research < 0 ? 0 : n.ResearchProgress / 100, Palette.Gold);
-                Button(g, "Технологии и план →", 20, 278, w, () => OpenResearchProject(researchSelection), true, "24 прикладные технологии, предпосылки и план работы", 32);
+                Button(g, "Технологии и план →", 20, 278, w, () => OpenResearchProject(researchSelection), true, "72 прикладные технологии, предпосылки и план работы", 32);
                 string[] effect = { "Урожайность", "Выработка энергии", "Двигатели и корпуса", "Ходовая, баки, строительство", "Уровень жизни", "Броня, оружие, электроника" };
                 for (int i = 0; i < 6; i++) {
                     int tech = i; float y = 326 + i * 67;

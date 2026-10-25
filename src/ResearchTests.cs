@@ -23,12 +23,12 @@ namespace Sovereign
             Action<Engine, string> rawSave = (e, p) => { using (var s = File.Create(p)) new XmlSerializer(typeof(Campaign)).Serialize(s, e.S); };
             scenario("Technology catalog and switching", () => {
                 var e = fresh(); var n = e.Player; var a = n.ScienceTree;
-                check(e.S.Version == 7 && e.S.Nations.All(c => c.ScienceTree != null && !c.ScienceTree.Known.Any(k => k) && c.ScienceTree.LegacyLevels.All(l => l == 0)), "New campaigns initialize independent research agendas without granting applied discoveries");
-                var reached = new bool[24]; var levels = Enumerable.Repeat(6, 6).ToArray();
-                for (int pass = 0; pass < 24; pass++) foreach (var d in TechnologyRules.Catalog) if (TechnologyRules.Requirements(d.Id + 6, levels, reached) == null) reached[d.Id] = true;
-                check(reached.All(k => k) && TechnologyRules.Catalog.Select(d => d.Id).SequenceEqual(Enumerable.Range(0, 24)), "All 24 technologies are reachable through an acyclic prerequisite graph");
+                check(e.S.Version == 8 && e.S.Nations.All(c => c.ScienceTree != null && !c.ScienceTree.Known.Any(k => k) && c.ScienceTree.LegacyLevels.All(l => l == 0)), "New campaigns initialize independent research agendas without granting applied discoveries");
+                var reached = new bool[TechnologyRules.Count]; var levels = Enumerable.Repeat(7, 6).ToArray();
+                for (int pass = 0; pass < TechnologyRules.Count; pass++) foreach (var d in TechnologyRules.Catalog) if (TechnologyRules.Requirements(d.Id + 6, levels, reached) == null) reached[d.Id] = true;
+                check(reached.All(k => k) && TechnologyRules.Catalog.Select(d => d.Id).SequenceEqual(Enumerable.Range(0, TechnologyRules.Count)), "All 72 technologies are reachable through an acyclic prerequisite graph");
                 double cash = n.Treasury; uint rng = e.S.RandomState;
-                check(e.SelectResearch(7) != null && e.SelectResearch(29) != null && e.SelectResearch(-1) != null && e.SelectResearch(30) != null && a.ActiveProject == -1 && n.Treasury == cash && e.S.RandomState == rng, "Unavailable or unknown research is rejected without changing money, random state or active work");
+                check(e.SelectResearch(7) != null && e.SelectResearch(29) != null && e.SelectResearch(-1) != null && e.SelectResearch(TechnologyRules.ProjectCount) != null && a.ActiveProject == -1 && n.Treasury == cash && e.S.RandomState == rng, "Unavailable or unknown research is rejected without changing money, random state or active work");
                 int level = n.Tech[0]; e.SelectResearch(6); n.ResearchProgress = 36.5; e.SelectResearch(0); n.ResearchProgress = 19.25;
                 check(a.StoredProgress[6] == 36.5 && a.ActiveProject == 0, "Switching from an applied project preserves its exact accumulated progress");
                 e.SelectResearch(6);
@@ -90,7 +90,7 @@ namespace Sovereign
             });
             scenario("Energy, materials and demographic consequences", () => {
                 var a = fresh(); var b = fresh(); rich(a); rich(b);
-                foreach (var d in TechnologyRules.Catalog) Learn(b.Player, d.Id);
+                foreach (var d in TechnologyRules.Catalog.Take(24)) Learn(b.Player, d.Id);
                 a.Player.Tech = (int[])b.Player.Tech.Clone(); a.ComputeEconomy(false); b.ComputeEconomy(false);
                 check(Math.Abs(b.Player.Production[1] / a.Player.Production[1] - 1.21) < 1e-8 && Math.Abs(b.Player.Production[2] / a.Player.Production[2] - 1.08) < 1e-8 && Math.Abs(b.Player.Production[4] / a.Player.Production[4] - 1.06) < 1e-8, "Energy and alloy discoveries change actual electricity, fuel and steel output by their combined stated factors");
                 double expected = Enumerable.Range(0, 8).Sum(i => Rules.Inputs[i, 1] * (b.Player.Production[i] * .92 - a.Player.Production[i]));
@@ -151,7 +151,7 @@ namespace Sovereign
                 double money = n.Treasury; uint rng = e.S.RandomState; var caps = Enumerable.Range(0, 8).Select(i => Math.Min(8, 2 + n.Tech[TechnologyRules.ModuleBranch(i)])).ToArray();
                 e.S.Version = 6; foreach (var c in e.S.Nations) c.ScienceTree = null;
                 string file = Path.Combine(directory, "research-v6.xml"); rawSave(e, file); var loaded = fresh(); loaded.Load(file);
-                check(loaded.S.Version == 7 && loaded.Player.ScienceTree.ActiveProject == 2 && loaded.Player.ResearchProgress == 47.125 && loaded.Player.Treasury == money && loaded.S.RandomState == rng, "Version-six migration preserves active fundamental progress, treasury and deterministic random state");
+                check(loaded.S.Version == 8 && loaded.Player.ScienceTree.ActiveProject == 2 && loaded.Player.ResearchProgress == 47.125 && loaded.Player.Treasury == money && loaded.S.RandomState == rng, "Version-six migration preserves active fundamental progress, treasury and deterministic random state");
                 check(caps.SequenceEqual(Enumerable.Range(0, 8).Select(i => TechnologyRules.ModuleCap(loaded.Player, i))) && !loaded.Player.ScienceTree.Known.Any(k => k), "Legacy migration preserves all previously available module levels without gifting applied technologies");
                 loaded.Validate(loaded.S);
             });
@@ -172,7 +172,7 @@ namespace Sovereign
                 check(rejected, "Save validation rejects learned technologies without their prerequisites");
             });
             scenario("AI follows research prerequisites", () => {
-                var e = fresh(); int owner = world.ByCode("POL"); var n = e.S.Nations[owner]; n.Focus = 5; n.Tech[5] = 4; n.Shortage = 0;
+                var e = fresh(); int owner = world.ByCode("POL"); var n = e.S.Nations[owner]; n.Focus = 5; n.Tech[5] = 1; n.Shortage = 0;
                 e.PlanResearch(owner); check(n.ScienceTree.ActiveProject == 5 && !n.ScienceTree.Known[20], "AI starts the missing military foundation instead of receiving an advanced technology for free");
                 for (int i = 0; i < 730; i++) e.Tick();
                 check(e.S.Nations.Where((c, i) => i != e.S.Player).Sum(c => c.ScienceTree.Known.Count(k => k)) > 10, "Two-year simulation makes AI countries complete real applied research"); e.Validate(e.S);

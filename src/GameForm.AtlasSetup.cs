@@ -83,8 +83,9 @@ namespace Sovereign
             g.TranslateTransform(mapRect.X + mapRect.Width / 2, mapRect.Y + mapRect.Height / 2);
             g.ScaleTransform(scale, scale); g.TranslateTransform(-cx, -cy);
             foreach (int id in new[] { hoveredCountry, menuCountry }.Distinct()) if (id >= 0) {
-                using (var brush = new SolidBrush(Color.FromArgb(id == menuCountry ? 65 : 35, 255, 243, 173))) g.FillPath(brush, W.Countries[id].Path);
-                using (var pen = new Pen(id == menuCountry ? Color.FromArgb(96, 66, 28) : Color.FromArgb(220, 225, 200), (id == menuCountry ? 2.4f : 1.5f) / scale)) g.DrawPath(pen, W.Countries[id].Path);
+                var path = HighlightPath(W.Countries[id]); if (path.PointCount == 0) continue;
+                using (var brush = new SolidBrush(Color.FromArgb(id == menuCountry ? 65 : 35, 255, 243, 173))) g.FillPath(brush, path);
+                using (var pen = new Pen(id == menuCountry ? Color.FromArgb(96, 66, 28) : Color.FromArgb(220, 225, 200), (id == menuCountry ? 2.4f : 1.5f) / scale)) g.DrawPath(pen, path);
             }
             g.Restore(state);
             Fill(g, Palette.Panel, 0, 0, VW, 82); Line(g, Palette.Gold, 0, 81, VW, 81);

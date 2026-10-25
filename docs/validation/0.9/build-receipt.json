@@ -1,0 +1,18 @@
+{
+  "version": "0.9.0",
+  "tested_at_utc": "2026-10-25T21:52:06.206938+00:00",
+  "executable_sha256": "4c343bb0b3c9c74457f7f9e79d3051247f7200f4c95c97cd2733f5999327b81d",
+  "source_sha256": "507e2fee430f4b7677293c0644d0ea89f83bcdc8fe4b4a55309700d442feccaa",
+  "executable_bytes": 3273216,
+  "build": ".NET SDK 8.0.426 / Release net472",
+  "runtime": "Mono 6.12 / Debian 13 / libgdiplus / Xvfb",
+  "native_windows_tested": false,
+  "logic_passed": 334,
+  "ui_passed": 287,
+  "legacy_save": "Uploaded autosave and version 0.8 applied-research fixture each loaded and advanced 30 days without rewriting original",
+  "performance_baseline_commit": "52d573d1964a52e8a119617fac87b264abce36d9",
+  "performance_baseline_note": "0.8 sources plus the same GameForm.Performance.cs and --benchmark CLI dispatch only; built with the same .NET SDK 8.0.426 Release configuration; two sequential before/after pairs without concurrent test jobs",
+  "baseline_executable_sha256": "430b45645953838e4f2ad707c5f0397252dd6d376b4c4029c4ce0edf03cd6e42",
+  "baseline_source_sha256": "52606abddd3cfc28e08b79187e255b113d24eb7cb5a7645836c2e86beeb752aa",
+  "benchmark_runner_sha256": "9ece91878c42eca561248de96329584c5281cee4ec189fe4e291e2b756193a69"
+}

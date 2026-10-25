@@ -125,7 +125,7 @@ namespace Sovereign
             InitializeAtlasColors();
 			E = new Engine(world);
 			base.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-			Text = "SOVEREIGN — Государство · 0.8";
+			Text = "SOVEREIGN — Государство · 0.9";
 			BackColor = Palette.Bg;
 			ForeColor = Palette.Text;
 			base.AutoScaleMode = AutoScaleMode.None;
@@ -144,22 +144,8 @@ namespace Sovereign
 				Invalidate();
 			};
 			e.Changed += value;
-			clock.Interval = 650;
-			clock.Tick += delegate
-			{
-				if (prefs.Tooltips && hoveredTip != "")
-				{
-					Invalidate();
-				}
-				if (speed > 0 && menuScreen == "" && E.S != null)
-				{
-					int num = ((speed == 1) ? 1 : ((speed == 2) ? 3 : 7));
-					for (int i = 0; i < num && speed > 0; i++)
-					{
-						E.Tick();
-					}
-				}
-			};
+            clock.Interval = 16;
+            clock.Tick += delegate { PumpUiClock(); };
 			clock.Start();
 			base.KeyDown += KeysDown;
 			base.FormClosing += delegate
@@ -602,6 +588,7 @@ namespace Sovereign
 		protected override void OnMouseMove(MouseEventArgs e)
 		{
 			base.OnMouseMove(e);
+            if (ResearchMouseMove(e)) return;
 			mouse = Logical(e.Location);
 			Hit hit = hits.LastOrDefault((Hit h) => h.Rect.Contains(mouse));
 			hoveredRegion = menuScreen == "" && MapInputAllowed(mouse) && hit == null && !panning ? FindRegion(Geo(mouse)) : -1;
@@ -632,6 +619,7 @@ namespace Sovereign
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			base.OnMouseDown(e);
+            if (ResearchMouseDown(e)) return;
 			if (e.Button == MouseButtons.Left && MapInputAllowed(Logical(e.Location)) && !hits.Any((Hit h) => h.Rect.Contains(Logical(e.Location))) && !showHelp)
 			{
 				panning = true;
@@ -644,6 +632,7 @@ namespace Sovereign
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
 			base.OnMouseUp(e);
+            if (ResearchMouseUp()) return;
 			panning = false;
 			base.Capture = false;
 			if (moved)
@@ -700,6 +689,7 @@ namespace Sovereign
 		protected override void OnMouseWheel(MouseEventArgs e)
 		{
 			base.OnMouseWheel(e);
+            if (ResearchMouseWheel(e)) return;
 			if (showHelp)
 			{
 				return;
@@ -856,6 +846,7 @@ namespace Sovereign
 			{
 				clock.Dispose();
                 cameraRefresh.Dispose();
+                ClearHighlights();
                 if (mapCache != null) mapCache.Dispose();
 
 				if (terrainTexture != null)
@@ -1012,6 +1003,7 @@ namespace Sovereign
 
 		private void BeginCampaign()
 		{
+            researchOffset = 0; researchZoom = 1; researchBranch = researchTab = 0; researchSelection = 6; researchFocusPending = false;
             selectedUnits.Clear(); frontOffset = 0; compareDesignId = 0; selectedAirWing = -1; airRosterOffset = 0;
 			if (campaignStarted && E.S != null && prefs.Autosave)
 			{
@@ -1239,7 +1231,7 @@ namespace Sovereign
 			Txt(g, "государств и территорий", num2 + 22f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "областей", num2 + 175f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "ЭКОНОМИКА  /  ДИПЛОМАТИЯ  /  ТЕХНОЛОГИИ  /  СТРАТЕГИЯ", num, VH - 59f, 12f, Palette.Muted);
-			Txt(g, "0.8   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
+			Txt(g, "0.9   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
 		}
 
 
@@ -1573,7 +1565,7 @@ namespace Sovereign
 				Matrix transform2 = g.Transform;
 				g.Transform = transform;
 				var rasterWatch = System.Diagnostics.Stopwatch.StartNew();
-                CountryInfo[] countries = W.Countries;
+
 
 				mapRasterProfile = "coast=" + rasterWatch.Elapsed.TotalMilliseconds.ToString("0.0"); rasterWatch.Restart();
                 for (int l = 0; l < W.Countries.Length; l++)
@@ -1617,17 +1609,15 @@ namespace Sovereign
                 g.SmoothingMode = SmoothingMode.AntiAlias;
                 }
 				mapRasterProfile += " provinces=" + rasterWatch.Elapsed.TotalMilliseconds.ToString("0.0"); rasterWatch.Restart();
-                countries = W.Countries;
-				foreach (CountryInfo countryInfo3 in countries)
-				{
-					if (countryInfo3.Bounds.IntersectsWith(rect))
-					{
-						using (Pen pen3 = new Pen(Color.FromArgb(91, 103, 91), 1.1f / scale))
-						{
-							if (visiblePath(countryInfo3).PointCount > 0) g.DrawPath(pen3, visiblePath(countryInfo3));
-						}
-					}
-				}
+                using (var borders = new GraphicsPath()) {
+                    foreach (var country in W.Countries) if (country.Bounds.IntersectsWith(rect)) {
+                        var path = visiblePath(country); if (path.PointCount > 0) borders.AddPath(path, false);
+                    }
+                    // Rasterize thin atlas boundaries in one pass, avoiding per-country AA strokes.
+                    g.SmoothingMode = SmoothingMode.None;
+                    using (var borderPen = new Pen(Color.FromArgb(91, 103, 91), 1.1f / scale)) if (borders.PointCount > 0) g.DrawPath(borderPen, borders);
+                    g.SmoothingMode = SmoothingMode.AntiAlias;
+                }
 				mapRasterProfile += " borders=" + rasterWatch.Elapsed.TotalMilliseconds.ToString("0.0");
                 g.Transform = transform2;
 				transform2.Dispose();
@@ -1705,25 +1695,8 @@ namespace Sovereign
                 (mapRect.Y + mapRect.Height / 2 - cy * scale) * UiScale)) {
                 var highlightState = g.Save();
                 g.Transform = transform;
-                if (hoveredRegion >= 0 && hoveredRegion != selected) {
-                    using (var highlight = new SolidBrush(Color.FromArgb(65, 255, 245, 199))) g.FillPath(highlight, W.Regions[hoveredRegion].Path);
-                    using (var border = new Pen(Color.FromArgb(85, 91, 70), 1.6f / scale)) g.DrawPath(border, W.Regions[hoveredRegion].Path);
-                }
-				if (selected >= 0)
-				{
-					using (SolidBrush brush4 = new SolidBrush(Color.FromArgb(43, 246, 238, 181)))
-					{
-						g.FillPath(brush4, W.Regions[selected].Path);
-					}
-					using (Pen pen4 = new Pen(Color.FromArgb(120, 100, 98, 64), 4f / scale))
-					{
-						g.DrawPath(pen4, W.Regions[selected].Path);
-					}
-					using (Pen pen5 = new Pen(Color.FromArgb(99, 93, 54), 1.6f / scale))
-					{
-						g.DrawPath(pen5, W.Regions[selected].Path);
-					}
-				}
+                if (hoveredRegion != selected) DrawRegionHighlight(g, hoveredRegion, false);
+                DrawRegionHighlight(g, selected, true);
                 DrawFrontRegions(g);
                 g.Restore(highlightState);
             }

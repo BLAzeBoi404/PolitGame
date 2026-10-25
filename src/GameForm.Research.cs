@@ -9,7 +9,7 @@ namespace Sovereign
         private int researchTab, researchBranch, researchSelection = 6;
         private void OpenResearchProject(int project)
         {
-            Navigate("Исследования"); detailPanel = true; researchSelection = project; researchBranch = TechnologyRules.Branch(project); researchTab = project < 6 ? 1 : 0; Invalidate();
+            Navigate("Исследования"); detailPanel = true; researchSelection = project; researchBranch = TechnologyRules.Branch(project); researchTab = project < 6 ? 1 : 0; researchFocusPending = true; Invalidate();
         }
         private void DrawResearch(Graphics g)
         {
@@ -18,7 +18,7 @@ namespace Sovereign
             string[] tabs = { "Технологии", "Фундаментальная наука", "План / " + a.Queue.Count };
             float[] starts = { 28, 199, 452 }, widths = { 159, 241, 138 };
             for (int i = 0; i < tabs.Length; i++) {
-                int tab = i; Button(g, tabs[i], starts[i], 222, widths[i], () => { researchTab = tab; researchSelection = tab == 1 ? researchBranch : researchBranch * 4 + 6; Invalidate(); }, researchTab == i, tabs[i], 35); hits[hits.Count - 1].Label = "research:tab:" + i;
+                int tab = i; Button(g, tabs[i], starts[i], 222, widths[i], () => { researchTab = tab; researchSelection = tab == 1 ? researchBranch : researchBranch * 4 + 6; researchOffset = 0; Invalidate(); }, researchTab == i, tabs[i], 35); hits[hits.Count - 1].Label = "research:tab:" + i;
             }
             Txt(g, n.Research < 0 ? "Нет текущей программы" : n.ResearchProgress.ToString("0") + "% · " + TechnologyRules.CurrentName(n), VW - 446, 226, 12, Palette.Teal, false, 288);
             Progress(g, VW - 445, 251, 281, n.ResearchProgress / 100, Palette.Teal);
@@ -26,29 +26,11 @@ namespace Sovereign
             if (researchTab == 2) { DrawResearchQueue(g); return; }
             float step = (VW - 56) / 6;
             for (int i = 0; i < 6; i++) {
-                int branch = i; Button(g, Rules.Techs[i], 28 + i * step, 276, step - 7, () => { researchBranch = branch; researchSelection = researchTab == 1 ? branch : branch * 4 + 6; Invalidate(); }, researchBranch == i, Rules.Techs[i], 32); hits[hits.Count - 1].Label = "research:branch:" + i;
+                int branch = i; Button(g, Rules.Techs[i], 28 + i * step, 276, step - 7, () => { researchBranch = branch; researchSelection = researchTab == 1 ? branch : branch * 4 + 6; researchOffset = 0; Invalidate(); }, researchBranch == i, Rules.Techs[i], 32); hits[hits.Count - 1].Label = "research:branch:" + i;
             }
             float right = VW - 331, leftWidth = right - 81;
             if (researchTab == 0) {
-                var nodes = TechnologyRules.Catalog.Where(t => t.Branch == researchBranch).ToArray();
-                foreach (var node in nodes) foreach (int source in node.Prerequisites.Where(id => TechnologyRules.Catalog[id].Branch == researchBranch)) {
-                    float y1 = 378 + source % 4 * 120, y2 = 378 + node.Id % 4 * 120, lane = 22 + source % 4 * 6;
-                    Color color = a.Known[source] ? Palette.Teal : Palette.Line;
-                    Line(g, color, 46, y1, lane, y1); Line(g, color, lane, y1, lane, y2); Line(g, color, lane, y2, 46, y2);
-                    Line(g, color, 40, y2 - 4, 46, y2); Line(g, color, 40, y2 + 4, 46, y2);
-                }
-                for (int i = 0; i < nodes.Length; i++) {
-                    var d = nodes[i]; int project = d.Id + 6; float y = 327 + i * 120; bool current = a.ActiveProject == project;
-                    Fill(g, researchSelection == project ? Palette.Selected : Palette.Card, 46, y, leftWidth, 102);
-                    Line(g, a.Known[d.Id] ? Palette.Teal : Palette.Line, 46, y + 102, 46 + leftWidth, y + 102);
-                    Txt(g, d.Name, 61, y + 11, 18, a.Known[d.Id] ? Palette.Teal : Palette.Text, true, leftWidth - 30);
-                    string status = a.Known[d.Id] ? "ОСВОЕНО" : current ? E.ResearchStatus(E.S.Player) : E.ResearchReason(project) == null ? "ДОСТУПНО · фундаментальный уровень " + d.Foundation : E.ResearchReason(project);
-                    Txt(g, status, 62, y + 40, 11, current ? Palette.Gold : Palette.Muted, false, leftWidth - 30);
-                    Para(g, d.Description, 62, y + 61, leftWidth - 30, 33, 12);
-                    if (!a.Known[d.Id]) Progress(g, 61, y + 98, leftWidth - 30, (current ? n.ResearchProgress : a.StoredProgress[project]) / 100, Palette.Gold);
-                    hits.Add(new Hit { Rect = new RectangleF(46, y, leftWidth, 102), Label = "technology:" + d.Id, Action = () => { researchSelection = project; Invalidate(); }, Tip = d.Description });
-                }
-                Txt(g, "Освоено " + a.Known.Count(k => k) + " / 24 · Связи других отраслей — в требованиях справа", 47, 812, 11, Palette.Muted, false, leftWidth);
+                DrawTechnologyTree(g, new RectangleF(28, 354, right - 52, 438));
             } else {
                 for (int i = 0; i < 6; i++) {
                     int branch = i; float y = 328 + i * 74;

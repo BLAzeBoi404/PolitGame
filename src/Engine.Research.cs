@@ -11,8 +11,17 @@ namespace Sovereign
             foreach (var n in campaign.Nations) n.ScienceTree = new ResearchAgenda {
                 LegacyLevels = legacy ? (int[])n.Tech.Clone() : new int[6], ActiveProject = n.Research
             };
-            campaign.Version = 7;
+            campaign.Version = 8;
         }
+        private void ExpandTechnology(Campaign campaign)
+        {
+            foreach (var n in campaign.Nations) {
+                Array.Resize(ref n.ScienceTree.Known, TechnologyRules.Count);
+                Array.Resize(ref n.ScienceTree.StoredProgress, TechnologyRules.ProjectCount);
+            }
+            campaign.Version = 8;
+        }
+        public double GroundTechnologyFactor(int owner) => 1 + TechnologyRules.Effects(S.Nations[owner]).GroundCombat;
         public string ResearchReason(int project, int owner = -1)
         {
             if (owner < 0) owner = S.Player;
@@ -116,7 +125,7 @@ namespace Sovereign
             var n = S.Nations[owner]; if (n.ScienceTree.ActiveProject >= 0 || n.ScienceTree.Paused) return;
             TryBeginQueuedResearch(n); if (n.ScienceTree.ActiveProject >= 0 || n.ScienceTree.Queue.Count > 0) return;
             int phase = n.Focus++; int branch = n.Shortage > .1 ? 0 : NationAtWar(owner) && phase % 2 == 0 ? 5 : phase % 6;
-            int desired = phase % 3 == 0 ? branch : TechnologyRules.Catalog.Where(t => t.Branch == branch && !n.ScienceTree.Known[t.Id]).Select(t => t.Id + 6).DefaultIfEmpty(branch).First();
+            int desired = phase % 3 == 0 ? branch : TechnologyRules.Catalog.Where(t => t.Branch == branch && !n.ScienceTree.Known[t.Id]).OrderBy(t => t.Foundation).ThenBy(t => t.Column).ThenBy(t => t.Id).Select(t => t.Id + 6).DefaultIfEmpty(branch).First();
             int next = NextResearchPrerequisite(n, desired);
             if (ResearchReason(next, owner) == null) SelectResearch(next, owner);
         }
@@ -128,15 +137,15 @@ namespace Sovereign
             foreach (int id in d.Prerequisites) if (!n.ScienceTree.Known[id]) return NextResearchPrerequisite(n, id + 6);
             return d.Branch;
         }
-        private void ValidateTechnology(Nation n)
+        private void ValidateTechnology(Nation n, int version)
         {
-            var a = n.ScienceTree;
-            if (a == null || a.Known == null || a.Known.Length != 24 || !Values(a.StoredProgress, 30) || a.StoredProgress.Any(p => p >= 100)
+            var a = n.ScienceTree; int count = version == 7 ? 24 : TechnologyRules.Count, projects = count + 6;
+            if (a == null || a.Known == null || a.Known.Length != count || !Values(a.StoredProgress, projects) || a.StoredProgress.Any(p => p >= 100)
                 || a.LegacyLevels == null || a.LegacyLevels.Length != 6 || a.LegacyLevels.Where((v, i) => v < 0 || v > n.Tech[i]).Any()
-                || a.ActiveProject < -1 || a.ActiveProject >= 30 || (a.ActiveProject < 0 ? n.Research != -1 || n.ResearchProgress != 0 : n.Research != TechnologyRules.Branch(a.ActiveProject) || a.StoredProgress[a.ActiveProject] != 0)
-                || n.ResearchProgress < 0 || n.ResearchProgress >= 100 || a.Queue == null || a.Queue.Count > 4 || a.Queue.Any(p => !TechnologyRules.ValidProject(p)) || a.Queue.Distinct().Count() != a.Queue.Count)
+                || a.ActiveProject < -1 || a.ActiveProject >= projects || (a.ActiveProject < 0 ? n.Research != -1 || n.ResearchProgress != 0 : n.Research != TechnologyRules.Branch(a.ActiveProject) || a.StoredProgress[a.ActiveProject] != 0)
+                || n.ResearchProgress < 0 || n.ResearchProgress >= 100 || a.Queue == null || a.Queue.Count > 4 || a.Queue.Any(p => p < 0 || p >= projects) || a.Queue.Distinct().Count() != a.Queue.Count)
                 throw new InvalidDataException("Повреждён план исследований.");
-            foreach (var d in TechnologyRules.Catalog) {
+            foreach (var d in TechnologyRules.Catalog.Take(count)) {
                 bool started = a.Known[d.Id] || a.StoredProgress[d.Id + 6] > 0;
                 if (started && (n.Tech[d.Branch] < d.Foundation || d.Prerequisites.Any(id => !a.Known[id])) || a.Known[d.Id] && a.StoredProgress[d.Id + 6] != 0)
                     throw new InvalidDataException("Нарушены предпосылки технологий.");

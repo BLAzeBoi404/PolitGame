@@ -810,8 +810,8 @@ namespace Sovereign
                 List<Army> list = occupants == null ? new List<Army>() : occupants.Where(d => live.Contains(d) && AtWar(a.Owner, d.Owner)).ToList();
 				if (list.Count > 0)
 				{
-					double num6 = EquipmentRules.CombatPower(a, list[0], false) * (1 + AirReconBonus(a.Owner, a.Target));
-					double num7 = list.Sum(d => EquipmentRules.CombatPower(d, a, true) * (1 + AirReconBonus(d.Owner, a.Target))) * 1.15;
+					double num6 = EquipmentRules.CombatPower(a, list[0], false) * GroundTechnologyFactor(a.Owner) * (1 + AirReconBonus(a.Owner, a.Target));
+					double num7 = list.Sum(d => EquipmentRules.CombatPower(d, a, true) * GroundTechnologyFactor(d.Owner) * (1 + AirReconBonus(d.Owner, a.Target))) * 1.15;
 					DamageArmy(a, Rules.Clamp(num7 / Math.Max(1.0, num6) * 9.0, 2.0, 28.0));
 					foreach (Army item in list)
 					{
@@ -914,6 +914,7 @@ namespace Sovereign
             if (s.Version == 4) InitializeManpower(s);
             if (s.Version == 5) InitializeNationalPolitics(s);
             if (s.Version == 6) InitializeTechnology(s, true);
+            if (s.Version == 7) ExpandTechnology(s);
             Validate(s);
 			S = s;
 			Raise();
