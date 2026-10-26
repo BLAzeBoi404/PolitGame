@@ -10,6 +10,7 @@ namespace Sovereign
         private int compareDesignId, focusedModule = 1;
         private void DrawDesigner(Graphics g)
         {
+            if (blueprintExpanded) { DrawTechnicalBoard(g); return; }
             float x = sidebar + 34, w = VW - sidebar - 68, lw = 264, rw = 270, center = x + lw + 20, cw = w - lw - rw - 40, right = center + cw + 20;
             PageTitle(g, "Конструктор вооружений", "От проекта до соединения: исследуйте модули, испытайте модель и закажите серию.");
             float tab = w / 8;
@@ -69,70 +70,24 @@ namespace Sovereign
         private void DrawBlueprintSheet(Graphics g, RectangleF box, Blueprint design, int module)
         {
             var state = g.Save(); g.SetClip(box, CombineMode.Intersect);
-            Fill(g, Color.FromArgb(25, 49, 61), box.X, box.Y, box.Width, box.Height);
-            for (float xx = box.Left; xx < box.Right; xx += 20) Line(g, Color.FromArgb(24, 160, 195, 203), xx, box.Top, xx, box.Bottom);
-            for (float yy = box.Top; yy < box.Bottom; yy += 20) Line(g, Color.FromArgb(24, 160, 195, 203), box.Left, yy, box.Right, yy);
-            HairlineFrame(g, new RectangleF(box.X + 12, box.Y + 12, box.Width - 24, box.Height - 24), Color.FromArgb(86, 117, 127));
-            Txt(g, "КБ / " + ((int)design.Kind + 1).ToString("00") + "   ·   ПРОЕКЦИЯ КЛАССА", box.X + 23, box.Y + 25, 9, Color.FromArgb(167, 196, 201), true);
-            Txt(g, "МОДУЛЬ " + (module + 1).ToString("00"), box.Right - 109, box.Y + 25, 9, Palette.Gold, true);
-            var drawing = new RectangleF(box.X + 26, box.Y + 74, box.Width - 52, box.Height - 142);
-            DrawEquipmentSymbol(g, drawing, design);
-            float dy = box.Bottom - 60;
-            Line(g, Palette.Muted, box.X + 28, dy, box.Right - 28, dy);
-            for (float xx = box.X + 28; xx <= box.Right - 28; xx += 20) Line(g, Palette.Muted, xx, dy - 3, xx, dy + 3);
-            Txt(g, design.Air ? "ПЛАНЕР / ВИД СВЕРХУ" : "ШАССИ / БОКОВАЯ ПРОЕКЦИЯ", box.X + 24, box.Bottom - 39, 9, Palette.Muted);
-            Txt(g, "НЕ В МАСШТАБЕ", box.Right - 117, box.Bottom - 39, 8, Palette.Muted);
+            using (var background = new LinearGradientBrush(box, Color.FromArgb(31,43,43), Color.FromArgb(15,25,26), 90)) g.FillRectangle(background, box);
+            for (float xx = box.Left + 14; xx < box.Right; xx += 28) Line(g, Color.FromArgb(15,180,200,180), xx, box.Top, xx, box.Bottom);
+            for (float yy = box.Top + 14; yy < box.Bottom; yy += 28) Line(g, Color.FromArgb(15,180,200,180), box.Left, yy, box.Right, yy);
+            HairlineFrame(g, new RectangleF(box.X + 12,box.Y + 12,box.Width - 24,box.Height - 24),Color.FromArgb(85,104,91));
+            Txt(g, "SOV / КБ–" + ((int)design.Kind+1).ToString("00") + "   ·   РЕВ. " + EquipmentRules.Modules(design).Sum().ToString("00"), box.X+24,box.Y+23,10,Palette.Gold,true);
+            float artHeight = (box.Height - 127) / 2;
+            Txt(g, "01  БОКОВАЯ ПРОЕКЦИЯ",box.X+25,box.Y+51,8,Palette.Muted);
+            TechnicalSilhouette(g,new RectangleF(box.X+20,box.Y+62,box.Width-40,artHeight),design,false);
+            float split=box.Y+66+artHeight;
+            Line(g,Color.FromArgb(75,95,80),box.X+24,split,box.Right-24,split);
+            Txt(g,"02  ПЛАН / " + EquipmentRules.ModuleNames[module].ToUpperInvariant(),box.X+25,split+10,8,Palette.Gold);
+            TechnicalSilhouette(g,new RectangleF(box.X+20,split+24,box.Width-40,artHeight),design,true);
+            Txt(g,design.Weight.ToString("0.0")+" т  /  "+design.SpeedKph.ToString("0")+" км/ч  /  "+design.Range.ToString("0")+" км",box.X+24,box.Bottom-29,9,Palette.Muted,false,box.Width-48);
             g.Restore(state);
-        }
-        private void DrawEquipmentSymbol(Graphics g, RectangleF box, Blueprint design)
-        {
-            var state = g.Save(); float scaleArt = Math.Min(box.Width / 420, box.Height / 220);
-            g.TranslateTransform(box.X + (box.Width - 420 * scaleArt) / 2, box.Y + (box.Height - 220 * scaleArt) / 2);
-            g.ScaleTransform(scaleArt, scaleArt);
-            using (var outline = new Pen(Color.FromArgb(192, 217, 217), 1.6f))
-            using (var fine = new Pen(Color.FromArgb(97, 145, 157), 1))
-            using (var highlight = new Pen(Palette.Gold, 2.2f)) {
-                fine.DashStyle = DashStyle.Dot;
-                g.DrawLine(fine, 5, 110, 415, 110); g.DrawLine(fine, 210, 4, 210, 216);
-                if (design.Air) {
-                    bool heavy = design.Kind == EquipmentKind.Bomber || design.Kind == EquipmentKind.Transport;
-                    float wing = heavy ? 32 : 74;
-                    PointF[] body = { new PointF(210, 10), new PointF(220, 32), new PointF(224, 95), new PointF(390, 95 + wing), new PointF(386, 112 + wing), new PointF(224, 131), new PointF(220, 174), new PointF(277, 200), new PointF(275, 211), new PointF(210, 198), new PointF(145, 211), new PointF(143, 200), new PointF(200, 174), new PointF(196, 131), new PointF(34, 112 + wing), new PointF(30, 95 + wing), new PointF(196, 95), new PointF(200, 32) };
-                    g.DrawPolygon(outline, body); g.DrawEllipse(outline, 203, 35, 14, 37); g.DrawLine(outline, 210, 78, 210, 187);
-                    g.DrawLine(outline, 46, 112 + wing, 196, 111); g.DrawLine(outline, 224, 111, 374, 112 + wing);
-                    for (int j = 0; j < (heavy ? 4 : 2); j++) { float ex = heavy ? 111 + j * 63 : 182 + j * 44; g.DrawRectangle(outline, ex, heavy ? 94 : 85, 13, 42); g.DrawLine(highlight, ex + 2, heavy ? 137 : 129, ex + 11, heavy ? 137 : 129); }
-                    if (design.Kind == EquipmentKind.Recon) { g.DrawEllipse(highlight, 201, 140, 18, 18); g.DrawLine(fine, 210, 158, 210, 177); }
-                    if (design.Kind == EquipmentKind.Bomber) for (int j = 0; j < 4; j++) g.DrawRectangle(fine, 205, 83 + j * 17, 10, 12);
-                    if (design.Kind == EquipmentKind.Transport) g.DrawRectangle(highlight, 202, 142, 16, 29);
-                } else {
-                    bool truck = design.Kind == EquipmentKind.Truck, artillery = design.Kind == EquipmentKind.Artillery;
-                    PointF[] hull = { new PointF(41, 134), new PointF(65, 94), new PointF(294, 94), new PointF(363, 125), new PointF(376, 153), new PointF(53, 153) };
-                    g.DrawPolygon(outline, hull);
-                    if (truck) {
-                        g.DrawRectangle(outline, 57, 58, 213, 69); g.DrawRectangle(outline, 282, 65, 63, 64);
-                        g.DrawRectangle(outline, 297, 73, 37, 29);
-                        for (int j = 0; j < 9; j++) g.DrawLine(outline, 67 + j * 22, 65, 67 + j * 22, 120);
-                        for (int j = 0; j < 4; j++) { float wx = j < 3 ? 82 + j * 48 : 320; g.DrawEllipse(outline, wx - 19, 141, 38, 38); g.DrawEllipse(outline, wx - 10, 150, 20, 20); }
-                        g.DrawLine(highlight, 349, 112, 360, 112);
-                    } else {
-                        g.DrawArc(outline, 37, 142, 46, 45, 90, 180); g.DrawArc(outline, 324, 142, 46, 45, 270, 180);
-                        g.DrawLine(outline, 60, 142, 347, 142); g.DrawLine(outline, 60, 187, 347, 187);
-                        for (int j = 0; j < 7; j++) { g.DrawEllipse(outline, 64 + j * 41, 149, 32, 32); g.DrawEllipse(outline, 73 + j * 41, 158, 14, 14); }
-                        for (int j = 0; j < 25; j++) g.DrawLine(fine, 64 + j * 11, 183, 64 + j * 11, 189);
-                        float turretX = artillery ? 98 : 155, barrelY = artillery ? 42 : 68;
-                        g.DrawPolygon(outline, new[] { new PointF(turretX, 95), new PointF(turretX + 12, 57), new PointF(turretX + 84, 57), new PointF(turretX + 107, 91) });
-                        g.DrawPolygon(focusedModule == 1 ? highlight : outline, new[] { new PointF(turretX + 87, 66), new PointF(403, barrelY), new PointF(405, barrelY + 7), new PointF(turretX + 90, 77) });
-                        g.DrawRectangle(outline, turretX + 21, 48, 35, 9); g.DrawLine(outline, turretX + 16, 56, turretX + 9, 20);
-                        for (int j = 0; j < 6; j++) g.DrawLine(outline, 75 + j * 8, 104, 72 + j * 8, 122);
-                        g.DrawRectangle(outline, 283, 109, 26, 20); g.DrawEllipse(outline, 337, 125, 11, 11);
-                        if (design.Kind == EquipmentKind.IFV) for (int j = 0; j < 5; j++) g.DrawRectangle(outline, 128 + j * 25, 111, 12, 9);
-                        if (focusedModule == 0) g.DrawLine(highlight, 297, 96, 363, 125);
-                        if (focusedModule == 5) g.DrawLine(highlight, 64, 188, 344, 188);
-                    }
-                    g.DrawLine(fine, 41, 198, 376, 198); g.DrawLine(outline, 41, 194, 41, 202); g.DrawLine(outline, 376, 194, 376, 202);
-                }
+            if (!blueprintExpanded) {
+                Button(g,"Развернуть чертёж ↗",box.Right-182,box.Y+18,160,()=>{blueprintExpanded=true;Invalidate();},false,"Две проекции и выбор узлов",22);
+                hits[hits.Count-1].Label="blueprint:expand";
             }
-            g.Restore(state);
         }
     }
 }

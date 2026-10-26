@@ -52,13 +52,14 @@ namespace Sovereign
                 hits[hits.Count - 1].Label = "conscription:" + i;
             }
             CompactSection(g, "ШТАТ НОВОГО НАБОРА", 518);
-            var template = E.SelectedTemplate(E.S.Player); var design = E.FindDesign(E.S.Player, n.ActiveDesign);
+            var template = E.SelectedTemplate(E.S.Player);
             Txt(g, template.Name, 20, 560, 17, Palette.Text, true, 265);
             Button(g, "‹", 290, 552, 35, () => CycleTemplate(-1), false, "Предыдущий штат", 30); hits[hits.Count - 1].Label = "template:previous";
             Button(g, "›", 338, 552, 35, () => CycleTemplate(1), false, "Следующий штат", 30); hits[hits.Count - 1].Label = "template:next";
             Txt(g, template.Battalions + " бат. · " + template.Battalions + " компл. · " + ManpowerRules.TrainingDays(template.Battalions) + " дней", 20, 593, 12, Palette.Gold);
-            Txt(g, design.Blueprint.Formation ? People(ManpowerRules.GroundSize(design.Blueprint.Kind, template.Battalions)) + " чел. · " + design.Blueprint.Name : "Для набора выберите наземный проект в каталоге", 20, 617, 11, Palette.Muted, false, w);
-            Line(g, Palette.Line, 20, 646, 376, 646);
+            var layout = template.Deployment ?? DeploymentRules.Default(template.Battalions);
+            Txt(g, "Передовая " + layout.Front + " · Л " + layout.Left + " · П " + layout.Right + " · резерв " + layout.Reserve, 20, 617, 11, Palette.Muted, false, w);
+            Button(g, "Передовая, фланги и резерв →", 20, 642, w, OpenDeployment, false, "Конструктор боевого порядка", 20);
             Button(g, templateDraftName + "…", 20, 664, 234, RenameTemplate, false, "Название нового штата; существующие части сохраняют свой штат", 30);
             Button(g, "−", 270, 664, 30, () => { templateDraftBattalions = Math.Max(1, templateDraftBattalions - 1); Invalidate(); }, false, "Меньше батальонов", 30); hits[hits.Count - 1].Label = "template:less";
             Txt(g, templateDraftBattalions.ToString(), 314, 671, 15, Palette.Gold, true);

@@ -26,6 +26,7 @@ namespace Sovereign
             if (tooltipVisible != tooltipWasVisible || toastVisible != toastWasVisible) Invalidate();
             tooltipWasVisible = tooltipVisible; toastWasVisible = toastVisible;
             PumpSimulation(uiTime.Elapsed.TotalMilliseconds);
+            if (frameRequested) ScheduleFrame();
         }
     }
 }

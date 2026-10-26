@@ -13,6 +13,41 @@ namespace Sovereign
         public GraphicsPath Path;
         public RectangleF Bounds;
         private GraphicsPath overviewPath, regionalPath;
+        [ThreadStatic] private static List<PointF> clipInput, clipOutput;
+        private struct PointRange { public int Start, End; public PointRange(int start, int end) { Start = start; End = end; } }
+        private readonly Dictionary<int, PointF[][]> rasterRings = new Dictionary<int, PointF[][]>();
+
+        // Background rasterization owns its GDI paths. Only immutable managed points are shared.
+        public GraphicsPath RasterPath(RectangleF clip, float zoom)
+        {
+            int level = zoom <= 12 ? 0 : zoom <= 40 ? 1 : 2;
+            PointF[][] rings;
+            lock (rasterRings) {
+                if (!rasterRings.TryGetValue(level, out rings)) {
+                    float tolerance = level == 0 ? .06f : level == 1 ? .018f : .005f;
+                    rings = new PointF[Rings.Length][];
+                    for (int i = 0; i < Rings.Length; i++) rings[i] = Simplify(Rings[i], tolerance);
+                    rasterRings[level] = rings;
+                }
+            }
+            var result = new GraphicsPath(FillMode.Winding);
+            if (clip.Contains(Bounds)) { foreach (var ring in rings) if (ring.Length >= 3) result.AddPolygon(ring); return result; }
+            if (clipInput == null) { clipInput = new List<PointF>(); clipOutput = new List<PointF>(); }
+            foreach (var source in rings) {
+                clipInput.Clear(); clipInput.AddRange(source);
+                for (int edge = 0; edge < 4 && clipInput.Count > 0; edge++) {
+                    clipOutput.Clear(); var previous = clipInput[clipInput.Count - 1];
+                    foreach (var current in clipInput) {
+                        bool inside = Inside(current, clip, edge), wasInside = Inside(previous, clip, edge);
+                        if (inside != wasInside) clipOutput.Add(Intersection(previous, current, clip, edge));
+                        if (inside) clipOutput.Add(current); previous = current;
+                    }
+                    var swap = clipInput; clipInput = clipOutput; clipOutput = swap;
+                }
+                if (clipInput.Count >= 3) result.AddPolygon(clipInput.ToArray());
+            }
+            return result;
+        }
 
         public void Prepare()
         {
@@ -40,17 +75,17 @@ namespace Sovereign
             var points = new List<PointF>(ring);
             if (points[0] != points[points.Count - 1]) points.Add(points[0]);
             bool[] keep = new bool[points.Count]; keep[0] = keep[points.Count - 1] = true;
-            var ranges = new Stack<Tuple<int, int>>(); ranges.Push(Tuple.Create(0, points.Count - 1));
+            var ranges = new Stack<PointRange>(); ranges.Push(new PointRange(0, points.Count - 1));
             double squared = tolerance * tolerance;
             while (ranges.Count > 0) {
-                var range = ranges.Pop(); int start = range.Item1, end = range.Item2, best = -1; double farthest = squared;
+                var range = ranges.Pop(); int start = range.Start, end = range.End, best = -1; double farthest = squared;
                 PointF a = points[start], b = points[end]; double dx = b.X - a.X, dy = b.Y - a.Y, length = dx * dx + dy * dy;
                 for (int i = start + 1; i < end; i++) {
                     double t = length == 0 ? 0 : Math.Max(0, Math.Min(1, ((points[i].X - a.X) * dx + (points[i].Y - a.Y) * dy) / length));
                     double x = points[i].X - (a.X + t * dx), y = points[i].Y - (a.Y + t * dy), distance = x * x + y * y;
                     if (distance > farthest) { farthest = distance; best = i; }
                 }
-                if (best >= 0) { keep[best] = true; ranges.Push(Tuple.Create(start, best)); ranges.Push(Tuple.Create(best, end)); }
+                if (best >= 0) { keep[best] = true; ranges.Push(new PointRange(start, best)); ranges.Push(new PointRange(best, end)); }
             }
             var simplified = new List<PointF>();
             for (int i = 0; i < points.Count - 1; i++) if (keep[i]) simplified.Add(points[i]);

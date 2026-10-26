@@ -32,10 +32,11 @@ namespace Sovereign
         }
         private void DrawProduction(Graphics g)
         {
-            if (equipmentProduction) DrawEquipmentProduction(g); else DrawConstruction(g);
+            if (procurementPage) DrawProcurement(g); else if (equipmentProduction) DrawEquipmentProduction(g); else DrawConstruction(g);
             float x = sidebar + 34;
-            Button(g, "Предприятия", x, 169, 138, () => { equipmentProduction = false; Invalidate(); }, !equipmentProduction, "Строительство и промышленная база", 28);
-            Button(g, "Серии и склад", x + 148, 169, 162, () => { equipmentProduction = true; Invalidate(); }, equipmentProduction, "Заказы на конкретные модели техники", 28);
+            Button(g, "Госзаказы", x + 320, 169, 140, OpenProcurement, procurementPage, "Контракты с частными предприятиями", 28);
+            Button(g, "Предприятия", x, 169, 138, () => { procurementPage = false; equipmentProduction = false; Invalidate(); }, !equipmentProduction && !procurementPage, "Строительство и промышленная база", 28);
+            Button(g, "Серии и склад", x + 148, 169, 162, () => { procurementPage = false; equipmentProduction = true; Invalidate(); }, equipmentProduction && !procurementPage, "Заказы на конкретные модели техники", 28);
         }
     }
 }

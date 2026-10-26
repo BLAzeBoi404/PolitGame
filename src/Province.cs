@@ -3,6 +3,9 @@ namespace Sovereign
 	public class Province
 	{
 		public int Owner;
+        public int Buses, Trucks;
+        public double FleetService;
+        public double[] ContractWork = new double[8];
         public int Airfield;
 
 		public double Population;

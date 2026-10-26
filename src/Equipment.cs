@@ -97,7 +97,7 @@ namespace Sovereign
             double airStrike = Support(army, EquipmentKind.Bomber) * (1 - Math.Min(0.8, Support(enemy, EquipmentKind.Fighter) * 3));
             double fire = 1 + Support(army, EquipmentKind.Artillery) + Support(army, EquipmentKind.Recon) + airStrike;
             return army.Strength * (defending ? army.Design.Defense : army.Design.Attack * armorFactor) / 32
-                * (0.3 + army.Supply / 100) * fire * army.Battalions * ManpowerRules.Manning(army) * (.35 + .65 * army.Organization / 100);
+                * (0.3 + army.Supply / 100) * fire * army.Battalions * ManpowerRules.Manning(army) * (.35 + .65 * army.Organization / 100) * DeploymentRules.Factor(army, enemy, defending);
         }
     }
 }

@@ -91,7 +91,7 @@ namespace Sovereign
                 var legacy = fresh(); legacy.S.Version = 2; legacy.S.Access = null; legacy.S.Alliances = null; legacy.S.WarStarted = null; legacy.S.TruceUntil = null;
                 string path = Path.Combine(directory, "v2-treaties.xml"); using (var file = File.Create(path)) new XmlSerializer(typeof(Campaign)).Serialize(file, legacy.S);
                 var e = fresh(); e.Load(path);
-                check(e.S.Version == 10 && !e.S.Alliances.Any(x => x) && e.S.Fronts.Count == 0 && e.S.Armies.Count == legacy.S.Armies.Count,
+                check(e.S.Version == 11 && !e.S.Alliances.Any(x => x) && e.S.Fronts.Count == 0 && e.S.Armies.Count == legacy.S.Armies.Count,
                     "Version 2 migration preserves forces and adds no unsolicited alliances");
                 e.S.Alliances[e.Pair(e.S.Player, pol)] = true; bool rejected = false;
                 try { e.Validate(e.S); } catch (InvalidDataException) { rejected = true; }

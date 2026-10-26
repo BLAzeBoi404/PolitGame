@@ -88,13 +88,14 @@ namespace Sovereign
                 LedgerRow(g, "Занято / мощность", E.AssignedFactories(E.S.Player) + " / " + E.FactoryCapacity(E.S.Player), 205);
                 LedgerRow(g, "Готовая техника", n.Designs.Sum(d => d.Stock) + " компл.", 237, Palette.Teal);
                 Button(g, "Каталог и заказ серии →", 20, 283, w, () => { equipmentProduction = true; detailPanel = true; Invalidate(); }, true);
+                Button(g, "Государственные закупки →", 20, 371, w, OpenProcurement, false, "Товары и транспорт от частных предприятий");
                 Button(g, "Строительство в области →", 20, 327, w, () => { equipmentProduction = false; detailPanel = true; Invalidate(); });
-                CompactSection(g, "ДЕЙСТВУЮЩИЕ СЕРИИ", 389);
+                CompactSection(g, "ДЕЙСТВУЮЩИЕ СЕРИИ", 427);
                 var lines = n.Lines.Where(l => l.Completed < l.Quantity).ToList();
                 int offset = Math.Min(scroll, Math.Max(0, lines.Count - 3));
-                if (lines.Count == 0) Para(g, "Заказов пока нет. Создайте проект в конструкторе и назначьте заводы для выпуска техники.", 20, 440, w, 110, 15);
+                if (lines.Count == 0) Para(g, "Заказов пока нет. Создайте проект в конструкторе и назначьте заводы для выпуска техники.", 20, 476, w, 110, 15);
                 for (int i = offset; i < Math.Min(lines.Count, offset + 3); i++) {
-                    var line = lines[i]; float y = 437 + (i - offset) * 112;
+                    var line = lines[i]; float y = 475 + (i - offset) * 100;
                     Txt(g, E.FindDesign(E.S.Player, line.DesignId).Blueprint.Name, 21, y, 15, Palette.Text, true, 255);
                     Txt(g, E.ProductionStatus(E.S.Player, line), 21, y + 28, 11, Palette.Muted, false, w);
                     Progress(g, 21, y + 57, w, (line.Completed + line.Progress) / line.Quantity, Palette.Teal);

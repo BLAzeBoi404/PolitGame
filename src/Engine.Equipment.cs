@@ -35,7 +35,7 @@ namespace Sovereign
         public EquipmentDesign FindDesign(int owner, int id) => S.Nations[owner].Designs.FirstOrDefault(d => d.Id == id);
         public int FactoryCapacity(int owner)
         {
-            return Math.Max(0, Math.Min(500, (int)Math.Floor(S.Provinces.Where(p => p.Owner == owner).Sum(p => p.Public[7] + p.Private[7]))));
+            return Math.Max(0, Math.Min(500, (int)Math.Floor(S.Provinces.Where(p => p.Owner == owner).Sum(p => p.Public[7] + p.Private[7]) - ReservedDefenseCapacity(owner))));
         }
         public int AssignedFactories(int owner) => S.Nations[owner].Lines.Where(l => l.Active).Sum(l => l.Factories);
         public string AdoptDesign(Blueprint d, int owner)
@@ -124,6 +124,7 @@ namespace Sovereign
             // Aggregate capacity once per day, rather than scanning all provinces for every line.
             double[] capacity = new double[S.Nations.Length];
             foreach (Province p in S.Provinces) capacity[p.Owner] += p.Public[7] + p.Private[7];
+            foreach (var buyer in S.Nations) foreach (var contract in buyer.Contracts) if (contract.Active && contract.Company % 8 == 7 && S.Provinces[contract.Company / 8].Owner == contract.Supplier) capacity[contract.Supplier] -= contract.Factories * ProcurementRules.CapacityUnit;
             for (int owner = 0; owner < S.Nations.Length; owner++) {
                 Nation n = S.Nations[owner];
                 int available = Math.Min(500, (int)Math.Floor(capacity[owner]));
@@ -170,6 +171,7 @@ namespace Sovereign
             n.Treasury -= .3 * template.Battalions; d.Stock -= template.Battalions; n.Recruits -= people;
             int days = ManpowerRules.TrainingDays(template.Battalions);
             S.Armies.Add(new Army { Id = S.NextArmy++, Owner = owner, Region = region, Strength = 100, Personnel = people,
+                Deployment = template.Deployment == null ? null : template.Deployment.Copy(),
                 TemplateId = template.Id, Battalions = template.Battalions, Organization = 20,
                 Design = d.Blueprint.Copy(), DesignId = d.Id, TrainingDays = days });
             if (owner == S.Player) Notify(template.Name + " формируется: " + World.Regions[region].Name + ". " + people + " чел., подготовка " + days + " дней.");

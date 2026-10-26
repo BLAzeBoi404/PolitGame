@@ -5,6 +5,7 @@ namespace Sovereign
 	public class Army
 	{
 		public int Id;
+        public BattleDeployment Deployment;
         public double CasualtyRemainder;
         public int Personnel = 800;
         public int TemplateId = 1, Battalions = 1;

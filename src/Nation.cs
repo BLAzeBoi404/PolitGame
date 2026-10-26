@@ -4,7 +4,9 @@ namespace Sovereign
 {
 	public class Nation
 	{
-		public double Treasury;
+		public List<PublicContract> Contracts = new List<PublicContract>();
+        public int NextContract = 1;
+        public double Treasury;
         public NationalPolitics Politics;
         public DoctrineState Doctrines;
         public GovernmentState Government;

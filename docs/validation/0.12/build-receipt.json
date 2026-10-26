@@ -1,0 +1,13 @@
+{
+  "version": "0.12.0",
+  "tested_at_utc": "2026-10-26T20:16:25.375945+00:00",
+  "executable_sha256": "45ab6b20f903b7123b6c4c2ec2d3fc18448c2e2c96f548451e3f27f73aac1553",
+  "source_sha256": "e55e6d22895a65c631aa18e23813124bb1b898deee2e88eab80f5de194c3e7fa",
+  "logic_passed": 542,
+  "ui_passed": 508,
+  "native_windows_tested": false,
+  "build": ".NET SDK 8 / Release net472",
+  "runtime": "Mono / libgdiplus / Xvfb",
+  "performance_baseline_commit": "528b60ae6323c9d19897f22c7158529f4a27763a",
+  "performance_note": "Baseline sources rebuilt with SDK; benchmark adapted to add medium zoom cases. Current exact tested SDK executable. CPU input/paint latency, not Windows FPS."
+}

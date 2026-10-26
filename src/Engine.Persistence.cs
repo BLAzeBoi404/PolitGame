@@ -17,7 +17,7 @@ namespace Sovereign
         public void Validate(Campaign s)
         {
             int nations = World.Countries.Length, regions = World.Regions.Length;
-            if (s == null || (s.Version < 1 || s.Version > 10) || s.Nations == null || s.Nations.Length != nations || s.Provinces == null || s.Provinces.Length != regions
+            if (s == null || (s.Version < 1 || s.Version > 11) || s.Nations == null || s.Nations.Length != nations || s.Provinces == null || s.Provinces.Length != regions
                 || s.Player < 0 || s.Player >= nations || s.StartYear < 1940 || s.StartYear > 2026 || s.Day < 0 || s.Day > 2000000 || s.RandomState == 0
                 || s.Difficulty < 0 || s.Difficulty > 2) throw new InvalidDataException("Несовместимое сохранение кампании.");
             int pairs = nations * nations;
@@ -126,6 +126,7 @@ namespace Sovereign
                     if (n.Mobilized - n.Discharged != n.Recruits + serving[i] + n.PersonnelLosses) throw new InvalidDataException("Нарушен баланс резерва, военнослужащих и потерь.");
                 }
             }
+            if (s.Version >= 11) ValidateOperations(s);
             foreach (var p in s.Projects)
                 if (p == null || p.Owner < 0 || p.Owner >= nations || p.Region < 0 || p.Region >= regions || p.Sector < 0 || p.Sector > (s.Version >= 4 ? 9 : 8) || p.Days <= 0 || p.Total < p.Days || (p.Sector == 9 && p.Private))
                     throw new InvalidDataException("Повреждена очередь строительства.");

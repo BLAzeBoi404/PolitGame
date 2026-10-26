@@ -11,6 +11,7 @@ namespace Sovereign
         private int frontOffset;
         private void DrawArmy(Graphics g)
         {
+            if (deploymentPage) { DrawDeployment(g); return; }
             float x = sidebar + 34, w = VW - sidebar - 68, fw = 302, listWidth = w - fw - 28, right = x + listWidth + 28;
             var units = E.S.Armies.Where(a => a.Owner == E.S.Player).ToList();
             selectedUnits.RemoveWhere(id => !units.Any(a => a.Id == id));
@@ -23,6 +24,7 @@ namespace Sovereign
                 recruitReason ?? (template.Name + ": " + template.Battalions + " компл., " + People(ManpowerRules.GroundSize(active.Blueprint.Kind, template.Battalions)) + " чел., " + ManpowerRules.TrainingDays(template.Battalions) + " дней подготовки."), true);
             Button(g, "Склад и оснащение →", x + 258, 218, 215, () => { equipmentProduction = true; Navigate("Производство"); });
             Txt(g, template.Name + " · " + active.Stock + " компл. · резерв " + People(E.Player.Recruits), x + 488, 227, 12, Palette.Gold, false, w - 488);
+            Button(g, "Боевой порядок →", x, VH - 101, 200, OpenDeployment, false, "Передовая, фланги, резерв и специализация", 25);
             Section(g, "БОЕВОЙ СОСТАВ / " + units.Count + " СОЕДИНЕНИЙ", x, 274, listWidth);
             Button(g, selectedUnits.Count == units.Count && units.Count > 0 ? "Снять выбор" : "Выбрать все", x + listWidth - 127, 267, 127, () => {
                 if (selectedUnits.Count == units.Count) selectedUnits.Clear(); else foreach (var unit in units) selectedUnits.Add(unit.Id); Invalidate();
@@ -34,7 +36,7 @@ namespace Sovereign
                 Button(g, chosen ? "✓" : "+", x + 10, y + 11, 30, () => { if (!selectedUnits.Add(unit.Id)) selectedUnits.Remove(unit.Id); Invalidate(); }, chosen, "Выбрать часть №" + unit.Id + " для фронта", 29);
                 Txt(g, "№" + unit.Id + "  /  " + unit.Design.Name + " · " + unit.Battalions + " бат.", x + 51, y + 11, 14, Palette.Text, true, listWidth - 209);
                 var plan = E.FrontFor(unit.Id);
-                Txt(g, E.Player.Templates.First(t => t.Id == unit.TemplateId).Name + " · " + W.Regions[unit.Region].Name + (plan == null ? "" : " · " + plan.Name), x + 51, y + 35, 11, Palette.Muted, false, listWidth - 209);
+                Txt(g, DeploymentRules.Names[(int)DeploymentRules.For(unit).Specialty] + " · " + W.Regions[unit.Region].Name + (plan == null ? "" : " · " + plan.Name), x + 51, y + 35, 11, Palette.Muted, false, listWidth - 209);
                 float statW = Math.Max(80, (listWidth - 245) / 3);
                 Txt(g, "Готовность " + unit.Strength.ToString("0") + "%", x + 51, y + 58, 10, Palette.Teal);
                 Progress(g, x + 51, y + 80, statW - 15, unit.Strength / 100, Palette.Teal);
@@ -50,7 +52,7 @@ namespace Sovereign
                 AvailableButton(g, "+ Поддержка", bx, y + 54, 135, () => Message(E.Refit(unit.Id, active.Id, true)), ready && active.Blueprint.Kind != EquipmentKind.Tank && active.Blueprint.Kind != EquipmentKind.IFV && unit.Attachments.Count < 3 && !unit.Attachments.Any(t => t.Blueprint.Kind == active.Blueprint.Kind), "Выберите класс поддержки в каталоге; нужны комплект и 14 дней подготовки.", false, 20);
                 Button(g, "Расформировать", bx, y + 78, 135, () => { if (Confirm("Расформировать часть №" + unit.Id + "? Личный состав вернётся в резерв, уцелевшая техника — на склад.")) Message(E.DisbandArmy(unit.Id)); }, false, "Только на стоянке в своей снабжаемой области", 20);
             }
-            Txt(g, "Колесо: список частей · Отмечено " + selectedUnits.Count + " · Авиация: отдельные крылья и группы поддержки", x, VH - 91, 11, Palette.Muted, false, listWidth);
+            Txt(g, "Отмечено " + selectedUnits.Count + " · Авиация: отдельные крылья и группы поддержки", x + 218, VH - 91, 11, Palette.Muted, false, listWidth - 218);
             DrawFrontCommand(g, right, 273, fw);
         }
         private void DrawFrontCommand(Graphics g, float x, float y, float w)

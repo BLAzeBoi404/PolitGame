@@ -19,7 +19,7 @@ namespace Sovereign
             if (next) { gameCx = cx; gameCy = cy; gameScale = scale; cx = setupCx; cy = setupCy; scale = setupScale; }
             else { setupCx = cx; setupCy = cy; setupScale = scale; cx = gameCx; cy = gameCy; scale = gameScale; }
             atlasCamera = next; hoveredCountry = -1; hoveredRegion = -1;
-            panning = false; moved = false; Capture = false; deferMapRefresh = false;
+            panning = false; moved = false; Capture = false;
         }
         private bool MapInputAllowed(Point point)
         {

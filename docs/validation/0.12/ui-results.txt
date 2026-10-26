@@ -1,0 +1,513 @@
+PASS Country selection starts a paused campaign
+PASS Starting another country resets campaign state
+PASS Designer category responds to a mouse click
+PASS Module control changes the actual blueprint
+PASS Designer saves a paid project through the UI
+PASS Production order button creates a real line
+PASS Production pause button releases the line
+PASS Production resume button restarts the line
+PASS Recruit button consumes manufactured equipment
+PASS Mouse wheel zooms the map
+PASS Mouse drag pans the map
+PASS Territory hit testing resolves real geography
+PASS Space resumes time
+PASS Menu pauses simulation
+PASS Сводка has visible action bounds at 1280x720
+PASS Setup controls hidden during Сводка
+PASS Карта has visible action bounds at 1280x720
+PASS Setup controls hidden during Карта
+PASS Экономика has visible action bounds at 1280x720
+PASS Setup controls hidden during Экономика
+PASS Производство has visible action bounds at 1280x720
+PASS Setup controls hidden during Производство
+PASS Серии has visible action bounds at 1280x720
+PASS Setup controls hidden during Серии
+PASS Исследования has visible action bounds at 1280x720
+PASS Setup controls hidden during Исследования
+PASS Дипломатия has visible action bounds at 1280x720
+PASS Setup controls hidden during Дипломатия
+PASS Армия has visible action bounds at 1280x720
+PASS Setup controls hidden during Армия
+PASS Конструктор has visible action bounds at 1280x720
+PASS Setup controls hidden during Конструктор
+PASS Политика has visible action bounds at 1280x720
+PASS Setup controls hidden during Политика
+PASS Меню has visible action bounds at 1280x720
+PASS Новая игра has visible action bounds at 1280x720
+PASS Настройки has visible action bounds at 1280x720
+PASS Клавиши has visible action bounds at 1280x720
+PASS Сводка has visible action bounds at 1600x900
+PASS Setup controls hidden during Сводка
+PASS Карта has visible action bounds at 1600x900
+PASS Setup controls hidden during Карта
+PASS Экономика has visible action bounds at 1600x900
+PASS Setup controls hidden during Экономика
+PASS Производство has visible action bounds at 1600x900
+PASS Setup controls hidden during Производство
+PASS Серии has visible action bounds at 1600x900
+PASS Setup controls hidden during Серии
+PASS Исследования has visible action bounds at 1600x900
+PASS Setup controls hidden during Исследования
+PASS Дипломатия has visible action bounds at 1600x900
+PASS Setup controls hidden during Дипломатия
+PASS Армия has visible action bounds at 1600x900
+PASS Setup controls hidden during Армия
+PASS Конструктор has visible action bounds at 1600x900
+PASS Setup controls hidden during Конструктор
+PASS Политика has visible action bounds at 1600x900
+PASS Setup controls hidden during Политика
+PASS Меню has visible action bounds at 1600x900
+PASS Новая игра has visible action bounds at 1600x900
+PASS Настройки has visible action bounds at 1600x900
+PASS Клавиши has visible action bounds at 1600x900
+PASS Сводка has visible action bounds at 1920x1080
+PASS Setup controls hidden during Сводка
+PASS Карта has visible action bounds at 1920x1080
+PASS Setup controls hidden during Карта
+PASS Экономика has visible action bounds at 1920x1080
+PASS Setup controls hidden during Экономика
+PASS Производство has visible action bounds at 1920x1080
+PASS Setup controls hidden during Производство
+PASS Серии has visible action bounds at 1920x1080
+PASS Setup controls hidden during Серии
+PASS Исследования has visible action bounds at 1920x1080
+PASS Setup controls hidden during Исследования
+PASS Дипломатия has visible action bounds at 1920x1080
+PASS Setup controls hidden during Дипломатия
+PASS Армия has visible action bounds at 1920x1080
+PASS Setup controls hidden during Армия
+PASS Конструктор has visible action bounds at 1920x1080
+PASS Setup controls hidden during Конструктор
+PASS Политика has visible action bounds at 1920x1080
+PASS Setup controls hidden during Политика
+PASS Меню has visible action bounds at 1920x1080
+PASS Новая игра has visible action bounds at 1920x1080
+PASS Настройки has visible action bounds at 1920x1080
+PASS Клавиши has visible action bounds at 1920x1080
+PASS Changing selection reuses cached geography
+PASS Small camera movements reuse accurate overscanned geography
+PASS Leaving the overscan margin rebuilds geography
+PASS Map mode click selects Политика
+PASS Map mode click selects Дипломатия
+PASS Map mode click selects Армии
+PASS Map mode click selects Экономика
+PASS Map mode click selects Ресурсы
+PASS Map mode click selects Инфраструктура
+PASS Map mode click selects Настроения
+Map rendering mean: 8.8 ms, 1600x900, 30 frames, Mono/Xvfb
+Forced camera rebuild mean (including overscan): 78.7 ms, 1600x900, 12 frames, Mono/Xvfb
+Drag frame mean: 6.4 ms, 1600x900, 20 frames, Mono/Xvfb
+PASS Dragging translates cached geometry without blocking on a rebuild
+PASS Releasing a short drag retains accurate overscanned geography
+Raster stages: 1856x1023, background raster 55.80 ms; UI annotation 2.07 ms
+PASS Overview geometry reduces vertices while retaining exact hit-test paths
+PASS Diplomatic action establishes an actual defensive alliance
+PASS Access treaty can be requested from the dossier
+PASS Roster selection assigns actual formations to a front
+PASS Front stance button changes the operational plan
+PASS Stopping a front cancels movement through the UI
+PASS Binding editor captures a new modifier shortcut
+PASS Old pause key no longer triggers after reassignment
+PASS Reassigned pause key controls the live simulation
+PASS Political palette assigns distinct colors to every pair of adjacent countries
+PASS Country map click selects France without creating or altering a campaign
+PASS Country selection does not jump or refocus the atlas camera
+PASS Setup wheel zoom keeps the geographic cursor anchor
+PASS Slow atlas drag pans without accidentally selecting a country on release
+PASS Ocean click preserves the selected starting country
+PASS Leaving setup restores the existing campaign camera and state
+PASS Atlas start button opens the chosen country directly on the paused map
+PASS Panel background captures clicks and scrolling without affecting the atlas
+PASS Opening compact management reuses the full-width atlas cache
+PASS Compact economy controls change the real trade policy
+PASS Compact panel expands into the detailed workspace
+PASS Detailed workspace collapses back without closing the map
+PASS Compact policy control changes actual political spending
+PASS Compact research starts a real scientific program
+PASS Atlas Экономика action bounds at 1280x720
+PASS Atlas Армия action bounds at 1280x720
+PASS Atlas Авиация action bounds at 1280x720
+PASS Atlas Новая игра action bounds at 1280x720
+PASS Atlas Конструктор action bounds at 1280x720
+PASS Atlas Экономика action bounds at 1600x900
+PASS Atlas Армия action bounds at 1600x900
+PASS Atlas Авиация action bounds at 1600x900
+PASS Atlas Новая игра action bounds at 1600x900
+PASS Atlas Конструктор action bounds at 1600x900
+PASS Atlas Экономика action bounds at 1920x1080
+PASS Atlas Армия action bounds at 1920x1080
+PASS Atlas Авиация action bounds at 1920x1080
+PASS Atlas Новая игра action bounds at 1920x1080
+PASS Atlas Конструктор action bounds at 1920x1080
+PASS Expanded Сводка remains within 1280x720 viewport
+PASS Expanded Экономика remains within 1280x720 viewport
+PASS Expanded Производство remains within 1280x720 viewport
+PASS Expanded Исследования remains within 1280x720 viewport
+PASS Expanded Дипломатия remains within 1280x720 viewport
+PASS Expanded Армия remains within 1280x720 viewport
+PASS Expanded Конструктор remains within 1280x720 viewport
+PASS Expanded Политика remains within 1280x720 viewport
+PASS Expanded Хроника remains within 1280x720 viewport
+PASS Leaving new-campaign preview hides native setup controls on other menus
+PASS Airbase panel starts actual construction through a mouse click
+PASS Air panel deploys a real produced equipment kit
+PASS Air panel assigns the map-selected target to the actual wing
+PASS Air mission stop returns the wing to reserve
+PASS Army navigation opens the actual reserve and template panel over the map
+PASS Conscription UI applies the paid law without inventing instant recruits
+PASS Template selector changes the next formation's actual organization size
+PASS Template editor saves and selects an immutable three-battalion organization
+PASS Recruit UI consumes three equipment kits and 2000 people for the selected template
+PASS Manpower panel remains within viewport at 1280x720
+PASS Expanded formations remain within viewport at 1280x720
+PASS Manpower panel remains within viewport at 1600x900
+PASS Expanded formations remain within viewport at 1600x900
+PASS Manpower panel remains within viewport at 1920x1080
+PASS Expanded formations remain within viewport at 1920x1080
+PASS Politics navigation opens the cabinet over the map and pauses simulation
+PASS Cabinet button starts the selected program and charges the actual quoted price
+PASS A disabled active-program button cannot charge the player twice
+PASS Active-measures tab represents the real industrial modifier
+PASS A new incident pauses fast-forward and opens its actual choice panel
+PASS Reviewing an already announced incident does not repeatedly force a pause
+PASS Cabinet tab 0 stays within the viewport at 1280x720
+PASS Cabinet tab 1 stays within the viewport at 1280x720
+PASS Cabinet tab 2 stays within the viewport at 1280x720
+PASS Cabinet tab 0 stays within the viewport at 1600x900
+PASS Cabinet tab 1 stays within the viewport at 1600x900
+PASS Cabinet tab 2 stays within the viewport at 1600x900
+PASS Cabinet tab 0 stays within the viewport at 1920x1080
+PASS Cabinet tab 1 stays within the viewport at 1920x1080
+PASS Cabinet tab 2 stays within the viewport at 1920x1080
+PASS An unaffordable event option is disabled in the actual interface
+PASS A real event click pays for reserve distribution and installs its time-limited result
+PASS Resolved choices appear in persistent cabinet history
+PASS Mouse wheel scrolls a long active-measures list without changing campaign effects
+PASS Cabinet navigation returns to working budget controls
+PASS Cabinet outliner shortcut does not overlap either of two production rows
+PASS The current-affairs outliner opens national programs
+PASS Compact science command panel opens the actual technology workspace
+PASS A technology card and start button select real applied research
+PASS Research pause button changes the actual research agenda
+PASS Fundamental tab switches the active program and retains applied progress
+PASS Returning through the interface restores the exact stored applied progress
+PASS Cross-branch prerequisite button navigates to the required technology card
+PASS UI plan admits dependencies supplied by the active and preceding queued programs
+PASS Removing a prerequisite from the visible plan retains its dependent work for later
+PASS Locked advanced technology cannot start through its disabled interface button
+PASS Technology branch 0 stays within the viewport at 1280x720
+PASS Prerequisite controls do not overlap the research action at 1280 branch 0
+PASS Technology branch 1 stays within the viewport at 1280x720
+PASS Prerequisite controls do not overlap the research action at 1280 branch 1
+PASS Technology branch 2 stays within the viewport at 1280x720
+PASS Prerequisite controls do not overlap the research action at 1280 branch 2
+PASS Technology branch 3 stays within the viewport at 1280x720
+PASS Prerequisite controls do not overlap the research action at 1280 branch 3
+PASS Technology branch 4 stays within the viewport at 1280x720
+PASS Prerequisite controls do not overlap the research action at 1280 branch 4
+PASS Technology branch 5 stays within the viewport at 1280x720
+PASS Prerequisite controls do not overlap the research action at 1280 branch 5
+PASS Research tab 1 stays within the viewport at 1280x720
+PASS Research tab 2 stays within the viewport at 1280x720
+PASS Technology branch 0 stays within the viewport at 1600x900
+PASS Prerequisite controls do not overlap the research action at 1600 branch 0
+PASS Technology branch 1 stays within the viewport at 1600x900
+PASS Prerequisite controls do not overlap the research action at 1600 branch 1
+PASS Technology branch 2 stays within the viewport at 1600x900
+PASS Prerequisite controls do not overlap the research action at 1600 branch 2
+PASS Technology branch 3 stays within the viewport at 1600x900
+PASS Prerequisite controls do not overlap the research action at 1600 branch 3
+PASS Technology branch 4 stays within the viewport at 1600x900
+PASS Prerequisite controls do not overlap the research action at 1600 branch 4
+PASS Technology branch 5 stays within the viewport at 1600x900
+PASS Prerequisite controls do not overlap the research action at 1600 branch 5
+PASS Research tab 1 stays within the viewport at 1600x900
+PASS Research tab 2 stays within the viewport at 1600x900
+PASS Technology branch 0 stays within the viewport at 1920x1080
+PASS Prerequisite controls do not overlap the research action at 1920 branch 0
+PASS Technology branch 1 stays within the viewport at 1920x1080
+PASS Prerequisite controls do not overlap the research action at 1920 branch 1
+PASS Technology branch 2 stays within the viewport at 1920x1080
+PASS Prerequisite controls do not overlap the research action at 1920 branch 2
+PASS Technology branch 3 stays within the viewport at 1920x1080
+PASS Prerequisite controls do not overlap the research action at 1920 branch 3
+PASS Technology branch 4 stays within the viewport at 1920x1080
+PASS Prerequisite controls do not overlap the research action at 1920 branch 4
+PASS Technology branch 5 stays within the viewport at 1920x1080
+PASS Prerequisite controls do not overlap the research action at 1920 branch 5
+PASS Research tab 1 stays within the viewport at 1920x1080
+PASS Research tab 2 stays within the viewport at 1920x1080
+PASS Designer links its capped armor module to the actual composite-armor technology
+PASS Technology foundation requirement opens the correct fundamental branch
+PASS Dragging the research canvas pans its graph without moving the map or selecting a node
+PASS Mouse wheel moves research stages instead of zooming the map underneath
+PASS Losing mouse capture during a graph drag cannot turn release into a technology click
+PASS Overview exposes all twelve technology nodes in branch 0 at 1280
+PASS All twelve graph cards remain clickable inside the viewport in branch 0 at 1280
+PASS Overview exposes all twelve technology nodes in branch 1 at 1280
+PASS All twelve graph cards remain clickable inside the viewport in branch 1 at 1280
+PASS Overview exposes all twelve technology nodes in branch 2 at 1280
+PASS All twelve graph cards remain clickable inside the viewport in branch 2 at 1280
+PASS Overview exposes all twelve technology nodes in branch 3 at 1280
+PASS All twelve graph cards remain clickable inside the viewport in branch 3 at 1280
+PASS Overview exposes all twelve technology nodes in branch 4 at 1280
+PASS All twelve graph cards remain clickable inside the viewport in branch 4 at 1280
+PASS Overview exposes all twelve technology nodes in branch 5 at 1280
+PASS All twelve graph cards remain clickable inside the viewport in branch 5 at 1280
+PASS Overview exposes all twelve technology nodes in branch 0 at 1600
+PASS All twelve graph cards remain clickable inside the viewport in branch 0 at 1600
+PASS Overview exposes all twelve technology nodes in branch 1 at 1600
+PASS All twelve graph cards remain clickable inside the viewport in branch 1 at 1600
+PASS Overview exposes all twelve technology nodes in branch 2 at 1600
+PASS All twelve graph cards remain clickable inside the viewport in branch 2 at 1600
+PASS Overview exposes all twelve technology nodes in branch 3 at 1600
+PASS All twelve graph cards remain clickable inside the viewport in branch 3 at 1600
+PASS Overview exposes all twelve technology nodes in branch 4 at 1600
+PASS All twelve graph cards remain clickable inside the viewport in branch 4 at 1600
+PASS Overview exposes all twelve technology nodes in branch 5 at 1600
+PASS All twelve graph cards remain clickable inside the viewport in branch 5 at 1600
+PASS Overview exposes all twelve technology nodes in branch 0 at 1920
+PASS All twelve graph cards remain clickable inside the viewport in branch 0 at 1920
+PASS Overview exposes all twelve technology nodes in branch 1 at 1920
+PASS All twelve graph cards remain clickable inside the viewport in branch 1 at 1920
+PASS Overview exposes all twelve technology nodes in branch 2 at 1920
+PASS All twelve graph cards remain clickable inside the viewport in branch 2 at 1920
+PASS Overview exposes all twelve technology nodes in branch 3 at 1920
+PASS All twelve graph cards remain clickable inside the viewport in branch 3 at 1920
+PASS Overview exposes all twelve technology nodes in branch 4 at 1920
+PASS All twelve graph cards remain clickable inside the viewport in branch 4 at 1920
+PASS Overview exposes all twelve technology nodes in branch 5 at 1920
+PASS All twelve graph cards remain clickable inside the viewport in branch 5 at 1920
+PASS Green-revolution dossier navigates to the actual fertilizer prerequisite
+PASS Expanded tree follows a cross-branch energy prerequisite and centers it
+PASS A newly added soil-science node starts a real research program through the graph
+PASS Advancing a day does not rerasterize an unchanged resource map
+PASS A real resource change still invalidates the resource layer cache
+PASS Construction-related infrastructure changes invalidate their thematic layer
+PASS Fast-forward pump advances one day instead of a seven-day blocking burst
+PASS A delayed timer never replays a backlog in a blocking simulation loop
+PASS Paused simulation ignores timer callbacks
+PASS Normal speed retains its 650 millisecond day interval
+PASS Normal-speed scheduler advances at the due time
+PASS Army command opens doctrine trees without enabling science canvas gestures
+PASS Locked doctrine stages cannot start through the interface
+PASS Doctrine prerequisite opens the exact network-coordination technology
+PASS Doctrine foundation control opens military fundamentals
+PASS Doctrine start button orders a real paid staff course
+PASS Doctrine pause control stops actual course progress
+PASS Declining adoption leaves the school and treasury unchanged
+PASS Adoption control pays for retraining rather than instantly granting combat bonuses
+PASS Declining cancellation preserves the running course
+PASS Cancelling through the interface clears the course without refunding payment
+PASS Doctrine stage 0 is selectable at 1280x720
+PASS Doctrine stage 0 controls stay visible and disjoint at 1280
+PASS Doctrine stage 1 is selectable at 1280x720
+PASS Doctrine stage 1 controls stay visible and disjoint at 1280
+PASS Doctrine stage 2 is selectable at 1280x720
+PASS Doctrine stage 2 controls stay visible and disjoint at 1280
+PASS Doctrine stage 3 is selectable at 1280x720
+PASS Doctrine stage 3 controls stay visible and disjoint at 1280
+PASS Doctrine stage 4 is selectable at 1280x720
+PASS Doctrine stage 4 controls stay visible and disjoint at 1280
+PASS Doctrine stage 5 is selectable at 1280x720
+PASS Doctrine stage 5 controls stay visible and disjoint at 1280
+PASS Doctrine stage 6 is selectable at 1280x720
+PASS Doctrine stage 6 controls stay visible and disjoint at 1280
+PASS Doctrine stage 7 is selectable at 1280x720
+PASS Doctrine stage 7 controls stay visible and disjoint at 1280
+PASS Doctrine stage 8 is selectable at 1280x720
+PASS Doctrine stage 8 controls stay visible and disjoint at 1280
+PASS Doctrine stage 9 is selectable at 1280x720
+PASS Doctrine stage 9 controls stay visible and disjoint at 1280
+PASS Doctrine stage 10 is selectable at 1280x720
+PASS Doctrine stage 10 controls stay visible and disjoint at 1280
+PASS Doctrine stage 11 is selectable at 1280x720
+PASS Doctrine stage 11 controls stay visible and disjoint at 1280
+PASS Doctrine stage 12 is selectable at 1280x720
+PASS Doctrine stage 12 controls stay visible and disjoint at 1280
+PASS Doctrine stage 13 is selectable at 1280x720
+PASS Doctrine stage 13 controls stay visible and disjoint at 1280
+PASS Doctrine stage 14 is selectable at 1280x720
+PASS Doctrine stage 14 controls stay visible and disjoint at 1280
+PASS Doctrine stage 15 is selectable at 1280x720
+PASS Doctrine stage 15 controls stay visible and disjoint at 1280
+PASS Doctrine stage 16 is selectable at 1280x720
+PASS Doctrine stage 16 controls stay visible and disjoint at 1280
+PASS Doctrine stage 17 is selectable at 1280x720
+PASS Doctrine stage 17 controls stay visible and disjoint at 1280
+PASS Doctrine stage 0 is selectable at 1600x900
+PASS Doctrine stage 0 controls stay visible and disjoint at 1600
+PASS Doctrine stage 1 is selectable at 1600x900
+PASS Doctrine stage 1 controls stay visible and disjoint at 1600
+PASS Doctrine stage 2 is selectable at 1600x900
+PASS Doctrine stage 2 controls stay visible and disjoint at 1600
+PASS Doctrine stage 3 is selectable at 1600x900
+PASS Doctrine stage 3 controls stay visible and disjoint at 1600
+PASS Doctrine stage 4 is selectable at 1600x900
+PASS Doctrine stage 4 controls stay visible and disjoint at 1600
+PASS Doctrine stage 5 is selectable at 1600x900
+PASS Doctrine stage 5 controls stay visible and disjoint at 1600
+PASS Doctrine stage 6 is selectable at 1600x900
+PASS Doctrine stage 6 controls stay visible and disjoint at 1600
+PASS Doctrine stage 7 is selectable at 1600x900
+PASS Doctrine stage 7 controls stay visible and disjoint at 1600
+PASS Doctrine stage 8 is selectable at 1600x900
+PASS Doctrine stage 8 controls stay visible and disjoint at 1600
+PASS Doctrine stage 9 is selectable at 1600x900
+PASS Doctrine stage 9 controls stay visible and disjoint at 1600
+PASS Doctrine stage 10 is selectable at 1600x900
+PASS Doctrine stage 10 controls stay visible and disjoint at 1600
+PASS Doctrine stage 11 is selectable at 1600x900
+PASS Doctrine stage 11 controls stay visible and disjoint at 1600
+PASS Doctrine stage 12 is selectable at 1600x900
+PASS Doctrine stage 12 controls stay visible and disjoint at 1600
+PASS Doctrine stage 13 is selectable at 1600x900
+PASS Doctrine stage 13 controls stay visible and disjoint at 1600
+PASS Doctrine stage 14 is selectable at 1600x900
+PASS Doctrine stage 14 controls stay visible and disjoint at 1600
+PASS Doctrine stage 15 is selectable at 1600x900
+PASS Doctrine stage 15 controls stay visible and disjoint at 1600
+PASS Doctrine stage 16 is selectable at 1600x900
+PASS Doctrine stage 16 controls stay visible and disjoint at 1600
+PASS Doctrine stage 17 is selectable at 1600x900
+PASS Doctrine stage 17 controls stay visible and disjoint at 1600
+PASS Doctrine stage 0 is selectable at 1920x1080
+PASS Doctrine stage 0 controls stay visible and disjoint at 1920
+PASS Doctrine stage 1 is selectable at 1920x1080
+PASS Doctrine stage 1 controls stay visible and disjoint at 1920
+PASS Doctrine stage 2 is selectable at 1920x1080
+PASS Doctrine stage 2 controls stay visible and disjoint at 1920
+PASS Doctrine stage 3 is selectable at 1920x1080
+PASS Doctrine stage 3 controls stay visible and disjoint at 1920
+PASS Doctrine stage 4 is selectable at 1920x1080
+PASS Doctrine stage 4 controls stay visible and disjoint at 1920
+PASS Doctrine stage 5 is selectable at 1920x1080
+PASS Doctrine stage 5 controls stay visible and disjoint at 1920
+PASS Doctrine stage 6 is selectable at 1920x1080
+PASS Doctrine stage 6 controls stay visible and disjoint at 1920
+PASS Doctrine stage 7 is selectable at 1920x1080
+PASS Doctrine stage 7 controls stay visible and disjoint at 1920
+PASS Doctrine stage 8 is selectable at 1920x1080
+PASS Doctrine stage 8 controls stay visible and disjoint at 1920
+PASS Doctrine stage 9 is selectable at 1920x1080
+PASS Doctrine stage 9 controls stay visible and disjoint at 1920
+PASS Doctrine stage 10 is selectable at 1920x1080
+PASS Doctrine stage 10 controls stay visible and disjoint at 1920
+PASS Doctrine stage 11 is selectable at 1920x1080
+PASS Doctrine stage 11 controls stay visible and disjoint at 1920
+PASS Doctrine stage 12 is selectable at 1920x1080
+PASS Doctrine stage 12 controls stay visible and disjoint at 1920
+PASS Doctrine stage 13 is selectable at 1920x1080
+PASS Doctrine stage 13 controls stay visible and disjoint at 1920
+PASS Doctrine stage 14 is selectable at 1920x1080
+PASS Doctrine stage 14 controls stay visible and disjoint at 1920
+PASS Doctrine stage 15 is selectable at 1920x1080
+PASS Doctrine stage 15 controls stay visible and disjoint at 1920
+PASS Doctrine stage 16 is selectable at 1920x1080
+PASS Doctrine stage 16 controls stay visible and disjoint at 1920
+PASS Doctrine stage 17 is selectable at 1920x1080
+PASS Doctrine stage 17 controls stay visible and disjoint at 1920
+PASS Return button restores the scientific research workspace
+PASS Compact science panel also opens doctrine management
+PASS Compact politics opens real constitutional management over the map
+PASS Government form 1 is selectable at 1280
+PASS Government form 1 action bounds remain visible and disjoint at 1280
+PASS Government form 2 is selectable at 1280
+PASS Government form 2 action bounds remain visible and disjoint at 1280
+PASS Government form 3 is selectable at 1280
+PASS Government form 3 action bounds remain visible and disjoint at 1280
+PASS Government form 4 is selectable at 1280
+PASS Government form 4 action bounds remain visible and disjoint at 1280
+PASS Government form 1 is selectable at 1600
+PASS Government form 1 action bounds remain visible and disjoint at 1600
+PASS Government form 2 is selectable at 1600
+PASS Government form 2 action bounds remain visible and disjoint at 1600
+PASS Government form 3 is selectable at 1600
+PASS Government form 3 action bounds remain visible and disjoint at 1600
+PASS Government form 4 is selectable at 1600
+PASS Government form 4 action bounds remain visible and disjoint at 1600
+PASS Government form 1 is selectable at 1920
+PASS Government form 1 action bounds remain visible and disjoint at 1920
+PASS Government form 2 is selectable at 1920
+PASS Government form 2 action bounds remain visible and disjoint at 1920
+PASS Government form 3 is selectable at 1920
+PASS Government form 3 action bounds remain visible and disjoint at 1920
+PASS Government form 4 is selectable at 1920
+PASS Government form 4 action bounds remain visible and disjoint at 1920
+PASS Declining constitutional reform preserves money and government
+PASS Disabled reform controls cannot bypass stability requirements
+PASS Accepting reform starts a real paid project and opens its progress panel
+PASS Reform pause button stops actual constitutional work
+PASS Declining withdrawal retains the active reform
+PASS Paused reform controls remain visible at 1280
+PASS Paused reform controls remain visible at 1600
+PASS Paused reform controls remain visible at 1920
+PASS A new constitutional convention pauses time and opens its actual decision panel
+PASS An already announced constitutional convention does not repeatedly force a pause
+PASS The map outliner returns to an unanswered constitutional convention
+PASS Convention choices remain visible and disjoint at 1280
+PASS Convention choices remain visible and disjoint at 1600
+PASS Convention choices remain visible and disjoint at 1920
+PASS Declining paid consultation preserves the unanswered convention
+PASS Consultation control pays its quote and starts sixty-day implementation
+PASS Implementation controls remain visible at 1280
+PASS Implementation controls remain visible at 1600
+PASS Implementation controls remain visible at 1920
+PASS Completed constitutional process returns to comparison with the new actual government
+PASS Cabinet management links back to constitutional reform
+PASS Accepting withdrawal through the interface retains its sunk cost and clears the project
+PASS Госзаказы controls remain visible at 1280
+PASS Боевой порядок controls remain visible at 1280
+PASS Настройки controls remain visible at 1280
+PASS Госзаказы controls remain visible at 1600
+PASS Боевой порядок controls remain visible at 1600
+PASS Настройки controls remain visible at 1600
+PASS Госзаказы controls remain visible at 1920
+PASS Боевой порядок controls remain visible at 1920
+PASS Настройки controls remain visible at 1920
+PASS Declining procurement leaves the treasury and contract book unchanged
+PASS Procurement UI places the selected product with the chosen Italian supplier
+PASS Contract pause control stops real production
+PASS Contract resume control reacquires free private capacity
+PASS Declining cancellation preserves the paid contract
+PASS Accepting cancellation removes the actual contract
+PASS An entirely archived catalog disables equipment-model selection without division by zero
+PASS Deployment controls create a five-battalion template with a real reserve
+PASS Technical album class 0 has reachable module controls at 1280
+PASS Technical album class 1 has reachable module controls at 1280
+PASS Technical album class 2 has reachable module controls at 1280
+PASS Technical album class 3 has reachable module controls at 1280
+PASS Technical album class 4 has reachable module controls at 1280
+PASS Technical album class 5 has reachable module controls at 1280
+PASS Technical album class 6 has reachable module controls at 1280
+PASS Technical album class 7 has reachable module controls at 1280
+PASS Technical album class 0 has reachable module controls at 1600
+PASS Technical album class 1 has reachable module controls at 1600
+PASS Technical album class 2 has reachable module controls at 1600
+PASS Technical album class 3 has reachable module controls at 1600
+PASS Technical album class 4 has reachable module controls at 1600
+PASS Technical album class 5 has reachable module controls at 1600
+PASS Technical album class 6 has reachable module controls at 1600
+PASS Technical album class 7 has reachable module controls at 1600
+PASS Technical album class 0 has reachable module controls at 1920
+PASS Technical album class 1 has reachable module controls at 1920
+PASS Technical album class 2 has reachable module controls at 1920
+PASS Technical album class 3 has reachable module controls at 1920
+PASS Technical album class 4 has reachable module controls at 1920
+PASS Technical album class 5 has reachable module controls at 1920
+PASS Technical album class 6 has reachable module controls at 1920
+PASS Technical album class 7 has reachable module controls at 1920
+PASS Panning beyond the cached edge keeps newly exposed inland geography visible
+PASS Fine geography refreshes while the mouse is still held, without waiting for release
+PASS Rapid pan and zoom coalesce to the latest complete atlas request
+PASS Changing map layers rejects stale background surfaces
+PASS Graphics quality changes actual raster resolution
+PASS Frame limiting coalesces updates and enforces the selected thirty-frame interval
+PASS An idle window does not schedule redundant repaint frames
+PASS Unlimited mode permits consecutive pending frames without an artificial cap
+PASS Fullscreen mode covers the selected monitor without a window border
+PASS Leaving fullscreen restores the prior window bounds
+PASS Resolution controls resize the actual client area and persist the applied dimensions
+PASS Unchanged army badges reuse cached text and stars across frames
+PASS Display and performance settings survive saving and reloading preferences
+Failures: 0

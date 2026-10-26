@@ -125,18 +125,18 @@ namespace Sovereign
             InitializeAtlasColors();
 			E = new Engine(world);
 			base.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-			Text = "SOVEREIGN — Государство · 0.11";
+			Text = "SOVEREIGN — Государство · 0.12";
 			BackColor = Palette.Bg;
 			ForeColor = Palette.Text;
 			base.AutoScaleMode = AutoScaleMode.None;
-			base.ClientSize = new Size(1540, 900);
+			base.ClientSize = new Size(Math.Min(prefs.WindowWidth, System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width - 24), Math.Min(prefs.WindowHeight, System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height - 64));
 			MinimumSize = new Size(1000, 640);
 			base.StartPosition = FormStartPosition.CenterScreen;
 			base.KeyPreview = true;
 			SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, value: true);
 			InitializePresentation();
             cameraRefresh.Interval = 100;
-            cameraRefresh.Tick += delegate { cameraRefresh.Stop(); deferMapRefresh = false; Invalidate(); };
+            cameraRefresh.Tick += delegate { cameraRefresh.Stop(); Invalidate(); };
 			Engine e = E;
 			Action value = delegate
 			{
@@ -145,6 +145,7 @@ namespace Sovereign
 			};
 			e.Changed += value;
             clock.Interval = 16;
+            InitializeFrameTiming();
             clock.Tick += delegate { PumpUiClock(); };
 			clock.Start();
 			base.KeyDown += KeysDown;
@@ -257,7 +258,7 @@ namespace Sovereign
 		private void Navigate(string p)
 		{
 			page = p;
-            aviationPage = false; manpowerPage = false; nationalPolicyPage = false; doctrinePage = false; governmentPage = false;
+            aviationPage = false; manpowerPage = false; nationalPolicyPage = false; doctrinePage = false; governmentPage = false; procurementPage = false; deploymentPage = false;
             detailPanel = p == "Конструктор";
 			scroll = 0;
 			hoveredTip = "";
@@ -266,7 +267,8 @@ namespace Sovereign
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			base.OnPaint(e);
+			double paintBegan = uiTime.Elapsed.TotalMilliseconds;
+            base.OnPaint(e);
 			Graphics graphics = e.Graphics;
 			graphics.ScaleTransform(UiScale, UiScale);
 			graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -298,6 +300,7 @@ namespace Sovereign
 				Fill(graphics, Color.FromArgb(42, 55, 65), (VW - num2) / 2f, num - 65f, num2, 50f);
 				Para(graphics, toast, (VW - num2) / 2f + 16f, num - 56f, num2 - 32f, 42f, 14f, Palette.Gold);
 			}
+            DrawPerformance(graphics, paintBegan);
 		}
 
 
@@ -589,6 +592,8 @@ namespace Sovereign
 		{
 			base.OnMouseMove(e);
             if (ResearchMouseMove(e)) return;
+            int priorRegion = hoveredRegion, priorCountry = hoveredCountry;
+            Hit priorHit = hits.LastOrDefault(h => h.Rect.Contains(mouse));
 			mouse = Logical(e.Location);
 			Hit hit = hits.LastOrDefault((Hit h) => h.Rect.Contains(mouse));
 			hoveredRegion = menuScreen == "" && MapInputAllowed(mouse) && hit == null && !panning ? FindRegion(Geo(mouse)) : -1;
@@ -612,8 +617,8 @@ namespace Sovereign
                 ClampCamera();
 				last = Logical(e.Location);
 			}
-			Cursor = (hits.Any((Hit h) => h.Rect.Contains(mouse)) ? Cursors.Hand : Cursors.Default);
-			Invalidate();
+			Cursor = hit != null ? Cursors.Hand : Cursors.Default;
+            if (panning || priorRegion != hoveredRegion || priorCountry != hoveredCountry || priorHit != hit || (prefs.Tooltips && !string.IsNullOrEmpty(hoveredTip) && (DateTime.Now - hoverSince).TotalMilliseconds >= 550)) Invalidate();
 		}
 
 		protected override void OnMouseDown(MouseEventArgs e)
@@ -702,7 +707,7 @@ namespace Sovereign
 			}
 			if (MapInputAllowed(Logical(e.Location)))
 			{
-				deferMapRefresh = true; cameraRefresh.Stop(); cameraRefresh.Start();
+				 cameraRefresh.Stop(); cameraRefresh.Start();
                 PointF pointF = Geo(Logical(e.Location));
 				scale = Math.Max(2f, Math.Min(100f, scale * ((e.Delta > 0) ? 1.18f : 0.84745765f)));
 				PointF pointF2 = Geo(Logical(e.Location));
@@ -764,7 +769,8 @@ namespace Sovereign
 				draft = Engine.CopyDesign(E.Player.Design);
 			}
 			menuScreen = "";
-			page = p; detailPanel = p == "Конструктор"; aviationPage = p == "Авиация"; manpowerPage = p == "Резерв";
+			procurementPage = p == "Госзаказы"; deploymentPage = p == "Боевой порядок";
+            page = p; detailPanel = p == "Конструктор" || procurementPage || deploymentPage; aviationPage = p == "Авиация"; manpowerPage = p == "Резерв";
             if (aviationPage || manpowerPage) page = "Армия";
             doctrinePage = p == "Доктрины";
             if (doctrinePage) { page = "Исследования"; detailPanel = true; }
@@ -772,6 +778,8 @@ namespace Sovereign
             if (governmentPage) { page = "Политика"; detailPanel = true; }
             nationalPolicyPage = p == "Решения" || p == "События";
             if (nationalPolicyPage) { page = "Политика"; detailPanel = true; policyTab = p == "События" ? 1 : 0; }
+            if (p == "Госзаказы") { page = "Производство"; procurementPage = true; }
+            if (p == "Боевой порядок") { page = "Армия"; deploymentPage = true; }
             if (p == "Серии") { page = "Производство"; equipmentProduction = true; }
 			LayoutMenuControls();
 			Invalidate();
@@ -849,8 +857,11 @@ namespace Sovereign
 			if (disposing)
 			{
 				clock.Dispose();
+                DisposeFrameTiming();
+                DisposeAtlas();
                 cameraRefresh.Dispose();
                 ClearHighlights();
+                ClearUnitBadges();
                 if (mapCache != null) mapCache.Dispose();
 
 				if (terrainTexture != null)
@@ -1031,10 +1042,13 @@ namespace Sovereign
 		{
 			if (!fullScreen)
 			{
-				windowBounds = base.Bounds;
+				previousWindowState = base.WindowState;
+                windowBounds = WindowState == FormWindowState.Normal ? Bounds : RestoreBounds;
+                var monitor = System.Windows.Forms.Screen.FromControl(this).Bounds;
 				previousBorder = base.FormBorderStyle;
 				base.FormBorderStyle = FormBorderStyle.None;
-				base.WindowState = FormWindowState.Maximized;
+				base.WindowState = FormWindowState.Normal;
+                base.Bounds = monitor;
 				fullScreen = true;
 			}
 			else
@@ -1042,6 +1056,7 @@ namespace Sovereign
 				base.WindowState = FormWindowState.Normal;
 				base.FormBorderStyle = previousBorder;
 				base.Bounds = windowBounds;
+                base.WindowState = previousWindowState;
 				fullScreen = false;
 			}
 			prefs.Fullscreen = fullScreen;
@@ -1235,7 +1250,7 @@ namespace Sovereign
 			Txt(g, "государств и территорий", num2 + 22f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "областей", num2 + 175f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "ЭКОНОМИКА  /  ДИПЛОМАТИЯ  /  ТЕХНОЛОГИИ  /  СТРАТЕГИЯ", num, VH - 59f, 12f, Palette.Muted);
-			Txt(g, "0.11   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
+			Txt(g, "0.12   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
 		}
 
 
@@ -1253,46 +1268,6 @@ namespace Sovereign
 			}, enabled, detail, 36f);
 		}
 
-		private void DrawSettings(Graphics g)
-		{
-			Fill(g, Palette.Bg, 0f, 0f, VW, VH);
-			Button(g, "← Назад", 48f, 30f, 150f, delegate
-			{
-				OpenMenu(menuBack);
-			});
-			Txt(g, "Настройки", 48f, 99f, 36f, Palette.Text, bold: true);
-			Txt(g, "Изменения применяются сразу и сохраняются на этом компьютере", 50f, 151f, 15f, Palette.Muted);
-			float num = 48f;
-			float num2 = VW - 96f;
-			float num3 = (num2 - 20f) / 2f;
-			SettingRow(g, "Полноэкранное окно", "Клавиша: " + prefs.KeyLabel("Fullscreen"), num, 215f, num3, fullScreen, ToggleFullScreen);
-			SettingRow(g, "Подписи на карте", "Названия стран и областей с учётом масштаба.", num + num3 + 20f, 215f, num3, prefs.Labels, delegate
-			{
-				prefs.Labels = !prefs.Labels;
-			});
-			SettingRow(g, "Границы областей", "Показывать административные границы при приближении.", num, 322f, num3, prefs.RegionBorders, delegate
-			{
-				prefs.RegionBorders = !prefs.RegionBorders;
-			});
-			SettingRow(g, "Текстура карты", "Тонкая фактура атласа. Можно отключить для более плоского вида.", num + num3 + 20f, 322f, num3, prefs.Texture, delegate
-			{
-				prefs.Texture = !prefs.Texture;
-			});
-			SettingRow(g, "Подсказки при наведении", "Объяснять кнопки, показатели и действия.", num, 429f, num3, prefs.Tooltips, delegate
-			{
-				prefs.Tooltips = !prefs.Tooltips;
-			});
-			SettingRow(g, "Автосохранение", "Каждые 90 игровых дней и при выходе из начатой кампании.", num + num3 + 20f, 429f, num3, prefs.Autosave, delegate
-			{
-				prefs.Autosave = !prefs.Autosave;
-			});
-			SettingRow(g, "Обучение в новой игре", "Короткая последовательность первых действий.", num, 536f, num3, prefs.Tutorial, delegate
-			{
-				prefs.Tutorial = !prefs.Tutorial;
-			});
-			Button(g, "Настроить клавиши →", num + num3 + 20, 559, num3, () => OpenMenu("controls"), true);
-            Para(g, "Размер интерфейса подстраивается под окно. Звук пока не добавлен. Настройки не меняют расчёты экономики или сложность уже начатой кампании.", num, 685f, num2, 80f, 15f);
-		}
 
 		private void DrawLoadMenu(Graphics g)
 		{
@@ -1528,167 +1503,6 @@ namespace Sovereign
 			return Color.FromArgb((int)((float)(int)a.R + (float)(b.R - a.R) * t), (int)((float)(int)a.G + (float)(b.G - a.G) * t), (int)((float)(int)a.B + (float)(b.B - a.B) * t));
 		}
 
-		private string mapRasterProfile;
-        private void DrawMapTerrain(Graphics g)
-        {
-            if (layer == "Армии") {
-                if (militaryIntensity == null) militaryIntensity = new double[W.Regions.Length];
-                Array.Clear(militaryIntensity, 0, militaryIntensity.Length);
-                foreach (var unit in E.S.Armies) militaryIntensity[unit.Region] += unit.Strength;
-            }
-			var terrainWatch = System.Diagnostics.Stopwatch.StartNew();
-            GraphicsState gstate = g.Save();
-			g.SetClip(mapRect);
-			using (LinearGradientBrush brush = new LinearGradientBrush(mapRect, Color.FromArgb(142, 163, 165), Color.FromArgb(104, 132, 142), 90f))
-			{
-				g.FillRectangle(brush, mapRect);
-			}
-			for (int i = -180; i <= 180; i += 10)
-			{
-				PointF pointF = Screen(i, 0.0);
-				Line(g, Color.FromArgb(45, 45, 77, 85), pointF.X, mapRect.Top, pointF.X, mapRect.Bottom);
-			}
-			for (int j = -80; j <= 80; j += 10)
-			{
-				PointF pointF2 = Screen(0.0, j);
-				Line(g, Color.FromArgb(45, 45, 77, 85), mapRect.Left, pointF2.Y, mapRect.Right, pointF2.Y);
-			}
-			RectangleF rect = new RectangleF(cx - mapRect.Width / scale / 2f, cy - mapRect.Height / scale / 2f, mapRect.Width / scale, mapRect.Height / scale);
-            RectangleF clippedView = rect; clippedView.Inflate(10 / scale, 10 / scale);
-            var clippedPaths = new Dictionary<Land, GraphicsPath>();
-            Func<Land, GraphicsPath> visiblePath = land => {
-                if (clippedView.Contains(land.Bounds)) return land.DisplayPath(scale);
-                GraphicsPath path;
-                if (!clippedPaths.TryGetValue(land, out path)) {
-                    path = land.ClipDisplayPath(clippedView, scale); clippedPaths.Add(land, path);
-                }
-                return path;
-            };
-			using (Matrix transform = new Matrix(scale * UiScale, 0f, 0f, scale * UiScale, (mapRect.X + mapRect.Width / 2f - cx * scale) * UiScale, (mapRect.Y + mapRect.Height / 2f - cy * scale) * UiScale))
-			{
-				Matrix transform2 = g.Transform;
-				g.Transform = transform;
-				var rasterWatch = System.Diagnostics.Stopwatch.StartNew();
-
-
-				mapRasterProfile = "coast=" + rasterWatch.Elapsed.TotalMilliseconds.ToString("0.0"); rasterWatch.Restart();
-                for (int l = 0; l < W.Countries.Length; l++)
-				{
-					CountryInfo countryInfo2 = W.Countries[l];
-					if (countryInfo2.Bounds.IntersectsWith(rect))
-					{
-						using (SolidBrush brush2 = new SolidBrush(CountryColor(l)))
-						{
-							if (visiblePath(countryInfo2).PointCount > 0) g.FillPath(brush2, visiblePath(countryInfo2));
-						}
-					}
-				}
-				mapRasterProfile += " country=" + rasterWatch.Elapsed.TotalMilliseconds.ToString("0.0"); rasterWatch.Restart();
-                using (var provinceBorders = new GraphicsPath()) {
-                if (scale > 4f || layer != "Политика" || E.S.Provinces.Where((p, i) => p.Owner != W.Regions[i].Country).Any())
-				{
-					for (int m = 0; m < W.Regions.Length; m++)
-					{
-						RegionInfo regionInfo = W.Regions[m];
-						if (!regionInfo.Bounds.IntersectsWith(rect) || (scale <= 4f && layer == "Политика" && E.S.Provinces[m].Owner == regionInfo.Country))
-						{
-							continue;
-						}
-                        // The national base already covers unoccupied political provinces.
-                        // Avoid repainting it thousands of times for imperceptible shade variation.
-                        if (layer != "Политика" || E.S.Provinces[m].Owner != regionInfo.Country) {
-                            using (var brush = new SolidBrush(RegionColor(m))) {
-                                var path = visiblePath(regionInfo); if (path.PointCount > 0) g.FillPath(brush, path);
-                            }
-                        }
-                        if (prefs.RegionBorders && scale > 18f && regionInfo.Bounds.Width * regionInfo.Bounds.Height * scale * scale >= 35) {
-                            var borderPath = visiblePath(regionInfo);
-                            if (borderPath.PointCount > 0) provinceBorders.AddPath(borderPath, false);
-                        }
-					}
-				}
-                g.SmoothingMode = SmoothingMode.None;
-                using (var borderPen = new Pen(Color.FromArgb(64, 64, 79, 76), 0.65f / scale))
-                    if (provinceBorders.PointCount > 0) g.DrawPath(borderPen, provinceBorders);
-                g.SmoothingMode = SmoothingMode.AntiAlias;
-                }
-				mapRasterProfile += " provinces=" + rasterWatch.Elapsed.TotalMilliseconds.ToString("0.0"); rasterWatch.Restart();
-                using (var borders = new GraphicsPath()) {
-                    foreach (var country in W.Countries) if (country.Bounds.IntersectsWith(rect)) {
-                        var path = visiblePath(country); if (path.PointCount > 0) borders.AddPath(path, false);
-                    }
-                    // Rasterize thin atlas boundaries in one pass, avoiding per-country AA strokes.
-                    g.SmoothingMode = SmoothingMode.None;
-                    using (var borderPen = new Pen(Color.FromArgb(91, 103, 91), 1.1f / scale)) if (borders.PointCount > 0) g.DrawPath(borderPen, borders);
-                    g.SmoothingMode = SmoothingMode.AntiAlias;
-                }
-				mapRasterProfile += " borders=" + rasterWatch.Elapsed.TotalMilliseconds.ToString("0.0");
-                g.Transform = transform2;
-				transform2.Dispose();
-			}
-			foreach (var clipped in clippedPaths.Values) clipped.Dispose();
-            mapGeometryMs = terrainWatch.Elapsed.TotalMilliseconds; terrainWatch.Restart();
-            if (prefs.Texture)
-			{
-				using (TextureBrush brush5 = new TextureBrush(terrainTexture, WrapMode.Tile))
-				{
-					g.FillRectangle(brush5, mapRect);
-				}
-			}
-			mapTextureMs = terrainWatch.Elapsed.TotalMilliseconds; terrainWatch.Restart();
-            List<RectangleF> list = new List<RectangleF>();
-			if (prefs.Labels)
-			{
-				RectangleF bounds = default(RectangleF);
-				foreach (int item in from num8 in Enumerable.Range(0, W.Countries.Length)
-					orderby (num8 != E.S.Player) ? ((double)(W.Countries[num8].Bounds.Width * W.Countries[num8].Bounds.Height)) : double.MaxValue descending
-					select num8)
-				{
-					CountryInfo countryInfo4 = W.Countries[item];
-					PointF pt = Screen(countryInfo4.X, countryInfo4.Y);
-					if (mapRect.Contains(pt) && !(countryInfo4.Bounds.Width * scale < 74f) && !(countryInfo4.Bounds.Height * scale < 27f))
-					{
-						string s = countryInfo4.Name.ToUpperInvariant();
-						float num = ((item == E.S.Player) ? 15 : 12);
-						SizeF sizeF = g.MeasureString(s, BookFont(num, bold: true));
-						bounds = new RectangleF(pt.X - sizeF.Width / 2f - 8f, pt.Y - 3f, sizeF.Width + 16f, num + 13f);
-						if (!list.Any((RectangleF b) => b.IntersectsWith(bounds)) && !((double)sizeF.Width > (double)(countryInfo4.Bounds.Width * scale) * 1.35))
-						{
-							list.Add(bounds);
-							Book(g, s, pt.X - sizeF.Width / 2f + 1f, pt.Y + 1f, num, Color.FromArgb(125, 246, 243, 221), bold: true);
-							Book(g, s, pt.X - sizeF.Width / 2f, pt.Y, num, Color.FromArgb(52, 66, 59), bold: true);
-						}
-					}
-				}
-				if (scale > 25f)
-				{
-					RegionInfo[] regions = W.Regions;
-					RectangleF bounds2 = default(RectangleF);
-					foreach (RegionInfo regionInfo2 in regions)
-					{
-						if (!regionInfo2.Bounds.IntersectsWith(rect) || regionInfo2.Bounds.Width * scale < 100f || regionInfo2.Bounds.Height * scale < 44f)
-						{
-							continue;
-						}
-						PointF pointF3 = Screen(regionInfo2.X, regionInfo2.Y);
-						SizeF sizeF2 = g.MeasureString(regionInfo2.Name, F(11f));
-						bounds2 = new RectangleF(pointF3.X - 3f, pointF3.Y + 9f, Math.Min(sizeF2.Width, 150f) + 8f, 22f);
-						if (!list.Any((RectangleF b) => b.IntersectsWith(bounds2)))
-						{
-							list.Add(bounds2);
-							using (SolidBrush brush6 = new SolidBrush(Color.FromArgb(70, 83, 72)))
-							{
-								g.FillEllipse(brush6, pointF3.X - 2f, pointF3.Y + 17f, 3f, 3f);
-							}
-							Txt(g, regionInfo2.Name, pointF3.X + 5f, pointF3.Y + 9f, 11f, Color.FromArgb(66, 80, 68), bold: false, 150f);
-						}
-					}
-				}
-			}
-            mapLabelsMs = terrainWatch.Elapsed.TotalMilliseconds;
-            g.Restore(gstate);
-        }
-
         private void DrawMap(Graphics g)
         {
             var gstate = g.Save();
@@ -1735,13 +1549,8 @@ namespace Sovereign
 				}
 				if (mapRect.Contains(pointF4))
 				{
-					bool flag = army.Owner == E.S.Player;
-					RectangleF rectangleF = new RectangleF(pointF4.X - 26f, pointF4.Y - 14f, 61f, 30f);
-					Round(g, (army.Id == this.army) ? Color.FromArgb(204, 185, 135) : Color.FromArgb(18, 32, 38), rectangleF, 4f);
-					RoundBorder(g, (army.Id == this.army) ? Palette.Gold : Color.FromArgb(92, 113, 111), rectangleF, 4f, 1f);
-					NavIcon(g, 6, rectangleF.X + 5f, rectangleF.Y + 5f, 17f, (army.Id == this.army) ? Palette.Bg : (flag ? Palette.Teal : (E.AtWar(E.S.Player, army.Owner) ? Palette.Red : Palette.Muted)));
-					Txt(g, army.Id.ToString(), rectangleF.X + 29f, rectangleF.Y + 6f, 12f, (army.Id == this.army) ? Palette.Bg : Palette.Text, bold: true);
-					Progress(g, rectangleF.X + 3f, rectangleF.Bottom - 3f, 55f, army.Strength / 100.0, flag ? Palette.Teal : (E.AtWar(E.S.Player, army.Owner) ? Palette.Red : Palette.Muted));
+					RectangleF rectangleF = new RectangleF(pointF4.X - 33f, pointF4.Y - 18f, 70f, 37f);
+                    DrawUnitBadge(g, army, rectangleF);
 					int id = army.Id;
 					int ri = army.Region;
 					hits.Add(new Hit
@@ -1754,7 +1563,7 @@ namespace Sovereign
 							foreign = E.S.Provinces[ri].Owner;
 							Invalidate();
 						},
-						Tip = "Соединение №" + id + ". Выберите его, затем нажмите правой кнопкой по области назначения."
+						Tip = "№" + id + " · " + People(army.Personnel) + " чел. · " + DeploymentRules.Stars(army) + "/5 звёзд готовности · опыт " + army.Experience.ToString("0") + "/100. " + DeploymentRules.Names[(int)DeploymentRules.For(army).Specialty] + ". Передовая " + DeploymentRules.For(army).Front + ", фланги " + DeploymentRules.For(army).Left + "/" + DeploymentRules.For(army).Right + ", резерв " + DeploymentRules.For(army).Reserve + ". ПКМ по области — приказ."
 					});
 				}
 			}

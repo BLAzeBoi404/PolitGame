@@ -168,6 +168,7 @@ namespace Sovereign
             InitializeTechnology(S, false);
             InitializeDoctrines(S);
             InitializeGovernments(S);
+            InitializeOperations(S);
 			Notify("Кабинет сформирован. Проверьте баланс ресурсов и выберите программу развития.");
 			Notify("Учебная модель: современная география; региональная экономика и ресурсы оценочные. Исторические границы пока не включены.");
 			ComputeEconomy(apply: false);
@@ -223,6 +224,7 @@ namespace Sovereign
 				S.Projects.Remove(item);
 			}
 			TickProduction();
+            TickContracts(); TickPublicFleets();
             bool[] network = SupplyNetwork();
             TickManpower(network);
             TickAviation();
@@ -255,9 +257,11 @@ namespace Sovereign
 			double[,] array = new double[num, 8];
 			double[] array2 = new double[num];
 			double[] array3 = new double[num];
-			Province[] provinces = S.Provinces;
-			foreach (Province province in provinces)
+			var reserved = apply ? null : ContractReservations();
+            Province[] provinces = S.Provinces;
+			for (int provinceId = 0; provinceId < provinces.Length; provinceId++)
 			{
+                Province province = provinces[provinceId];
 				int owner = province.Owner;
 				array2[owner] += province.Infrastructure * province.Population;
 				array3[owner] += province.Population;
@@ -265,7 +269,7 @@ namespace Sovereign
 				{
 					ref double reference = ref array[owner, j];
 					double num2 = reference;
-					double num3 = province.Public[j] + province.Private[j];
+					double num3 = province.Public[j] + Math.Max(0, province.Private[j] - (apply ? province.ContractWork[j] / 7 : reserved == null ? 0 : reserved[provinceId, j]));
 					double num4;
 					switch (j)
 					{
@@ -282,7 +286,7 @@ namespace Sovereign
 						num4 = province.Soil;
 						break;
 					}
-					reference = num2 + num3 * num4 * (0.55 + province.Infrastructure / 200.0);
+					reference = num2 + num3 * num4 * (0.55 + ProcurementRules.Infrastructure(province) / 200.0);
 				}
 			}
 			int c;
@@ -379,6 +383,7 @@ namespace Sovereign
 			}
 			if (apply)
 			{
+                foreach (var province in S.Provinces) Array.Clear(province.ContractWork, 0, 8);
 				Trade();
 			}
 			int c2;
@@ -586,8 +591,9 @@ namespace Sovereign
 				}
 			}
 			Province[] provinces = S.Provinces;
-			foreach (Province province in provinces)
+			for (int provinceId = 0; provinceId < provinces.Length; provinceId++)
 			{
+                Province province = provinces[provinceId];
 				Nation nation2 = S.Nations[province.Owner];
 				province.Unrest = Rules.Clamp(100.0 - nation2.Stability - nation2.Repression * 0.15, 0.0, 100.0);
 				double num4 = 0.002 + growthBonus[province.Owner] + (double)nation2.Tech[4] * 0.0006 + nation2.Social * 0.0002 - nation2.Shortage * 0.035 - Math.Max(0.0, nation2.Inflation - 15.0) * 0.0001;
@@ -817,7 +823,8 @@ namespace Sovereign
                 List<Army> list = occupants == null ? new List<Army>() : occupants.Where(d => live.Contains(d) && AtWar(a.Owner, d.Owner)).ToList();
 				if (list.Count > 0)
 				{
-					double num6 = EquipmentRules.CombatPower(a, list[0], false) * GroundCombatFactor(a.Owner, false) * (1 + AirReconBonus(a.Owner, a.Target));
+					a.Experience = Math.Min(100, a.Experience + .5); foreach (var defender in list) defender.Experience = Math.Min(100, defender.Experience + .35);
+                    double num6 = EquipmentRules.CombatPower(a, list[0], false) * GroundCombatFactor(a.Owner, false) * (1 + AirReconBonus(a.Owner, a.Target));
 					double num7 = list.Sum(d => EquipmentRules.CombatPower(d, a, true) * GroundCombatFactor(d.Owner, true) * (1 + AirReconBonus(d.Owner, a.Target))) * 1.15;
 					DamageArmy(a, Rules.Clamp(num7 / Math.Max(1.0, num6) * 9.0, 2.0, 28.0));
 					foreach (Army item in list)
@@ -924,6 +931,7 @@ namespace Sovereign
             if (s.Version == 7) ExpandTechnology(s);
             if (s.Version == 8) InitializeDoctrines(s);
             if (s.Version == 9) InitializeGovernments(s);
+            if (s.Version == 10) InitializeOperations(s);
             Validate(s);
 			S = s;
 			Raise();

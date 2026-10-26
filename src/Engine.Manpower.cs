@@ -49,13 +49,14 @@ namespace Sovereign
             if (n.Treasury < .3 * t.Battalions) return "Для набора нужно " + (.3 * t.Battalions).ToString("0.00") + " млрд.";
             return null;
         }
-        public string CreateTemplate(string name, int battalions)
+        public string CreateTemplate(string name, int battalions, BattleDeployment deployment = null)
         {
             if (string.IsNullOrWhiteSpace(name) || name.Trim().Length > 32 || name.Any(char.IsControl)) return "Название штата: 1–32 печатных символа.";
+            if (!DeploymentRules.Valid(deployment, battalions)) return "Передовая: минимум один батальон. Сумма позиций должна совпадать со штатом.";
             if (battalions < 1 || battalions > 6) return "Штат: от одного до шести батальонов одной основной модели.";
             if (Player.Templates.Count >= 24) return "Достигнут предел: 24 штата.";
             if (Player.Templates.Any(t => string.Equals(t.Name, name.Trim(), StringComparison.OrdinalIgnoreCase))) return "Укажите уникальное название штата.";
-            var template = new FormationTemplate { Id = Player.NextTemplate++, Name = name.Trim(), Battalions = battalions };
+            var template = new FormationTemplate { Id = Player.NextTemplate++, Name = name.Trim(), Battalions = battalions, Deployment = deployment == null ? null : deployment.Copy() };
             Player.Templates.Add(template); Player.ActiveTemplate = template.Id; Raise(); return null;
         }
         public string SelectTemplate(int id)
@@ -104,6 +105,7 @@ namespace Sovereign
                 bool supplied = IsSupplied(a.Owner, a.Region, network);
                 if (supplied && a.Supply >= 60 && S.Provinces[a.Region].Owner == a.Owner) {
                     int replacements = DrawReplacements(a.Owner, ManpowerRules.Establishment(a) - a.Personnel, Math.Max(1, (int)(ManpowerRules.Establishment(a) / 100.0 * (1 + TechnologyRules.Effects(S.Nations[a.Owner]).Replacements))));
+                    if (replacements > 0) a.Experience *= (double)a.Personnel / (a.Personnel + replacements);
                     a.Personnel += replacements;
                     if (replacements > 0) a.Organization = Math.Max(0, a.Organization - replacements * 20.0 / ManpowerRules.Establishment(a));
                 }
@@ -169,9 +171,11 @@ namespace Sovereign
             var d = FindDesign(S.Player, a.DesignId); int delta = t.Battalions - a.Battalions;
             int size = ManpowerRules.GroundSize(a.Design.Kind, t.Battalions, a.Attachments.Count);
             int added = Math.Max(0, size - ManpowerRules.Establishment(a)), released = Math.Max(0, a.Personnel - size);
+            if (added > 0) a.Experience *= (double)a.Personnel / (a.Personnel + added);
             Player.Treasury -= ReorganizationCost(a, t); Player.Recruits += released - added; a.Personnel += added - released;
             if (delta > 0) { d.Stock -= delta; a.Strength = (a.Strength * a.Battalions + delta * 100) / t.Battalions; }
             else if (delta < 0) d.Stock += a.Strength >= 90 ? -delta : (int)Math.Floor(-delta * a.Strength / 100);
+            a.Deployment = t.Deployment == null ? null : t.Deployment.Copy();
             a.Battalions = t.Battalions; a.TemplateId = t.Id; a.TrainingDays = 14 + 3 * Math.Abs(delta); a.Organization = Math.Min(a.Organization, 40);
             DetachFromFront(a.Id); TrimReserve(S.Player);
             Notify("Часть №" + id + " переходит на штат «" + t.Name + "»: " + a.TrainingDays + " дней подготовки."); Raise(); return null;

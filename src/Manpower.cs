@@ -7,6 +7,7 @@ namespace Sovereign
     public class FormationTemplate
     {
         public int Id;
+        public BattleDeployment Deployment;
         public string Name;
         public int Battalions = 1;
     }

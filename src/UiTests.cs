@@ -24,7 +24,8 @@ namespace Sovereign
             var frame = new Bitmap(ClientSize.Width, ClientSize.Height);
             using (var graphics = Graphics.FromImage(frame)) {
                 graphics.Clear(BackColor);
-                OnPaint(new PaintEventArgs(graphics, ClientRectangle));
+                synchronousAtlas = true;
+                try { OnPaint(new PaintEventArgs(graphics, ClientRectangle)); } finally { synchronousAtlas = false; }
             }
             foreach (Control child in Controls) if (child.Visible) {
                 using (var part = new Bitmap(child.Width, child.Height)) {
@@ -39,6 +40,7 @@ namespace Sovereign
             var results = new List<string>(); int failed = 0;
             Action<bool, string> check = (ok, name) => { results.Add((ok ? "PASS " : "FAIL ") + name); if (!ok) failed++; };
             Action<string> preview = p => { PreviewPage(p); detailPanel = menuScreen == "" && page != "Карта"; };
+            prefs.Labels = prefs.RegionBorders = prefs.Texture = true; prefs.LabelDensity = 2; prefs.GraphicsQuality = 2; prefs.FrameLimit = 60; prefs.PerformanceOverlay = false;
             prefs.Autosave = false; prefs.Tutorial = false; prefs.Fullscreen = false; prefs.Bindings = Preferences.DefaultBindings();
             E.AutoSaveEnabled = false;
             Show(); Application.DoEvents();
@@ -132,7 +134,6 @@ namespace Sovereign
             panning = false; using (var frame = RenderFrame()) { }
             check(MapCacheBuilds == buildsBeforeDrag, "Releasing a short drag retains accurate overscanned geography");
             results.Add("Raster stages: " + mapRasterProfile);
-            results.Add("Terrain stages ms: geometry=" + mapGeometryMs.ToString("0.0") + " texture=" + mapTextureMs.ToString("0.0") + " labels=" + mapLabelsMs.ToString("0.0"));
             check(W.Countries.Sum(c => c.DisplayPath(6).PointCount) < W.Countries.Sum(c => c.Path.PointCount), "Overview geometry reduces vertices while retaining exact hit-test paths");
             // Exercise new systems through the real hit regions and keyboard handler.
             foreign = W.ByCode("POL"); preview("Дипломатия");
@@ -167,6 +168,7 @@ namespace Sovereign
             TestExpandedResearchInterface(directory, check, click);
             TestDoctrineInterface(directory, check, click);
             TestGovernmentInterface(directory, check, click);
+            TestOperationsInterface(directory, check, click);
             results.Add("Failures: " + failed); File.WriteAllLines(Path.Combine(directory, "ui-results.txt"), results);
             Console.WriteLine(string.Join(Environment.NewLine, results));
             return failed == 0 ? 0 : 2;
