@@ -1,0 +1,11 @@
+1600x900, Unix / Mono, fixed camera; CPU input + paint times, not display FPS. Autosave disabled.
+Cached political map: mean=3.65 p95=4.57 max=7.06 ms; samples=60
+Hover and exact hit testing: mean=3.65 p95=4.56 max=6.71 ms; samples=60
+Complex selected province: mean=13.46 p95=15.31 max=19.44 ms; samples=30
+Camera drag: mean=3.67 p95=4.37 max=6.77 ms; samples=60
+Camera rebuild: mean=35.14 p95=37.15 max=38.26 ms; samples=12
+Raster stages: coast=0.0 country=17.9 provinces=0.1 borders=7.8
+Geometry=26.7 texture=1.4 labels=2.3 ms
+Resource map advancing daily: mean=6.22 p95=13.16 max=20.78 ms; samples=20
+Seven-day simulation burst: mean=23.28 p95=37.61 max=44.03 ms; samples=20
+Research workspace: mean=6.24 p95=6.87 max=7.81 ms; samples=40

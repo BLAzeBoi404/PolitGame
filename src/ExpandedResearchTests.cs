@@ -52,7 +52,7 @@ namespace Sovereign
                 e.S.Version = 7; foreach (var n in e.S.Nations) { Array.Resize(ref n.ScienceTree.Known, 24); Array.Resize(ref n.ScienceTree.StoredProgress, 30); }
                 string file = Path.Combine(directory, "research-version7.xml"); e.Save(file);
                 var loaded = fresh(); loaded.Load(file); var agenda = loaded.Player.ScienceTree;
-                check(loaded.S.Version == 9 && agenda.Known.Length == 72 && agenda.StoredProgress.Length == 78 && agenda.Known[8] && !agenda.Known.Skip(24).Any(k => k), "Version-seven migration extends research arrays without replacing old discoveries or gifting new ones");
+                check(loaded.S.Version == 10 && agenda.Known.Length == 72 && agenda.StoredProgress.Length == 78 && agenda.Known[8] && !agenda.Known.Skip(24).Any(k => k), "Version-seven migration extends research arrays without replacing old discoveries or gifting new ones");
                 check(agenda.ActiveProject == 6 && loaded.Player.ResearchProgress == 48.25 && agenda.StoredProgress[0] == 17.5 && agenda.Paused && agenda.Queue.Single() == 7 && loaded.Player.Treasury == money && loaded.S.RandomState == random, "Migration preserves active and stored progress, queue, pause, treasury and random state exactly");
                 loaded.PauseResearch(false); loaded.Player.ResearchProgress = 99.9; loaded.S.Day = 6; loaded.Tick();
                 check(agenda.Known[0] && agenda.ActiveProject == 7, "A migrated research queue continues through its original stable project identifiers");

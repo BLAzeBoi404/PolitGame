@@ -1,0 +1,19 @@
+{
+  "version": "0.11.0",
+  "tested_at_utc": "2026-10-26T09:38:47.726585+00:00",
+  "executable_sha256": "309854b46eb435a4d2592c9359d312e619cd063cea68c5c1d4fc2c0ac31f5e9b",
+  "source_sha256": "7b37d42b38fab344233b08263865c92b500940ebfff710a19e00aaa6bb5a47da",
+  "executable_bytes": 3372032,
+  "build": ".NET SDK 8.0.426 / Release net472",
+  "runtime": "Mono 6.12 / Debian 13 / libgdiplus / Xvfb",
+  "native_windows_tested": false,
+  "logic_passed": 493,
+  "ui_passed": 454,
+  "legacy_save": "Uploaded autosave and version 0.10 doctrine fixture each loaded and advanced 30 days without rewriting original",
+  "ui_confirmation_note": "Real WinForms mouse events; modal confirmation answers injected for acceptance and cancellation. Native dialog rendering not tested.",
+  "performance_baseline_commit": "80101c3ad35c34fada5ae4abb54bc901c2d376c4",
+  "baseline_executable_sha256": "f102936340d48ea2d81f63b0f1b19f3d52fbf2a0cf888086588f91759f875545",
+  "baseline_source_sha256": "6473275757cf91323ba5ce201d45d3d60cb6ca7aeb6474309bc74deaadc0aea2",
+  "benchmark_runner_sha256": "9ece91878c42eca561248de96329584c5281cee4ec189fe4e291e2b756193a69",
+  "performance_note": "Initial standalone measurement retained, followed by one sequential 0.10/0.11 pair after functional jobs finished. Baseline is the exact archived tested 0.10 SDK executable, current is the tested 0.11 SDK executable; identical benchmark source. CPU input and paint latency, not display FPS."
+}

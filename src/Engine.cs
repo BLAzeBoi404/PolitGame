@@ -167,6 +167,7 @@ namespace Sovereign
             InitializeNationalPolitics(S);
             InitializeTechnology(S, false);
             InitializeDoctrines(S);
+            InitializeGovernments(S);
 			Notify("Кабинет сформирован. Проверьте баланс ресурсов и выберите программу развития.");
 			Notify("Учебная модель: современная география; региональная экономика и ресурсы оценочные. Исторические границы пока не включены.");
 			ComputeEconomy(apply: false);
@@ -191,6 +192,7 @@ namespace Sovereign
 			S.Day++;
             TickNationalPolitics();
             TickDoctrines();
+            TickGovernments();
 			foreach (Construction item in S.Projects.ToList())
 			{
 				if (--item.Days > 0)
@@ -287,7 +289,7 @@ namespace Sovereign
 			for (c = 0; c < num; c++)
 			{
 				Nation nation = S.Nations[c];
-                var policyEffects = PolicyRules.Effects(nation, S.Day);
+                var policyEffects = GovernmentRules.CombinedEffects(nation, S.Day);
                 var technologyEffects = TechnologyRules.Effects(nation);
 				nation.Population = Math.Max(0.001, array3[c]);
 				nation.Production = new double[8];
@@ -408,7 +410,7 @@ namespace Sovereign
 					nation2.LastPrice = num20;
 				}
 				double num25 = nation2.GDP / 52.0;
-				nation2.Revenue = num25 * (nation2.Tax / 100.0) * (0.82 - nation2.Repression * 0.001) * PolicyRules.Effects(nation2, S.Day).RevenueFactor;
+				nation2.Revenue = num25 * (nation2.Tax / 100.0) * (0.82 - nation2.Repression * 0.001) * GovernmentRules.CombinedEffects(nation2, S.Day).RevenueFactor;
 				nation2.Spending = num25 * (0.08 + (nation2.Social + nation2.Science + nation2.Military) / 100.0) + nation2.Debt * nation2.Interest / 100.0 / 52.0 + armyBudget[c2];
 				nation2.TradeBalance = nation2.Exports - nation2.Imports;
 				if (!apply)
@@ -557,10 +559,10 @@ namespace Sovereign
 			for (int i = 0; i < S.Nations.Length; i++)
 			{
 				Nation nation = S.Nations[i];
-				double num = Rules.Clamp(65.0 + nation.Social * 2.0 - nation.Tax * 0.5 - nation.Unemployment * 0.3 - nation.Shortage * 55.0 - Math.Max(0.0, nation.Inflation - 5.0) * 0.4 - nation.Repression * 0.16 - (int)nation.Conscription * 2 + PolicyRules.Effects(nation, S.Day).Approval, 5.0, 95.0);
+				double num = Rules.Clamp(65.0 + nation.Social * 2.0 - nation.Tax * 0.5 - nation.Unemployment * 0.3 - nation.Shortage * 55.0 - Math.Max(0.0, nation.Inflation - 5.0) * 0.4 - nation.Repression * 0.16 - (int)nation.Conscription * 2 + GovernmentRules.CombinedEffects(nation, S.Day).Approval, 5.0, 95.0);
 				nation.Living = Rules.Clamp(nation.Living + (num - nation.Living) * 0.025, 5.0, 95.0);
 				nation.Approval += (num - nation.Approval) * 0.07;
-				double num2 = Rules.Clamp(nation.Approval + nation.Repression * 0.22 - (double)(S.Wars.Skip(i * S.Nations.Length).Take(S.Nations.Length).Count((bool x) => x) * 4), 3.0, 96.0);
+				double num2 = Rules.Clamp(nation.Approval + GovernmentRules.StabilityTarget(nation) + nation.Repression * 0.22 - (double)(S.Wars.Skip(i * S.Nations.Length).Take(S.Nations.Length).Count((bool x) => x) * 4), 3.0, 96.0);
 				nation.Stability += (num2 - nation.Stability) * 0.06;
 				nation.Education = Rules.Clamp(nation.Education + (nation.Science - 1.0) * 0.015, 10.0, 98.0);
 				if (nation.Stability < 26.0 && S.Random() < (26.0 - nation.Stability) / 150.0)
@@ -640,6 +642,7 @@ namespace Sovereign
 				}
 				PlanNationalPolicy(c);
                 PlanDoctrines(c);
+                PlanGovernment(c);
                 PlanManpower(c);
                 EquipmentAI(c, list);
                 PlanResearch(c);
@@ -920,6 +923,7 @@ namespace Sovereign
             if (s.Version == 6) InitializeTechnology(s, true);
             if (s.Version == 7) ExpandTechnology(s);
             if (s.Version == 8) InitializeDoctrines(s);
+            if (s.Version == 9) InitializeGovernments(s);
             Validate(s);
 			S = s;
 			Raise();

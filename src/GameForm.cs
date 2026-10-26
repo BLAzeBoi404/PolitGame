@@ -125,7 +125,7 @@ namespace Sovereign
             InitializeAtlasColors();
 			E = new Engine(world);
 			base.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-			Text = "SOVEREIGN — Государство · 0.10";
+			Text = "SOVEREIGN — Государство · 0.11";
 			BackColor = Palette.Bg;
 			ForeColor = Palette.Text;
 			base.AutoScaleMode = AutoScaleMode.None;
@@ -257,7 +257,7 @@ namespace Sovereign
 		private void Navigate(string p)
 		{
 			page = p;
-            aviationPage = false; manpowerPage = false; nationalPolicyPage = false; doctrinePage = false;
+            aviationPage = false; manpowerPage = false; nationalPolicyPage = false; doctrinePage = false; governmentPage = false;
             detailPanel = p == "Конструктор";
 			scroll = 0;
 			hoveredTip = "";
@@ -375,7 +375,7 @@ namespace Sovereign
 			}
 			else if (page == "Политика")
 			{
-				if (nationalPolicyPage) DrawNationalPolitics(g); else DrawPolitics(g);
+				if (governmentPage) DrawGovernment(g); else if (nationalPolicyPage) DrawNationalPolitics(g); else DrawPolitics(g);
 			}
 			else
 			{
@@ -768,6 +768,8 @@ namespace Sovereign
             if (aviationPage || manpowerPage) page = "Армия";
             doctrinePage = p == "Доктрины";
             if (doctrinePage) { page = "Исследования"; detailPanel = true; }
+            governmentPage = p == "Государство";
+            if (governmentPage) { page = "Политика"; detailPanel = true; }
             nationalPolicyPage = p == "Решения" || p == "События";
             if (nationalPolicyPage) { page = "Политика"; detailPanel = true; policyTab = p == "События" ? 1 : 0; }
             if (p == "Серии") { page = "Производство"; equipmentProduction = true; }
@@ -1233,7 +1235,7 @@ namespace Sovereign
 			Txt(g, "государств и территорий", num2 + 22f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "областей", num2 + 175f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "ЭКОНОМИКА  /  ДИПЛОМАТИЯ  /  ТЕХНОЛОГИИ  /  СТРАТЕГИЯ", num, VH - 59f, 12f, Palette.Muted);
-			Txt(g, "0.10   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
+			Txt(g, "0.11   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
 		}
 
 

@@ -128,7 +128,7 @@ namespace Sovereign
                 Nation n = S.Nations[owner];
                 int available = Math.Min(500, (int)Math.Floor(capacity[owner]));
                 var technology = TechnologyRules.Effects(n);
-                double policyFactor = PolicyRules.Effects(n, S.Day).EquipmentFactor * (1 + technology.Equipment);
+                double policyFactor = GovernmentRules.CombinedEffects(n, S.Day).EquipmentFactor * (1 + technology.Equipment);
                 foreach (var line in n.Lines) {
                     if (!line.Active) continue;
                     available -= line.Factories;

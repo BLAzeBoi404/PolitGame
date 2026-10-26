@@ -97,7 +97,7 @@ namespace Sovereign
             var n = S.Nations[owner]; if (n.Science <= 0) return 0;
             double work = project < 6 ? 1 : TechnologyRules.Catalog[project - 6].Work;
             return (1 + n.Science * .7) * (n.Education / 60) / (1 + n.Tech[TechnologyRules.Branch(project)] * .18) / work
-                * PolicyRules.Effects(n, S.Day).ResearchFactor * (1 + TechnologyRules.Effects(n).Research);
+                * GovernmentRules.CombinedEffects(n, S.Day).ResearchFactor * (1 + TechnologyRules.Effects(n).Research);
         }
         public string ResearchStatus(int owner)
         {

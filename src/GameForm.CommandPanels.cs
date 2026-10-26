@@ -74,7 +74,8 @@ namespace Sovereign
                 LedgerRow(g, "Стабильность", Num(n.Stability) + "%", 166, Palette.Teal);
                 LedgerRow(g, "Одобрение", Num(n.Approval) + "%", 195);
                 LedgerRow(g, "Уровень жизни", Num(n.Living) + " / 100", 224);
-                Button(g, "Решения и события →", 20, 254, w, () => OpenNationalPolicy(), false, "Программы кабинета, повестка и действующие меры", 32);
+                Button(g, "Решения и события →", 20, 254, 166, () => OpenNationalPolicy(), false, "Программы кабинета, повестка и действующие меры", 32);
+                GovernmentLink(g, 194, 254, 182);
                 CompactSection(g, "БЮДЖЕТ И ГОСУДАРСТВО", 303);
                 CompactPolicy(g, "Налоги", n.Tax, 350, v => n.Tax = v, 5, 50, 1, "Высокие налоги сдерживают инвестиции.");
                 CompactPolicy(g, "Социальные расходы", n.Social, 433, v => n.Social = v, 0, 15, .5, "Поддерживают уровень жизни и одобрение.");
@@ -177,7 +178,8 @@ namespace Sovereign
                 var line = lines[i]; var b = E.FindDesign(E.S.Player, line.DesignId).Blueprint;
                 Button(g, b.Name + "  " + line.Completed + "/" + line.Quantity, x + 12, y + 150 + i * 29, w - 24, () => { equipmentProduction = true; Navigate("Производство"); }, false, E.ProductionStatus(E.S.Player, line), 25);
             }
-            Button(g, n.Politics.Pending == null ? "Программы кабинета →" : "Событие: " + PolicyRules.Events[(int)n.Politics.Pending.Kind].Name, x + 12, y + 208, w - 24, () => OpenNationalPolicy(n.Politics.Pending == null ? 0 : 1), n.Politics.Pending != null, "Национальные решения и события", 28); hits[hits.Count - 1].Label = "policy:outliner";
+            bool convention = n.Politics.Pending == null && n.Government.Target >= 0 && n.Government.Phase == 1;
+            Button(g, convention ? "Реформа ждёт решения →" : n.Politics.Pending == null ? "Программы кабинета →" : "Событие: " + PolicyRules.Events[(int)n.Politics.Pending.Kind].Name, x + 12, y + 208, w - 24, () => { if (convention) OpenGovernment(true); else OpenNationalPolicy(n.Politics.Pending == null ? 0 : 1); }, convention || n.Politics.Pending != null, "Национальные решения, события и государственная реформа", 28); hits[hits.Count - 1].Label = convention ? "government:outliner" : "policy:outliner";
             Txt(g, "СОЕДИНЕНИЯ", x + 14, y + 246, 9, Palette.Gold, true);
             var units = E.S.Armies.Where(a => a.Owner == E.S.Player).Take(3).ToList();
             for (int i = 0; i < units.Count; i++) {

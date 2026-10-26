@@ -7,6 +7,7 @@ namespace Sovereign
 		public double Treasury;
         public NationalPolitics Politics;
         public DoctrineState Doctrines;
+        public GovernmentState Government;
         public int Recruits;
         public long Mobilized, Discharged, PersonnelLosses;
         public ConscriptionLaw Conscription;

@@ -166,6 +166,7 @@ namespace Sovereign
             TestResearchInterface(directory, check, click);
             TestExpandedResearchInterface(directory, check, click);
             TestDoctrineInterface(directory, check, click);
+            TestGovernmentInterface(directory, check, click);
             results.Add("Failures: " + failed); File.WriteAllLines(Path.Combine(directory, "ui-results.txt"), results);
             Console.WriteLine(string.Join(Environment.NewLine, results));
             return failed == 0 ? 0 : 2;

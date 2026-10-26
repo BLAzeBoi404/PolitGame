@@ -23,7 +23,7 @@ namespace Sovereign
             Action<Engine, string> rawSave = (e, p) => { using (var s = File.Create(p)) new XmlSerializer(typeof(Campaign)).Serialize(s, e.S); };
             scenario("Technology catalog and switching", () => {
                 var e = fresh(); var n = e.Player; var a = n.ScienceTree;
-                check(e.S.Version == 9 && e.S.Nations.All(c => c.ScienceTree != null && !c.ScienceTree.Known.Any(k => k) && c.ScienceTree.LegacyLevels.All(l => l == 0)), "New campaigns initialize independent research agendas without granting applied discoveries");
+                check(e.S.Version == 10 && e.S.Nations.All(c => c.ScienceTree != null && !c.ScienceTree.Known.Any(k => k) && c.ScienceTree.LegacyLevels.All(l => l == 0)), "New campaigns initialize independent research agendas without granting applied discoveries");
                 var reached = new bool[TechnologyRules.Count]; var levels = Enumerable.Repeat(7, 6).ToArray();
                 for (int pass = 0; pass < TechnologyRules.Count; pass++) foreach (var d in TechnologyRules.Catalog) if (TechnologyRules.Requirements(d.Id + 6, levels, reached) == null) reached[d.Id] = true;
                 check(reached.All(k => k) && TechnologyRules.Catalog.Select(d => d.Id).SequenceEqual(Enumerable.Range(0, TechnologyRules.Count)), "All 72 technologies are reachable through an acyclic prerequisite graph");
@@ -151,7 +151,7 @@ namespace Sovereign
                 double money = n.Treasury; uint rng = e.S.RandomState; var caps = Enumerable.Range(0, 8).Select(i => Math.Min(8, 2 + n.Tech[TechnologyRules.ModuleBranch(i)])).ToArray();
                 e.S.Version = 6; foreach (var c in e.S.Nations) c.ScienceTree = null;
                 string file = Path.Combine(directory, "research-v6.xml"); rawSave(e, file); var loaded = fresh(); loaded.Load(file);
-                check(loaded.S.Version == 9 && loaded.Player.ScienceTree.ActiveProject == 2 && loaded.Player.ResearchProgress == 47.125 && loaded.Player.Treasury == money && loaded.S.RandomState == rng, "Version-six migration preserves active fundamental progress, treasury and deterministic random state");
+                check(loaded.S.Version == 10 && loaded.Player.ScienceTree.ActiveProject == 2 && loaded.Player.ResearchProgress == 47.125 && loaded.Player.Treasury == money && loaded.S.RandomState == rng, "Version-six migration preserves active fundamental progress, treasury and deterministic random state");
                 check(caps.SequenceEqual(Enumerable.Range(0, 8).Select(i => TechnologyRules.ModuleCap(loaded.Player, i))) && !loaded.Player.ScienceTree.Known.Any(k => k), "Legacy migration preserves all previously available module levels without gifting applied technologies");
                 loaded.Validate(loaded.S);
             });

@@ -133,7 +133,7 @@ namespace Sovereign
                 try { loaded.Validate(loaded.S); } catch (InvalidDataException) { rejected = true; }
                 check(rejected, "Save validator rejects a broken formation template reference");
                 var legacy = fresh(); legacy.S.Version = 4; legacy.Save(path); loaded.Load(path);
-                check(loaded.S.Version == 9 && loaded.S.Armies.Count == legacy.S.Armies.Count && loaded.Player.Designs[0].Stock == legacy.Player.Designs[0].Stock && conserved(loaded), "Version-four migration preserves units and equipment while initializing a balanced personnel ledger");
+                check(loaded.S.Version == 10 && loaded.S.Armies.Count == legacy.S.Armies.Count && loaded.Player.Designs[0].Stock == legacy.Player.Designs[0].Stock && conserved(loaded), "Version-four migration preserves units and equipment while initializing a balanced personnel ledger");
                 int pol = world.ByCode("POL"); e = fresh(); e.Diplomacy(pol, 3); var n = e.S.Nations[pol]; reserve(n, 0); n.Treasury = 100; n.Stability = 80;
                 e.PlanManpower(pol); check(n.Conscription == ConscriptionLaw.Limited && conserved(e), "Wartime AI raises conscription under the same costs and restrictions");
                 for (int i = 0; i < 730; i++) { e.Tick(); if (i % 30 == 0) e.Validate(e.S); }

@@ -17,7 +17,7 @@ namespace Sovereign
         public void Validate(Campaign s)
         {
             int nations = World.Countries.Length, regions = World.Regions.Length;
-            if (s == null || (s.Version < 1 || s.Version > 9) || s.Nations == null || s.Nations.Length != nations || s.Provinces == null || s.Provinces.Length != regions
+            if (s == null || (s.Version < 1 || s.Version > 10) || s.Nations == null || s.Nations.Length != nations || s.Provinces == null || s.Provinces.Length != regions
                 || s.Player < 0 || s.Player >= nations || s.StartYear < 1940 || s.StartYear > 2026 || s.Day < 0 || s.Day > 2000000 || s.RandomState == 0
                 || s.Difficulty < 0 || s.Difficulty > 2) throw new InvalidDataException("Несовместимое сохранение кампании.");
             int pairs = nations * nations;
@@ -53,6 +53,7 @@ namespace Sovereign
                 if (s.Version >= 6) ValidateNationalPolitics(n, s);
                 if (s.Version >= 7) ValidateTechnology(n, s.Version);
                 if (s.Version >= 9) ValidateDoctrines(n, s);
+                if (s.Version >= 10) ValidateGovernment(n, s);
                 if (s.Version >= 5) {
                     if (!Enum.IsDefined(typeof(ConscriptionLaw), n.Conscription) || n.Recruits < 0 || n.Recruits > 1000000000 || n.LawChangedDay < -90 || n.LawChangedDay > s.Day
                         || n.Mobilized < 0 || n.Discharged < 0 || n.PersonnelLosses < 0 || n.Mobilized > 1000000000000000L || n.Discharged > n.Mobilized || n.PersonnelLosses > n.Mobilized)

@@ -179,6 +179,7 @@ namespace Sovereign
             ResearchTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
             ExpandedResearchTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
             DoctrineTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
+            GovernmentTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
 			report.Add("Simulated days: " + e.S.Day + "; wall seconds: " + stopwatch.Elapsed.TotalSeconds.ToString("0.00"));
 			report.Add("Countries: " + w.Countries.Length + "; regions: " + w.Regions.Length);
 			report.Add("Failures: " + failures);

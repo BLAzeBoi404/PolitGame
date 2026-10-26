@@ -16,6 +16,7 @@ namespace Sovereign
         }
         private void ObservePolicyIncident()
         {
+            if (ObserveGovernmentConvention()) return;
             if (E.S == null || E.S.Nations == null || E.Player.Politics == null) return;
             if (!ReferenceEquals(observedPolicyCampaign, E.S)) { observedPolicyCampaign = E.S; lastPolicyIncident = 0; }
             var incident = E.Player.Politics.Pending;
@@ -38,6 +39,7 @@ namespace Sovereign
             for (int i = 0; i < tabs.Length; i++) {
                 int tab = i; Button(g, tabs[i], 28 + i * 211, 223, 199, () => { policyTab = tab; scroll = 0; Invalidate(); }, policyTab == i, tabs[i], 35); hits[hits.Count - 1].Label = "policy:tab:" + i;
             }
+            GovernmentLink(g, 661, 224, 190);
             Button(g, "Бюджет и налоги →", VW - 235, 223, 207, () => Navigate("Политика"), false, "Вернуться к бюджетным регуляторам", 35);
             if (policyTab == 0) DrawNationalDecisions(g); else if (policyTab == 1) DrawPolicyIncident(g); else DrawPolicyModifiers(g);
         }
@@ -111,7 +113,7 @@ namespace Sovereign
             foreach (var d in n.Politics.Decisions.Where(d => d.ActiveUntil > E.S.Day)) rows.Add(Tuple.Create(PolicyRules.Decisions[(int)d.Kind].Name, EffectSummary(PolicyRules.Decisions[(int)d.Kind].Effects), d.ActiveUntil));
             foreach (var m in n.Politics.Modifiers.Where(m => m.UntilDay > E.S.Day)) rows.Add(Tuple.Create(PolicyRules.Modifiers[(int)m.Kind].Name, PolicyRules.Modifiers[(int)m.Kind].Description, m.UntilDay));
             Book(g, "Действующие меры / " + rows.Count, 28, 288, 27, Palette.Text, true);
-            Para(g, "Изменения одноимённых показателей складываются. Призыв, бюджет и технологии учитываются отдельно. При окончании срока эффект снимается автоматически.", 29, 333, w, 49, 14);
+            Para(g, "Изменения одноимённых показателей складываются. Государственный строй, призыв, бюджет и технологии учитываются отдельно. При окончании срока эффект снимается автоматически.", 29, 333, w, 49, 14);
             int count = Math.Max(1, (int)((VH - 506) / 82)); int offset = Math.Min(scroll, Math.Max(0, rows.Count - count));
             if (rows.Count == 0) Txt(g, "Временных мер пока нет.", 29, 409, 18, Palette.Muted);
             for (int i = offset; i < Math.Min(rows.Count, offset + count); i++) {
