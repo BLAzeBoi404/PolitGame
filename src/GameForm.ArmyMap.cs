@@ -60,16 +60,17 @@ namespace Sovereign
                     // Draw only the selected unit's route; hundreds of overlapping routes
                     // do not obscure the atlas or allocate arrow caps every frame.
                     if (chosen && unit.Owner == E.S.Player) using (var pen = new Pen(Palette.Gold,1.7f)) using (var cap = new AdjustableArrowCap(3,4)) {
-                        pen.DashStyle = DashStyle.Dash; pen.CustomEndCap = cap; g.DrawLine(pen,position,target);
-                        foreach (int stop in unit.Route) { var next=Screen(W.Regions[stop].X,W.Regions[stop].Y); g.DrawLine(pen,target,next); target=next; }
+                        pen.DashStyle = DashStyle.Dash; pen.CustomEndCap = cap;
+                        if(gpuRecordingWorld)MapPolyline(g,Palette.Gold,1.7f,new[]{position,target},true,true);else g.DrawLine(pen,position,target);
+                        foreach (int stop in unit.Route) {var next=Screen(W.Regions[stop].X,W.Regions[stop].Y);if(gpuRecordingWorld)MapPolyline(g,Palette.Gold,1.7f,new[]{target,next},true,true);else g.DrawLine(pen,target,next);target=next;}
                     }
                 }
-                if (!mapRect.Contains(position)) continue;
+                if (!(gpuRecordingWorld?GpuWorldVisible(position):mapRect.Contains(position))) continue;
                 var bounds = new RectangleF(position.X-34,position.Y-18,70,37);
                 int badgeId = group.Units.Count == 1 ? unit.Id : -1-unit.Owner*W.Regions.Length-unit.Region;
                 DrawUnitBadge(g,unit,bounds,group.Personnel,group.Units.Count,group.Stars,badgeId,chosen);
                 var captured = group;
-                hits.Add(new Hit { Rect = RectangleF.Intersect(bounds,mapRect), Label = "army-group:"+badgeId, Tip = group.Tip, Action = () => {
+                hits.Add(new Hit { Rect = gpuRecordingWorld?bounds:RectangleF.Intersect(bounds,mapRect), Label = "army-group:"+badgeId, Tip = group.Tip, Action = () => {
                     int index = captured.Units.FindIndex(a => a.Id == army); var next = captured.Units[(index + 1) % captured.Units.Count];
                     army = next.Id; selected = next.Region; foreign = next.Owner; Invalidate();
                 } });

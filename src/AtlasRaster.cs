@@ -27,6 +27,22 @@ namespace Sovereign
     }
     internal static class AtlasRaster
     {
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<Land[],float[]> textWidths = new System.Runtime.CompilerServices.ConditionalWeakTable<Land[],float[]>();
+        internal static void PrepareText(Land[] countries,Land[] regions)
+        {
+            PrepareText(countries,true);PrepareText(regions,false);
+        }
+        private static float[] PrepareText(Land[] lands,bool countries)
+        {
+            return textWidths.GetValue(lands,key=>{
+                var widths=new float[key.Length];
+                using(var b=new Bitmap(1,1))using(var g=Graphics.FromImage(b))using(var font=new Font(countries?"Georgia":"Segoe UI",countries?12:11,countries?FontStyle.Bold:FontStyle.Regular,GraphicsUnit.Pixel)) {
+                    g.TextRenderingHint=TextRenderingHint.AntiAliasGridFit;
+                    for(int i=0;i<key.Length;i++)widths[i]=g.MeasureString(countries?key[i].Name.ToUpperInvariant():key[i].Name,font).Width;
+                }
+                return widths;
+            });
+        }
         public static Bitmap Render(AtlasScene scene)
         {
             var timer = System.Diagnostics.Stopwatch.StartNew();
@@ -79,16 +95,15 @@ namespace Sovereign
         {
             if(s.Labels==0 || s.Overview)return new AtlasLabel[0];
             var labels=new List<AtlasLabel>();var cells=new Dictionary<long,List<RectangleF>>();float ratio=s.PixelScale/s.Zoom;
-            using(var bitmap=new Bitmap(1,1))using(var g=Graphics.FromImage(bitmap))
-            using(var countryFont=new Font("Georgia",12*ratio,FontStyle.Bold,GraphicsUnit.Pixel))
-            using(var regionFont=new Font("Segoe UI",11*ratio,FontStyle.Regular,GraphicsUnit.Pixel)) {
-                g.TextRenderingHint=TextRenderingHint.AntiAliasGridFit;
+            {
                 for(int pass=0;pass<(s.Labels==2&&s.Zoom>25?2:1);pass++) {
-                    var lands=pass==0?s.Countries:s.Regions;var font=pass==0?countryFont:regionFont;
-                    foreach(var land in lands) {
+                    var lands=pass==0?s.Countries:s.Regions;
+                    var widths=PrepareText(lands,pass==0);
+                    for(int index=0;index<lands.Length;index++) {
+                        var land=lands[index];
                         if(land.Bounds.Width*s.Zoom<(pass==0?74:100)||land.Bounds.Height*s.Zoom<(pass==0?27:44))continue;
                         string text=pass==0?land.Name.ToUpperInvariant():land.Name;
-                        float width=Math.Min(g.MeasureString(text,font).Width+6,190*ratio);
+                        float width=Math.Min((widths[index]+6)*ratio,190*ratio);
                         var box=new RectangleF((float)land.X*s.PixelScale-width/2,(float)land.Y*s.PixelScale,width,20*ratio);
                         int x0=(int)Math.Floor(box.Left/256),x1=(int)Math.Floor(box.Right/256),y0=(int)Math.Floor(box.Top/256),y1=(int)Math.Floor(box.Bottom/256);
                         bool overlap=false;

@@ -1,0 +1,3 @@
+PASS 0.13-fixture: original SHA-256 preserved 7aab146beccf46bc0153ba314152b0b53c653b49e6f2b81ec13a12f300ffcc7d
+PASS supplied-autosave: original SHA-256 preserved b0e33973010d0464517eff78928ec84e842aa0ca5f30eb684da0fe36b8fce1cc
+PASS benchmark-settings: original SHA-256 preserved 1c5d65827a2ba185f2c89d36e6a5892c0f6efc60afed962a0b9f6e025c000e81

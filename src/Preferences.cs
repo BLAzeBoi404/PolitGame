@@ -19,14 +19,16 @@ namespace Sovereign
 		public bool Texture = true;
 
 		public bool Fullscreen;
-        public int WindowWidth = 1540, WindowHeight = 900, FrameLimit = 60;
+        public int WindowWidth = 1540, WindowHeight = 900, FrameLimit = -1;
+        public int Renderer; // 0: GPU when available; 1: compatibility GDI+
         public int GraphicsQuality = 2, LabelDensity = 2;
         public bool PerformanceOverlay;
         public void NormalizeDisplay()
         {
             WindowWidth = Math.Max(1000, Math.Min(7680, WindowWidth));
             WindowHeight = Math.Max(640, Math.Min(4320, WindowHeight));
-            if (FrameLimit != 0 && FrameLimit != 30 && FrameLimit != 60 && FrameLimit != 90 && FrameLimit != 120) FrameLimit = 60;
+            if (FrameLimit != -1 && FrameLimit != 0 && FrameLimit != 30 && FrameLimit != 60 && FrameLimit != 90 && FrameLimit != 120 && FrameLimit != 144 && FrameLimit != 165 && FrameLimit != 240) FrameLimit = 60;
+            Renderer = Renderer == 1 ? 1 : 0;
             GraphicsQuality = Math.Max(0, Math.Min(2, GraphicsQuality));
             LabelDensity = Math.Max(0, Math.Min(2, LabelDensity));
         }

@@ -19,7 +19,7 @@ namespace Sovereign
             if (next) { gameCx = cx; gameCy = cy; gameScale = scale; cx = setupCx; cy = setupCy; scale = setupScale; }
             else { setupCx = cx; setupCy = cy; setupScale = scale; cx = gameCx; cy = gameCy; scale = gameScale; }
             atlasCamera = next; hoveredCountry = -1; hoveredRegion = -1;
-            panning = false; moved = false; Capture = false;
+            panning = false; moved = false; CapturePointer(false);
         }
         private bool MapInputAllowed(Point point)
         {
@@ -75,6 +75,7 @@ namespace Sovereign
         private void DrawCampaignSetup(Graphics g)
         {
             mapRect = new RectangleF(0, 82, VW, VH - 124);
+            if(!gpuCapturingHud) {
             var state = g.Save(); g.SetClip(mapRect); DrawCachedMap(g);
             g.TranslateTransform(mapRect.X + mapRect.Width / 2, mapRect.Y + mapRect.Height / 2);
             g.ScaleTransform(scale, scale); g.TranslateTransform(-cx, -cy);
@@ -84,6 +85,7 @@ namespace Sovereign
                 using (var pen = new Pen(id == menuCountry ? Color.FromArgb(96, 66, 28) : Color.FromArgb(220, 225, 200), (id == menuCountry ? 2.4f : 1.5f) / scale)) g.DrawPath(pen, path);
             }
             g.Restore(state);
+            }
             Fill(g, Palette.Panel, 0, 0, VW, 82); Line(g, Palette.Gold, 0, 81, VW, 81);
             Button(g, "← Главное меню", 18, 23, 170, () => OpenMenu("main"));
             Book(g, "АТЛАС ГОСУДАРСТВ", 220, 20, 25, Palette.Text, true);

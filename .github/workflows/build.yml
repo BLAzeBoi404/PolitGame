@@ -23,14 +23,18 @@ jobs:
           path: |
             bin/Release/net472/Sovereign.exe
             bin/Release/net472/Sovereign.exe.config
+            bin/Release/net472/OpenTK*
+            lib/OpenTK-LICENSE.txt
             artifacts/tests-windows.txt
   linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: sudo apt-get update && sudo apt-get install -y mono-devel libgdiplus xvfb xauth fonts-dejavu-core
+      - run: sudo apt-get update && sudo apt-get install -y mono-devel libgdiplus xvfb xauth fonts-dejavu-core libgl1-mesa-dri libglx-mesa0
       - name: Simulation and real WinForms UI tests
         run: bash scripts/test.sh --ui
+      - name: GPU compositor and asynchronous simulation (Mesa software driver)
+        run: bash scripts/with-display.sh mono build/Sovereign.exe --gpu-test artifacts/gpu
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -38,4 +42,5 @@ jobs:
           path: |
             artifacts/tests.txt
             artifacts/ui/
+            artifacts/gpu/
             artifacts/simulation-performance.txt

@@ -110,12 +110,12 @@ namespace Sovereign
         protected override void OnMouseCaptureChanged(EventArgs e)
         {
             base.OnMouseCaptureChanged(e);
-            if (!Capture) { researchDragging = false; panning = false; }
+            if (!PointerCaptured) { researchDragging = false; panning = false; }
         }
         private bool ResearchMouseDown(MouseEventArgs e)
         {
             var point = Logical(e.Location); if (!ResearchCanvasActive || !researchViewport.Contains(point) || e.Button != MouseButtons.Left) return false;
-            researchDragging = true; researchMoved = false; researchOrigin = researchLast = point; Capture = true; return true;
+            researchDragging = true; researchMoved = false; researchOrigin = researchLast = point; CapturePointer(true); return true;
         }
         private bool ResearchMouseMove(MouseEventArgs e)
         {
@@ -127,7 +127,7 @@ namespace Sovereign
         private bool ResearchMouseUp()
         {
             if (!researchDragging && !researchMoved) return false;
-            bool movedTree = researchMoved; researchDragging = false; researchMoved = false; Capture = false; return movedTree;
+            bool movedTree = researchMoved; researchDragging = false; researchMoved = false; CapturePointer(false); return movedTree;
         }
         private bool ResearchMouseWheel(MouseEventArgs e)
         {

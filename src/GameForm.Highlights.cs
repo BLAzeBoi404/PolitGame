@@ -46,6 +46,7 @@ namespace Sovereign
                 }
                 cached = new HighlightSurface { Image = bitmap, Bounds = bounds }; highlightSurfaces[key] = cached;
             }
+            if(gpuRecordingWorld){var point=Screen(cached.Bounds.X,cached.Bounds.Y);RecordImage(cached.Image,new RectangleF(point.X*UiScale,point.Y*UiScale,cached.Bounds.Width*scale*UiScale,cached.Bounds.Height*scale*UiScale),false);return;}
             var state = g.Save(); g.ResetTransform(); PointF position = Screen(cached.Bounds.X, cached.Bounds.Y);
             g.DrawImageUnscaled(cached.Image, (int)System.Math.Round(position.X * UiScale), (int)System.Math.Round(position.Y * UiScale)); g.Restore(state);
         }

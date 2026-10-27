@@ -61,21 +61,21 @@ namespace Sovereign
                             double lon2 = lon + Math.Atan2(Math.Sin(bearing) * Math.Sin(distance) * Math.Cos(lat), Math.Cos(distance) - Math.Sin(lat) * Math.Sin(lat2));
                             ring[i] = Screen(lon2 * 180 / Math.PI, -lat2 * 180 / Math.PI);
                         }
-                        g.DrawLines(radius, ring);
+                        MapPolyline(g,radius.Color,radius.Width,ring,true);
                     }
                 }
                 if (wing.Mission != AirMission.Reserve && wing.Target >= 0) {
                     var target = Screen(W.Regions[wing.Target].X, W.Regions[wing.Target].Y);
-                    using (var line = new Pen(Palette.Gold, 1.5f)) { line.DashStyle = DashStyle.Dash; g.DrawLine(line, basePoint, target); g.DrawEllipse(line, target.X - 7, target.Y - 7, 14, 14); }
+                    using (var line = new Pen(Palette.Gold, 1.5f)) { line.DashStyle = DashStyle.Dash; MapPolyline(g,line.Color,line.Width,new[]{basePoint,target},true); MapEllipse(g,line.Color,line.Width,new RectangleF(target.X-7,target.Y-7,14,14)); }
                 }
                 var rect = new RectangleF(basePoint.X - 16, basePoint.Y - 43, 34, 24);
-                if (!mapRect.IntersectsWith(rect)) continue;
+                if (!(gpuRecordingWorld?GpuWorldVisible(basePoint):mapRect.IntersectsWith(rect))) continue;
                 Fill(g, wing.Id == selectedAirWing && aviationPage ? Palette.Selected : Palette.Panel, rect.X, rect.Y, rect.Width, rect.Height);
                 // Original top-view aircraft symbol, independent of installed symbol fonts.
                 Line(g, Palette.Gold, basePoint.X, rect.Y + 4, basePoint.X, rect.Bottom - 3, 2);
                 Line(g, Palette.Gold, basePoint.X - 12, rect.Y + 14, basePoint.X + 12, rect.Y + 14, 2);
                 Line(g, Palette.Gold, basePoint.X - 5, rect.Bottom - 4, basePoint.X + 5, rect.Bottom - 4);
-                hits.Add(new Hit { Rect = RectangleF.Intersect(rect, mapRect), Label = "air:" + wing.Id, Action = () => { selectedAirWing = wing.Id; selected = wing.BaseRegion; OpenAviation(); }, Tip = wing.Design.Name + " · " + E.AirStatus(wing) });
+                hits.Add(new Hit { Rect = gpuRecordingWorld?rect:RectangleF.Intersect(rect, mapRect), Label = "air:" + wing.Id, Action = () => { selectedAirWing = wing.Id; selected = wing.BaseRegion; OpenAviation(); }, Tip = wing.Design.Name + " · " + E.AirStatus(wing) });
             }
         }
     }

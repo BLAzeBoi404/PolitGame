@@ -19,7 +19,7 @@ namespace Sovereign
             string key = people + "/" + count + "/" + stars + "/" + readiness + "/" + chosen + "/" + affiliation.ToArgb() + "/" + UiScale;
             UnitBadge badge;
             if (!unitBadges.TryGetValue(badgeId, out badge) || badge.Key != key) {
-                if (unitBadges.Count >= 1024) { ClearUnitBadges(); badge = null; }
+                if (unitBadges.Count >= 1024 && !gpuRecordingWorld) { ClearUnitBadges(); badge = null; }
                 if (badge != null) badge.Dispose();
                 var bitmap = new Bitmap((int)Math.Ceiling(70 * UiScale), (int)Math.Ceiling(37 * UiScale), System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
                 using (var ink = Graphics.FromImage(bitmap)) {
@@ -33,6 +33,7 @@ namespace Sovereign
                 }
                 badge=new UnitBadge {Key=key,Image=bitmap};unitBadges[badgeId]=badge;UnitBadgeBuilds++;
             }
+            if(gpuRecordingWorld){RecordImage(badge.Image,Physical(bounds),true);return;}
             var state=g.Save(); g.ResetTransform(); g.DrawImageUnscaled(badge.Image,(int)Math.Round(bounds.X*UiScale),(int)Math.Round(bounds.Y*UiScale)); g.Restore(state);
         }
     }

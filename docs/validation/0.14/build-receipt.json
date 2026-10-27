@@ -1,0 +1,22 @@
+{
+  "version": "0.14.0",
+  "tested_at_utc": "2026-10-27T21:13:18.181571+00:00",
+  "executable_sha256": "097952f9d50515ca8427f7afd985079fad766f323bdc8999fc7c824c4ad766bd",
+  "source_sha256": "7f8fd826545c3e7b69b449f48688cca11ec25b8e23ed28f03be5b7a14b319526",
+  "runtime_sha256": {
+    "OpenTK.dll": "2bbd3ac9651cb1daab679da57020f1054d5c18a1b89621b92ba6ac7ab1b1b3ea",
+    "OpenTK.GLControl.dll": "92e0bf6dcf085ecbbfa82319114e228a915a57284f422f779124d363e36ea3e3",
+    "OpenTK.dll.config": "58050540744c0a3270fe38a58f0d76eeddcd8b3c34022bb5deccd7d8bcc0e461"
+  },
+  "license_sha256": "c5761cf7198ad2677ff824b1efab3b95bfaa745246e10277dfc7775abbe7fbf5",
+  "scenario_input_manifest_sha256": "46efd568ba7c7fbdc49e3b32fd501b2986d0f4f28d611cb2b68b5d4dc6f1f0ad",
+  "logic_passed": 603,
+  "ui_passed": 515,
+  "gpu_passed": 23,
+  "native_windows_tested": false,
+  "hardware_gpu_tested": false,
+  "build": ".NET SDK 8.0.426 / Release net472",
+  "runtime": "Mono / libgdiplus / Xvfb / Mesa llvmpipe 25.0.7; LP_NUM_THREADS=2",
+  "performance_baseline_commit": "9616b17f348699b28eb358ff8980219ef7bd5d76",
+  "performance_note": "Same reflection input/message-loop probe against original 0.13 and final 0.14 SDK executable. Two serial paused pairs at 60, one live pair at 60 and one paused pair at 165. Presentation delivery, not physical monitor FPS. Software GL swaps still show long stalls. Simulation/save/close concurrency checked with a held worker."
+}

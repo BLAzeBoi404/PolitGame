@@ -78,7 +78,7 @@ namespace Sovereign
         {
             lock (gate) {
                 int collected = 0;
-                while (completed.Count > 0 && collected++ < 2) {
+                while (completed.Count > 0 && collected++ < 1) {
                     var tile = completed.Dequeue(); 
                     AtlasTile old; if (ready.TryGetValue(tile.Id, out old)) old.Dispose();
                     Annotate(tile);

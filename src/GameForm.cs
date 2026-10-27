@@ -122,10 +122,11 @@ namespace Sovereign
 		public GameForm(World world)
 		{
 			W = world;
+            AtlasRaster.PrepareText(W.Countries,W.Regions);
             InitializeAtlasColors();
 			E = new Engine(world);
 			base.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-			Text = "SOVEREIGN — Государство · 0.13";
+			Text = "SOVEREIGN — Государство · 0.14";
 			BackColor = Palette.Bg;
 			ForeColor = Palette.Text;
 			base.AutoScaleMode = AutoScaleMode.None;
@@ -140,6 +141,7 @@ namespace Sovereign
 			Engine e = E;
 			Action value = delegate
 			{
+                if(simulationBusy)return;
                 ObservePolicyIncident();
 				Invalidate();
 			};
@@ -149,8 +151,9 @@ namespace Sovereign
             clock.Tick += delegate { PumpUiClock(); };
 			clock.Start();
 			base.KeyDown += KeysDown;
-			base.FormClosing += delegate
+			base.FormClosing += (sender,args) =>
 			{
+                if(simulationBusy){args.Cancel=true;speed=0;pendingSimulationActions.Enqueue(Close);return;}
 				if (campaignStarted && prefs.Autosave)
 				{
 					E.Autosave();
@@ -198,6 +201,7 @@ namespace Sovereign
 
 		private void Fill(Graphics g, Color color, float x, float y, float w, float h)
 		{
+            if(gpuRecordingWorld){RecordFill(color,new RectangleF(x,y,w,h));return;}
 			using (SolidBrush brush = new SolidBrush(color))
 			{
 				g.FillRectangle(brush, x, y, w, h);
@@ -206,6 +210,7 @@ namespace Sovereign
 
 		private void Line(Graphics g, Color color, float x, float y, float x2, float y2, float thick = 1f)
 		{
+            if(gpuRecordingWorld){MapPolyline(g,color,thick,new[]{new PointF(x,y),new PointF(x2,y2)});return;}
 			using (Pen pen = new Pen(color, thick))
 			{
 				g.DrawLine(pen, x, y, x2, y2);
@@ -267,12 +272,14 @@ namespace Sovereign
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
+            if(gpu!=null&&!gpuCapturingHud&&!synchronousAtlas){base.OnPaint(e);return;}
+            if(simulationBusy)return;
 			double paintBegan = uiTime.Elapsed.TotalMilliseconds;
             base.OnPaint(e);
 			Graphics graphics = e.Graphics;
 			graphics.ScaleTransform(UiScale, UiScale);
 			graphics.SmoothingMode = SmoothingMode.AntiAlias;
-			graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+			graphics.TextRenderingHint = gpuCapturingHud ? TextRenderingHint.AntiAliasGridFit : TextRenderingHint.ClearTypeGridFit;
 			hits.Clear();
             SynchronizeAtlasCamera();
 			if (menuScreen != "")
@@ -598,7 +605,7 @@ namespace Sovereign
 			Hit hit = hits.LastOrDefault((Hit h) => h.Rect.Contains(mouse));
 			hoveredRegion = menuScreen == "" && MapInputAllowed(mouse) && hit == null && !panning ? FindRegion(Geo(mouse)) : -1;
             if (menuScreen == "new") hoveredCountry = MapInputAllowed(mouse) && !panning ? FindCountry(Geo(mouse)) : -1;
-            string text = menuScreen == "new" && hit == null ? (hoveredCountry >= 0 ? W.Countries[hoveredCountry].Name + " · нажмите для выбора" : "") : hit == null ? (hoveredRegion >= 0 ? W.Regions[hoveredRegion].Name + " · " + W.Countries[E.S.Provinces[hoveredRegion].Owner].Name : "") : hit.Tip;
+            string text = menuScreen == "new" && hit == null ? (hoveredCountry >= 0 ? W.Countries[hoveredCountry].Name + " · нажмите для выбора" : "") : hit == null ? (hoveredRegion >= 0 ? W.Regions[hoveredRegion].Name + " · " + W.Countries[RegionOwnerForView(hoveredRegion)].Name : "") : hit.Tip;
 			if (text != hoveredTip)
 			{
 				hoveredTip = text;
@@ -618,7 +625,9 @@ namespace Sovereign
 				last = Logical(e.Location);
 			}
 			Cursor = hit != null ? Cursors.Hand : Cursors.Default;
-            if (panning || priorRegion != hoveredRegion || priorCountry != hoveredCountry || priorHit != hit || (prefs.Tooltips && !string.IsNullOrEmpty(hoveredTip) && (DateTime.Now - hoverSince).TotalMilliseconds >= 550)) Invalidate();
+            if(panning) {hoveredTip="";InvalidateCamera(priorRegion!=hoveredRegion);}
+            else if(priorHit!=hit || (prefs.Tooltips && !string.IsNullOrEmpty(hoveredTip) && (DateTime.Now-hoverSince).TotalMilliseconds>=550))Invalidate();
+            else if(priorRegion!=hoveredRegion||priorCountry!=hoveredCountry)InvalidateCamera(true);
 		}
 
 		protected override void OnMouseDown(MouseEventArgs e)
@@ -630,7 +639,7 @@ namespace Sovereign
 				panning = true;
 				moved = false;
 				last = Logical(e.Location); panOrigin = last;
-				base.Capture = true;
+				CapturePointer(true);
 			}
 		}
 
@@ -639,13 +648,14 @@ namespace Sovereign
 			base.OnMouseUp(e);
             if (ResearchMouseUp()) return;
 			panning = false;
-			base.Capture = false;
+			CapturePointer(false);
 			if (moved)
 			{
 				moved = false;
                 Invalidate();
 				return;
 			}
+            if(simulationBusy){QueueMapClick(e);return;}
 			if (e.Button == MouseButtons.Left)
 			{
 				Hit hit = hits.LastOrDefault((Hit h) => h.Rect.Contains(Logical(e.Location)));
@@ -706,7 +716,7 @@ namespace Sovereign
 				PointF pointF2 = Geo(Logical(e.Location));
 				cx += pointF.X - pointF2.X;
 				cy += pointF.Y - pointF2.Y;
-                ClampCamera();
+                ClampCamera();InvalidateCamera(true);return;
 			}
 			else
 			{
@@ -717,6 +727,7 @@ namespace Sovereign
 
         private void KeysDown(object sender, KeyEventArgs e)
         {
+            if(simulationBusy){var key=e.KeyData;pendingSimulationActions.Enqueue(()=>KeysDown(sender,new KeyEventArgs(key)));e.Handled=true;return;}
             if (CaptureBinding(e)) return;
             if (e.KeyData == prefs.Binding("Fullscreen")) { ToggleFullScreen(); e.Handled = true; return; }
             if (menuScreen != "") {
@@ -850,6 +861,8 @@ namespace Sovereign
 			if (disposing)
 			{
 				clock.Dispose();
+                FinishSimulation();
+                StopGpu();
                 DisposeFrameTiming();
                 DisposeAtlas();
                 cameraRefresh.Dispose();
@@ -1242,7 +1255,7 @@ namespace Sovereign
 			Txt(g, "государств и территорий", num2 + 22f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "областей", num2 + 175f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "ЭКОНОМИКА  /  ДИПЛОМАТИЯ  /  ТЕХНОЛОГИИ  /  СТРАТЕГИЯ", num, VH - 59f, 12f, Palette.Muted);
-			Txt(g, "0.13   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
+			Txt(g, "0.14   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
 		}
 
 
@@ -1497,6 +1510,7 @@ namespace Sovereign
 
         private void DrawMap(Graphics g)
         {
+            if(gpuCapturingHud)return;
             var gstate = g.Save();
             g.SetClip(mapRect);
             DrawCachedMap(g);

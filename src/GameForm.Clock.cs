@@ -12,12 +12,13 @@ namespace Sovereign
         internal int SimulationPumps;
         internal void PumpSimulation(double milliseconds)
         {
+            if (simulationBusy || processingSimulationActions || !Enabled) return;
             if (speed <= 0 || menuScreen != "" || E.S == null) { scheduledSpeed = 0; return; }
             double interval = 650.0 / (speed == 1 ? 1 : speed == 2 ? 3 : 7);
             if (scheduledSpeed != speed) { scheduledSpeed = speed; nextSimulationStep = milliseconds + interval; return; }
             if (milliseconds < nextSimulationStep) return;
             // Never catch up in a blocking batch. Input and paint get a turn between days.
-            nextSimulationStep = milliseconds + interval; SimulationPumps++; E.Tick();
+            nextSimulationStep = milliseconds + interval; SimulationPumps++; StartSimulationDay();
         }
         private void PumpUiClock()
         {

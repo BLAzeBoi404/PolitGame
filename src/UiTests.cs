@@ -27,7 +27,7 @@ namespace Sovereign
                 synchronousAtlas = true;
                 try { OnPaint(new PaintEventArgs(graphics, ClientRectangle)); } finally { synchronousAtlas = false; }
             }
-            foreach (Control child in Controls) if (child.Visible) {
+            foreach (Control child in Controls) if (child.Visible && !(child is GpuCanvas)) {
                 using (var part = new Bitmap(child.Width, child.Height)) {
                     child.DrawToBitmap(part, new Rectangle(0, 0, child.Width, child.Height));
                     using (var g = Graphics.FromImage(frame)) g.DrawImageUnscaled(part, child.Location);

@@ -29,7 +29,7 @@ namespace Sovereign
             foreach (var unit in E.S.Armies.Where(a => a.Owner == E.S.Player && a.Target >= 0 && a.Days <= 1.1)) {
                 if (!enemies.ContainsKey(unit.Target)) continue;
                 PointF point = Screen(W.Regions[unit.Target].X, W.Regions[unit.Target].Y);
-                if (!mapRect.Contains(point)) continue;
+                if (!(gpuRecordingWorld?GpuWorldVisible(point):mapRect.Contains(point))) continue;
                 var box = new RectangleF(point.X - 10, point.Y - 37, 20, 20);
                 Fill(g, Palette.Panel, box.X, box.Y, box.Width, box.Height);
                 Line(g, Palette.Red, box.X + 5, box.Y + 5, box.Right - 5, box.Bottom - 5, 2);

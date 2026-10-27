@@ -1,0 +1,6 @@
+1600x900; high quality; frame limit 165; medium zoom 45; paused; requested 500 Hz input, at most one queued callback; original mouse handler and real message loop.
+Runtime: Unix 6.18.55.0 / Mono. Present/paint delivery intervals; NOT physical monitor FPS.
+Renderer: GDI+; starting armies: 3765
+First traversal: frames=924; camera-changing frames=897; inputs=1399; interval mean=6.49 p95=8.32 max=24.15 ms; >33ms=0; >50ms=0; raster builds=15; fallback paints=0; HUD builds=0; GPU uploads=0; GC0=14
+Repeated traversal: frames=941; camera-changing frames=908; inputs=1434; interval mean=6.38 p95=7.07 max=122.42 ms; >33ms=1; >50ms=1; raster builds=0; fallback paints=0; HUD builds=0; GPU uploads=0; GC0=14
+Campaign days advanced: 0; event panels returned to map: 0

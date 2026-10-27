@@ -4,7 +4,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 tooling=/workspace/tooling
 mkdir -p "$tooling/apt/lists/partial" "$tooling/apt/archives/partial" "$tooling/apt/empty" "$tooling/sysroot" "$tooling/font-cache"
-if [[ ! -f "$tooling/sysroot/.sovereign-ready" ]]; then
+if [[ ! -f "$tooling/sysroot/.sovereign-gpu-ready" ]]; then
   cat > "$tooling/apt/sources.list" <<'SOURCES'
 deb [signed-by=/usr/share/keyrings/debian-archive-keyring.gpg] https://deb.debian.org/debian trixie main
 SOURCES
@@ -21,7 +21,7 @@ APT::Get::List-Cleanup "false";
 CONFIG
   touch "$tooling/apt/status"
   APT_CONFIG="$tooling/apt/apt.conf" /usr/bin/apt-get update
-  APT_CONFIG="$tooling/apt/apt.conf" /usr/bin/apt-get install --download-only --no-install-recommends -y mono-devel libgdiplus xvfb xauth fonts-dejavu-core
+  APT_CONFIG="$tooling/apt/apt.conf" /usr/bin/apt-get install --download-only --no-install-recommends -y mono-devel libgdiplus xvfb xauth fonts-dejavu-core libgl1-mesa-dri libglx-mesa0
   python3 - <<'PY'
 from pathlib import Path
 import subprocess
@@ -47,4 +47,4 @@ ENV
 source "$tooling/env.sh"
 mono --version
 bash build.sh
-touch "$tooling/sysroot/.sovereign-ready"
+touch "$tooling/sysroot/.sovereign-gpu-ready"

@@ -29,7 +29,9 @@ namespace Sovereign
 				}
 				Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
+                if (args.Contains("--gpu-test")) return GpuTests.Run(world,args[args.Length-1]);
                 if (args.Contains("--ui-test")) return UiTests.Run(world, args[args.Length - 1]);
+                if(args.Contains("--gpu-pan-benchmark")||args.Contains("--gpu-live-benchmark")){FramePacingProbe.Run(typeof(GameForm),world,args[args.Length-1],true,args.Contains("--gpu-live-benchmark"),args.Contains("--165")?165:60);return 0;}
                 if (args.Contains("--pan-benchmark")) { FramePacingProbe.Run(typeof(GameForm), world, args[args.Length - 1]); return 0; }
                 if (args.Contains("--benchmark")) { using (var form = new GameForm(world)) form.Benchmark(args[args.Length - 1]); return 0; }
 				if (args.Contains("--preview"))
@@ -57,7 +59,7 @@ namespace Sovereign
 			catch (Exception ex)
 			{
 				File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error.log"), ex.ToString());
-				if (!args.Contains("--test") && !args.Contains("--ui-test") && !args.Contains("--preview") && !args.Contains("--verify-save") && !args.Contains("--benchmark") && !args.Contains("--pan-benchmark"))
+				if (!args.Contains("--test") && !args.Contains("--ui-test") && !args.Contains("--gpu-test") && !args.Contains("--gpu-pan-benchmark") && !args.Contains("--gpu-live-benchmark") && !args.Contains("--preview") && !args.Contains("--verify-save") && !args.Contains("--benchmark") && !args.Contains("--pan-benchmark"))
 				{
 					MessageBox.Show("Не удалось запустить игру. Подробности записаны в error.log.\n" + ex.Message, "Sovereign");
 				}
