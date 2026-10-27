@@ -6,11 +6,14 @@ using System.Text;
 
 namespace Sovereign
 {
-	public class World : IDisposable
+	public partial class World : IDisposable
 	{
 		public CountryInfo[] Countries;
 
 		public RegionInfo[] Regions;
+        private GeographicIndex regionIndex, countryIndex;
+        public int FindRegion(PointF point) => (regionIndex ?? (regionIndex = new GeographicIndex(Regions))).Find(point);
+        public int FindCountry(PointF point) => (countryIndex ?? (countryIndex = new GeographicIndex(Countries))).Find(point);
 
 		private static string ReadString(BinaryReader b)
 		{
@@ -75,6 +78,7 @@ namespace Sovereign
 					world.Regions[j] = regionInfo2;
 					world.Countries[regionInfo2.Country].Regions.Add(j);
 				}
+                world.LoadScenario();
 				return world;
 			}
 		}

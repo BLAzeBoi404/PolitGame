@@ -7,6 +7,8 @@ namespace Sovereign
 		public string Code;
 
 		public double GDP;
+        public int PopulationYear, ReferenceMilitary, StartingGroundPersonnel, MilitaryYear, CapitalRegion;
+        public bool GroundStrengthEstimated;
 
 		public List<int> Regions = new List<int>();
 	}

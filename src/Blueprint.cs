@@ -11,7 +11,8 @@ namespace Sovereign
         public int Frame = 1, Mobility = 1, FuelTank = 1, Support = 1;
         public bool Air => Kind >= EquipmentKind.Fighter;
         public bool Formation => Kind == EquipmentKind.Tank || Kind == EquipmentKind.IFV || Kind == EquipmentKind.Artillery;
-        public double BaseWeight => (new double[] { 18, 10, 4, 12, 4, 12, 3, 16 })[(int)Kind];
+        private static readonly double[] BaseWeights = { 18, 10, 4, 12, 4, 12, 3, 16 };
+        public double BaseWeight => BaseWeights[(int)Kind];
         public double Weight => BaseWeight + Armor * (Air ? 0.35 : 2.1) + Gun * (Air ? 0.4 : 1.1)
             + Engine * 0.45 + Electronics * 0.12 + Frame * 0.6 + Mobility * 0.3 + FuelTank * 0.45 + Support * 0.25;
         public double Protection => Armor * (Air ? 6 : 22) * (1 + Frame * 0.04);

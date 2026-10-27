@@ -11,4 +11,7 @@ fi
 "${compiler[@]}" -langversion:7.2 -sdk:4.7.2 -target:winexe -optimize+ -out:build/Sovereign.exe \
   -r:System.Windows.Forms -r:System.Drawing -r:System.Xml -r:System.Core \
   -resource:assets/world.bin,world.bin \
+  -resource:assets/scenario-countries.tsv,scenario-countries.tsv \
+  -resource:assets/scenario-regions.tsv,scenario-regions.tsv \
+  -resource:assets/scenario-adjacency.tsv,scenario-adjacency.tsv \
   -win32icon:assets/app.ico src/*.cs

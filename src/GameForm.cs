@@ -125,7 +125,7 @@ namespace Sovereign
             InitializeAtlasColors();
 			E = new Engine(world);
 			base.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-			Text = "SOVEREIGN — Государство · 0.12";
+			Text = "SOVEREIGN — Государство · 0.13";
 			BackColor = Palette.Bg;
 			ForeColor = Palette.Text;
 			base.AutoScaleMode = AutoScaleMode.None;
@@ -681,14 +681,7 @@ namespace Sovereign
 
 		private int FindRegion(PointF pt)
 		{
-			for (int i = 0; i < W.Regions.Length; i++)
-			{
-				if (W.Regions[i].Bounds.Contains(pt) && W.Regions[i].Path.IsVisible(pt))
-				{
-					return i;
-				}
-			}
-			return -1;
+            return W.FindRegion(pt);
 		}
 
 		protected override void OnMouseWheel(MouseEventArgs e)
@@ -709,7 +702,7 @@ namespace Sovereign
 			{
 				 cameraRefresh.Stop(); cameraRefresh.Start();
                 PointF pointF = Geo(Logical(e.Location));
-				scale = Math.Max(2f, Math.Min(100f, scale * ((e.Delta > 0) ? 1.18f : 0.84745765f)));
+				scale = Math.Max(2f, Math.Min(400f, scale * ((e.Delta > 0) ? 1.18f : 0.84745765f)));
 				PointF pointF2 = Geo(Logical(e.Location));
 				cx += pointF.X - pointF2.X;
 				cy += pointF.Y - pointF2.Y;
@@ -793,9 +786,9 @@ namespace Sovereign
 				select i).FirstOrDefault();
 			selected = num;
 			CountryInfo countryInfo = W.Countries[E.S.Player];
-			cx = (float)countryInfo.X;
-			cy = (float)countryInfo.Y;
-			scale = (float)Math.Max(4.0, Math.Min(19.0, 680.0 / Math.Max(18.0, (double)countryInfo.Bounds.Width * 1.5)));
+			cx = (float)W.Regions[countryInfo.CapitalRegion].X;
+			cy = (float)W.Regions[countryInfo.CapitalRegion].Y;
+			scale = (float)Math.Max(12.0, Math.Min(45.0, 680.0 / Math.Max(6.0, (double)countryInfo.Bounds.Width * 1.5)));
 			army = (from a in E.S.Armies
 				where a.Owner == E.S.Player
 				select a.Id).FirstOrDefault();
@@ -862,7 +855,6 @@ namespace Sovereign
                 cameraRefresh.Dispose();
                 ClearHighlights();
                 ClearUnitBadges();
-                if (mapCache != null) mapCache.Dispose();
 
 				if (terrainTexture != null)
 				{
@@ -1250,7 +1242,7 @@ namespace Sovereign
 			Txt(g, "государств и территорий", num2 + 22f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "областей", num2 + 175f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "ЭКОНОМИКА  /  ДИПЛОМАТИЯ  /  ТЕХНОЛОГИИ  /  СТРАТЕГИЯ", num, VH - 59f, 12f, Palette.Muted);
-			Txt(g, "0.12   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
+			Txt(g, "0.13   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
 		}
 
 
@@ -1518,55 +1510,7 @@ namespace Sovereign
                 DrawFrontRegions(g);
                 g.Restore(highlightState);
             }
-			foreach (Army army in E.S.Armies)
-			{
-				if (army.Owner != E.S.Player && !E.AtWar(army.Owner, E.S.Player) && scale < 25f)
-				{
-					continue;
-				}
-				RegionInfo regionInfo3 = W.Regions[army.Region];
-				PointF pointF4 = Screen(regionInfo3.X, regionInfo3.Y);
-				if (army.Target >= 0)
-				{
-					PointF pt2 = Screen(W.Regions[army.Target].X, W.Regions[army.Target].Y);
-					double num2 = 1.0 - Rules.Clamp(army.Days / army.TotalDays, 0.0, 1.0);
-					pointF4 = new PointF(pointF4.X + (pt2.X - pointF4.X) * (float)num2, pointF4.Y + (pt2.Y - pointF4.Y) * (float)num2);
-					if (army.Owner == E.S.Player)
-					{
-						Pen pen6 = new Pen(Palette.Gold, 1.7f);
-						pen6.DashStyle = DashStyle.Dash;
-						pen6.CustomEndCap = new AdjustableArrowCap(3f, 4f);
-						using (Pen pen7 = pen6)
-						{
-							g.DrawLine(pen7, pointF4, pt2);
-                            PointF legStart = pt2;
-                            foreach (int stop in army.Route) {
-                                PointF legEnd = Screen(W.Regions[stop].X, W.Regions[stop].Y);
-                                g.DrawLine(pen7, legStart, legEnd); legStart = legEnd;
-                            }
-						}
-					}
-				}
-				if (mapRect.Contains(pointF4))
-				{
-					RectangleF rectangleF = new RectangleF(pointF4.X - 33f, pointF4.Y - 18f, 70f, 37f);
-                    DrawUnitBadge(g, army, rectangleF);
-					int id = army.Id;
-					int ri = army.Region;
-					hits.Add(new Hit
-					{
-						Rect = RectangleF.Intersect(rectangleF, mapRect),
-						Action = delegate
-						{
-							this.army = id;
-							selected = ri;
-							foreign = E.S.Provinces[ri].Owner;
-							Invalidate();
-						},
-						Tip = "№" + id + " · " + People(army.Personnel) + " чел. · " + DeploymentRules.Stars(army) + "/5 звёзд готовности · опыт " + army.Experience.ToString("0") + "/100. " + DeploymentRules.Names[(int)DeploymentRules.For(army).Specialty] + ". Передовая " + DeploymentRules.For(army).Front + ", фланги " + DeploymentRules.For(army).Left + "/" + DeploymentRules.For(army).Right + ", резерв " + DeploymentRules.For(army).Reserve + ". ПКМ по области — приказ."
-					});
-				}
-			}
+            DrawArmyMap(g);
             DrawBattleMarkers(g);
             DrawAirOperations(g);
             g.Restore(gstate);

@@ -9,7 +9,7 @@ namespace Sovereign
         {
             var deployed = new long[campaign.Nations.Length];
             foreach (var a in campaign.Armies) {
-                a.CasualtyRemainder = 0; a.TemplateId = 1; a.Battalions = 1; a.Organization = a.TrainingDays > 0 ? 30 : 100;
+                a.CasualtyRemainder = 0; a.Deployment = null; a.TemplateId = 1; a.Battalions = 1; a.Organization = a.TrainingDays > 0 ? 30 : 100;
                 a.Personnel = (int)Math.Round(ManpowerRules.Establishment(a) * (a.TrainingDays > 0 ? 1 : a.Strength / 100));
                 deployed[a.Owner] += a.Personnel;
             }

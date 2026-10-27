@@ -219,8 +219,10 @@ namespace Sovereign
             var design = FindDesign(owner, n.ActiveDesign);
             if (design.Stock < 2 && !n.Lines.Any(l => l.DesignId == design.Id) && AssignedFactories(owner) < capacity)
                 StartProduction(design.Id, Math.Min(2, capacity - AssignedFactories(owner)), 2, owner);
-            int desired = Math.Min(8, 2 + (int)(n.Population / 20));
-            if (design.Stock > 0 && S.Armies.Count(a => a.Owner == owner) < desired) RecruitWithDesign(regions[0], design.Id, owner);
+            int target = World.Countries[owner].StartingGroundPersonnel;
+            if (target == 0) return;
+            int desired = Math.Max(1, (int)Math.Ceiling(target / (double)ManpowerRules.GroundSize(design.Blueprint.Kind, SelectedTemplate(owner).Battalions)));
+            if (design.Stock > 0 && S.Armies.Count(a => a.Owner == owner) < desired && ServicePersonnel(owner) < target) RecruitWithDesign(regions[0], design.Id, owner);
         }
     }
 }

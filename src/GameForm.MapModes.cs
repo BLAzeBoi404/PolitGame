@@ -11,7 +11,7 @@ namespace Sovereign
         private static readonly string[] MapLayers = { "Политика", "Дипломатия", "Армии", "Экономика", "Ресурсы", "Инфраструктура", "Настроения" };
         private static readonly string[] MapDescriptions = {
             "Текущее владение, включая занятые области.", "Зелёный: свои; золотой: союз; бирюзовый: доступ; красный: война; синий: торговля; серый: нейтралитет.",
-            "Концентрация боеспособных частей: светлее — больше сил.", "Производственные мощности на миллион жителей: светлее — больше.",
+            "Концентрация сил и все иностранные части. На политической карте мирные иностранные части видны только вблизи.", "Производственные мощности на миллион жителей: светлее — больше.",
             "Нефть, руда и плодородие: модельная обеспеченность.", "Дороги влияют на выпуск, строительство и скорость движения.", "Спокойствие населения; низкий индекс означает недовольство."
         };
         private Color DiplomaticColor(int owner)
@@ -28,7 +28,7 @@ namespace Sovereign
             float x = VW - 314, y = VH - 118;
             Fill(g, Palette.Panel, x, y, 302, 73);
             Txt(g, layer.ToUpperInvariant(), x + 10, y + 10, 10, Palette.Gold, true, 185);
-            Button(g, "+", x + 192, y + 4, 29, () => { scale = Math.Min(100, scale * 1.3f); Invalidate(); }, false, "Приблизить", 26); hits[hits.Count - 1].Label = "map:zoom-in";
+            Button(g, "+", x + 192, y + 4, 29, () => { scale = Math.Min(400, scale * 1.3f); Invalidate(); }, false, "Приблизить", 26); hits[hits.Count - 1].Label = "map:zoom-in";
             Button(g, "−", x + 228, y + 4, 29, () => { scale = Math.Max(2, scale / 1.3f); Invalidate(); }, false, "Отдалить", 26); hits[hits.Count - 1].Label = "map:zoom-out";
             Button(g, "⌂", x + 264, y + 4, 29, Home, false, "К своей стране", 26);
             string[] abbreviations = { "ПЛ", "ДП", "ВЧ", "ЭК", "РС", "ИН", "НС" };

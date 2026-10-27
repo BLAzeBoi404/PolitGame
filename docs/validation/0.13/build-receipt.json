@@ -1,0 +1,14 @@
+{
+  "version": "0.13.0",
+  "tested_at_utc": "2026-10-27T15:00:37.407786+00:00",
+  "executable_sha256": "c1a50cb763a4a2d840ce21a9dc5cf6c259992b66e4cf961d87c7b26a216dc155",
+  "source_sha256": "5234d126ae275be3d66b5d8922ca1c866fdddb96971c9a700eb498240af91bb5",
+  "scenario_input_manifest_sha256": "46efd568ba7c7fbdc49e3b32fd501b2986d0f4f28d611cb2b68b5d4dc6f1f0ad",
+  "logic_passed": 603,
+  "ui_passed": 515,
+  "native_windows_tested": false,
+  "build": ".NET SDK 8.0.426 / Release net472",
+  "runtime": "Mono / libgdiplus / Xvfb",
+  "performance_baseline_commit": "03fc466b0213f1753111a61a19501fd1fee4bd66",
+  "performance_note": "Original 0.12 release executable vs exact tested 0.13 SDK executable. Three serial pairs; all raw results retained. CPU timing and Paint delivery intervals, not Windows monitor FPS. 517 vs 3765 starting formations."
+}

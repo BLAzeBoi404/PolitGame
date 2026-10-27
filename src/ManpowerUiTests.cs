@@ -9,7 +9,7 @@ namespace Sovereign
     {
         private void TestManpowerInterface(string directory, Action<bool, string> check, Action<string> click)
         {
-            menuCountry = W.ByCode("UKR"); BeginCampaign(); ClientSize = new Size(1600, 900);
+            menuCountry = W.ByCode("UKR"); BeginCampaign(); Tests.SmallPlayerForce(E); ClientSize = new Size(1600, 900);
             click("nav:Армия"); click("Резерв →");
             check(manpowerPage && !detailPanel && page == "Армия", "Army navigation opens the actual reserve and template panel over the map");
             double money = E.Player.Treasury; int people = E.Player.Recruits;

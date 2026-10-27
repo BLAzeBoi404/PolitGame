@@ -30,6 +30,7 @@ namespace Sovereign
 				Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 if (args.Contains("--ui-test")) return UiTests.Run(world, args[args.Length - 1]);
+                if (args.Contains("--pan-benchmark")) { FramePacingProbe.Run(typeof(GameForm), world, args[args.Length - 1]); return 0; }
                 if (args.Contains("--benchmark")) { using (var form = new GameForm(world)) form.Benchmark(args[args.Length - 1]); return 0; }
 				if (args.Contains("--preview"))
 				{
@@ -56,7 +57,7 @@ namespace Sovereign
 			catch (Exception ex)
 			{
 				File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error.log"), ex.ToString());
-				if (!args.Contains("--test") && !args.Contains("--ui-test") && !args.Contains("--preview") && !args.Contains("--verify-save") && !args.Contains("--benchmark"))
+				if (!args.Contains("--test") && !args.Contains("--ui-test") && !args.Contains("--preview") && !args.Contains("--verify-save") && !args.Contains("--benchmark") && !args.Contains("--pan-benchmark"))
 				{
 					MessageBox.Show("Не удалось запустить игру. Подробности записаны в error.log.\n" + ex.Message, "Sovereign");
 				}

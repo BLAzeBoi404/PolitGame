@@ -23,7 +23,7 @@ namespace Sovereign
             Action<Engine, string> rawSave = (e, p) => { using (var s = File.Create(p)) new XmlSerializer(typeof(Campaign)).Serialize(s, e.S); };
             scenario("Technology catalog and switching", () => {
                 var e = fresh(); var n = e.Player; var a = n.ScienceTree;
-                check(e.S.Version == 11 && e.S.Nations.All(c => c.ScienceTree != null && !c.ScienceTree.Known.Any(k => k) && c.ScienceTree.LegacyLevels.All(l => l == 0)), "New campaigns initialize independent research agendas without granting applied discoveries");
+                check(e.S.Version == 12 && e.S.Nations.All(c => c.ScienceTree != null && !c.ScienceTree.Known.Any(k => k) && c.ScienceTree.LegacyLevels.All(l => l == 0)), "New campaigns initialize independent research agendas without granting applied discoveries");
                 var reached = new bool[TechnologyRules.Count]; var levels = Enumerable.Repeat(7, 6).ToArray();
                 for (int pass = 0; pass < TechnologyRules.Count; pass++) foreach (var d in TechnologyRules.Catalog) if (TechnologyRules.Requirements(d.Id + 6, levels, reached) == null) reached[d.Id] = true;
                 check(reached.All(k => k) && TechnologyRules.Catalog.Select(d => d.Id).SequenceEqual(Enumerable.Range(0, TechnologyRules.Count)), "All 72 technologies are reachable through an acyclic prerequisite graph");
@@ -125,7 +125,7 @@ namespace Sovereign
                 b.DestroyArmy(ub); check(b.Player.PersonnelLosses == pb, "Destruction still accounts for every remaining person after medical casualty reduction");
                 check(b.WeeklyIntake(b.S.Player) > a.WeeklyIntake(a.S.Player), "Public health raises actual weekly recruit intake within the existing population capacity");
                 a = fresh(); b = fresh(); rich(a); rich(b); Learn(b.Player, 18); ua = a.S.Armies.First(u => u.Owner == a.S.Player); ub = b.S.Armies.First(u => u.Owner == b.S.Player);
-                ua.Personnel -= 100; ub.Personnel -= 100; a.Player.PersonnelLosses += 100; b.Player.PersonnelLosses += 100;
+                Tests.FillPlayerFormations(a); Tests.FillPlayerFormations(b); ua.Personnel -= 100; ub.Personnel -= 100; a.Player.PersonnelLosses += 100; b.Player.PersonnelLosses += 100;
                 pa = ua.Personnel; pb = ub.Personnel; int ra = a.Player.Recruits, rb = b.Player.Recruits;
                 a.TickManpower(); b.TickManpower();
                 check(ub.Personnel - pb > ua.Personnel - pa && ra - a.Player.Recruits == ua.Personnel - pa && rb - b.Player.Recruits == ub.Personnel - pb && b.Player.Treasury < a.Player.Treasury, "Teaching hospitals speed real replacements while spending the corresponding recruits and money");
@@ -151,7 +151,7 @@ namespace Sovereign
                 double money = n.Treasury; uint rng = e.S.RandomState; var caps = Enumerable.Range(0, 8).Select(i => Math.Min(8, 2 + n.Tech[TechnologyRules.ModuleBranch(i)])).ToArray();
                 e.S.Version = 6; foreach (var c in e.S.Nations) c.ScienceTree = null;
                 string file = Path.Combine(directory, "research-v6.xml"); rawSave(e, file); var loaded = fresh(); loaded.Load(file);
-                check(loaded.S.Version == 11 && loaded.Player.ScienceTree.ActiveProject == 2 && loaded.Player.ResearchProgress == 47.125 && loaded.Player.Treasury == money && loaded.S.RandomState == rng, "Version-six migration preserves active fundamental progress, treasury and deterministic random state");
+                check(loaded.S.Version == 12 && loaded.Player.ScienceTree.ActiveProject == 2 && loaded.Player.ResearchProgress == 47.125 && loaded.Player.Treasury == money && loaded.S.RandomState == rng, "Version-six migration preserves active fundamental progress, treasury and deterministic random state");
                 check(caps.SequenceEqual(Enumerable.Range(0, 8).Select(i => TechnologyRules.ModuleCap(loaded.Player, i))) && !loaded.Player.ScienceTree.Known.Any(k => k), "Legacy migration preserves all previously available module levels without gifting applied technologies");
                 loaded.Validate(loaded.S);
             });

@@ -1,25 +1,29 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Sovereign
 {
     public partial class GameForm
     {
-        private Bitmap mapCache, atlasOverview;
-        private string mapCacheKey, overviewKey;
-        private AtlasScene cachedScene, requestedScene, renderingScene;
+        private Bitmap atlasOverview;
+        private AtlasScene cachedScene;
+        private AtlasTiles atlasTiles;
+        private string mapCacheKey, overviewKey, tileContentKey;
         private bool synchronousAtlas, atlasDisposed;
-        private const int CameraMargin = 128;
+        private int atlasWakeQueued;
+        private const int CameraMargin = 256;
         private readonly Timer cameraRefresh = new Timer();
-        private Task atlasWorker;
-        private readonly object atlasGate = new object();
-        internal int MapCacheBuilds, AtlasFallbackFrames;
-        private double atlasAnnotationMs;
-        private readonly System.Collections.Generic.HashSet<Bitmap> pendingAtlases = new System.Collections.Generic.HashSet<Bitmap>();
-        private string mapRasterProfile => cachedScene == null ? "pending" : cachedScene.Width + "x" + cachedScene.Height + ", background raster " + cachedScene.BuildMilliseconds.ToString("0.00") + " ms; UI annotation " + atlasAnnotationMs.ToString("0.00") + " ms";
+        private List<AtlasTileId> currentTileRequests = new List<AtlasTileId>();
+        internal int MapCacheBuilds => atlasTiles == null ? 0 : atlasTiles.Builds;
+        internal int AtlasFallbackFrames, AtlasMissingTiles;
+        internal int AtlasTileHits => atlasTiles == null ? 0 : atlasTiles.Hits;
+        internal int AtlasResidentTiles => atlasTiles == null ? 0 : atlasTiles.Count;
+        internal float AtlasPixelScale;
+        private bool AtlasBusy => atlasTiles != null && atlasTiles.Busy;
+        private string mapRasterProfile => "tiles=" + AtlasResidentTiles + "/" + AtlasTiles.Limit + "; background tile=" + (atlasTiles == null ? "0" : atlasTiles.LastBuildMilliseconds.ToString("0.00")) + " ms; tile annotations cached";
         private string AtlasContentKey(bool setup)
         {
             int ownership = 17, theme = 17, diplomacy = 17;
@@ -49,51 +53,60 @@ namespace Sovereign
             if (!setup) for (int i = 0; i < scene.RegionColors.Length; i++) { scene.RegionColors[i] = RegionColor(i); scene.FillRegions[i] = layer != "Политика" || E.S.Provinces[i].Owner != W.Regions[i].Country; }
             return scene;
         }
-        private void PublishAtlas(AtlasScene scene, Bitmap next)
+        private void WakeAtlas()
         {
-            if (atlasDisposed || scene.Key != overviewKey) { next.Dispose(); return; }
-            // Font backends may share native caches. Annotate completed geography on the UI thread.
-            var timer = System.Diagnostics.Stopwatch.StartNew(); AtlasRaster.Annotate(next, scene); atlasAnnotationMs = timer.Elapsed.TotalMilliseconds;
-            if (mapCache != null) mapCache.Dispose(); mapCache = next; cachedScene = scene; mapCacheKey = scene.Key; MapCacheBuilds++; Invalidate();
-        }
-        private static bool SameAtlasRequest(AtlasScene a, AtlasScene b) => a != null && a.Key == b.Key && a.X == b.X && a.Y == b.Y && a.Zoom == b.Zoom && a.Width == b.Width && a.Height == b.Height;
-        private void RequestAtlas(AtlasScene scene)
-        {
-            lock (atlasGate) {
-                if (SameAtlasRequest(requestedScene, scene) || (requestedScene == null && SameAtlasRequest(renderingScene, scene))) return;
-                requestedScene = scene;
-                if (atlasWorker != null && !atlasWorker.IsCompleted) return;
-                atlasWorker = Task.Run(() => {
-                    while (true) {
-                        AtlasScene job;
-                        lock (atlasGate) { if (atlasDisposed || requestedScene == null) { atlasWorker = null; renderingScene = null; return; } job = requestedScene; renderingScene = job; requestedScene = null; }
-                        Bitmap result;
-                        try { result = AtlasRaster.Render(job); }
-                        catch (Exception ex) { lock (atlasGate) { atlasWorker = null; requestedScene = null; renderingScene = null; } System.Diagnostics.Debug.WriteLine(ex); return; }
-                        lock (atlasGate) {
-                            if (atlasDisposed) { result.Dispose(); atlasWorker = null; return; }
-                            foreach (var obsolete in pendingAtlases) obsolete.Dispose(); pendingAtlases.Clear();
-                            pendingAtlases.Add(result);
-                            try { BeginInvoke((Action)(() => { lock (atlasGate) { if (!pendingAtlases.Remove(result)) return; } PublishAtlas(job, result); })); }
-                            catch (InvalidOperationException) { pendingAtlases.Remove(result); result.Dispose(); }
-                        }
-                    }
-                });
-            }
+            if (atlasDisposed || !IsHandleCreated || System.Threading.Interlocked.Exchange(ref atlasWakeQueued, 1) != 0) return;
+            try { BeginInvoke((Action)(() => { System.Threading.Interlocked.Exchange(ref atlasWakeQueued, 0); if (!atlasDisposed) Invalidate(); })); }
+            catch (InvalidOperationException) { System.Threading.Interlocked.Exchange(ref atlasWakeQueued, 0); }
         }
         internal void WaitForAtlas()
         {
             var watch = System.Diagnostics.Stopwatch.StartNew();
-            while (watch.ElapsedMilliseconds < 10000) {
-                Task worker; lock (atlasGate) worker = atlasWorker;
-                if (worker == null) { Application.DoEvents(); break; }
-                worker.Wait(5); Application.DoEvents();
+            while (!atlasDisposed && atlasTiles != null && watch.ElapsedMilliseconds < 10000) {
+                atlasTiles.Collect(); atlasTiles.Request(currentTileRequests, false);
+                if (!AtlasBusy) break;
+                Application.DoEvents(); System.Threading.Thread.Sleep(1);
             }
+            if (atlasTiles != null) atlasTiles.Collect();
         }
         private void DisposeAtlas()
         {
-            lock (atlasGate) { atlasDisposed = true; requestedScene = null; foreach (var bitmap in pendingAtlases) bitmap.Dispose(); pendingAtlases.Clear(); }
-            if (atlasOverview != null) { atlasOverview.Dispose(); atlasOverview = null; }
+            atlasDisposed = true;
+            if (atlasTiles != null) atlasTiles.Dispose();
+            if (atlasOverview != null) atlasOverview.Dispose();
+        }
+        private RectangleF AtlasView => new RectangleF(cx - mapRect.Width / scale / 2, cy - mapRect.Height / scale / 2, mapRect.Width / scale, mapRect.Height / scale);
+        // Crop the SOURCE before scaling. GDI+ otherwise resamples a world-sized image
+        // into tens of thousands of pixels at close zoom, even with a viewport clip.
+        private void DrawAtlasSurface(Graphics g, Bitmap image, RectangleF coverage, RectangleF part, RectangleF view)
+        {
+            var visible = RectangleF.Intersect(RectangleF.Intersect(coverage, part), view);
+            if (visible.Width <= 0 || visible.Height <= 0) return;
+            var origin = Screen(visible.X, visible.Y);
+            var destination = new RectangleF(origin.X * UiScale, origin.Y * UiScale, visible.Width * scale * UiScale, visible.Height * scale * UiScale);
+            var source = new RectangleF((visible.X - coverage.X) / coverage.Width * image.Width, (visible.Y - coverage.Y) / coverage.Height * image.Height,
+                visible.Width / coverage.Width * image.Width, visible.Height / coverage.Height * image.Height);
+            float imagePixels = image.Width / coverage.Width;
+            if (Math.Abs(imagePixels - scale * UiScale) < .003) {
+                var position = Screen(coverage.X, coverage.Y);
+                var clip = Rectangle.FromLTRB((int)Math.Round(destination.Left), (int)Math.Round(destination.Top), (int)Math.Round(destination.Right), (int)Math.Round(destination.Bottom));
+                var saved = g.Save(); g.SetClip(clip, CombineMode.Intersect);
+                g.DrawImageUnscaled(image, (int)Math.Round(position.X * UiScale), (int)Math.Round(position.Y * UiScale)); g.Restore(saved);
+            } else g.DrawImage(image, destination, source, GraphicsUnit.Pixel);
+        }
+        private List<AtlasTileId> VisibleTiles(int level, RectangleF view, int margin)
+        {
+            float width = AtlasTiles.Size / AtlasTiles.Pixels(level);
+            int x0 = Math.Max(0, (int)Math.Floor((view.Left + 180) / width) - margin), x1 = Math.Min((int)Math.Ceiling(360 / width) - 1, (int)Math.Floor((view.Right + 180) / width) + margin);
+            int y0 = Math.Max(0, (int)Math.Floor((view.Top + 90) / width) - margin), y1 = Math.Min((int)Math.Ceiling(180 / width) - 1, (int)Math.Floor((view.Bottom + 90) / width) + margin);
+            var list = new List<AtlasTileId>();
+            for (int y = y0; y <= y1; y++) for (int x = x0; x <= x1; x++) list.Add(new AtlasTileId(level, x, y));
+            list.Sort((a,b) => {
+                var aa = AtlasTiles.Bounds(a); var bb = AtlasTiles.Bounds(b);
+                int visible = (bb.IntersectsWith(view) ? 1 : 0) - (aa.IntersectsWith(view) ? 1 : 0); if (visible != 0) return visible;
+                return (Math.Abs(aa.X + aa.Width/2 - cx) + Math.Abs(aa.Y + aa.Height/2 - cy)).CompareTo(Math.Abs(bb.X + bb.Width/2 - cx) + Math.Abs(bb.Y + bb.Height/2 - cy));
+            });
+            return list;
         }
         private void DrawCachedMap(Graphics g)
         {
@@ -102,32 +115,35 @@ namespace Sovereign
                 var next = AtlasRaster.Render(CaptureAtlas(key, true));
                 if (atlasOverview != null) atlasOverview.Dispose(); atlasOverview = next; overviewKey = key;
             }
-            var view = new RectangleF(cx - mapRect.Width / scale / 2, cy - mapRect.Height / scale / 2, mapRect.Width / scale, mapRect.Height / scale);
-            bool covers = mapCache != null && mapCacheKey == key && cachedScene.Coverage.Contains(view);
-            bool exact = covers && cachedScene.Zoom == scale && cachedScene.Width == (int)Math.Ceiling(mapRect.Width * UiScale * (prefs.GraphicsQuality == 0 ? .65f : prefs.GraphicsQuality == 1 ? .85f : 1)) + CameraMargin * 2;
-            exact = exact && cachedScene.Height == (int)Math.Ceiling(mapRect.Height * UiScale * (prefs.GraphicsQuality == 0 ? .65f : prefs.GraphicsQuality == 1 ? .85f : 1)) + CameraMargin * 2;
-            var ahead = view; ahead.Inflate(CameraMargin * .45f / (scale * UiScale), CameraMargin * .45f / (scale * UiScale));
-            bool prefetch = exact && !cachedScene.Coverage.Contains(ahead);
-            if (!exact || (!synchronousAtlas && prefetch) || mapCacheKey == null) {
-                var scene = CaptureAtlas(key, false);
-                if (synchronousAtlas) { PublishAtlas(scene, AtlasRaster.Render(scene)); covers = true; }
-                else RequestAtlas(scene);
+            if (atlasTiles == null) atlasTiles = new AtlasTiles(WakeAtlas);
+            string content = key + "/" + UiScale + (scale >= 10 ? "/regions" : "/countries") + (scale > 25 ? "/labels" : "/country-labels");
+            if (tileContentKey != content || mapCacheKey == null) {
+                cachedScene = CaptureAtlas(key, false);
+                atlasTiles.Reset(cachedScene); tileContentKey = content; mapCacheKey = key;
             }
-            Fill(g, Color.FromArgb(122, 148, 154), mapRect.X, mapRect.Y, mapRect.Width, mapRect.Height);
-            // Draw one complete coverage surface; never expose partial cache strips as ocean.
-            if (covers && mapCache != null) {
-                float factor = scale / cachedScene.PixelScale;
-                float x = mapRect.X + mapRect.Width / 2 + (cachedScene.X - cx) * scale - mapCache.Width * factor / 2;
-                float y = mapRect.Y + mapRect.Height / 2 + (cachedScene.Y - cy) * scale - mapCache.Height * factor / 2;
-                var state = g.Save();
-                if (Math.Abs(factor * UiScale - 1) < .0001) { g.ResetTransform(); g.DrawImageUnscaled(mapCache, (int)Math.Round(x * UiScale), (int)Math.Round(y * UiScale)); }
-                else { g.InterpolationMode = InterpolationMode.Bilinear; g.DrawImage(mapCache, new RectangleF(x, y, mapCache.Width * factor, mapCache.Height * factor)); }
-                g.Restore(state);
-            } else {
-                AtlasFallbackFrames++;
-                float x = mapRect.X + mapRect.Width / 2 + (-180 - cx) * scale, y = mapRect.Y + mapRect.Height / 2 + (-90 - cy) * scale;
-                g.InterpolationMode = InterpolationMode.Bilinear; g.DrawImage(atlasOverview, new RectangleF(x, y, 360 * scale, 180 * scale));
+            atlasTiles.Collect();
+            var view = AtlasView; float quality = prefs.GraphicsQuality == 0 ? .65f : prefs.GraphicsQuality == 1 ? .85f : 1;
+            int level = AtlasTiles.Level(scale * UiScale * quality); AtlasPixelScale = AtlasTiles.Pixels(level);
+            currentTileRequests = VisibleTiles(level, view, 1);
+            atlasTiles.Request(currentTileRequests, synchronousAtlas);
+            var state = g.Save(); g.ResetTransform();
+            g.InterpolationMode = InterpolationMode.Bilinear; g.PixelOffsetMode = PixelOffsetMode.Half;
+            using (var sea = new SolidBrush(Color.FromArgb(122,148,154))) g.FillRectangle(sea, mapRect.X * UiScale, mapRect.Y * UiScale, mapRect.Width * UiScale, mapRect.Height * UiScale);
+            int missing = 0;
+            foreach (var id in currentTileRequests) if (AtlasTiles.Bounds(id).IntersectsWith(view) && atlasTiles.Find(id) == null) missing++;
+            if (missing > 0) DrawAtlasSurface(g, atlasOverview, new RectangleF(-180,-90,360,180), view, view);
+            // Keep already detailed geography while a new zoom level or edge is loading.
+            // Only missing tiles use the overview; a cache miss never blurs the entire screen.
+            if (missing > 0) foreach (var tile in atlasTiles.Ready) if (tile.Id.Level != level && tile.Id.Level > level * .5 && tile.Id.Level < level * 2)
+                DrawAtlasSurface(g, tile.Image, tile.Scene.Coverage, AtlasTiles.Bounds(tile.Id), view);
+            foreach (var id in currentTileRequests) {
+                var bounds = AtlasTiles.Bounds(id); if (!bounds.IntersectsWith(view)) continue;
+                var tile = atlasTiles.Find(id);
+                if (tile == null) continue;
+                DrawAtlasSurface(g, tile.Image, tile.Scene.Coverage, bounds, view);
             }
+            AtlasMissingTiles = missing; if (missing > 0) AtlasFallbackFrames++;
+            g.Restore(state);
         }
     }
 }

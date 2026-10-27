@@ -53,6 +53,11 @@ namespace Sovereign
 			}
 		}
 
+        // Initial capacity is an estimate, quantized to a millionth of a factory.
+        // Canonicalize using the save codec as Mono's short-decimal parser can differ
+        // by one ULP from Math.Round; repeated save/load must not alter the simulation.
+        private static double InitialFactoryCapacity(double value) => System.Xml.XmlConvert.ToDouble(System.Xml.XmlConvert.ToString(Math.Round(value, 6)));
+
 		public void New(int player, int year, int difficulty)
 		{
 			S = new Campaign
@@ -136,8 +141,8 @@ namespace Sovereign
 				for (int m = 0; m < 8; m++)
 				{
 					double num7 = num4 * (new double[8] { 0.52, 0.43, 0.2, 0.19, 0.22, 0.18, 0.36, 0.1 })[m] * ((m == 0) ? 1.0 : num6);
-					province2.Public[m] = num7 * ((m == 1 || m == 7) ? 0.65 : 0.18);
-					province2.Private[m] = num7 - province2.Public[m];
+					province2.Public[m] = InitialFactoryCapacity(num7 * ((m == 1 || m == 7) ? 0.65 : 0.18));
+					province2.Private[m] = InitialFactoryCapacity(num7 - province2.Public[m]);
 				}
 				S.Provinces[l] = province2;
 			}
@@ -148,17 +153,7 @@ namespace Sovereign
 					int num9 = (int)(S.Random() * 50.0) - 10;
 					S.Relations[Pair(n, num8)] = (S.Relations[Pair(num8, n)] = num9);
 				}
-				List<int> list = World.Countries[n].Regions.OrderByDescending((int r) => S.Provinces[r].Population).Take(3).ToList();
-				foreach (int item in list)
-				{
-					S.Armies.Add(new Army
-					{
-						Id = S.NextArmy++,
-						Owner = n,
-						Region = item,
-						Design = CopyDesign(S.Nations[n].Design)
-					});
-				}
+
 			}
 			InitializeEquipment(S);
             InitializeTreaties(S);
@@ -169,6 +164,7 @@ namespace Sovereign
             InitializeDoctrines(S);
             InitializeGovernments(S);
             InitializeOperations(S);
+            InitializeStartingForces();
 			Notify("Кабинет сформирован. Проверьте баланс ресурсов и выберите программу развития.");
 			Notify("Учебная модель: современная география; региональная экономика и ресурсы оценочные. Исторические границы пока не включены.");
 			ComputeEconomy(apply: false);
@@ -253,7 +249,13 @@ namespace Sovereign
 		{
 			int num = S.Nations.Length;
             var armyCount = new int[num]; var armyBudget = new double[num];
-            foreach (var unit in S.Armies) { armyCount[unit.Owner] += unit.Battalions; armyBudget[unit.Owner] += 0.002 * unit.Design.Cost / 0.2 * unit.Battalions; }
+            foreach (var unit in S.Armies) {
+                armyCount[unit.Owner] += unit.Battalions;
+                var nation = S.Nations[unit.Owner];
+                // Weekly personnel costs depend on national incomes. Equipment already
+                // has a separate, actually paid daily maintenance bill.
+                armyBudget[unit.Owner] += unit.Personnel * .00002 * Rules.Clamp(nation.GDP / Math.Max(.001,nation.Population) / 30, .25, 2) / 52;
+            }
 			double[,] array = new double[num, 8];
 			double[] array2 = new double[num];
 			double[] array3 = new double[num];
@@ -361,7 +363,7 @@ namespace Sovereign
                     if (num16 == 0) num17 *= 1 + technologyEffects.HouseholdFood;
                     if (num16 == 7)
 					{
-						num17 += (double)armyCount[c] * 0.045;
+						num17 += (double)armyCount[c] * 0.003;
 					}
 					nation.Demand[num16] += num17;
 					double num18 = Math.Min(array4[num16], num17);
@@ -778,7 +780,7 @@ namespace Sovereign
                 if (!live.Contains(a)) continue; // A defender destroyed earlier this day must not act.
                 Nation nation = S.Nations[a.Owner];
                 var doctrine = DoctrineRules.Effects(nation, S.Day);
-                double upkeep = GroundUpkeep(a);
+                double upkeep = GroundUpkeep(a, doctrine);
                 bool funded = nation.Treasury >= upkeep;
                 if (funded) nation.Treasury -= upkeep;
                 if (a.TrainingDays > 0) { if (funded) { a.Organization = Math.Min(100, a.Organization + (100 - a.Organization) / a.TrainingDays); a.TrainingDays--; } continue; }
@@ -798,9 +800,9 @@ namespace Sovereign
                 if (!flag && a.SupplyDays <= 0) DamageArmy(a, (100 - a.Supply) * .004, .2, 8.1);
 				if (a.Target < 0)
 				{
-					double num5 = Math.Min(nation.Stock[7], 0.002 * num3 * a.Battalions);
-					nation.Stock[7] -= num5;
-					a.Strength = Math.Min(100.0, a.Strength + 0.4 * a.Supply / 100.0 * num3 * (num5 / (0.002 * a.Battalions)));
+                    double repair = Math.Min(100 - a.Strength, Math.Min(.4 * a.Supply / 100 * num3, nation.Stock[7] / (.005 * a.Battalions)));
+                    nation.Stock[7] -= repair * .005 * a.Battalions;
+                    a.Strength = Math.Min(100, a.Strength + repair);
 					continue;
 				}
 				a.Strength = Math.Max(8.1, a.Strength - (100.0 - a.Design.Reliability) * 0.002);
@@ -932,6 +934,7 @@ namespace Sovereign
             if (s.Version == 8) InitializeDoctrines(s);
             if (s.Version == 9) InitializeGovernments(s);
             if (s.Version == 10) InitializeOperations(s);
+            if (s.Version == 11) s.Version = 12;
             Validate(s);
 			S = s;
 			Raise();

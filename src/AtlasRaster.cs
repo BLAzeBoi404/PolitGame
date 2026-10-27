@@ -19,6 +19,12 @@ namespace Sovereign
         public double BuildMilliseconds;
         public RectangleF Coverage => new RectangleF(X - Width / PixelScale / 2, Y - Height / PixelScale / 2, Width / PixelScale, Height / PixelScale);
     }
+    internal sealed class AtlasLabel
+    {
+        internal string Text;
+        internal RectangleF Bounds; // Stable world-pixel coordinates, independent of tile/camera.
+        internal bool Country;
+    }
     internal static class AtlasRaster
     {
         public static Bitmap Render(AtlasScene scene)
@@ -41,7 +47,7 @@ namespace Sovereign
                             }
                             for (int i = 0; i < scene.Regions.Length; i++) {
                                 var land = scene.Regions[i]; if (!land.Bounds.IntersectsWith(view)) continue;
-                                bool border = !scene.Overview && scene.Borders && scene.Zoom > 18 && land.Bounds.Width * land.Bounds.Height * scene.Zoom * scene.Zoom >= 35;
+                                bool border = !scene.Overview && scene.Borders && scene.Zoom >= 10 && land.Bounds.Width * land.Bounds.Height * scene.Zoom * scene.Zoom >= 35;
                                 if (!scene.FillRegions[i] && !border) continue;
                                 using (var path = land.RasterPath(clip, scene.Overview ? 4 : scene.Zoom)) {
                                     if (path.PointCount == 0) continue;
@@ -67,32 +73,55 @@ namespace Sovereign
                 return bitmap;
             } catch { bitmap.Dispose(); throw; }
         }
-        internal static void Annotate(Bitmap bitmap, AtlasScene scene)
+        // Choose labels once in world-pixel space. Per-tile collision filtering could
+        // keep a label in one tile and reject its other half in the neighbouring tile.
+        internal static AtlasLabel[] PlanLabels(AtlasScene s)
         {
-            if (scene.Labels == 0 || scene.Overview) return;
-            using (var g = Graphics.FromImage(bitmap)) DrawLabels(g, scene);
-        }
-        private static void DrawLabels(Graphics g, AtlasScene s)
-        {
-            var occupied = new List<RectangleF>(); float ratio = s.PixelScale / s.Zoom;
-            g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-            using (var countryFont = new Font("Georgia", 12 * ratio, FontStyle.Bold, GraphicsUnit.Pixel))
-            using (var regionFont = new Font("Segoe UI", 11 * ratio, FontStyle.Regular, GraphicsUnit.Pixel))
-            using (var ink = new SolidBrush(Color.FromArgb(52, 66, 59)))
-            using (var halo = new SolidBrush(Color.FromArgb(150, 246, 243, 221)))
-            using (var format = new StringFormat { Trimming = StringTrimming.EllipsisCharacter, FormatFlags = StringFormatFlags.NoWrap }) {
-                for (int pass = 0; pass < (s.Labels == 2 && s.Zoom > 25 ? 2 : 1); pass++) {
-                    var lands = pass == 0 ? s.Countries : s.Regions; var font = pass == 0 ? countryFont : regionFont;
-                    foreach (var land in lands) {
-                        if (land.Bounds.Width * s.Zoom < (pass == 0 ? 74 : 100) || land.Bounds.Height * s.Zoom < (pass == 0 ? 27 : 44)) continue;
-                        float x = s.Width / 2f + ((float)land.X - s.X) * s.PixelScale, y = s.Height / 2f + ((float)land.Y - s.Y) * s.PixelScale;
-                        if (x < 0 || y < 0 || x >= s.Width || y >= s.Height) continue;
-                        string name = pass == 0 ? land.Name.ToUpperInvariant() : land.Name;
-                        var size = g.MeasureString(name, font); var box = new RectangleF(x - size.Width / 2, y, Math.Min(size.Width + 6, 190 * ratio), 20 * ratio);
-                        bool overlaps = false; foreach (var prior in occupied) if (box.IntersectsWith(prior)) { overlaps = true; break; }
-                        if (overlaps) continue; occupied.Add(box);
-                        var shadow = box; shadow.Offset(ratio, ratio); g.DrawString(name, font, halo, shadow, format); g.DrawString(name, font, ink, box, format);
+            if(s.Labels==0 || s.Overview)return new AtlasLabel[0];
+            var labels=new List<AtlasLabel>();var cells=new Dictionary<long,List<RectangleF>>();float ratio=s.PixelScale/s.Zoom;
+            using(var bitmap=new Bitmap(1,1))using(var g=Graphics.FromImage(bitmap))
+            using(var countryFont=new Font("Georgia",12*ratio,FontStyle.Bold,GraphicsUnit.Pixel))
+            using(var regionFont=new Font("Segoe UI",11*ratio,FontStyle.Regular,GraphicsUnit.Pixel)) {
+                g.TextRenderingHint=TextRenderingHint.AntiAliasGridFit;
+                for(int pass=0;pass<(s.Labels==2&&s.Zoom>25?2:1);pass++) {
+                    var lands=pass==0?s.Countries:s.Regions;var font=pass==0?countryFont:regionFont;
+                    foreach(var land in lands) {
+                        if(land.Bounds.Width*s.Zoom<(pass==0?74:100)||land.Bounds.Height*s.Zoom<(pass==0?27:44))continue;
+                        string text=pass==0?land.Name.ToUpperInvariant():land.Name;
+                        float width=Math.Min(g.MeasureString(text,font).Width+6,190*ratio);
+                        var box=new RectangleF((float)land.X*s.PixelScale-width/2,(float)land.Y*s.PixelScale,width,20*ratio);
+                        int x0=(int)Math.Floor(box.Left/256),x1=(int)Math.Floor(box.Right/256),y0=(int)Math.Floor(box.Top/256),y1=(int)Math.Floor(box.Bottom/256);
+                        bool overlap=false;
+                        for(int x=x0;x<=x1&&!overlap;x++)for(int y=y0;y<=y1&&!overlap;y++) {
+                            List<RectangleF> nearby;if(!cells.TryGetValue(((long)x<<32)^(uint)y,out nearby))continue;
+                            foreach(var prior in nearby)if(prior.IntersectsWith(box)){overlap=true;break;}
+                        }
+                        if(overlap)continue;
+                        labels.Add(new AtlasLabel {Text=text,Bounds=box,Country=pass==0});
+                        for(int x=x0;x<=x1;x++)for(int y=y0;y<=y1;y++) {
+                            long key=((long)x<<32)^(uint)y;List<RectangleF> nearby;
+                            if(!cells.TryGetValue(key,out nearby))cells[key]=nearby=new List<RectangleF>();nearby.Add(box);
+                        }
                     }
+                }
+            }
+            return labels.ToArray();
+        }
+        internal static void Annotate(Bitmap bitmap, AtlasScene s, AtlasLabel[] labels)
+        {
+            if(labels.Length==0)return;float ratio=s.PixelScale/s.Zoom;
+            using(var g=Graphics.FromImage(bitmap))
+            using(var countryFont=new Font("Georgia",12*ratio,FontStyle.Bold,GraphicsUnit.Pixel))
+            using(var regionFont=new Font("Segoe UI",11*ratio,FontStyle.Regular,GraphicsUnit.Pixel))
+            using(var ink=new SolidBrush(Color.FromArgb(52,66,59)))
+            using(var halo=new SolidBrush(Color.FromArgb(150,246,243,221)))
+            using(var format=new StringFormat {Trimming=StringTrimming.EllipsisCharacter,FormatFlags=StringFormatFlags.NoWrap}) {
+                g.TextRenderingHint=TextRenderingHint.AntiAliasGridFit;
+                foreach(var label in labels) {
+                    var box=label.Bounds;box.Offset(s.Width/2f-s.X*s.PixelScale,s.Height/2f-s.Y*s.PixelScale);
+                    if(box.Right<0||box.Bottom<0||box.Left>s.Width||box.Top>s.Height)continue;
+                    var shadow=box;shadow.Offset(ratio,ratio);var font=label.Country?countryFont:regionFont;
+                    g.DrawString(label.Text,font,halo,shadow,format);g.DrawString(label.Text,font,ink,box,format);
                 }
             }
         }

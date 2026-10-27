@@ -38,7 +38,7 @@ namespace Sovereign
         internal int TestInterface(string directory)
         {
             var results = new List<string>(); int failed = 0;
-            Action<bool, string> check = (ok, name) => { results.Add((ok ? "PASS " : "FAIL ") + name); if (!ok) failed++; };
+            Action<bool, string> check = (ok, name) => { results.Add((ok ? "PASS " : "FAIL ") + name); if (!ok) { failed++; Console.Error.WriteLine("FAIL " + name); } };
             Action<string> preview = p => { PreviewPage(p); detailPanel = menuScreen == "" && page != "Карта"; };
             prefs.Labels = prefs.RegionBorders = prefs.Texture = true; prefs.LabelDensity = 2; prefs.GraphicsQuality = 2; prefs.FrameLimit = 60; prefs.PerformanceOverlay = false;
             prefs.Autosave = false; prefs.Tutorial = false; prefs.Fullscreen = false; prefs.Bindings = Preferences.DefaultBindings();
@@ -77,6 +77,8 @@ namespace Sovereign
             float before = scale;
             OnMouseWheel(new MouseEventArgs(MouseButtons.None, 0, (int)(center.X * UiScale), (int)(center.Y * UiScale), 120));
             check(scale > before, "Mouse wheel zooms the map");
+            using (var frame = RenderFrame()) { }
+            for(int x=350;x<1100;x+=17) if(!hits.Any(h=>h.Rect.Contains(x,450))) { center=new Point(x,450);break; }
             float oldCx = cx;
             OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, (int)(center.X * UiScale), (int)(center.Y * UiScale), 0));
             OnMouseMove(new MouseEventArgs(MouseButtons.Left, 0, (int)((center.X + 40) * UiScale), (int)(center.Y * UiScale), 0));
@@ -110,10 +112,10 @@ namespace Sovereign
             cx += 0.25f;
             using (var frame = RenderFrame()) { }
             check(MapCacheBuilds == cached, "Small camera movements reuse accurate overscanned geography");
-            cx += CameraMargin / scale / UiScale + 2;
+            cx += AtlasTiles.Size * 2 / scale / UiScale + 2;
             using (var frame = RenderFrame()) { }
-            check(MapCacheBuilds == cached + 1, "Leaving the overscan margin rebuilds geography");
-            cx -= CameraMargin / scale / UiScale + 2;
+            check(MapCacheBuilds > cached, "Moving beyond prefetched tiles builds newly visible geography");
+            cx -= AtlasTiles.Size * 2 / scale / UiScale + 2;
             foreach (string mode in MapLayers) {
                 click(mode);
                 using (var frame = RenderFrame()) frame.Save(Path.Combine(directory, "map-" + Array.IndexOf(MapLayers, mode) + ".png"));
@@ -137,7 +139,9 @@ namespace Sovereign
             check(W.Countries.Sum(c => c.DisplayPath(6).PointCount) < W.Countries.Sum(c => c.Path.PointCount), "Overview geometry reduces vertices while retaining exact hit-test paths");
             // Exercise new systems through the real hit regions and keyboard handler.
             foreign = W.ByCode("POL"); preview("Дипломатия");
-            while (E.S.Relations[E.Pair(E.S.Player, foreign)] < 65) click("Отправить");
+            E.Player.Treasury = 100; // diplomacy fixture must be funded independently of the production campaign
+            for (int attempt=0; attempt<20 && E.S.Relations[E.Pair(E.S.Player, foreign)] < 65; attempt++) click("Отправить");
+            check(E.S.Relations[E.Pair(E.S.Player, foreign)] >= 65, "Funded diplomatic contacts reach the alliance threshold");
             click("Предложить союз");
             check(E.Allied(E.S.Player, foreign), "Diplomatic action establishes an actual defensive alliance");
             click("Запросить");
@@ -169,6 +173,7 @@ namespace Sovereign
             TestDoctrineInterface(directory, check, click);
             TestGovernmentInterface(directory, check, click);
             TestOperationsInterface(directory, check, click);
+            TestScenarioInterface(directory, check);
             results.Add("Failures: " + failed); File.WriteAllLines(Path.Combine(directory, "ui-results.txt"), results);
             Console.WriteLine(string.Join(Environment.NewLine, results));
             return failed == 0 ? 0 : 2;

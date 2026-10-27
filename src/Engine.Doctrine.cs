@@ -105,7 +105,12 @@ namespace Sovereign
         {
             var effects = DoctrineRules.Effects(S.Nations[owner], S.Day); return GroundTechnologyFactor(owner) * (1 + (defending ? effects.Defense : effects.Attack));
         }
-        public double GroundUpkeep(Army army) => (army.Design.Maintenance * army.Battalions + army.Attachments.Sum(a => a.Blueprint.Maintenance)) * (1 + DoctrineRules.Effects(S.Nations[army.Owner], S.Day).Maintenance);
+        public double GroundUpkeep(Army army) => GroundUpkeep(army, DoctrineRules.Effects(S.Nations[army.Owner], S.Day));
+        private static double GroundUpkeep(Army army, DoctrineEffects effects)
+        {
+            double attachments = 0; foreach (var a in army.Attachments) attachments += a.Blueprint.Maintenance;
+            return (army.Design.Maintenance * army.Battalions + attachments) * (1 + effects.Maintenance);
+        }
         public double AirUpkeep(AirWing wing) => wing.Design.Maintenance * (1 + DoctrineRules.Effects(S.Nations[wing.Owner], S.Day).AirMaintenance);
         public double AirDoctrineFactor(int owner, AirMission mission)
         {

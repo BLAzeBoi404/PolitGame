@@ -107,6 +107,7 @@ namespace Sovereign
                 CompactSection(g, "ЧАСТИ / " + units.Count, 160);
                 Button(g, "Резерв →", 168, 151, 92, OpenManpower, false, "Личный состав, мобилизация и штаты", 27);
                 Button(g, "Авиация →", 270, 151, 106, OpenAviation, false, "Аэродромы, крылья и вылеты", 27);
+                Txt(g, "На карте: " + People(units.Sum(a => (long)a.Personnel)) + " чел. · несколько частей объединены в значок", 20, 190, 10, Palette.Muted, false, w);
                 int offset = Math.Min(scroll, Math.Max(0, units.Count - 6));
                 for (int i = offset; i < Math.Min(units.Count, offset + 6); i++) {
                     var a = units[i]; float y = 209 + (i - offset) * 80;
@@ -181,7 +182,7 @@ namespace Sovereign
             }
             bool convention = n.Politics.Pending == null && n.Government.Target >= 0 && n.Government.Phase == 1;
             Button(g, convention ? "Реформа ждёт решения →" : n.Politics.Pending == null ? "Программы кабинета →" : "Событие: " + PolicyRules.Events[(int)n.Politics.Pending.Kind].Name, x + 12, y + 208, w - 24, () => { if (convention) OpenGovernment(true); else OpenNationalPolicy(n.Politics.Pending == null ? 0 : 1); }, convention || n.Politics.Pending != null, "Национальные решения, события и государственная реформа", 28); hits[hits.Count - 1].Label = convention ? "government:outliner" : "policy:outliner";
-            Txt(g, "СОЕДИНЕНИЯ", x + 14, y + 246, 9, Palette.Gold, true);
+            Txt(g, "СОЕДИНЕНИЯ / " + E.S.Armies.Count(a => a.Owner == E.S.Player), x + 14, y + 246, 9, Palette.Gold, true);
             var units = E.S.Armies.Where(a => a.Owner == E.S.Player).Take(3).ToList();
             for (int i = 0; i < units.Count; i++) {
                 var a = units[i]; Button(g, "№" + a.Id + " · " + W.Regions[a.Region].Name, x + 12, y + 266 + i * 31, w - 24, () => FocusArmy(a), a.Id == army, a.Design.Name + "; готовность " + a.Strength.ToString("0") + "%, снабжение " + a.Supply.ToString("0") + "%", 27);
@@ -193,7 +194,7 @@ namespace Sovereign
                 Txt(g, "ВЫБРАННАЯ ОБЛАСТЬ", x + 14, y + 407, 9, Palette.Gold, true);
                 Para(g, W.Regions[selected].Name, x + 14, y + 429, w - 28, 45, 18, Palette.Text);
                 Txt(g, W.Countries[p.Owner].Name, x + 14, y + 481, 12, Palette.Muted, false, w - 28);
-                Txt(g, Num(p.Population) + " млн · дороги " + p.Infrastructure.ToString("0") + "%", x + 14, y + 508, 12, Palette.Text);
+                Txt(g, People((long)Math.Round(p.Population * 1000000)) + " чел. · дороги " + p.Infrastructure.ToString("0") + "%", x + 14, y + 508, 12, Palette.Text);
                 Txt(g, "Спокойствие " + (100 - p.Unrest).ToString("0") + "%", x + 14, y + 535, 12, Palette.Teal);
                 Button(g, p.Owner == E.S.Player ? "Развивать область →" : "Дипломатия →", x + 12, y + 570, w - 24, () => { foreign = p.Owner; Navigate(p.Owner == E.S.Player ? "Производство" : "Дипломатия"); }, false, "Управление выбранной территорией", 30);
             }

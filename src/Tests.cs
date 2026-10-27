@@ -18,9 +18,32 @@ namespace Sovereign
 			report.Add((pass ? "PASS " : "FAIL ") + name);
 			if (!pass)
 			{
-				failures++;
+				failures++; Console.Error.WriteLine("FAIL " + name);
 			}
 		}
+
+        internal static void FillPlayerFormations(Engine e)
+        {
+            foreach (var a in e.S.Armies.Where(a => a.Owner == e.S.Player)) {
+                int missing = ManpowerRules.Establishment(a) - a.Personnel;
+                a.Personnel += missing; e.Player.Mobilized += missing;
+            }
+        }
+        // A deliberately small, homogeneous fixture for exact crew/fuel accounting.
+        // Integration and scenario tests continue to use the full national forces.
+        internal static void SmallPlayerForce(Engine e)
+        {
+            e.S.Armies.RemoveAll(a => a.Owner == e.S.Player);
+            var n = e.Player; n.Templates = ManpowerRules.Defaults(); n.NextTemplate = 4; n.ActiveTemplate = 1;
+            n.Conscription = ConscriptionLaw.Volunteers; n.LawChangedDay = -90; n.Recruits = 3400; n.Mobilized = 3400; n.Discharged = n.PersonnelLosses = 0;
+            var supply = e.SupplyNetwork();
+            foreach (int r in e.World.Countries[e.S.Player].Regions.Where(r => supply[r]).Take(3)) {
+                var d = e.FindDesign(e.S.Player,n.ActiveDesign);
+                var a = new Army {Id=e.S.NextArmy++,Owner=e.S.Player,Region=r,DesignId=d.Id,Design=d.Blueprint.Copy()};
+                e.S.Armies.Add(a); n.Mobilized += a.Personnel;
+            }
+            e.ComputeEconomy(false);
+        }
 
 		private static bool Finite(double d)
 		{
@@ -181,6 +204,7 @@ namespace Sovereign
             DoctrineTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
             OperationsTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
             GovernmentTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
+            ScenarioTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
 			report.Add("Simulated days: " + e.S.Day + "; wall seconds: " + stopwatch.Elapsed.TotalSeconds.ToString("0.00"));
 			report.Add("Countries: " + w.Countries.Length + "; regions: " + w.Regions.Length);
 			report.Add("Failures: " + failures);

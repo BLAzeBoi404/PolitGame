@@ -1,0 +1,5 @@
+1600x900; high quality; limit 60; medium zoom 45; paused; synthetic requested 125 Hz left/right drag through the real mouse handler and WinForms message loop.
+Runtime: Unix 6.18.55.0 / Mono. Paint delivery intervals; NOT physical monitor FPS.
+World armies: 517
+First traversal: paints=290; inputs=280; interval mean=20.78 p95=29.03 max=273.61 ms; >33ms=8; >50ms=3; raster builds=98; fallback paints=51; GC0=20
+Repeated traversal: paints=329; inputs=295; interval mean=18.29 p95=24.74 max=50.72 ms; >33ms=1; >50ms=1; raster builds=116; fallback paints=44; GC0=24

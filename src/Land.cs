@@ -12,6 +12,8 @@ namespace Sovereign
         public PointF[][] Rings;
         public GraphicsPath Path;
         public RectangleF Bounds;
+        public double Area;
+        private RectangleF[] ringBounds;
         private GraphicsPath overviewPath, regionalPath;
         [ThreadStatic] private static List<PointF> clipInput, clipOutput;
         private struct PointRange { public int Start, End; public PointRange(int start, int end) { Start = start; End = end; } }
@@ -20,11 +22,11 @@ namespace Sovereign
         // Background rasterization owns its GDI paths. Only immutable managed points are shared.
         public GraphicsPath RasterPath(RectangleF clip, float zoom)
         {
-            int level = zoom <= 12 ? 0 : zoom <= 40 ? 1 : 2;
+            int level = zoom <= 12 ? 0 : zoom <= 40 ? 1 : zoom <= 100 ? 2 : 3;
             PointF[][] rings;
             lock (rasterRings) {
                 if (!rasterRings.TryGetValue(level, out rings)) {
-                    float tolerance = level == 0 ? .06f : level == 1 ? .018f : .005f;
+                    float tolerance = level == 0 ? .06f : level == 1 ? .018f : level == 2 ? .005f : .001f;
                     rings = new PointF[Rings.Length][];
                     for (int i = 0; i < Rings.Length; i++) rings[i] = Simplify(Rings[i], tolerance);
                     rasterRings[level] = rings;
@@ -53,6 +55,35 @@ namespace Sovereign
         {
             Path = BuildPath(0);
             Bounds = Path.GetBounds();
+            ringBounds = new RectangleF[Rings.Length]; Area = 0;
+            for (int k = 0; k < Rings.Length; k++) {
+                var ring = Rings[k]; if (ring.Length == 0) continue;
+                float minX = ring[0].X, maxX = minX, minY = ring[0].Y, maxY = minY; double area = 0;
+                for (int i = 0, j = ring.Length - 1; i < ring.Length; j = i++) {
+                    minX = Math.Min(minX, ring[i].X); maxX = Math.Max(maxX, ring[i].X); minY = Math.Min(minY, ring[i].Y); maxY = Math.Max(maxY, ring[i].Y);
+                    area += (double)ring[j].X * ring[i].Y - (double)ring[i].X * ring[j].Y;
+                }
+                ringBounds[k] = RectangleF.FromLTRB(minX, minY, maxX, maxY); Area += Math.Abs(area) / 2;
+            }
+        }
+        // GDI+ IsVisible rasterizes in device pixels: at a scale of one degree per pixel
+        // it misses small districts and even selects the neighbouring country. Never use
+        // that raster test for geographic picking. The world format stores exterior rings.
+        public bool Contains(PointF point)
+        {
+            if (!Bounds.Contains(point)) return false;
+            for (int k = 0; k < Rings.Length; k++) {
+                if (!ringBounds[k].Contains(point)) continue;
+                var ring = Rings[k]; int winding = 0;
+                for (int i = 0, j = ring.Length - 1; i < ring.Length; j = i++) {
+                    double ax = ring[j].X, ay = ring[j].Y, bx = ring[i].X, by = ring[i].Y;
+                    double side = (bx - ax) * (point.Y - ay) - (point.X - ax) * (by - ay);
+                    if (ay <= point.Y && by > point.Y && side > 0) winding++;
+                    else if (ay > point.Y && by <= point.Y && side < 0) winding--;
+                }
+                if (winding != 0) return true;
+            }
+            return false;
         }
         // At the selected zoom the simplification error is < 0.8 logical pixels.
         // Hit tests always use original geometry. LOD paths are generated once on demand.

@@ -20,7 +20,7 @@ namespace Sovereign
             Action<Engine, string> raw = (e, file) => { using (var stream = File.Create(file)) new XmlSerializer(typeof(Campaign)).Serialize(stream, e.S); };
             scenario("Constitutional reform orders", () => {
                 var e = fresh(); var n = e.Player; var s = n.Government; double cash = n.Treasury; uint rng = e.S.RandomState;
-                check(e.S.Version == 11 && e.S.Nations.All(c => c.Government.Form == 0 && c.Government.Target == -1), "Every new country starts with neutral existing institutions rather than an invented historical government");
+                check(e.S.Version == 12 && e.S.Nations.All(c => c.Government.Form == 0 && c.Government.Target == -1), "Every new country starts with neutral existing institutions rather than an invented historical government");
                 check(e.StartGovernmentReform(0) != null && e.StartGovernmentReform(5) != null && e.StartGovernmentReform(-1) != null && n.Treasury == cash && s.Target == -1 && e.S.RandomState == rng, "Unknown and neutral reform targets are rejected without changing the campaign");
                 n.Treasury = 0; check(e.StartGovernmentReform(1) != null, "Unfunded constitutional reform cannot begin"); n.Treasury = cash;
                 n.Stability = 49; check(e.StartGovernmentReform(1) != null, "Reform requires fifty stability"); n.Stability = 70;
@@ -123,7 +123,7 @@ namespace Sovereign
                 rejectState("Future reform cooldown dates are rejected", s => s.LastStartedDay = 2);
                 var legacy = fresh(); DoctrineTests.Learn(legacy.Player, 0, 1); legacy.AdoptDoctrine(0); legacy.SelectResearch(0); legacy.Player.ResearchProgress = 37.25;
                 double cash = legacy.Player.Treasury; uint rng = legacy.S.RandomState; legacy.S.Version = 9; foreach (var n in legacy.S.Nations) n.Government = null; raw(legacy, file); other.Load(file);
-                check(other.S.Version == 11 && other.Player.Treasury == cash && other.S.RandomState == rng && other.Player.ResearchProgress == 37.25 && other.Player.Doctrines.Active[0] == 0 && other.S.Nations.All(n => n.Government.Form == 0 && n.Government.Target == -1), "Version-nine migration preserves money, research, doctrine adoption and RNG without inventing governments"); other.Validate(other.S);
+                check(other.S.Version == 12 && other.Player.Treasury == cash && other.S.RandomState == rng && other.Player.ResearchProgress == 37.25 && other.Player.Doctrines.Active[0] == 0 && other.S.Nations.All(n => n.Government.Form == 0 && n.Government.Target == -1), "Version-nine migration preserves money, research, doctrine adoption and RNG without inventing governments"); other.Validate(other.S);
             });
             scenario("AI constitutional reform", () => {
                 var e = fresh(); int owner = world.ByCode("POL"); var n = e.S.Nations[owner]; n.Treasury = 10000; n.Stability = n.Approval = 70; n.Repression = 0;

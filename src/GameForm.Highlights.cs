@@ -21,11 +21,11 @@ namespace Sovereign
         {
             var view = new RectangleF(cx - mapRect.Width / scale / 2, cy - mapRect.Height / scale / 2, mapRect.Width / scale, mapRect.Height / scale);
             if (highlightPixels != UiScale || highlightScale != scale || !highlightCoverage.Contains(view) || highlightPaths.Count > 6) {
-                ClearHighlights(); highlightPixels = UiScale; highlightScale = scale; highlightCoverage = view; highlightCoverage.Inflate(140 / scale, 140 / scale);
+                ClearHighlights(); highlightPixels = UiScale; highlightScale = scale; highlightCoverage = view; highlightCoverage.Inflate(256 / scale, 256 / scale);
             }
             GraphicsPath path;
             if (!highlightPaths.TryGetValue(land, out path)) {
-                path = land.Bounds.IntersectsWith(highlightCoverage) ? land.ClipDisplayPath(highlightCoverage, scale) : new GraphicsPath();
+                path = land.Bounds.IntersectsWith(highlightCoverage) ? land.RasterPath(highlightCoverage, scale) : new GraphicsPath();
                 highlightPaths.Add(land, path);
             }
             return path;

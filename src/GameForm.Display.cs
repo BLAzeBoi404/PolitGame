@@ -56,7 +56,7 @@ namespace Sovereign
             if (!prefs.PerformanceOverlay) return;
             Fill(g, Color.FromArgb(230, 15, 24, 26), 12, VH - 86, 360, 43);
             Txt(g, "Кадр CPU " + frameCpuMs.ToString("0.0") + " мс  ·  обновления " + (frameIntervalMs > 0 ? (1000 / frameIntervalMs).ToString("0") : "—") + "/с", 22, VH - 80, 11, Palette.Gold);
-            Txt(g, "При движении · лимит " + (prefs.FrameLimit == 0 ? "выкл." : prefs.FrameLimit.ToString()) + " · карта " + (atlasWorker == null ? "готова" : "детализация…"), 22, VH - 62, 10, Palette.Muted);
+            Txt(g, "При движении · лимит " + (prefs.FrameLimit == 0 ? "выкл." : prefs.FrameLimit.ToString()) + " · карта " + (!AtlasBusy ? "готова" : "детализация…"), 22, VH - 62, 10, Palette.Muted);
         }
         private void CycleResolution()
         {

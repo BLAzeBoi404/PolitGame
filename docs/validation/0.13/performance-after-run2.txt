@@ -1,0 +1,13 @@
+1600x900, Unix / Mono, fixed camera; high quality / native raster resolution; CPU input + paint times, not display FPS. Autosave disabled.
+Cached political map: mean=3.74 p95=4.73 max=5.32 ms; samples=60; GC0=0; GC1=0
+Hover and exact hit testing: mean=3.98 p95=4.95 max=11.36 ms; samples=60; GC0=2; GC1=0
+Complex selected province: mean=4.32 p95=5.47 max=5.97 ms; samples=30; GC0=1; GC1=0
+Camera drag: mean=3.86 p95=4.45 max=6.60 ms; samples=60; GC0=1; GC1=0
+Camera rebuild: mean=8.46 p95=9.65 max=10.23 ms; samples=12; GC0=0; GC1=0
+Medium zoom cached / many provinces: mean=4.48 p95=8.15 max=13.80 ms; samples=60; GC0=1; GC1=0
+Medium zoom long drag / async detail: mean=4.19 p95=5.27 max=14.39 ms; samples=90; GC0=1; GC1=0
+Latest camera detail settled in 10.01 ms; fallback frames=16
+Raster stages: tiles=40/96; background tile=4.84 ms; tile annotations cached
+Resource map advancing daily: mean=12.22 p95=23.38 max=35.12 ms; samples=20; GC0=5; GC1=1
+Seven-day simulation burst: mean=57.98 p95=95.25 max=100.05 ms; samples=20; GC0=27; GC1=5
+Research workspace: mean=6.00 p95=6.27 max=7.67 ms; samples=40; GC0=1; GC1=0

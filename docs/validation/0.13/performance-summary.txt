@@ -1,0 +1,13 @@
+Medians of three consecutive paired runs, 1600x900, Mono/libgdiplus/Xvfb. CPU timing, not monitor FPS.
+0.12: 517 starting formations; 0.13: 3765 starting formations.
+Case | mean before -> after (ms) | p95 before -> after (ms)
+Cached political map | 3.46 -> 3.74 | 6.56 -> 4.73
+Hover and exact hit testing | 3.58 -> 3.98 | 4.32 -> 5.08
+Complex selected province | 4.09 -> 4.32 | 4.59 -> 5.47
+Camera drag | 3.48 -> 3.95 | 5.35 -> 5.37
+Camera rebuild | 7.57 -> 8.46 | 8.05 -> 12.24
+Medium zoom cached / many provinces | 4.89 -> 4.48 | 6.02 -> 8.15
+Medium zoom long drag / async detail | 9.14 -> 4.19 | 16.89 -> 5.27
+Resource map advancing daily | 7.51 -> 12.14 | 17.70 -> 23.11
+Seven-day simulation burst | 39.32 -> 59.55 | 78.93 -> 95.25
+Research workspace | 6.84 -> 6.16 | 9.75 -> 6.51

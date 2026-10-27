@@ -78,7 +78,9 @@ namespace Sovereign
         }
         public static double Support(Army army, EquipmentKind kind)
         {
-            return army.Attachments.Where(a => a.Blueprint.Kind == kind).Sum(a => {
+            double total = 0;
+            foreach (var a in army.Attachments) {
+                if (a.Blueprint.Kind != kind) continue;
                 Blueprint d = a.Blueprint;
                 double benefit;
                 switch (kind) {
@@ -88,8 +90,9 @@ namespace Sovereign
                     case EquipmentKind.Fighter: benefit = 0.03 + d.Attack / 600 + d.Speed * 0.018 + d.Electronics * 0.008; break;
                     default: benefit = 0.03 + d.Attack / 650 + d.Penetration / 2500 + d.Electronics * 0.008; break;
                 }
-                return benefit * a.Condition / 100;
-            });
+                total += benefit * a.Condition / 100;
+            }
+            return total;
         }
         public static double CombatPower(Army army, Army enemy, bool defending)
         {

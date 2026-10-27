@@ -33,11 +33,7 @@ namespace Sovereign
         private void ClampCamera() { cx = Math.Max(-180, Math.Min(180, cx)); cy = Math.Max(-84, Math.Min(84, cy)); }
         private int FindCountry(PointF point)
         {
-            for (int i = 0; i < W.Countries.Length; i++) {
-                var country = W.Countries[i];
-                if (country.Bounds.Contains(point) && country.Path.IsVisible(point)) return i;
-            }
-            return -1;
+            return W.FindCountry(point);
         }
         private void FocusSetupCountry(int id)
         {
@@ -107,13 +103,13 @@ namespace Sovereign
             CountrySilhouette(g, menuCountry, new RectangleF(x + 35, 157, 228, 85), Color.FromArgb(140, Palette.Gold));
             Book(g, country.Name, x + 20, 254, 23, Palette.Text, true, 258);
             Txt(g, country.Code + "  /  " + country.Regions.Count + " областей", x + 20, 289, 11, Palette.Gold);
-            Txt(g, "Население   " + Num(country.Population / 1000000) + " млн", x + 20, 319, 14, Palette.Text);
+            Txt(g, "Население " + country.PopulationYear + " · " + Num(country.Population / 1000000) + " млн", x + 20, 319, 14, Palette.Text);
             Txt(g, "ВВП базы     " + Money(country.GDP / 1000), x + 20, 344, 14, Palette.Text);
             Txt(g, "НАЧАЛЬНЫЙ ГОД", x + 20, 371, 10, Palette.Muted, true);
             Button(g, experimentalYear ? "✓ Экспериментальная эпоха" : "○ Экспериментальная эпоха", x + 20, 435, 258, () => {
                 experimentalYear = !experimentalYear; if (!experimentalYear) { newYear = 2026; startYear.Value = 2026; } LayoutMenuControls(); Invalidate();
             }, experimentalYear, "Меняет дату и технологии; границы остаются современными.", 30);
-            Para(g, "Современные границы для любого года. Экономика — исходные оценки модели.", x + 20, 479, 258, 53, 12, Palette.Muted);
+            Para(g, "Современные границы. Региональное население, состав и размещение войск — оценки сценария; численность ВС основана на открытых данных.", x + 20, 479, 258, 53, 12, Palette.Muted);
             Txt(g, "ПОВЕДЕНИЕ ДРУГИХ СТРАН", x + 20, 544, 10, Palette.Gold, true);
             string[] difficulty = { "Спокойное", "Стратегическое", "Конкурентное" };
             for (int i = 0; i < 3; i++) { int v = i; Button(g, difficulty[i], x + 20, 570 + 38 * i, 258, () => { newDifficulty = v; Invalidate(); }, newDifficulty == i, "Поведение ИИ", 32); }
@@ -122,7 +118,7 @@ namespace Sovereign
             Fill(g, Palette.Panel, 0, VH - 42, VW, 42);
             Txt(g, "ЛКМ: выбрать государство    /    Потяните: переместить карту    /    Колесо: масштаб", 24, VH - 28, 12, Palette.Text);
             Button(g, "−", VW - 175, VH - 37, 40, () => { scale = Math.Max(2, scale / 1.3f); Invalidate(); }, false, "Отдалить", 30);
-            Button(g, "+", VW - 125, VH - 37, 40, () => { scale = Math.Min(100, scale * 1.3f); Invalidate(); }, false, "Приблизить", 30);
+            Button(g, "+", VW - 125, VH - 37, 40, () => { scale = Math.Min(400, scale * 1.3f); Invalidate(); }, false, "Приблизить", 30);
             Button(g, "⌂", VW - 75, VH - 37, 40, () => FocusSetupCountry(menuCountry), false, "К выбранной стране", 30);
         }
     }

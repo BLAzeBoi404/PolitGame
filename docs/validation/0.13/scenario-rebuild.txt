@@ -1,0 +1,68 @@
+Enclave connection Брюссельский столичный регион → Фламандский Брабант
+Enclave connection Арима → Тунапуна-Пиарко
+Enclave connection Тайбэй → Синьбэй
+Enclave connection Цзяи → уезд Цзяи
+Enclave connection Куала-Лумпур → Селангор
+Enclave connection Путраджая → Селангор
+Enclave connection Бишкек → Чуйская область
+Enclave connection Берлин → Бранденбург
+Enclave connection Пномпень → Кандаль
+Enclave connection Мингечевир → Евлахский район
+Enclave connection Австралийская столичная территория → Новый Южный Уэльс
+Enclave connection Вена → Нижняя Австрия
+Enclave connection Ноттингем → Ноттингемшир
+Enclave connection Лестер → Лестершир
+Enclave connection Дерби → Дербишир
+Enclave connection Сеул → Кёнгидо
+Enclave connection Кванджу → Чолла-Намдо
+Enclave connection Тэгу → Кёнсан-Пукто
+Enclave connection Адыгея → Краснодарский край
+Enclave connection Дархан-Уул → Сэлэнгэ
+Enclave connection Улан-Батор → Туве
+Enclave connection Аддис-Абеба → Оромия
+Enclave connection Харари → Оромия
+Enclave connection Сана → Сана
+Enclave connection Прага → Среднечешский край
+Enclave connection Минск → Минская область
+Enclave connection Киев → Киев
+Enclave connection Ташкент → Ташкентская область
+Enclave connection Алма-Ата → Алматинская область
+Enclave connection Нур-Султан → Акмолинская область
+Enclave connection Степанакерт → Ходжалинский район
+Enclave connection Дамаск → Дамаск
+Enclave connection Бухарест → Илфов
+Enclave connection Даугавпилс → Даугавпилс
+Enclave connection Резекне → Резекне
+Enclave connection Ниамей → Тиллабери
+Enclave connection Бамако → Куликоро
+Enclave connection Дьёр → Дьёр-Мошон-Шопрон
+Enclave connection Сомбатхей → Ваш
+Enclave connection Залаэгерсег → Зала
+Enclave connection Веспрем → Веспрем
+Enclave connection Капошвар → Шомодь
+Enclave connection Печ → Баранья
+Enclave connection Сексард → Тольна
+Enclave connection Секешфехервар → Фейер
+Enclave connection Бекешчаба → Бекеш
+Enclave connection Дебрецен → Хайду-Бихар
+Enclave connection Ньиредьхаза → Сабольч-Сатмар-Берег
+Enclave connection Евлах → Евлахский район
+Enclave connection Душанбе → РПП
+Enclave connection Луксор → Кена
+Enclave connection Франсистаун → Северо-Восточный округ
+Enclave connection Лобаце → Юго-Восточный округ
+Enclave connection Селеби-Пхикве → Центральный округ
+Enclave connection Сова → Центральный округ
+Enclave connection Нага → Южный Камаринес
+Enclave connection Анджелес → Пампанга
+Enclave connection Багио → Бенгет
+Enclave connection Нафтала́н → Геранбойский район
+Enclave connection Шеки → Шекинский район
+USA 340003797 [('Калифорния', 41375903), ('Техас', 28744755), ('Флорида', 21212629), ('Нью-Йорк', 21055806), ('Иллинойс', 13734826)]
+RUS 143669648 [('Москва', 13100002), ('Московская область', 8600000), ('Краснодарский край', 5800000), ('Санкт-Петербург', 5600000), ('Свердловская область', 3988485)]
+IND 1450935791 [('Уттар-Прадеш', 239429872), ('Махараштра', 134655040), ('Бихар', 124739308), ('Западная Бенгалия', 109373818), ('Мадхья-Прадеш', 87027173)]
+UKR 37860221 [('Донецкая область', 3450055), ('Днепропетровская область', 3009758), ('Харьковская область', 2800482), ('Киев', 2568950), ('Одесская область', 2217636)]
+MDA 2402306 [('Кишинёв', 716507), ('Бендеры', 196165), ('Бельцы', 135916), ('Кагульский район', 116273), ('Комрат', 45258)]
+CHN 1408975000 [('Гуандун', 125939746), ('Шаньдун', 101473393), ('Хэнань', 99314597), ('Цзянсу', 84702748), ('Сычуань', 83623351)]
+Overlay built: 176 countries; 4136 regions. IDs and boundaries unchanged.
+PASS All three scenario resources reproduced byte-for-byte from included inputs

@@ -8,7 +8,7 @@ namespace Sovereign
     {
         public static void Run(World world, string directory, Action<bool, string> check)
         {
-            Func<Engine> fresh = () => { var e = new Engine(world) { AutoSaveEnabled = false }; e.New(world.ByCode("UKR"), 2026, 1); return e; };
+            Func<Engine> fresh = () => { var e = new Engine(world) { AutoSaveEnabled = false }; e.New(world.ByCode("UKR"), 2026, 1); Tests.SmallPlayerForce(e); return e; };
             Action<string, Action> scenario = (name, run) => { try { run(); } catch (Exception ex) { check(false, name + ": " + ex); } };
             Func<Engine, bool> conserved = e => Enumerable.Range(0, e.S.Nations.Length).All(c => {
                 var n = e.S.Nations[c]; return n.Mobilized - n.Discharged == n.Recruits + e.ServicePersonnel(c) + n.PersonnelLosses;
@@ -133,7 +133,7 @@ namespace Sovereign
                 try { loaded.Validate(loaded.S); } catch (InvalidDataException) { rejected = true; }
                 check(rejected, "Save validator rejects a broken formation template reference");
                 var legacy = fresh(); legacy.S.Version = 4; legacy.Save(path); loaded.Load(path);
-                check(loaded.S.Version == 11 && loaded.S.Armies.Count == legacy.S.Armies.Count && loaded.Player.Designs[0].Stock == legacy.Player.Designs[0].Stock && conserved(loaded), "Version-four migration preserves units and equipment while initializing a balanced personnel ledger");
+                check(loaded.S.Version == 12 && loaded.S.Armies.Count == legacy.S.Armies.Count && loaded.Player.Designs[0].Stock == legacy.Player.Designs[0].Stock && conserved(loaded), "Version-four migration preserves units and equipment while initializing a balanced personnel ledger");
                 int pol = world.ByCode("POL"); e = fresh(); e.Diplomacy(pol, 3); var n = e.S.Nations[pol]; reserve(n, 0); n.Treasury = 100; n.Stability = 80;
                 e.PlanManpower(pol); check(n.Conscription == ConscriptionLaw.Limited && conserved(e), "Wartime AI raises conscription under the same costs and restrictions");
                 for (int i = 0; i < 730; i++) { e.Tick(); if (i % 30 == 0) e.Validate(e.S); }

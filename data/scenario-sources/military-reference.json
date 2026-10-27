@@ -1,0 +1,1052 @@
+{
+  "FJI": {
+    "source": "australia-oceania/fj.json",
+    "strength_text": "approximately 4,000 active Republic of Fiji Military Forces (2025)",
+    "services_text": "Republic of Fiji Military Forces (RFMF): Land Force, Republic of Fiji Navy (2025)",
+    "urban_fraction": 0.5870000000000001
+  },
+  "TZA": {
+    "source": "africa/tz.json",
+    "strength_text": "approximately 25,000 active Defense Forces (2025)",
+    "services_text": "Tanzania People's Defense Forces (TPDF or Jeshi la Wananchi la Tanzania, JWTZ): Land Forces, Naval Forces, Air Force, Nation Building Army (Jeshi la Kujenga Taifa, JKT), Reserve Forces<br><br>Ministry of Home Affairs: Tanzania Police Force (Jeshi la Polisi Tanzania) (2025)",
+    "urban_fraction": 0.374
+  },
+  "SAH": {
+    "source": "africa/wi.json",
+    "strength_text": "",
+    "services_text": "",
+    "urban_fraction": 0.868
+  },
+  "CAN": {
+    "source": "north-america/ca.json",
+    "strength_text": "approximately 75,000 active-duty military personnel (2025)",
+    "services_text": "Canadian Forces: Canadian Army, Royal Canadian Navy, Royal Canadian Air Force (2025)",
+    "urban_fraction": 0.8190000000000001
+  },
+  "USA": {
+    "source": "north-america/us.json",
+    "strength_text": "approximately 1.28 million active duty Armed Forces (450,000 Army; 334,000 Navy; 317,000 Air Force; 10,000 Space Force; 168,000 Marine Corps); 42,000 Coast Guard) (2025)",
+    "services_text": "United States Armed Forces (aka US Military): US Army (USA), US Navy (USN; includes US Marine Corps or USMC), US Air Force (USAF), US Space Force (USSF); US Coast Guard (USCG); National Guard (Army National Guard and Air National Guard) (2025)",
+    "urban_fraction": 0.833
+  },
+  "KAZ": {
+    "source": "central-asia/kz.json",
+    "strength_text": "available information varies widely; estimated 50,000 active Armed Forces; estimated 30,000 National Guard (2025)",
+    "services_text": "Armed Forces of the Republic of Kazakhstan: Land Forces (Army of Kazakhstan), Naval Forces, Air and Air Defense Forces<br><br>Ministry of Internal Affairs: National Police, National Guard<br><br>Committee for National Security (KNB): Border Guard Service (2025)",
+    "urban_fraction": 0.5820000000000001
+  },
+  "UZB": {
+    "source": "central-asia/uz.json",
+    "strength_text": "limited available information; estimated 50,000 active Armed Forces (2025)",
+    "services_text": "Armed Forces of Uzbekistan: Army, Air and Air Defense Forces; National Guard <br><br>Ministry of Internal Affairs: Internal Security Troops, Border Guards, police (2024)",
+    "urban_fraction": 0.505
+  },
+  "PNG": {
+    "source": "east-n-southeast-asia/pp.json",
+    "strength_text": "estimated 4,000 active PNGDF  (2025)",
+    "services_text": "Papua New Guinea Defense Force (PNGDF): Land, Air, Maritime elements<br><br>Ministry of Internal Security: Royal Papua New Guinea Constabulary (RPNGC) (2025)",
+    "urban_fraction": 0.13699999999999998
+  },
+  "IDN": {
+    "source": "east-n-southeast-asia/id.json",
+    "strength_text": "approximately 400,000 active Armed Forces, including about 300,000 Army (2025)",
+    "services_text": "Indonesian National Armed Forces (Tentara Nasional Indonesia, TNI): Army (TNI-Angkatan Darat, TNI-AD), Navy (TNI-Angkatan Laut, TNI-AL; includes Marine Corps (Korps Marinir or KorMar)), Air Force (TNI-Angkatan Udara, TNI-AU)<br><br>Indonesian National Police (aka The State Police of the Republic of Indonesia or POLRI)<br><br>Ministry of Transportation: Indonesia Sea and Coast Guard (Kesatuan Penjagaan Laut dan Pantai Republik Indonesia, KPLP); Coordinating Ministry for Political, Legal, and Security Affairs: Maritime Security Agency of the Republic of Indonesia (Badan Keamanan Laut Republik Indonesia, Bakamla) (2025)",
+    "urban_fraction": 0.586
+  },
+  "ARG": {
+    "source": "south-america/ar.json",
+    "strength_text": "approximately 75,000 active-duty Armed Forces (45,000 Army; 15,000 Navy, including about 3,500 marines; 15,000 Air Force) (2025)",
+    "services_text": "Armed Forces of the Argentine Republic (Fuerzas Armadas de la República Argentina): Argentine Army (Ejercito Argentino, EA), Navy of the Argentine Republic (Armada Republica, ARA; includes naval aviation and naval infantry), Argentine Air Force (Fuerza Aerea Argentina, FAA)<br><br>Ministry of Security: Gendarmería Nacional Argentina (National Gendarmerie), Coast Guard (Prefectura Naval) (2025)",
+    "urban_fraction": 0.925
+  },
+  "CHL": {
+    "source": "south-america/ci.json",
+    "strength_text": "approximately 70,000 active Armed Forces (40,000 Army; 20,000 Navy; 10,000 Air Force); approximately 50,000 Carabineros (2025)",
+    "services_text": "Armed Forces of Chile (Fuerzas Armadas de Chile): Chilean Army (Ejército de Chile), Chilean Navy (Armada de Chile, includes Marine Corps and Maritime Territory and Merchant Marine Directorate or Directemar), Chilean Air Force (Fuerza Aerea de Chile, FACh) (2025)",
+    "urban_fraction": 0.88
+  },
+  "COD": {
+    "source": "africa/cg.json",
+    "strength_text": "estimated 100-150,000 active FARDC (2025)",
+    "services_text": "Armed Forces of the Democratic Republic of the Congo (Forces d'Armees de la Republique Democratique du Congo, FARDC): Land Forces (Forces Terrestres), National Navy (La Marine Nationale), Congolese Air Force (Force Aerienne Congolaise, FAC); Republican Guard (Garde Républicaine, GR)<br><br>Ministry of Interior: Congolese National Police (Police Nationale Congolaise, PNC) (2025)",
+    "urban_fraction": 0.474
+  },
+  "SOM": {
+    "source": "africa/so.json",
+    "strength_text": "estimated 20,000 active Somali Armed Forces (2025)",
+    "services_text": "Somali Armed Forces (SAF; aka Somali Defense Force): Somali National Army (SNA; aka Land Forces), Somali Navy, Somali Air Force<br><br>Ministry of Internal Security: Somali National Police (SNP, includes Coast Guard, commando unit) (2025)",
+    "urban_fraction": 0.479
+  },
+  "KEN": {
+    "source": "africa/ke.json",
+    "strength_text": "approximately 25,000 active Kenya Defense Forces (2025)",
+    "services_text": "Kenya Defense Forces (KDF): Kenya Army, Kenya Navy, Kenya Air Force<br><br>Ministry of Interior: National Police Service, Kenya Coast Guard (2025)",
+    "urban_fraction": 0.295
+  },
+  "SDN": {
+    "source": "africa/su.json",
+    "strength_text": "prior to the outbreak of fighting between the SAF and the RSF in 2023, size estimates for Sudan's armed forces varied widely: up to 200,000 SAF; up to 100,000 RSF; up to 80,000 Central Reserve Police (2023)",
+    "services_text": "Sudanese Armed Forces (SAF): Ground Force (Sudanese Army), Sudanese Navy, Sudanese Air Force; Rapid Support Forces (RSF); Border Guards<br><br>Ministry of Interior: Sudan Police Forces (SPF), Central Reserve Police (CRP) (2025)",
+    "urban_fraction": 0.363
+  },
+  "TCD": {
+    "source": "africa/cd.json",
+    "strength_text": "estimated 35-40,000 active Chadian National Army personnel (2025)",
+    "services_text": "Chadian National Army (Armee Nationale du Tchad, ANT): Ground Forces (l'Armee de Terre, AdT), Chadian Air Force (l'Armee de l'Air Tchadienne, AAT), Chadian National Gendarmerie; General Direction of the Security Services of State Institutions (Direction Generale des Services de Securite des Institutions de l'Etat, GDSSIE)<br><br>Ministry of Public Security and Immigration: National Nomadic Guard of Chad (GNNT) (2025)",
+    "urban_fraction": 0.244
+  },
+  "HTI": {
+    "source": "central-america-n-caribbean/ha.json",
+    "strength_text": "estimates vary; up to 2,000 trained military personnel (the force is planned to eventually have around 5,000 personnel); estimates for the National Police range from a low of 9,000 to a high of about 13,000 (2025)",
+    "services_text": "the Haitian Armed Forces (FAdH): Army<br><br>Ministry of Justice and Public Security: Haitian National Police (Police Nationale d'Haïti or PNH) (2025)",
+    "urban_fraction": 0.597
+  },
+  "DOM": {
+    "source": "central-america-n-caribbean/dr.json",
+    "strength_text": "approximately 55-60,000 Armed Forces; up to 35,000 National Police (2025)",
+    "services_text": "Armed Forces of the Dominican Republic: Army of the Dominican Republic (Ejercito de la República Dominicana, ERD), Navy (Armada de República Dominicana or ARD; includes naval infantry), Dominican Air Force (Fuerza Aerea de la República Dominicana, FARD) (2025)",
+    "urban_fraction": 0.8440000000000001
+  },
+  "RUS": {
+    "source": "central-asia/rs.json",
+    "strength_text": "estimated 1.1-1.2 million active Armed Forces; estimated 350,000 Federal National Guard Troops (2025)",
+    "services_text": "Armed Forces of the Russian Federation: Ground Forces (SV), Aerospace Forces (VKS), Navy (VMF); separate or independent troop branches include the Airborne Forces (VDV), Missile Troops of Strategic Purpose (RVSN; commonly to as Strategic Rocket Forces), Special Operations Forces, and Unmanned Systems Forces <br><br>Federal National Guard Troops Service of the Russian Federation (FSVNG, National Guard, Russian Guard, or Rosgvardiya)<br><br>Federal Security Services (FSB): Federal Border Guard Service (includes land and maritime forces) (2025)",
+    "urban_fraction": 0.753
+  },
+  "BHS": {
+    "source": "central-america-n-caribbean/bf.json",
+    "strength_text": "approximately 1,500-1,800 active RBDF (2025)",
+    "services_text": "Royal Bahamas Defense Force (RBDF): includes land, air, maritime elements; Royal Bahamas Police Force (RBPF) (2025)",
+    "urban_fraction": 0.836
+  },
+  "FLK": {
+    "source": "south-america/fk.json",
+    "strength_text": "",
+    "services_text": "no regular military forces",
+    "urban_fraction": 0.797
+  },
+  "NOR": {
+    "source": "europe/no.json",
+    "strength_text": "approximately 27,000 active military personnel; approximately 40,000 Home Guard (2025)",
+    "services_text": "Norwegian Armed Forces (Forsvaret or \"the Defense\"): Norwegian Army (Haeren), Royal Norwegian Navy (Kongelige Norske Sjoeforsvaret; includes Coastal Rangers and Coast Guard (Kystvakt)), Royal Norwegian Air Force (Kongelige Norske Luftforsvaret), Home Guard (Heimevernet, HV) (2025)",
+    "urban_fraction": 0.84
+  },
+  "GRL": {
+    "source": "north-america/gl.json",
+    "strength_text": "",
+    "services_text": "no regular military forces",
+    "urban_fraction": 0.879
+  },
+  "ATF": {
+    "source": "antarctica/fs.json",
+    "strength_text": "",
+    "services_text": "",
+    "urban_fraction": 0.6
+  },
+  "TLS": {
+    "source": "east-n-southeast-asia/tt.json",
+    "strength_text": "approximately 2,000 Defense Forces  (2025)",
+    "services_text": "Timor-Leste Defense Force (Falintil-Forcas de Defesa de Timor-L'este, Falintil (F-FDTL)): Land Component, Air Force Component, Naval Component<br><br>Ministry of Interior: National Police of Timor-Leste (Polícia Nacional de Timor-Leste, PNTL) (2025)",
+    "urban_fraction": 0.325
+  },
+  "ZAF": {
+    "source": "africa/sf.json",
+    "strength_text": "approximately 65-70,000 active-duty National Defense Forces (2025)",
+    "services_text": "South African National Defense Force (SANDF): South African Army (includes Reserve Force), South African Navy (SAN), South African Air Force (SAAF), South African Military Health Services<br><br>Ministry of Police: South African Police Service (SAPS) (2025)",
+    "urban_fraction": 0.688
+  },
+  "LSO": {
+    "source": "africa/lt.json",
+    "strength_text": "approximately 2,000 active Defense Forces (2025)",
+    "services_text": "Lesotho Defense Force (LDF) (2025)",
+    "urban_fraction": 0.304
+  },
+  "MEX": {
+    "source": "north-america/mx.json",
+    "strength_text": "information varies; approximately 260,000 active-duty Armed Forces; approximately 110,000 National Guard personnel (2025)",
+    "services_text": "the Mexican Armed Forces (Fuerzas Armadas de México) are divided between the Secretariat of National Defense and the Secretariat of the Navy:<br><br>Secretariat of National Defense (Secretaria de Defensa Nacional, SEDENA): Army (Ejercito), Mexican Air Force (Fuerza Aerea Mexicana, FAM), National Guard (Guardia Nacional); Secretariat of the Navy (Secretaria de Marina, SEMAR): Mexican Navy (Armada de Mexico (ARM), includes Naval Air Force (FAN), Mexican Naval Infantry Corps (Cuerpo de Infanteria de Marina, Mexmar or CIM))<br><br>Secretariat of Security and Civilian Protection/SEDENA: National Guard (2025)",
+    "urban_fraction": 0.816
+  },
+  "URY": {
+    "source": "south-america/uy.json",
+    "strength_text": "approximately 23,000 active-duty Armed Forces (15,000 Army; 5,000 Navy; 3,000 Air Force) (2025)",
+    "services_text": "Armed Forces of Uruguay (Fuerzas Armadas del Uruguay or FF.AA. del Uruguay): National Army, National Navy (includes Coast Guard (Prefectura Nacional Naval or PRENA)), Uruguayan Air Force<br><br>Ministry of Interior: National Police (2025)",
+    "urban_fraction": 0.958
+  },
+  "BRA": {
+    "source": "south-america/br.json",
+    "strength_text": "approximately 360,000 active Armed Forces (220,000 Army; 70,000 Navy; 70,000 Air Force) (2025)",
+    "services_text": "Brazilian Armed Forces (Forças Armadas Brasileiras): Brazilian Army (Exercito Brasileiro, EB), Brazilian Navy (Marinha do Brasil; includes Naval Aviation (Aviacao Naval Brasileira) and Marine Corps (Corpo de Fuzileiros Navais)), Brazilian Air Force (Forca Aerea Brasileira) (2025)",
+    "urban_fraction": 0.878
+  },
+  "BOL": {
+    "source": "south-america/bl.json",
+    "strength_text": "approximately 30-35,000 active-duty Armed Forces (2025)",
+    "services_text": "Bolivian Armed Forces (Fuerzas Armadas de Bolivia or FAB): Bolivian Army (Ejercito de Boliviano), Bolivian Navy (Armada Boliviana), Bolivian Air Force (Fuerza Aerea Boliviana)<br><br>Ministry of Government: National Police (Policía Nacional de Bolivia, PNB) (2025)",
+    "urban_fraction": 0.7120000000000001
+  },
+  "PER": {
+    "source": "south-america/pe.json",
+    "strength_text": "information varies; approximately 85,000 active-duty Armed Forces (50,000 Army; 25,000 Navy; 10,000 Air Force); approximately 75,000 National Police (2025)",
+    "services_text": "Armed Forces of Peru (Fuerzas Armadas del Perú or FAP): Peruvian Army (Ejercito del Peru), Peruvian Navy (Marina de Guerra del Peru, MGP, includes naval infantry and General Directorate of Captaincies and Coast Guards, DICAPI), Air Force of Peru (Fuerza Aerea del Peru, FAP)<br><br>Ministry of the Interior: Peruvian National Police (Policía Nacional del Perú, PNP) (2025)",
+    "urban_fraction": 0.789
+  },
+  "COL": {
+    "source": "south-america/co.json",
+    "strength_text": "approximately 260,000 active Military Forces; approximately 150,000 National Police (2025)",
+    "services_text": "Military Forces of Colombia (Fuerzas Militares de Colombia<em lang=\"es\">)</em>: National Army (Ejercito Nacional), Colombian Aerospace Force (Fuerza Aeroespacial Colombiana, FAC), Colombian Navy (Armada de Colombia; includes Coast Guard); National Police of Colombia (Policia Nacional de Colombia, PNC) (2025)",
+    "urban_fraction": 0.8240000000000001
+  },
+  "PAN": {
+    "source": "central-america-n-caribbean/pm.json",
+    "strength_text": "approximately 30,000 Ministry of Public Security personnel (2025)",
+    "services_text": "no regular military forces<br><br>Ministry of Public Security: National Police (Policía Nacional, PN), National Aeronaval Service (Servicio Nacional Aeronaval, SENAN), National Border Service (Servicio Nacional de Fronteras, SENAFRONT) (2025)",
+    "urban_fraction": 0.695
+  },
+  "CRI": {
+    "source": "central-america-n-caribbean/cs.json",
+    "strength_text": "approximately 10-15,000 Ministry of Public Security personnel (2025)",
+    "services_text": "Ministry of Public Security (Ministerio de Seguridad Pública de Costa Rica): National Police (Fuerza Pública), Air Surveillance Service (Servicio de Vigilancia Aérea), National Coast Guard Service (Servicio Nacional de Guardacostas), Drug Control Police (Policía Control de Drogas), Border Police (Policia de Fronteras), Professional Migration Police (Policía Profesional de Migración)<br><br>Ministry of Presidency: Directorate of Intelligence and Security (DIS), Special Intervention Unit (UEI) (2025)",
+    "urban_fraction": 0.826
+  },
+  "NIC": {
+    "source": "central-america-n-caribbean/nu.json",
+    "strength_text": "approximately 12,000 active Armed Forces (2025)",
+    "services_text": "Armed Forces of Nicaragua (formal name is Army of Nicaragua or Ejercito de Nicaragua, EN): Land Force; Naval Force; Air Force (2025)",
+    "urban_fraction": 0.598
+  },
+  "HND": {
+    "source": "central-america-n-caribbean/ho.json",
+    "strength_text": "approximately 15,000 active Honduran Armed Forces (2025)",
+    "services_text": "Honduran Armed Forces (Fuerzas Armadas de Honduras, FFAA): Army (Ejercito), Honduran Naval Force (Fuerza Naval Hondurena, FNH; includes marines), Honduran Air Force (Fuerza Aerea Hondurena, FAH), Honduran Military Police of Public Order (Policía Militar del Orden Público or PMOP) (2025)",
+    "urban_fraction": 0.602
+  },
+  "SLV": {
+    "source": "central-america-n-caribbean/es.json",
+    "strength_text": "approximately 25,000 active FAES (2025)",
+    "services_text": "The Armed Forces of El Salvador (La Fuerza Armada de El Salvador, FAES): Army of El Salvador (Ejercito de El Salvador, ES), Naval Force of El Salvador (Fuerza Naval de El Salvador, FNES), Salvadoran Air Force (Fuerza Aérea Salvadoreña, FAS)<br><br>Ministry of Justice and Public Safety: National Civil Police (Policia Nacional Civil, PNC) (2025)",
+    "urban_fraction": 0.754
+  },
+  "GTM": {
+    "source": "central-america-n-caribbean/gt.json",
+    "strength_text": "approximately 20,000 active Armed Forces (2025)",
+    "services_text": "Army of Guatemala (Ejercito de Guatemala; aka Armed Forces of Guatemala or Fuerzas Armadas de Guatemala): Land Forces (Fuerzas de Tierra), Naval Forces (Fuerzas de Mar), and Air Force (Fuerza de Aire) (2025)",
+    "urban_fraction": 0.531
+  },
+  "BLZ": {
+    "source": "central-america-n-caribbean/bh.json",
+    "strength_text": "approximately 1,500 BDF personnel (2025)",
+    "services_text": "Belize Defense Force (BDF): Army, Air Wing; Belize Coast Guard (BCG) (2025)",
+    "urban_fraction": 0.466
+  },
+  "VEN": {
+    "source": "south-america/ve.json",
+    "strength_text": "information varies; approximately 125-150,000 active Armed Forces; estimated 200,000 Bolivarian Militia (2025)",
+    "services_text": "Bolivarian National Armed Forces (Fuerza Armada Nacional Bolivariana, FANB): Bolivarian Army (Ejercito Bolivariano, EB), Bolivarian Navy (Armada Bolivariana, AB; includes marines, Coast Guard), Bolivarian Military Aviation (Aviacion Militar Bolivariana, AMB), Bolivarian Militia (Milicia Bolivariana), Bolivarian National Guard (Guardia Nacional Bolivaria, GNB), Presidential Honor Guard<br><br>Ministry of Interior, Justice, and Peace: Bolivarian National Police (Policía Nacional Bolivariana, PNB) (2025)",
+    "urban_fraction": 0.884
+  },
+  "GUY": {
+    "source": "south-america/gy.json",
+    "strength_text": "approximately 3,500 active-duty Guyana Defense Forces (2025)",
+    "services_text": "the Guyana Defense Force (GDF) is a unified force with ground, air, and coast guard components, as well as the Guyana National Reserve (2026)",
+    "urban_fraction": 0.272
+  },
+  "SUR": {
+    "source": "south-america/ns.json",
+    "strength_text": "approximately 2,000 National Army (2025)",
+    "services_text": "Suriname National Army (Nationaal Leger or NL); Army (Landmacht), Navy (Marine); Air Force (Luchtmacht), Military Police (Korps Militaire Politie)<br><br>Ministry of Justice and Police: Suriname Police Force (Korps Politie Suriname or KPS) (2026)",
+    "urban_fraction": 0.664
+  },
+  "FRA": {
+    "source": "europe/fr.json",
+    "strength_text": "approximately 200,000 active duty Armed Forces; approximately 150,000 National Gendarmerie; approximately 80,000 National Guard (2025)",
+    "services_text": "French Armed Forces (Forces Armées Françaises): Army (l'Armee de Terre; includes Foreign Legion), Navy (Marine Nationale), Air and Space Force (l'Armee de l’Air et de l’Espace); includes Air Defense), National Guard (Garde Nationale), National Gendarmerie (Gendarmerie Nationale) (2025)",
+    "urban_fraction": 0.818
+  },
+  "ECU": {
+    "source": "south-america/ec.json",
+    "strength_text": "approximately 40,000 active Ecuadorian Armed Forces (2025)",
+    "services_text": "Ecuadorian Armed Forces (Fuerzas Armadas del Ecuador): Ground Force (Fuerza Terrestre), Naval Force (Fuerza Naval; includes naval infantry, naval aviation, coast guard), Ecuadorian Air Force (Fuerza Aérea Ecuatoriana) (2025)",
+    "urban_fraction": 0.648
+  },
+  "PRI": {
+    "source": "central-america-n-caribbean/rq.json",
+    "strength_text": "",
+    "services_text": "Puerto Rico Police; Puerto Rico (US) National Guard (Guardia Nacional de Puerto Rico or GNPR) (2025)",
+    "urban_fraction": 0.9359999999999999
+  },
+  "JAM": {
+    "source": "central-america-n-caribbean/jm.json",
+    "strength_text": "approximately 4,000 active Jamaica Defense Forces (2025)",
+    "services_text": "Jamaica Defense Force (JDF): Jamaica Regiment (Land Force), Maritime, Air, and Cyber Command (MACC), Support Brigade, Caribbean Military Academy, Jamaica National Reserve (2025)",
+    "urban_fraction": 0.574
+  },
+  "CUB": {
+    "source": "central-america-n-caribbean/cu.json",
+    "strength_text": "limited available information; estimated 50,000 active Armed Forces  (2025)",
+    "services_text": "Revolutionary Armed Forces (Fuerzas Armadas Revolucionarias, FAR): Ground Troops (Tropas Terrestres), Revolutionary Navy (Marina de Guerra Revolucionaria, MGR), Revolutionary Air and Air Defense Forces (Defensas Anti-Aereas y Fuerza Aerea Revolucionaria, DAAFAR)<br><br>Paramilitary forces under the FAR: Youth Labor Army (Ejercito Juvenil del Trabajo, EJT), Territorial Militia Troops (Milicia de Tropas de Territoriales, MTT), Defense and Production Brigades (Brigadas de Producción y Defensa, BPD), Civil Defense Organization (Defensa Civil de Cuba) <br><br>Ministry of Interior: National Revolutionary Police (Policía Nacional Revolucionaria, PNR), Directorate of Border Guard Troops (Dirección de Tropas de Guardia Fronteriza, TGF), Department of State Security (Departamento de Seguridad del Estado, DSE) (2025)",
+    "urban_fraction": 0.775
+  },
+  "ZWE": {
+    "source": "africa/zi.json",
+    "strength_text": "approximately 30,000 active Zimbabwe Defense Forces (2025)",
+    "services_text": "Zimbabwe Defense Forces (ZDF): Zimbabwe National Army (ZNA), Air Force of Zimbabwe (AFZ)<br><br>Ministry of Home Affairs: Zimbabwe Republic Police (2025)",
+    "urban_fraction": 0.325
+  },
+  "BWA": {
+    "source": "africa/bc.json",
+    "strength_text": "estimated 10,000 active Botswana Defense Force (2025)",
+    "services_text": "Botswana Defense Force (BDF): Ground Forces Command, Air Arm Command, Defense Logistics Command (2025)",
+    "urban_fraction": 0.7290000000000001
+  },
+  "NAM": {
+    "source": "africa/wa.json",
+    "strength_text": "estimated 12,000 active Namibian Defense Forces (2025)",
+    "services_text": "Namibian Defense Force (NDF): Namibian Army, Namibian Navy, Namibian Air Force (2025)",
+    "urban_fraction": 0.5489999999999999
+  },
+  "SEN": {
+    "source": "africa/sg.json",
+    "strength_text": "approximately 25,000 active Armed Forces personnel, including the Gendarmerie (2025)",
+    "services_text": "Senegalese Armed Forces (les Forces Armées Sénégalaises, FAS): Army (l’Armée de Terre, AT), Senegalese National Navy (Marine Séenéegalaise, MNS), Senegalese Air Force (l'Arméee de l'Air du Séenéegal, AAS), National Gendarmerie<br><br>Ministry of Interior: National Police (2025)",
+    "urban_fraction": 0.496
+  },
+  "MLI": {
+    "source": "africa/ml.json",
+    "strength_text": "information varies; estimated 35-40,000 active FAMa, Gendarmerie, and National Guard (2025)",
+    "services_text": "Malian Armed Forces (Forces Armées Maliennes or FAMa): Army (l’Armée de Terre), Air Force (l’Armée de l’Air); National Guard (la Garde Nationale du Mali); National Gendarmerie of Mali (Gendarmerie Nationale du Mali) (2025)",
+    "urban_fraction": 0.462
+  },
+  "MRT": {
+    "source": "africa/mr.json",
+    "strength_text": "estimated 17,000 active Mauritanian Armed Forces; estimated 3,000 Gendarmerie (2025)",
+    "services_text": "Mauritanian Armed Forces (aka Armée Nationale Mauritanienne): National Army, National Navy, Air Force; Gendarmerie <br><br>Ministry of Interior and Decentralization: National Police, National Guard (2025)",
+    "urban_fraction": 0.5770000000000001
+  },
+  "BEN": {
+    "source": "africa/bn.json",
+    "strength_text": "estimated 10-12,000 active duty Armed Forces (including National Guard) (2025)",
+    "services_text": "Beninese Armed Forces (Forces Armees Beninoises, FAB; aka Benin Defense Forces): Army, Air Force, National Navy, National Guard (aka Republican Guard)<br><br>Ministry of Interior and Public Security: Republican Police (Police Republicaine, DGPR) (2025)",
+    "urban_fraction": 0.501
+  },
+  "NER": {
+    "source": "africa/ng.json",
+    "strength_text": "estimated 50,000 active Armed Forces, including Gendarmerie; estimated 15-20,000 National Guard (2025)",
+    "services_text": "Nigerien Armed Forces (Forces Armees Nigeriennes, FAN): Army, Nigerien Air Force, Niger Gendarmerie<br><br>Ministry of Interior, Public Safety and Decentralization: Niger National Guard, National Police (2025)",
+    "urban_fraction": 0.171
+  },
+  "NGA": {
+    "source": "africa/ni.json",
+    "strength_text": "information varies; estimated 140,000 active Armed Forces (2025)",
+    "services_text": "Armed Forces of Nigeria (AFN): Nigerian Army, Nigerian Navy (includes Coast Guard), Nigerian Air Force<br><br>Ministry of Interior: Nigeria Security and Civil Defense Corps (NSCDC); Ministry of Police Affairs: Nigeria Police Force (NPF) (2025)",
+    "urban_fraction": 0.5429999999999999
+  },
+  "CMR": {
+    "source": "africa/cm.json",
+    "strength_text": "estimated 40-50,000 active FAC, including the Gendarmerie (2025)",
+    "services_text": "Cameroon Armed Forces (Forces Armees Camerounaises, FAC): Army, Cameroon Navy (includes naval infantry or fusiliers marin), Air Force, National Gendarmerie, National Firefighting Corps<br><br>General Delegation for National Security (Délégation Générale à la Sûreté Nationale or DGSN): Cameroon Police (2025)",
+    "urban_fraction": 0.593
+  },
+  "TGO": {
+    "source": "africa/to.json",
+    "strength_text": "estimated 20,000 active Armed Forces, including Gendarmerie (2025)",
+    "services_text": "Togolese Armed Forces (Forces Armees Togolaise, FAT): Togolese Army, Togolese Navy, Togolese Air Force, National Gendarmerie (Gendarmerie Nationale Togolaise or GNT)<br><br>Ministry of Security and Civil Protection: Togolese Police (2025)",
+    "urban_fraction": 0.445
+  },
+  "GHA": {
+    "source": "africa/gh.json",
+    "strength_text": "estimated 15-20,000 active Armed Forces (2025)",
+    "services_text": "Ghana Armed Forces (GAF): Army, Air Force, Ghana Navy<br><br>Ministry of Interior: Ghana Police Service (2025)",
+    "urban_fraction": 0.5920000000000001
+  },
+  "CIV": {
+    "source": "africa/iv.json",
+    "strength_text": "approximately 25-30,000 active FACI, including Gendarmerie personnel (2025)",
+    "services_text": "Armed Forces of Cote d'Ivoire (Forces Armees de Cote d'Ivoire, FACI; aka Republican Forces of Ivory Coast, FRCI): Army, National Navy, Air Force, Special Forces; National Gendarmerie <br><br>Ministry of Security and Civil Protection: National Police (2025)",
+    "urban_fraction": 0.531
+  },
+  "GIN": {
+    "source": "africa/gv.json",
+    "strength_text": "estimated 10-12,000 active Armed Forces (2025)",
+    "services_text": "Guinean (or National) Armed Forces (Forces Armées Guinéennes): Army, Air Force, Navy, National Gendarmerie<br><br>Ministry of Security: National Police (2025)",
+    "urban_fraction": 0.381
+  },
+  "GNB": {
+    "source": "africa/pu.json",
+    "strength_text": "estimated 4,000 active FARP (2025)",
+    "services_text": "People's Revolutionary Armed Force (Forcas Armadas Revolucionarias do Povo or FARP): Army, Navy, Air Force<br><br>Ministry of Internal Administration: National Guard (a gendarmerie force), Public Order Police, Border Police, Rapid Intervention Police, Maritime Police (2025)",
+    "urban_fraction": 0.455
+  },
+  "LBR": {
+    "source": "africa/li.json",
+    "strength_text": "approximately 2,000 active Armed Forces (2025)",
+    "services_text": "Armed Forces of Liberia (AFL): Army, Liberian Coast Guard<br><br>Ministry of Justice: Liberia National Police, Liberia Drug Enforcement Agency (2025)",
+    "urban_fraction": 0.536
+  },
+  "SLE": {
+    "source": "africa/sl.json",
+    "strength_text": "estimated 10,000 active Armed Forces (2025)",
+    "services_text": "Republic of Sierra Leone Armed Forces (RSLAF): organized as a Joint Force Command with land, air, and maritime components<br><br>Ministry of Internal Affairs: Sierra Leone Police (2025)",
+    "urban_fraction": 0.44299999999999995
+  },
+  "BFA": {
+    "source": "africa/uv.json",
+    "strength_text": "estimated 20,000 Armed Forces; estimated 50,000 Homeland Defense Volunteers (2025)",
+    "services_text": "Armed Forces of Burkina Faso (FABF; aka National Armed Forces (FAN), aka Defense and Security Forces (Forces de Défense et de Sécurité or FDS)): Army of Burkina Faso, Air Force of Burkina Faso, National Gendarmerie, National Fire Brigade (Brigade Nationale de Sapeurs-Pompiers or BNSP); Homeland Defense Volunteers (Forcés de Volontaires de Défense pour la Patrie or VDP)<br><br>Ministry of Territorial Administration, Decentralization and Security (Ministère de l'Administration Territoriale, de la Décentralisation et de la Sécurité): National Police of Burkina Faso (includes Border Police, Judicial Police, and Intervention Units, as well as State and Public Security forces) (2025)",
+    "urban_fraction": 0.325
+  },
+  "CAF": {
+    "source": "africa/ct.json",
+    "strength_text": "estimated 10-15,000 active FACA (2025)",
+    "services_text": "Central African Armed Forces (Forces Armees Centrafricaines, FACA): Army (includes an air squadron, Escadrille Centrafricaine)<br><br>Ministry of Interior: National Gendarmerie (Gendarmerie Nationale), National Police (2025)",
+    "urban_fraction": 0.436
+  },
+  "COG": {
+    "source": "africa/cf.json",
+    "strength_text": "approximately 12-14,000 active FAC, including Gendarmerie (2025)",
+    "services_text": "Congolese Armed Forces (Forces Armees Congolaises, FAC): Army, Navy, Congolese Air Force, National Gendarmerie<br><br>Ministry of Interior: National Police (2025)",
+    "urban_fraction": 0.6920000000000001
+  },
+  "GAB": {
+    "source": "africa/gb.json",
+    "strength_text": "approximately 7,000 active-duty Armed Forces including the Republican Guard and Gendarmerie (2025)",
+    "services_text": "Gabonese Armed Forces (Force Armées Gabonaise or FAG; aka National Defense and Security Forces of Gabon or des Forces Nationales de Défense et de Sécurité (FNDS) du Gabon): Army, Navy, Air Force, Light Aviation, Fire Brigade; Gabon National Gendarmerie (GENA); Republican Guard (GR); Military Health Service; Military Engineering (2025)",
+    "urban_fraction": 0.91
+  },
+  "GNQ": {
+    "source": "africa/ek.json",
+    "strength_text": "estimated 2,000 active Armed Forces, including Gendarmerie (2025)",
+    "services_text": "Equatorial Guinea Armed Forces (Fuerzas Armadas de Guinea Ecuatorial, FAGE): Army, Navy, Air Force, Gendarmerie (Guardia Civil) (2025)",
+    "urban_fraction": 0.7440000000000001
+  },
+  "ZMB": {
+    "source": "africa/za.json",
+    "strength_text": "approximately 16,000 active Defense Forces (2025)",
+    "services_text": "Zambia Defense Force (ZDF): Zambia Army, Zambia Air Force, Zambia National Service<br><br>Ministry of Home Affairs and Internal Security: Zambia Police (2025)",
+    "urban_fraction": 0.46299999999999997
+  },
+  "MWI": {
+    "source": "africa/mi.json",
+    "strength_text": "estimated 10,000 active Malawi Defense Forces (2025)",
+    "services_text": "Malawi Defense Force (MDF): Malawi Army (Land Forces), Malawi Maritime Force (MMF), Malawi Air Force (MAF), Malawi National Service (MNS)<br><br>Ministry of Homeland Security: Malawi Police Service (2025)",
+    "urban_fraction": 0.183
+  },
+  "MOZ": {
+    "source": "africa/mz.json",
+    "strength_text": "estimated 12,000 active FADM (2025)",
+    "services_text": "Armed Forces for the Defense of Mozambique (Forcas Armadas de Defesa de Mocambique, FADM): Army, Mozambique Navy, Mozambique Air Force <br><br>Ministry of Interior: Mozambique National Police (PRM; includes the Rapid Intervention Unit, UIR), the National Criminal Investigation Service (SERNIC), Border Security Force; other security forces include the Presidential Guard and the Force for the Protection of High-Level Individuals (2025)",
+    "urban_fraction": 0.38799999999999996
+  },
+  "SWZ": {
+    "source": "africa/wz.json",
+    "strength_text": "estimated 3,000 active-duty Defense Force (2025)",
+    "services_text": "Umbutfo Eswatini Defense Force (UEDF): Army (includes a small air wing); the Royal Eswatini Police Service (REPS) (2025)",
+    "urban_fraction": 0.248
+  },
+  "AGO": {
+    "source": "africa/ao.json",
+    "strength_text": "approximately 100,000 active duty Armed Forces (2025)",
+    "services_text": "Angolan Armed Forces (Forcas Armadas Angolanas, FAA): Army, Navy (Marinha de Guerra Angola, MGA), Angolan National Air Force (Forca Aerea Nacional Angolana, FANA)<br><br>Ministry of Interior: National Police, Border Guard Police (2025)",
+    "urban_fraction": 0.687
+  },
+  "BDI": {
+    "source": "africa/by.json",
+    "strength_text": "limited available information; estimated 25-30,000 active-duty Defense Force troops (2025)",
+    "services_text": "Burundi National Defense Force (BNDF; Force de Defense Nationale du Burundi, FDNB): Land Force (Army), Naval Force, Air Force, Specialized Units<br><br>Ministry of Interior, Community Development, and Public Security: Burundi National Police (Police Nationale du Burundi, PNB) (2024)",
+    "urban_fraction": 0.14800000000000002
+  },
+  "ISR": {
+    "source": "middle-east/is.json",
+    "strength_text": "approximately 170,000 active-duty Defense Forces (130,000 Ground Forces; 10,000 Naval; 30,000 Air Force); more than 400,000 reserves (2025)",
+    "services_text": "Israel Defense Forces (IDF): Ground Forces, Israel Naval Force (IN, includes commandos), Israel Air Force (IAF, includes air defense)<br><br>Ministry of National Security: Israeli Police (2025)",
+    "urban_fraction": 0.929
+  },
+  "LBN": {
+    "source": "middle-east/le.json",
+    "strength_text": "approximately 70,000 active Lebanese Armed Forces (2025)",
+    "services_text": "Lebanese Armed Forces (LAF): Army Command (includes Presidential Guard Brigade, Land Border Regiments), Naval Forces, Air Forces<br><br>Ministry of Interior: General Directorate of Internal Security Forces (law enforcement; includes Mobile Gendarmerie), General Directorate for Public Security (border control, some domestic security duties) (2025)",
+    "urban_fraction": 0.894
+  },
+  "MDG": {
+    "source": "africa/ma.json",
+    "strength_text": "estimated 13,000 Armed Forces; estimated 10,000 Gendarmerie (2025)",
+    "services_text": "Madagascar Armed Forces (aka Armed forces of the Republic of Madagascar); Malagasy Army, Naval Forces (or National Navy), Air Force; Malagasy National Gendarmerie (2025)",
+    "urban_fraction": 0.406
+  },
+  "PSX": {
+    "source": "middle-east/we.json",
+    "strength_text": "the PA police and security forces have approximately 28,000 active personnel, including about 11,500 National Security Forces (2024)",
+    "services_text": "per the Oslo Accords, the Palestinian Authority (PA) is not permitted a conventional military but maintains security and police forces; PA security personnel have operated exclusively in the West Bank since HAMAS seized power in the Gaza Strip in 2007; PA forces include the Palestinian National Security Forces, Presidential Guard, Civil Police, Civil Defense, Preventive Security Organization, the General Intelligence Organization, and the Military Intelligence Organization (2024)",
+    "urban_fraction": 0.7759999999999999
+  },
+  "GMB": {
+    "source": "africa/ga.json",
+    "strength_text": "estimated 3,000-4,000 active Gambian Armed Forces (2025)",
+    "services_text": "Gambian Armed Forces (GAF; aka Armed Forces of the Gambia): the Gambian National Army (GNA), Gambia Navy, Gambia Air Force, Republican National Guard (RNG)<br><br>Ministry of Interior: Gambia Police Force (GPF) (2025)",
+    "urban_fraction": 0.645
+  },
+  "TUN": {
+    "source": "africa/ts.json",
+    "strength_text": "approximately 35,000 active-duty Armed Forces (2025)",
+    "services_text": "Tunisian Armed Forces (Forces Armées Tunisiennes, FAT): Tunisian Army (includes Air Defense Force), Tunisian Navy, Tunisia Air Force<br><br>Ministry of Interior (MoI): Internal Security Forces (National Police, National Guard) (2025)",
+    "urban_fraction": 0.705
+  },
+  "DZA": {
+    "source": "africa/ag.json",
+    "strength_text": "information varies; estimated 200,000 active ANP, including the National Gendarmerie (2025)",
+    "services_text": "Algerian People's National Army (ANP): Land Forces, Naval Forces (includes Coast Guard), Air Forces, Territorial Air Defense Forces, Republican Guard, National Gendarmerie<br><br>Ministry of Interior: General Directorate of National Security (national police) (2025)",
+    "urban_fraction": 0.753
+  },
+  "JOR": {
+    "source": "middle-east/jo.json",
+    "strength_text": "approximately 100,000 active duty Armed Forces (2025)",
+    "services_text": "Jordanian Armed Forces (JAF; aka Arab Army): Jordanian Army (Jordanian Ground Forces; includes Special Operations Forces, Border Guards, Royal Guard), Jordanian Air Force, Jordanian Navy)  <br><br>Ministry of Interior: Public Security Directorate (includes national police, the Gendarmerie, and the Civil Defense Directorate) (2025)",
+    "urban_fraction": 0.92
+  },
+  "ARE": {
+    "source": "middle-east/ae.json",
+    "strength_text": "approximately 65,000 active Armed Forces (45,000 Land Forces; 3,000 Navy; 5,000 Air Force; 12,000 Presidential Guard) (2025)",
+    "services_text": "United Arab Emirates Armed Forces: Land Forces (Army), Navy, Air Force, Presidential Guard (includes special operations forces), National Guard (includes Coast Guard) (2025)",
+    "urban_fraction": 0.878
+  },
+  "QAT": {
+    "source": "middle-east/qa.json",
+    "strength_text": "approximately 15,000 active-duty Qatar Armed Forces (2025)",
+    "services_text": "Qatar Armed Forces (QAF): Qatari Amiri Land Force (QALF, includes Emiri Guard), Qatari Amiri Navy (QAN, includes Coast Guard), Qatari Amiri Air Force (QAAF)<br><br>Ministry of Interior: General Directorate of Public Security, General Directorate of Coasts and Border Security, Internal Security Force (ISF or Lekhwiya) (2025)",
+    "urban_fraction": 0.9940000000000001
+  },
+  "KWT": {
+    "source": "middle-east/ku.json",
+    "strength_text": "approximately 17,000 active Kuwait Armed Forces; approximately 7,000 National Guard (2025)",
+    "services_text": "Kuwait Armed Forces (KAF): Kuwait Army (aka Kuwait Land Forces, KLF), Kuwait Navy (aka Kuwait Naval Force), Kuwait Air Force; Kuwait National Guard (KNG)<br><br>Ministry of Interior: Kuwait Police, State Security, Kuwait Coast Guard (2025)",
+    "urban_fraction": 1.0
+  },
+  "IRQ": {
+    "source": "middle-east/iz.json",
+    "strength_text": "estimated 200,000 active armed forces personnel under the Ministry of Defense (Army, Aviation Command, Air/Air Defense, Navy, Special Forces); approximately 20-25,000 National-Level Security Forces<br><br>Ministry of Peshmerga: estimated 150,000 active personnel<br><br>Popular Mobilization Forces: estimated 200,000 militia (2025)",
+    "services_text": "Ministry of Defense: Iraqi Army, Iraqi Navy, Iraqi Air Force<br><br>Office of the Prime Minister: Iraqi Counterterrorism Service (CTS); Popular Mobilization Committee (PMC)<br><br>Ministry of Interior: Federal Police Forces Command, Border Guard Forces Command, Federal Intelligence and Investigations Agency, Emergency Response Division, Facilities Protection Directorate, and Provincial Police; Ministry of Oil: Energy Police Directorate (2025)",
+    "urban_fraction": 0.716
+  },
+  "OMN": {
+    "source": "middle-east/mu.json",
+    "strength_text": "approximately 40,000 active Sultan's Armed Forces (2025)",
+    "services_text": "Sultan's Armed Forces (SAF): Royal Army of Oman (RAO), Royal Navy of Oman (RNO), Royal Air Force of Oman (RAFO), Royal Guard of Oman (RGO), Sultan's Special Forces<br><br>Royal Oman Police (ROP): Civil Defense, Immigration, Infrastructure Security Police, Coast Guard Police, Special Security Police, Special Task Force (2024)",
+    "urban_fraction": 0.884
+  },
+  "VUT": {
+    "source": "australia-oceania/nh.json",
+    "strength_text": "",
+    "services_text": "no regular military forces; Vanuatu Police Force (VPF)",
+    "urban_fraction": 0.26
+  },
+  "KHM": {
+    "source": "east-n-southeast-asia/cb.json",
+    "strength_text": "information varies; estimated 200,000 Armed Forces, including Gendarmerie (2025)",
+    "services_text": "Royal Cambodian Armed Forces (RCAF): Royal Cambodian Army, Royal Khmer Navy, Royal Cambodian Air Force, Royal Gendarmerie (Military Police); National Committee for Maritime Security (2025)",
+    "urban_fraction": 0.256
+  },
+  "THA": {
+    "source": "east-n-southeast-asia/th.json",
+    "strength_text": "estimated 350,000 active-duty Armed Forces (250,000 Army; 70,000 Navy; 30,000 Air Force) (2025)",
+    "services_text": "Royal Thai Armed Forces (RTARF): Royal Thai Army (RTA), Royal Thai Navy (RTN; includes Royal Thai Marine Corps), Royal Thai Air Force (RTAF)<br><br>Office of the Prime Minister: Royal Thai Police (2025)",
+    "urban_fraction": 0.536
+  },
+  "LAO": {
+    "source": "east-n-southeast-asia/la.json",
+    "strength_text": "information limited and varied; estimated 30,000 active Armed Forces; estimated 100,000 Self-Defense Militia Forces (2025)",
+    "services_text": "Lao People's Armed Forces (LPAF; aka Lao People's Army): Lao People's Army (LPA, includes Riverine Force), Lao People's Air Force (LPAF); Self-Defense Militia Forces (2025)",
+    "urban_fraction": 0.382
+  },
+  "MMR": {
+    "source": "east-n-southeast-asia/bm.json",
+    "strength_text": "information varies; estimated 150,000 active military personnel (2025)",
+    "services_text": "Burmese Defense Service (aka Armed Forces of Burma, Myanmar Army, Royal Armed Forces, the Tatmadaw, or the Sit-Tat): Army (Tatmadaw Kyi), Navy (Tatmadaw Yay), Air Force (Tatmadaw Lay); People’s Militia<br><br>Ministry of Home Affairs: Burma (People's) Police Force, Border Guard Forces/Police (2025)",
+    "urban_fraction": 0.321
+  },
+  "VNM": {
+    "source": "east-n-southeast-asia/vm.json",
+    "strength_text": "approximately 450,000 active-duty People's Army of Vietnam (2025)",
+    "services_text": "People's Army of Vietnam (PAVN; aka Vietnam People's Army, VPA): Ground Forces (Army), Navy (includes naval infantry), Air Defense - Air Force, Vietnam Border Guard, Vietnam Coast Guard<br><br>Vietnam People's Ministry of Public Security; Vietnam Civil Defense Force (2025)",
+    "urban_fraction": 0.395
+  },
+  "PRK": {
+    "source": "east-n-southeast-asia/kn.json",
+    "strength_text": "estimates vary; as many as 1.3 million active-duty Korean People's Army (2025)",
+    "services_text": "Korean People's Army (KPA): KPA Ground Forces, KPA Navy, KPA Air Force and Air Defense Forces, KPA Strategic Forces (missile forces), KPA Special Forces (special operations forces); Security Guard Command (aka Bodyguard Command); Military Security Command<br><br>Ministry of Social Security (formerly Ministry of Public Security): Border Guard General Bureau, civil security forces; Ministry of State Security: internal security, investigations (2025)",
+    "urban_fraction": 0.632
+  },
+  "KOR": {
+    "source": "east-n-southeast-asia/ks.json",
+    "strength_text": "approximately 500,000 active Armed Forces (365,000 Army; 70,000 Navy, including about 30,000 Marines; 65,000 Air Force) (2025)",
+    "services_text": "Armed Forces of the Republic of Korea: Republic of Korea Army (ROKA), Republic of Korea Navy (ROKN, includes Marine Corps, ROKMC), Republic of Korea Air Force (ROKAF)<br><br>Ministry of Maritime Affairs and Fisheries: Korea Coast Guard; Ministry of Interior and Safety: Korean National Police Agency (2025)",
+    "urban_fraction": 0.815
+  },
+  "MNG": {
+    "source": "east-n-southeast-asia/mg.json",
+    "strength_text": "information varies; estimated 10-20,000 active Mongolian Armed Forces (2025)",
+    "services_text": "Mongolian Armed Forces (MAF): Land Force, Air Force, Cyber Security Forces, Special Forces, Construction-Engineering Forces (2025)",
+    "urban_fraction": 0.691
+  },
+  "IND": {
+    "source": "south-asia/in.json",
+    "strength_text": "information varies; approximately 1.5 million active Indian Armed Forces, including about 1.25 million in the Army (2025)",
+    "services_text": "Indian Armed Forces (IAF): Army, Navy, Air Force, Coast Guard<br><br>Ministry of Home Affairs: Central Police Organization, Central Armed Police Forces (includes Assam Rifles, Border Security Force, Central Industrial Security Force, Central Reserve Police Force, Indo-Tibetan Border Police, National Security Guards, Sashastra Seema Bal) (2025)",
+    "urban_fraction": 0.364
+  },
+  "BGD": {
+    "source": "south-asia/bg.json",
+    "strength_text": "information varies; approximately 170,000 active Armed Forces (2025)",
+    "services_text": "Armed Forces of Bangladesh (aka Bangladesh Defense Force): Bangladesh Army, Bangladesh Navy, Bangladesh Air Force<br><br>Ministry of Home Affairs: Bangladesh Police, Border Guard Bangladesh (BGB), Bangladesh Coast Guard, Rapid Action Battalion (RAB), Ansars, Village Defense Party (VDP) (2025)",
+    "urban_fraction": 0.405
+  },
+  "BTN": {
+    "source": "south-asia/bt.json",
+    "strength_text": "estimated 7-8,000 active Royal Bhutan Army (2025)",
+    "services_text": "Royal Bhutan Army (RBA; includes Royal Bodyguard of Bhutan, or RBG, and an air wing); National Militia<br><br>Ministry of Home and Cultural Affairs: Royal Bhutan Police (2025)",
+    "urban_fraction": 0.444
+  },
+  "NPL": {
+    "source": "south-asia/np.json",
+    "strength_text": "approximately 95,000 active Armed Forces (2025)",
+    "services_text": "Nepalese Armed Forces (Ministry of Defense): Nepali Army (includes Air Wing)<br><br>Ministry of Home Affairs: Nepal Police, Nepal Armed Police Force (APF) (2025)",
+    "urban_fraction": 0.21899999999999997
+  },
+  "PAK": {
+    "source": "south-asia/pk.json",
+    "strength_text": "approximately 650,000 active Armed Forces (2025)",
+    "services_text": "Pakistan Armed Forces: Pakistan Army (includes National Guard), Pakistan Navy (includes Pakistan Marines, Pakistan Maritime Security Agency), Pakistan Air Force<br><br>Ministry of Interior: Frontier Constabulary, Frontier Corps, National Police, Pakistan Coast Guard, Punjab (Pakistan) Rangers, Sindh (Pakistan) Rangers (2025)",
+    "urban_fraction": 0.38
+  },
+  "AFG": {
+    "source": "south-asia/af.json",
+    "strength_text": "the Taliban claims to have 190,000 under the Ministry of Defense and 215,000 under the Ministry of Interior (2025)",
+    "services_text": "the Taliban claims authority over a Ministry of Defense and a National Army (aka Army of the Islamic Emirate of Afghanistan, Islamic Emirate Army, or Afghan Army); it has also formed police forces under a Ministry of Interior (2025)",
+    "urban_fraction": 0.26899999999999996
+  },
+  "TJK": {
+    "source": "central-asia/ti.json",
+    "strength_text": "estimated 10,000 active Armed Forces; estimated 5-10,000 active paramilitary National Guard, Border Service, and Internal Troops personnel (2025)",
+    "services_text": "Armed Forces of the Republic of Tajikistan: Ground Forces, Mobile Forces, Air and Air Defense Forces<br><br>Tajik National Guard (TNG); Ministry of Internal Affairs: Internal Troops of Tajikistan; State Committee on National Security: Border Troops (aka Tajik Border Service) (2025)",
+    "urban_fraction": 0.282
+  },
+  "KGZ": {
+    "source": "central-asia/kg.json",
+    "strength_text": "limited available information; estimated 10-15,000 active Armed Forces, including the National Guard (2025)",
+    "services_text": "Armed Forces of the Kyrgyz Republic: Land Forces (Kygyz Army), Air Defense Forces (Kyrgyz Air Force), National Guard of the Armed Forces of the Kyrgyz Republic<br><br>Ministry of Internal Affairs: Internal Security Service<br><br>State Committee for National Security: Border Guard Service (2025)",
+    "urban_fraction": 0.37799999999999995
+  },
+  "TKM": {
+    "source": "central-asia/tx.json",
+    "strength_text": "estimated 35,000 active Armed Forces (2025)",
+    "services_text": "Armed Forces of Turkmenistan (aka Turkmen National Army): Ground Forces, Air Force, Navy<br><br>Ministry of Internal Affairs: Internal Troops, Turkmen (National) Police, Federal/State Border Guard Service (2025)",
+    "urban_fraction": 0.54
+  },
+  "IRN": {
+    "source": "middle-east/ir.json",
+    "strength_text": "information varies; up to 600,000 total active armed forces personnel; estimated 400,000 Islamic Republic of Iran Regular Forces (350,000 Ground Forces; 18,000 Navy; 40,000 Air Force/Air Defense Forces); up to estimated 190,000 Islamic Revolutionary Guard Corps (100-150,000 Ground Forces; 20,000 Navy; 15,000 Aerospace Force; 5,000 Qods Force); estimated 90,000 active Basij Paramilitary Forces (2025)",
+    "services_text": "the military forces of Iran are divided between the Islamic Republic of Iran Regular Forces (Artesh) and the Islamic Revolutionary Guard Corps (IRGC or Sepah):<br><br>Artesh: Ground Forces, Navy (includes marines), Air Force, Air Defense Forces<br><br>IRGC: Ground Forces, Navy (includes marines), Aerospace Force (controls strategic missile force), Qods Force (aka Quds Force; special operations), Cyber Electronic Command, Basij Paramilitary Forces<br><br>Ministry of Interior: Law Enforcement Command (FARAJA)<br><br>Ministry of Intelligence and Security (2025)",
+    "urban_fraction": 0.773
+  },
+  "SYR": {
+    "source": "middle-east/sy.json",
+    "strength_text": "not available",
+    "services_text": "the interim government authorities in Syria have established a Ministry of Defense and are attempting to unify the dozens of armed factions operating in Syria under a single, state-linked army; it has also established a Ministry of Interior to manage police and other security forces (2025)",
+    "urban_fraction": 0.574
+  },
+  "ARM": {
+    "source": "central-asia/am.json",
+    "strength_text": "approximately 40-50,000 active Armenian Armed Forces (2025)",
+    "services_text": "Armenian Republic Armed Forces: Armenian Army (includes land, air, air defense forces) (2025)",
+    "urban_fraction": 0.637
+  },
+  "SWE": {
+    "source": "europe/sw.json",
+    "strength_text": "approximately 25,000 active military personnel; approximately 21,000 Home Guard  (2025)",
+    "services_text": "Swedish Armed Forces (Försvarsmakten): Army, Navy, Air Force, Home Guard (202)",
+    "urban_fraction": 0.887
+  },
+  "BLR": {
+    "source": "europe/bo.json",
+    "strength_text": "approximately 50-60,000 active-duty military personnel (2025)",
+    "services_text": "Belarus Armed Forces: Army, Air and Air Defense Force, Special Operations Force, Special Troops, Territorial Defense Forces<br><br>Ministry of Interior: State Border Troops, Militia, Internal Troops (2025)",
+    "urban_fraction": 0.807
+  },
+  "UKR": {
+    "source": "europe/up.json",
+    "strength_text": "estimated 850,000-1 million active Defense Forces (2025)",
+    "services_text": "Armed Forces of Ukraine (AFU; Zbroyni Syly Ukrayiny or ZSU): Ground Forces, Naval Forces, Air Forces, Air Assault Forces, Marine Corps, Special Operations Forces, Unmanned Systems Forces, Territorial Defense Forces (Reserves)<br><br>Ministry of Internal Affairs: National Guard of Ukraine, State Border Guard Service of Ukraine (includes Maritime Border Guard or Sea Guard), National Police of Ukraine (2025)",
+    "urban_fraction": 0.701
+  },
+  "POL": {
+    "source": "europe/pl.json",
+    "strength_text": "approximately 235,000 active military personnel (2025)",
+    "services_text": "Polish Armed Forces (Polskie Siły Zbrojne): Land Forces (Wojska Ladowe), Navy (Marynarka Wojenna), Air Force (Sily Powietrzne), Special Forces (Wojska Specjalne), Territorial Defense Forces (Wojska Obrony Terytorialnej), Cyberspace Defense Forces (Wojska Obrony Cyberprzestrzeni)<br><br>Ministry of Interior and Administration: Polish National Police (Policja); Border Guard (Straż Graniczna or SG) (2025)",
+    "urban_fraction": 0.602
+  },
+  "AUT": {
+    "source": "europe/au.json",
+    "strength_text": "approximately 22,000 active Armed Forces (includes about 14,000 regular troops and around 8,000 reservists/militia undergoing refresher training) (2025)",
+    "services_text": "Austrian Armed Forces (Bundesheer): Land Forces, Air Force, Cyber Forces, Special Operations Forces, Militia (reserves) (2025)",
+    "urban_fraction": 0.595
+  },
+  "HUN": {
+    "source": "europe/hu.json",
+    "strength_text": "approximately 30,000 active-duty military personnel (2025)",
+    "services_text": "Hungarian Defense Forces (HDF or Magyar Honvédség): the HDF is organized as a joint force under a general staff with commands for land, air, cyber, special operations, territorial defense, and support forces (2025)",
+    "urban_fraction": 0.7290000000000001
+  },
+  "MDA": {
+    "source": "europe/md.json",
+    "strength_text": "approximately 6,500 Moldovan Armed Forces (2025)",
+    "services_text": "Armed Forces of the Republic of Moldova (Forțele Armate ale Republicii Moldova): National Army (comprised of Land Forces, Air Force)<br><br>Ministry of Internal Affairs: General Inspectorate of Police (GPI), Border Police Department, Carabinieri Troops Department (2025)",
+    "urban_fraction": 0.434
+  },
+  "ROU": {
+    "source": "europe/ro.json",
+    "strength_text": "approximately 70,000 active Armed Forces (2025)",
+    "services_text": "Romanian Armed Forces (Forțele Armate Române or Armata Română): Romanian Land Forces, Romanian Naval Forces, Romanian Air Force<br><br>Ministry of Internal Affairs: Romanian Police, Romanian Gendarmerie, Romanian Border Police (2025)",
+    "urban_fraction": 0.547
+  },
+  "LTU": {
+    "source": "europe/lh.json",
+    "strength_text": "approximately 20,000 active-duty military personnel (2025)",
+    "services_text": "Lithuanian Armed Forces (Lietuvos Ginkluotosios Pajegos): Lithuanian Land Forces (LLF), Lithuanian Navy, Lithuanian Air Force (LTAF), Lithuanian Special Operations Forces (LITHSOF); National Defense Volunteer Forces (2025)",
+    "urban_fraction": 0.687
+  },
+  "LVA": {
+    "source": "europe/lg.json",
+    "strength_text": "approximately 9,000 active-duty military personnel (2025)",
+    "services_text": "National Armed Forces (Nacionalie Brunotie Speki or NBS): Land Forces (Latvijas Sauszemes Speki), Naval Force (Latvijas Juras Speki, includes Coast Guard (Latvijas Kara Flote)), Air Force (Latvijas Gaisa Speki), National Guard (aka Land Guard or Zemessardze)<br><br>Ministry of Interior: State Police, State Border Guards, State Security Service  (2025)",
+    "urban_fraction": 0.687
+  },
+  "EST": {
+    "source": "europe/en.json",
+    "strength_text": "approximately 7,500 active-duty military personnel (2025)",
+    "services_text": "Estonian Defense Forces: Land Forces, Navy, Air Force; Estonian Defense League <br><br>Ministry of Interior: Police and Border Guard Board, Internal Security Service (2025)",
+    "urban_fraction": 0.698
+  },
+  "DEU": {
+    "source": "europe/gm.json",
+    "strength_text": "approximately 185,000 active-duty military personnel (2025)",
+    "services_text": "Federal Armed Forces (Bundeswehr): German Army (Deutsche Heer), German Navy (Deutsche Marine, includes naval air arm), German Air Force (Deutsche Luftwaffe, includes air defense), Cyber and Information Space (Cyber und Informationsraum) (2025)",
+    "urban_fraction": 0.778
+  },
+  "BGR": {
+    "source": "europe/bu.json",
+    "strength_text": "approximately 28,000 active duty Armed Forces  (2025)",
+    "services_text": "Bulgarian Armed Forces (aka Bulgarian Army): Land Forces, Air Force, Navy<br><br>Ministry of Interior: General Directorate National Police (GDNP), General Directorate Border Police (GDBP), Special Unit for Combating Terrorism (SOBT) (2025)",
+    "urban_fraction": 0.767
+  },
+  "GRC": {
+    "source": "europe/gr.json",
+    "strength_text": "approximately 112,000 active-duty military personnel (2025)",
+    "services_text": "Hellenic Armed Forces (HAF; Ellinikes Enoples Dynamis, EED): Hellenic Army (Ellinikos Stratos, ES; includes National Guard), Hellenic Navy (Elliniko Polemiko Navtiko, EPN), Hellenic Air Force (Elliniki Polemiki Aeroporia, EPA; includes air defense) (2025)",
+    "urban_fraction": 0.807
+  },
+  "TUR": {
+    "source": "middle-east/tu.json",
+    "strength_text": "approximately 495,000 active military personnel; approximately 150,000 Gendarmerie (2025)",
+    "services_text": "Turkish Armed Forces (TAF; Türk Silahlı Kuvvetleri, TSK): Turkish Land Forces (Türk Kara Kuvvetleri), Turkish Naval Forces (Türk Deniz Kuvvetleri; includes naval air and naval infantry), Turkish Air Forces (Türk Hava Kuvvetleri)<br><br>Ministry of Interior: Gendarmerie General Command (aka Gendarmerie of the Turkish Republic), Turkish Coast Guard Command, General Directorate of Security (National Police) (2025)",
+    "urban_fraction": 0.775
+  },
+  "ALB": {
+    "source": "europe/al.json",
+    "strength_text": "approximately 7,500 active-duty military personnel (2025)",
+    "services_text": "Republic of Albania Armed Forces (Forcat e Armatosura të Republikës së Shqipërisë (FARSH); aka Albanian Armed Forces (AAF)): Land Forces, Naval Force (includes Coast Guard), Air Forces<br><br>Ministry of Interior: Guard of the Republic, State Police (includes the Border and Migration Police) (2025)",
+    "urban_fraction": 0.6459999999999999
+  },
+  "HRV": {
+    "source": "europe/hr.json",
+    "strength_text": "approximately 15,000 active-duty military personnel (2025)",
+    "services_text": "Armed Forces of the Republic of Croatia (Oruzane Snage Republike Hrvatske, OSRH): Croatian Army (Hrvatska Kopnena Vojska, HKoV), Croatian Navy (Hrvatska Ratna Mornarica, HRM; includes Coast Guard), Croatian Air Force (Hrvatsko Ratno Zrakoplovstvo, HRZ) (2025)",
+    "urban_fraction": 0.586
+  },
+  "CHE": {
+    "source": "europe/sz.json",
+    "strength_text": "approximately 145,000 Swiss Armed Forces (2024)",
+    "services_text": "Swiss Armed Forces (aka Swiss Army or Schweizer Armee); Army (aka Land Forces), Swiss Air Force (2025)",
+    "urban_fraction": 0.742
+  },
+  "LUX": {
+    "source": "europe/lu.json",
+    "strength_text": "approximately 900 active military personnel (2025)",
+    "services_text": "Luxembourg Army (l'Armée Luxembourgeoise) (2025)",
+    "urban_fraction": 0.9209999999999999
+  },
+  "BEL": {
+    "source": "europe/be.json",
+    "strength_text": "approximately 23,000 active-duty military personnel (2025)",
+    "services_text": "Belgian Armed Forces (Defensie or La Défense): Land Component, Marine (Naval) Component, Air Component, Medical Component, Cyber Command (2025)",
+    "urban_fraction": 0.982
+  },
+  "NLD": {
+    "source": "europe/nl.json",
+    "strength_text": "approximately 43,000 active-duty professional military personnel (2025)",
+    "services_text": "Netherlands (Dutch) Armed Forces (Nederlandse Krijgsmacht): Royal Netherlands Army, Royal Netherlands Navy (includes Marine Corps), Royal Netherlands Air Force, Royal Netherlands Marechaussee (Military Constabulary) (2025)",
+    "urban_fraction": 0.932
+  },
+  "PRT": {
+    "source": "europe/po.json",
+    "strength_text": "approximately 25,000 active-duty military personnel (2025)",
+    "services_text": "Portuguese Armed Forces (Forças Armadas Portuguesa): Portuguese Army (Exercito Portuguesa), Portuguese Navy (Marinha Portuguesa; includes Marine Corps, aka Corpo de Fuzileiros or Corps of Fusiliers), Portuguese Air Force (Forca Aerea Portuguesa, FAP)<br><br>Ministry of Internal Administration: Public Security Police (Polícia de Segurança Pública, PSP) , National Republican Guard (Guarda Nacional Republicana, GNR) (2025)",
+    "urban_fraction": 0.679
+  },
+  "ESP": {
+    "source": "europe/sp.json",
+    "strength_text": "approximately 120,000 active-duty military personnel; approximately 80,000 Guardia Civil (2025)",
+    "services_text": "Spanish Armed Forces (Fuerzas Armadas de España): Army (Ejército de Tierra), Spanish Navy (Armada Espanola; includes Marine Corps), Air and Space Force (Ejército del Aire y del Espacio), Emergency Response Unit (Unidad Militar de Emergencias); Civil Guard (Guardia Civil)<br><br>Ministry of the Interior: Spanish National Police (Cuerpo Nacional de Policía, CNP) (2025)",
+    "urban_fraction": 0.816
+  },
+  "IRL": {
+    "source": "europe/ei.json",
+    "strength_text": "approximately 7,500 active-duty Defense Forces (authorized establishment of 9,500) (2025)",
+    "services_text": "Irish Defense Forces (Oglaigh na h-Eireannn): Army, Air Corps, Naval Service, Reserve Defense Forces (2025)",
+    "urban_fraction": 0.645
+  },
+  "NCL": {
+    "source": "australia-oceania/nc.json",
+    "strength_text": "",
+    "services_text": "no regular military forces; Territorial Directorate of the National Police of New Caledonia (DTPN), Gendarmerie of New Caledonia (2025)",
+    "urban_fraction": 0.727
+  },
+  "SLB": {
+    "source": "australia-oceania/bp.json",
+    "strength_text": "",
+    "services_text": "Ministry of Police, National Security and Correctional Services (MPNSCS): the Royal Solomon Islands Police Force (RSIPF) (2025)",
+    "urban_fraction": 0.26
+  },
+  "NZL": {
+    "source": "australia-oceania/nz.json",
+    "strength_text": "approximately 8,800 active (Regular Force) New Zealand Defense Forces (4,300 Army; 2,100 Navy; 2,400 Air Force) (2025)",
+    "services_text": "New Zealand Defense Force (NZDF): New Zealand Army, Royal New Zealand Navy, Royal New Zealand Air Force (2025)",
+    "urban_fraction": 0.87
+  },
+  "AUS": {
+    "source": "australia-oceania/as.json",
+    "strength_text": "approximately 60,000 active ADF personnel (2025)",
+    "services_text": "Australian Defense Force (ADF): Australian Army, Royal Australian Navy, Royal Australian Air Force (2025)",
+    "urban_fraction": 0.866
+  },
+  "LKA": {
+    "source": "south-asia/ce.json",
+    "strength_text": "estimated 210,000 active Armed Forces (140,000 Army; 25,000 Air Force; 45,000 Navy) (2025)",
+    "services_text": "Sri Lanka Armed Forces: Sri Lanka Army (includes National Guard and the Volunteer Force), Sri Lanka Navy (includes Marine Corps), Sri Lanka Air Force, Sri Lanka Coast Guard; Civil Security Department (Home Guard) <br><br>Ministry of Public Security: Sri Lanka Police (2025)",
+    "urban_fraction": 0.192
+  },
+  "CHN": {
+    "source": "east-n-southeast-asia/ch.json",
+    "strength_text": "approximately 2 million active-duty PLA (950,000-1 million Ground; 250,000 Navy, including about 50,000 Marines; 350-400,000 Air Force; 120,000 Rocket Forces; 150-175,000 other forces) (2025)",
+    "services_text": "People's Liberation Army (PLA): Ground Forces or People's Liberation Army Army (PLAA), Navy (PLAN, includes Marine Corps (PLANMC)), Air Force (PLAAF), Rocket Force (PLARF), Aerospace Force (ASF), Cyberspace Force (CSF), Information Support Force (ISF), Joint Logistics Support Force (JLSF); People's Armed Police (PAP, includes Coast Guard, Border Defense Force, Internal Security Forces); PLA Reserve Force (2025)",
+    "urban_fraction": 0.6459999999999999
+  },
+  "TWN": {
+    "source": "east-n-southeast-asia/tw.json",
+    "strength_text": "approximately 170,000 active duty Armed Forces (2025)",
+    "services_text": "Taiwan Armed Forces: Army, Navy (includes Marine Corps), Air Force, Information Communication and Electronic Force (ICEF)<br><br>Ocean Affairs Council: Coast Guard Administration (CGA)<br><br>Ministry of Interior: National Police (2025)",
+    "urban_fraction": 0.8009999999999999
+  },
+  "ITA": {
+    "source": "europe/it.json",
+    "strength_text": "approximately 170,000 active-duty military personnel; approximately 105,000 Carabinieri (2025)",
+    "services_text": "Italian Armed Forces (Forze Armate Italiane): Army (Esercito Italiano, EI), Navy (Marina Militare Italiana, MMI; includes aviation, marines), Italian Air Force (Aeronautica Militare Italiana, AMI); Carabinieri Corps (Arma dei Carabinieri, CC) (2025)",
+    "urban_fraction": 0.72
+  },
+  "DNK": {
+    "source": "europe/da.json",
+    "strength_text": "approximately 17,000 active-duty military personnel (2025)",
+    "services_text": "Danish Armed Forces (Forsvaret): Royal Danish Army, Royal Danish Navy, Royal Danish Air Force (2025)",
+    "urban_fraction": 0.885
+  },
+  "GBR": {
+    "source": "europe/uk.json",
+    "strength_text": "approximately 138,000 Regular Forces (75,000 Army including the Gurkhas; 32,000 Navy including the Royal Marines; 31,000 Air Force) (2025)",
+    "services_text": "United Kingdom Armed Forces (aka British Armed Forces, aka His Majesty's Armed Forces): British Army, Royal Navy (includes Royal Marines), Royal Air Force (2025)",
+    "urban_fraction": 0.846
+  },
+  "ISL": {
+    "source": "europe/ic.json",
+    "strength_text": "",
+    "services_text": "no regular military forces; the Icelandic National Police, the regional police forces, and the Icelandic Coast Guard fall under the purview of the Ministry of Justice (2025)",
+    "urban_fraction": 0.94
+  },
+  "AZE": {
+    "source": "central-asia/aj.json",
+    "strength_text": "information varies widely; estimated 100,000 active Armed Forces personnel (2025)",
+    "services_text": "Azerbaijan Armed Forces: Land Forces, Air Forces, Navy Forces, Special Forces, State Border Service, Coast Guard<br><br>Ministry of Internal Affairs: Internal Troops, local police forces; Special State Protection Service (SSPS): National Guard (2025)",
+    "urban_fraction": 0.5760000000000001
+  },
+  "GEO": {
+    "source": "central-asia/gg.json",
+    "strength_text": "the Georgia Defense Forces are authorized up to 37,000 personnel (2025)",
+    "services_text": "Georgian Defense Forces (GDF; aka Defense Forces of Georgia, DFG): Ground Forces, Air Force, Special Operations Forces, National Guard<br><br>Ministry of Internal Affairs: Police, Border Police of Georgia, Coast Guard of Georgia (includes naval forces, which were merged with the Coast Guard in 2009) (2025)",
+    "urban_fraction": 0.607
+  },
+  "PHL": {
+    "source": "east-n-southeast-asia/rp.json",
+    "strength_text": "approximately 145,000 active Armed Forces (105,000 Army; 25,000 Navy, including about 8,000 Marine Corps; 15,000 Air Force) (2025)",
+    "services_text": "Armed Forces of the Philippines (AFP): Army, Navy (includes Marine Corps), Air Force<br><br>Department of Transportation: Philippine Coast Guard (PCG); Department of the Interior: Philippine National Police Force (PNP) (2025)",
+    "urban_fraction": 0.483
+  },
+  "MYS": {
+    "source": "east-n-southeast-asia/my.json",
+    "strength_text": "approximately 110,000 active Malaysian Armed Forces (2025)",
+    "services_text": "Malaysian Armed Forces (Angkatan Tentera Malaysia, ATM): Malaysian Army, Royal Malaysian Navy, Royal Malaysian Air Force<br><br>Ministry of Home Affairs: Royal Malaysia Police (RMP or Polis Diraja Malaysia, PDRM), Malaysian Maritime Enforcement Agency (MMEA; aka Malaysian Coast Guard) (2025)",
+    "urban_fraction": 0.787
+  },
+  "BRN": {
+    "source": "east-n-southeast-asia/bx.json",
+    "strength_text": "approximately 7,000 active Armed Forces (2025)",
+    "services_text": "Royal Brunei Armed Forces (RBAF) or Angkatan Bersenjata Diraja Brunei (ABDB): Royal Brunei Land Force (RBLF), Royal Brunei Navy (RBN), Royal Brunei Air Force (RBAirF) (2025)",
+    "urban_fraction": 0.7909999999999999
+  },
+  "SVN": {
+    "source": "europe/si.json",
+    "strength_text": "approximately 6,000 active military personnel (2025)",
+    "services_text": "Slovenian Armed Forces (Slovenska Vojska, SV): structured as a combined force with air, land, maritime, and special operations components<br><br>Ministry of Interior: National Police (2025)",
+    "urban_fraction": 0.561
+  },
+  "FIN": {
+    "source": "europe/fi.json",
+    "strength_text": "approximately 31,000 active-duty military personnel (2025)",
+    "services_text": "Finnish Defense Forces (FDF; Puolustusvoimat): Army (Maavoimat), Navy (Merivoimat), Air Force (Ilmavoimat) (2025)",
+    "urban_fraction": 0.858
+  },
+  "SVK": {
+    "source": "europe/lo.json",
+    "strength_text": "approximately 17,000 active-duty military personnel (2025)",
+    "services_text": "Armed Forces of the Slovak Republic (Ozbrojene Sily Slovenskej Republiky): Ground Forces (Slovenské Pozemné Sily), Air Forces (Slovenské Vzdušné Sily), Special Operations Forces (Sily Pre Speciálne Operácie)<br><br>Ministry of Interior: Slovak Police Force (SPF or Policajný Zbor) (2025)",
+    "urban_fraction": 0.54
+  },
+  "CZE": {
+    "source": "europe/ez.json",
+    "strength_text": "approximately 28,000 active-duty military personnel (2025)",
+    "services_text": "Czech Armed Forces: Land Forces, Air Force, Special Forces (2025)",
+    "urban_fraction": 0.746
+  },
+  "ERI": {
+    "source": "africa/er.json",
+    "strength_text": "available information varies widely; estimated 150,000-200,000 active Defense Forces (2025)",
+    "services_text": "Eritrean Defense Forces (EDF): Eritrean Ground Forces, Eritrean Navy, Eritrean Air Force; People's Militia (aka People's Army or Hizbawi Serawit) (2024)",
+    "urban_fraction": 0.433
+  },
+  "JPN": {
+    "source": "east-n-southeast-asia/ja.json",
+    "strength_text": "approximately 230-240,000 active Self Defense Forces  (2025)",
+    "services_text": "Japan Self-Defense Force (JSDF): Ground Self-Defense Force (Rikujou Jieitai, GSDF; includes aviation), Maritime Self-Defense Force (Kaijou Jieitai, MSDF; includes naval aviation), Air Self-Defense Force (Koukuu Jieitai, ASDF) (2025)",
+    "urban_fraction": 0.92
+  },
+  "PRY": {
+    "source": "south-america/pa.json",
+    "strength_text": "approximately 15,000 active duty Armed Forces (2025)",
+    "services_text": "Armed Forces of Paraguay (Fuerzas Armadas de Paraguay; aka Armed Forces of the Nation or Fuerzas Armadas de la Nación): Paraguayan Army (Ejército Paraguayo), Paraguayan Navy (Armada Paraguaya; includes marines), Paraguayan Air Force (Fuerza Aérea Paraguaya)<br><br>Ministry of Internal Affairs: National Police of Paraguay (Policía Nacional del Paraguay, PNP) (2025)",
+    "urban_fraction": 0.631
+  },
+  "YEM": {
+    "source": "middle-east/ym.json",
+    "strength_text": "not available",
+    "services_text": "Yemeni Armed Forces: Yemeni National Army, Air Force and Air Defense, Navy and Coastal Defense Forces, Border Guard, Strategic Reserve Forces (includes Special Forces and Presidential Protection Brigades, which are under the Ministry of Defense but responsible to the president), Popular Committee Forces (aka Popular Resistance Forces; government-backed tribal militia)<br><br>Ministry of Interior: Security Forces, Emergency Forces, Counterterrorism Units (2025)",
+    "urban_fraction": 0.39799999999999996
+  },
+  "SAU": {
+    "source": "middle-east/sa.json",
+    "strength_text": "approximately 250,000 active Saudi Armed Forces, including 125,000 under the Ministry of Defense and 125,000 in the National Guard (2025)",
+    "services_text": "the Saudi Arabian Armed Forces (SAAF) are divided into two ministries:<br><br>Ministry of Defense: Royal Saudi Land Forces, Royal Saudi Naval Forces (includes marines, special forces, naval aviation), Royal Saudi Air Force, Royal Saudi Air Defense Forces, Royal Saudi Strategic Missiles Force; Ministry of the National Guard: Saudi Arabian National Guard (SANG)<br><br>Other security forces include: <br><br>Ministry of Interior: Facilities Security Forces, Public Security Forces (police), General Directorate of Border Guard<br><br>State Security Presidency (SSP): General Directorate of Investigation (Mabahith), Special Security Forces, Special Emergency Forces (2025)",
+    "urban_fraction": 0.85
+  },
+  "CYP": {
+    "source": "europe/cy.json",
+    "strength_text": "approximately 12-15,000 active Cypriot National Guard (2025)",
+    "services_text": "Cypriot National Guard (Ethniki Froura, EF): Army, Navy, Air Force (2025)",
+    "urban_fraction": 0.67
+  },
+  "MAR": {
+    "source": "africa/mo.json",
+    "strength_text": "estimated 220,000 active Armed Forces (175,000 Army; 10,000 Navy; 15,000 Air Force, 20,000 Gendarmerie) (2025)",
+    "services_text": "Royal Moroccan Armed Forces (FAR): Royal Moroccan Army (includes the Moroccan Royal Guard), Royal Moroccan Navy (includes Coast Guard, marines), Royal Moroccan Air Force, Moroccan Royal Guard, Royal Moroccan Gendarmerie<br><br>Ministry of Interior: General Directorate for National Security (DGSN; aka National Police), Auxiliary Forces (2025)",
+    "urban_fraction": 0.6509999999999999
+  },
+  "EGY": {
+    "source": "africa/eg.json",
+    "strength_text": "estimated 450,000 active Armed Forces (2025)",
+    "services_text": "Egyptian Armed Forces (EAF): Army (includes Republican Guard), Navy (includes Coast Guard), Air Force, Air Defense Forces, Border Guard Forces<br><br>Interior Ministry: Public Security Sector Police, the Central Security Force, National Security Agency (2025)",
+    "urban_fraction": 0.431
+  },
+  "LBY": {
+    "source": "africa/ly.json",
+    "strength_text": "estimates not available",
+    "services_text": "the Libyan Armed Forces of the Tripoli-based Government of National Unity (GNU) have various ground, air, and naval/coast guard forces, which include a mix of nominally integrated and semi-regular units, tribal armed groups and militias, civilian volunteers, and foreign military contractors; the GNU's armed forces are nominally under the control of the Ministry of Defense; the GNU also has various internal security forces under both the Ministry of Defense and the Ministry of Interior (2025)",
+    "urban_fraction": 0.816
+  },
+  "ETH": {
+    "source": "africa/et.json",
+    "strength_text": "available information varies widely; estimated 150-300,000 active-duty Defense Force  (2025)",
+    "services_text": "Ethiopian National Defense Force (ENDF; aka Federal Defense Force of Ethiopia, FDRE): Army, Air Force, Naval Force, Defense Cyber Main Directorate (2025)",
+    "urban_fraction": 0.23199999999999998
+  },
+  "DJI": {
+    "source": "africa/dj.json",
+    "strength_text": "estimated 10-12,000 active Armed Forces, including Gendarmerie (2025)",
+    "services_text": "Djibouti Armed Forces (Forces Armées Djiboutiennes or FAD): Djiboutian (or National) Army, Djiboutian Navy (includes Djiboutian Coast Guard), Djiboutian Air Force; Djiboutian National Gendarmerie<br><br>Ministry of Interior: National Police (Police Nationale) (2025)",
+    "urban_fraction": 0.7859999999999999
+  },
+  "SOL": {
+    "source": "africa/so.json",
+    "strength_text": "estimated 20,000 active Somali Armed Forces (2025)",
+    "services_text": "Somali Armed Forces (SAF; aka Somali Defense Force): Somali National Army (SNA; aka Land Forces), Somali Navy, Somali Air Force<br><br>Ministry of Internal Security: Somali National Police (SNP, includes Coast Guard, commando unit) (2025)",
+    "urban_fraction": 0.479
+  },
+  "UGA": {
+    "source": "africa/ug.json",
+    "strength_text": "approximately 45,000 active Defense Forces (2025)",
+    "services_text": "Uganda People's Defense Force (UPDF): Land Force (includes marines), Air Force, Special Forces Command, Reserve Force <br><br>Ministry of Internal Affairs: Uganda Police Force (2025)",
+    "urban_fraction": 0.268
+  },
+  "RWA": {
+    "source": "africa/rw.json",
+    "strength_text": "approximately 30-35,000 active Rwanda Defense Forces (2025)",
+    "services_text": "Rwanda Defense Force (RDF; Ingabo z’u Rwanda): Rwanda Army (Rwanda Land Force), Rwanda Air Force (Force Aerienne Rwandaise, FAR), Rwanda Reserve Force, Special Units<br><br>Ministry of Internal Security: Rwanda National Police (2025)",
+    "urban_fraction": 0.179
+  },
+  "BIH": {
+    "source": "europe/bk.json",
+    "strength_text": "approximately 10,000 active duty Armed Forces (2025)",
+    "services_text": "Armed Forces of Bosnia and Herzegovina (AFBiH or Oruzanih Snaga Bosne i Hercegovine, OSBiH): Army, Air, Air Defense forces organized into an Operations Command and a Support Command<br><br>Ministry of Security: Border Police (2025)",
+    "urban_fraction": 0.503
+  },
+  "MKD": {
+    "source": "europe/mk.json",
+    "strength_text": "approximately 6,000 active military personnel (2025)",
+    "services_text": "Army of the Republic of North Macedonia (ARSM or ARNM): joint force with air, ground, reserve, special operations, and support forces (2025)",
+    "urban_fraction": 0.595
+  },
+  "SRB": {
+    "source": "europe/ri.json",
+    "strength_text": "approximately 25,000 active-duty Armed Forces (15,000 Land Forces; 5,000 Air/Air Defense; 5,000 other, including Serbian Guard) (2025)",
+    "services_text": "Serbian Armed Forces (Vojska Srbije, VS): Army (aka Land Forces; includes Riverine Component, consisting of a naval flotilla on the Danube), Air and Air Defense Forces, Serbian Guard<br><br>Serbian Ministry of Internal Affairs: Police Directorate (2025)",
+    "urban_fraction": 0.5710000000000001
+  },
+  "MNE": {
+    "source": "europe/mj.json",
+    "strength_text": "approximately 2,000 active-duty military personnel (2025)",
+    "services_text": "Army of Montenegro (Vojska Crne Gore or VCG): Ground Forces, Air Force, Navy <br><br>Ministry of Interior: Police Directorate of Montenegro (2025)",
+    "urban_fraction": 0.685
+  },
+  "KOS": {
+    "source": "europe/kv.json",
+    "strength_text": "approximately 3,300 Kosovo Security Forces, including about 800 reserves (2024)",
+    "services_text": "Kosovo Security Force (KSF; Forca e Sigurisë së Kosovës or FSK): Land Force, National Guard (2025)",
+    "urban_fraction": 0.6
+  },
+  "TTO": {
+    "source": "central-america-n-caribbean/td.json",
+    "strength_text": "approximately 5,000 Defense Forces (2025)",
+    "services_text": "Trinidad and Tobago Defense Force (TTDF): Trinidad and Tobago Regiment (Army/Land Forces), Trinidad and Tobago Coast Guard, Trinidad and Tobago Air Guard, Defense Force Reserves (2026)",
+    "urban_fraction": 0.534
+  },
+  "SDS": {
+    "source": "africa/od.json",
+    "strength_text": "information varies; estimated 150-200,000 active Defense Forces (2025)",
+    "services_text": "South Sudan People’s Defense Force (SSPDF): Land Forces (includes Presidential Guard), Air Forces, Marine (Riverine) Forces, Reserve Forces; National (or Necessary) Unified Forces (NUF)<br><br>Ministry of Interior: South Sudan National Police Service (SSNPS) (2025)",
+    "urban_fraction": 0.212
+  }
+}

@@ -42,6 +42,8 @@ namespace Sovereign
             Txt(g, "+" + People(E.WeeklyIntake(E.S.Player)) + " в неделю · предел " + People(E.ManpowerCapacity(E.S.Player)), 20, 222, 11, Palette.Muted, false, w);
             LedgerRow(g, "На службе", People(E.ServicePersonnel(E.S.Player)), 252, Palette.Teal);
             LedgerRow(g, "Безвозвратные потери", People(n.PersonnelLosses), 281, Palette.Red);
+            var reference = W.Countries[E.S.Player];
+            Txt(g, "Справочно ВС " + (reference.MilitaryYear == 0 ? "(оценка)" : reference.MilitaryYear.ToString()) + ": " + People(reference.ReferenceMilitary) + "; на карте — наземные части", 20, 309, 10, Palette.Muted, false, w);
             CompactSection(g, "КОМПЛЕКТОВАНИЕ", 324);
             for (int i = 0; i < 4; i++) {
                 var law = (ConscriptionLaw)i; string reason = E.ConscriptionReason(law);

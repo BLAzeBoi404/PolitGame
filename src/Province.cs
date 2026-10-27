@@ -9,6 +9,10 @@ namespace Sovereign
         public int Airfield;
 
 		public double Population;
+        // Optional exact representation in format 12. Some Mono versions round tiny
+        // decimal doubles incorrectly on XML reads. Keep the readable value for older
+        // files, then restore its exact IEEE bits when this element is present.
+        public long PopulationBits { get => System.BitConverter.DoubleToInt64Bits(Population); set => Population = System.BitConverter.Int64BitsToDouble(value); }
 
 		public double Infrastructure = 50.0;
 
