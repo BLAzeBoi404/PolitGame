@@ -1,0 +1,21 @@
+{
+  "version": "0.15.0",
+  "tested_at_utc": "2026-10-28T09:10:06.322298+00:00",
+  "executable_sha256": "51dbb484f7a006d8fd4769f62f19b0d54efc2f63e0799714bb5e2ca377654137",
+  "source_sha256": "35bb81c31a7a1a921549feed5527d3b63e3ce68437ed4bf7dc95a7fa2dcfdc86",
+  "runtime_sha256": {
+    "OpenTK.dll": "2bbd3ac9651cb1daab679da57020f1054d5c18a1b89621b92ba6ac7ab1b1b3ea",
+    "OpenTK.GLControl.dll": "92e0bf6dcf085ecbbfa82319114e228a915a57284f422f779124d363e36ea3e3",
+    "OpenTK.dll.config": "58050540744c0a3270fe38a58f0d76eeddcd8b3c34022bb5deccd7d8bcc0e461"
+  },
+  "license_sha256": "c5761cf7198ad2677ff824b1efab3b95bfaa745246e10277dfc7775abbe7fbf5",
+  "logic_passed": 648,
+  "ui_passed": 530,
+  "gpu_passed": 24,
+  "native_windows_tested": false,
+  "hardware_gpu_tested": false,
+  "build": ".NET SDK 8.0.426 / Release net472",
+  "runtime": "Mono / libgdiplus / Xvfb / Mesa llvmpipe; LP_NUM_THREADS=2",
+  "performance_baseline_commit": "a2974303381ec491e722e40c4b75480d9bdfd651",
+  "performance_note": "Three serial old/new pairs using the unchanged SimulationProbe against original 0.14 and final 0.15. 35 warm-up + 730 measured days, all countries; no UI or autosave. Economics changes trajectories. This measures simulation cost, not monitor FPS."
+}

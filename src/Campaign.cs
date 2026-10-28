@@ -5,7 +5,12 @@ namespace Sovereign
 {
 	public class Campaign
 	{
-		public int Version = 1;
+		public const int CurrentVersion = 13;
+        public int Version = 1;
+        public double[] MarketPrices;
+        public List<TradeDeal> TradeDeals;
+        public List<TradeFlow> TradeFlows;
+        public int NextTradeDeal = 1, TradeDay = -1;
 
 		public int Player;
 

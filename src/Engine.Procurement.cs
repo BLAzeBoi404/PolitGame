@@ -61,7 +61,7 @@ namespace Sovereign
             Player.Contracts.Add(new PublicContract { Id = Player.NextContract++, Company = company, Supplier = S.Provinces[company / 8].Owner, Product = product, Quantity = quantity, Factories = factories, Destination = destination, DesignId = product == 10 ? designId : 0 });
             Notify("Госзаказ принят: " + CompanyName(company) + ". Оплата по мере изготовления."); ComputeEconomy(false); Raise(); return null;
         }
-        public string ContractStatus(int buyer, PublicContract c)
+        public string ContractStatus(int buyer, PublicContract c, bool forecast = false)
         {
             if (c.Delivered == c.Quantity) return "Выполнен";
             if (c.Paused) return "Приостановлен";
@@ -74,7 +74,7 @@ namespace Sovereign
             if (assigned > CompanyCapacity(c.Company)) return "Утрачены мощности";
             if (S.Nations[buyer].Treasury <= 0) return "Нет средств";
             var design = c.Product == 10 ? FindDesign(buyer, c.DesignId).Blueprint : null;
-            for (int good = 0; good < 8; good++) if (ProcurementRules.Input(c.Product, good, design) > 0 && S.Nations[c.Supplier].Stock[good] <= 1e-9) return "Дефицит: " + Rules.Goods[good];
+            for (int good = 0; !forecast && good < 8; good++) if (ProcurementRules.Input(c.Product, good, design) > 0 && S.Nations[c.Supplier].Stock[good] <= 1e-9) return "Дефицит: " + Rules.Goods[good];
             return "В производстве";
         }
         public string ToggleContract(int id)

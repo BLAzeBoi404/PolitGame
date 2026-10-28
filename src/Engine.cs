@@ -165,6 +165,7 @@ namespace Sovereign
             InitializeGovernments(S);
             InitializeOperations(S);
             InitializeStartingForces();
+            InitializeTrade(S);
 			Notify("Кабинет сформирован. Проверьте баланс ресурсов и выберите программу развития.");
 			Notify("Учебная модель: современная география; региональная экономика и ресурсы оценочные. Исторические границы пока не включены.");
 			ComputeEconomy(apply: false);
@@ -301,11 +302,6 @@ namespace Sovereign
 				nation.Production = new double[8];
 				nation.Demand = new double[8];
 				nation.Consumed = new double[8];
-				if (apply)
-				{
-					nation.Imports = 0.0;
-					nation.Exports = 0.0;
-				}
 				double num5 = 0.0;
 				for (int k = 0; k < 8; k++)
 				{
@@ -383,10 +379,11 @@ namespace Sovereign
 					nation.Stock = array4;
 				}
 			}
+            PrepareTradeNeeds();
 			if (apply)
 			{
                 foreach (var province in S.Provinces) Array.Clear(province.ContractWork, 0, 8);
-				Trade();
+				SettleTradeWeek();
 			}
 			int c2;
 			for (c2 = 0; c2 < num; c2++)
@@ -405,7 +402,7 @@ namespace Sovereign
 					num20 += nation2.Price[num21] / Rules.Prices[num21] / 8.0;
 					if (apply)
 					{
-						nation2.Stock[num21] = Math.Min(nation2.Stock[num21], Math.Max(5.0, nation2.Demand[num21] * 52.0));
+						nation2.Stock[num21] = Math.Min(nation2.Stock[num21], Math.Max(5.0, TradeNeed(c2,num21) * 52.0));
 					}
 				}
 				if (apply)
@@ -417,15 +414,15 @@ namespace Sovereign
 					nation2.LastPrice = num20;
 				}
 				double num25 = nation2.GDP / 52.0;
-				nation2.Revenue = num25 * (nation2.Tax / 100.0) * (0.82 - nation2.Repression * 0.001) * GovernmentRules.CombinedEffects(nation2, S.Day).RevenueFactor;
+				nation2.Revenue = num25 * (nation2.Tax / 100.0) * (0.82 - nation2.Repression * 0.001) * GovernmentRules.CombinedEffects(nation2, S.Day).RevenueFactor + nation2.Trade.Tariffs;
 				nation2.Spending = num25 * (0.08 + (nation2.Social + nation2.Science + nation2.Military) / 100.0) + nation2.Debt * nation2.Interest / 100.0 / 52.0 + armyBudget[c2];
 				nation2.TradeBalance = nation2.Exports - nation2.Imports;
 				if (!apply)
 				{
 					continue;
 				}
-				nation2.Treasury += nation2.Revenue - nation2.Spending;
-				nation2.PrivateCapital += Math.Max(0.0, num25 * (1.0 - nation2.Tax / 100.0) * 0.06 + nation2.TradeBalance);
+				nation2.Treasury += nation2.Revenue - nation2.Spending - nation2.Trade.Tariffs; // Tariffs were transferred by settlement, not newly created here.
+				nation2.PrivateCapital += TradeRules.RetainedBusinessIncome(num25,nation2.Tax);
 				if (nation2.Treasury < 0.0)
 				{
 					nation2.Debt -= nation2.Treasury;
@@ -450,60 +447,6 @@ namespace Sovereign
 				if (nation2.StabilityHistory.Count > 104)
 				{
 					nation2.StabilityHistory.RemoveAt(0);
-				}
-			}
-		}
-
-		private void Trade()
-		{
-			int num = S.Nations.Length;
-			int k;
-			for (k = 0; k < 8; k++)
-			{
-				List<int> list = (from c in Enumerable.Range(0, num)
-					where S.Nations[c].AutoTrade && S.Nations[c].Stock[k] > Math.Max(1.0, S.Nations[c].Demand[k] * 4.0)
-					orderby S.Nations[c].Price[k]
-					select c).ToList();
-				for (int num2 = 0; num2 < num; num2++)
-				{
-					int num3 = (num2 + S.Day) % num;
-					Nation nation = S.Nations[num3];
-					if (!nation.AutoTrade)
-					{
-						continue;
-					}
-					double num4 = Math.Max(0.0, nation.Demand[k] * 3.0 - nation.Stock[k]);
-					if (num4 <= 0.0)
-					{
-						continue;
-					}
-					foreach (int item in list)
-					{
-						if (item == num3 || AtWar(item, num3) || S.Embargo[Pair(item, num3)] || S.Embargo[Pair(num3, item)])
-						{
-							continue;
-						}
-						Nation nation2 = S.Nations[item];
-						double val = Math.Max(0.0, nation2.Stock[k] - Math.Max(1.0, nation2.Demand[k] * 4.0));
-						double num5 = (nation2.Price[k] + nation.Price[k]) * 0.5;
-						double num6 = (S.Agreements[Pair(item, num3)] ? 1.03 : 1.12);
-						double num7 = Math.Min(num4, Math.Min(val, nation.PrivateCapital / (num5 * num6)));
-						if (!(num7 <= 0.0))
-						{
-							nation2.Stock[k] -= num7;
-							nation.Stock[k] += num7;
-							double num8 = num7 * num5;
-							nation.PrivateCapital -= num8 * num6;
-							nation2.PrivateCapital += num8;
-							nation.Imports += num8 * num6;
-							nation2.Exports += num8;
-							num4 -= num7;
-							if (num4 < 0.001)
-							{
-								break;
-							}
-						}
-					}
 				}
 			}
 		}
@@ -935,6 +878,7 @@ namespace Sovereign
             if (s.Version == 9) InitializeGovernments(s);
             if (s.Version == 10) InitializeOperations(s);
             if (s.Version == 11) s.Version = 12;
+            if (s.Version == 12) InitializeTrade(s);
             Validate(s);
 			S = s;
 			Raise();

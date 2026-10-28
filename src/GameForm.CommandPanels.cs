@@ -54,6 +54,7 @@ namespace Sovereign
                     Txt(g, Num(n.Stock[i]), 294, y, 12, n.Stock[i] < n.Demand[i] ? Palette.Red : Palette.Text, false, 80);
                     hits.Add(new Hit { Rect = new RectangleF(14, y - 3, w + 12, 27), Label = "market:" + i, Action = () => { marketGood = good; detailPanel = true; Invalidate(); }, Tip = Rules.Goods[i] + ": спрос " + Num(n.Demand[i]) + ", цена " + Num(n.Price[i] * 1000) + " млн/ед. Нажмите для производственной цепочки." });
                 }
+                TradeLink(g,20,714,w);
                 Button(g, n.AutoTrade ? "Автоторговля: включена" : "Автоторговля: выключена", 20, 761, w, () => { n.AutoTrade = !n.AutoTrade; Invalidate(); }, n.AutoTrade, "Торговля использует капитал бизнеса", 31);
             } else if (page == "Исследования") {
                 Txt(g, "НАУЧНАЯ ПРОГРАММА", 20, 160, 10, Palette.Gold, true);

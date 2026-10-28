@@ -1,0 +1,8 @@
+Diagnostic pass before supplier-order optimization; temporary instrumented Mono build.
+Same 35 + 730-day SimulationProbe scenario. Stopwatch per stage; these are stage costs, not FPS.
+forecast: samples=117, mean_ms=0.999, max_ms=4.303
+prices: samples=109, mean_ms=0.023, max_ms=0.710
+AI: samples=109, mean_ms=1.798, max_ms=6.536
+contracts: samples=109, mean_ms=0.068, max_ms=1.137
+sorting: samples=109, mean_ms=10.017, max_ms=19.978
+spot: samples=109, mean_ms=3.077, max_ms=6.738

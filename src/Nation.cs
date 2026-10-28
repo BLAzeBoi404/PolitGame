@@ -6,6 +6,7 @@ namespace Sovereign
 	{
 		public List<PublicContract> Contracts = new List<PublicContract>();
         public int NextContract = 1;
+        public TradePolicy Trade;
         public double Treasury;
         public NationalPolitics Politics;
         public DoctrineState Doctrines;

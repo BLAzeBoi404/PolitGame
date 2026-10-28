@@ -80,6 +80,9 @@ namespace Sovereign
             check(scale>oldScale&&GpuActive&&AtlasMissingTiles>0,"New zoom presents immediately using the overview while detail loads");settle();
             ToggleFullScreen();PresentGpu();ToggleFullScreen();PresentGpu();
             check(GpuActive,"Fullscreen transitions retain a working GPU context");
+            OpenTrade();Invalidate();PresentGpu();
+            using(var frame=gpu.CaptureFrame())frame.Save(Path.Combine(directory,"gpu-trade.png"));
+            check(GpuActive&&hits.Any(h=>h.Label=="trade:sign"),"Trade desk renders through the retained GPU HUD with active controls");
             menuScreen="settings";Invalidate();PresentGpu();using(var frame=gpu.CaptureFrame())frame.Save(Path.Combine(directory,"gpu-settings.png"));
             check(hits.Any(h=>h.Label.Contains("Видеокарта")),"Renderer selection remains reachable in settings");
             ClientSize=new Size(1280,720);Invalidate();PresentGpu();using(var frame=gpu.CaptureFrame())frame.Save(Path.Combine(directory,"gpu-small.png"));

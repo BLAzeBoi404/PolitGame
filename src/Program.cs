@@ -23,6 +23,7 @@ namespace Sovereign
                     Console.WriteLine("PASS Supplied save migrated; 30 subsequent days validated; source file unchanged.");
                     return 0;
                 }
+                if(args.Contains("--trade-test"))return TradeTests.RunSuite(world,args[args.Length-1]);
                 if (args.Contains("--test"))
 				{
 					return Tests.Run(world, (args.Length > 1) ? args[args.Length - 1] : "test-results.txt");
@@ -59,7 +60,7 @@ namespace Sovereign
 			catch (Exception ex)
 			{
 				File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error.log"), ex.ToString());
-				if (!args.Contains("--test") && !args.Contains("--ui-test") && !args.Contains("--gpu-test") && !args.Contains("--gpu-pan-benchmark") && !args.Contains("--gpu-live-benchmark") && !args.Contains("--preview") && !args.Contains("--verify-save") && !args.Contains("--benchmark") && !args.Contains("--pan-benchmark"))
+				if (!args.Contains("--trade-test") && !args.Contains("--test") && !args.Contains("--ui-test") && !args.Contains("--gpu-test") && !args.Contains("--gpu-pan-benchmark") && !args.Contains("--gpu-live-benchmark") && !args.Contains("--preview") && !args.Contains("--verify-save") && !args.Contains("--benchmark") && !args.Contains("--pan-benchmark"))
 				{
 					MessageBox.Show("Не удалось запустить игру. Подробности записаны в error.log.\n" + ex.Message, "Sovereign");
 				}

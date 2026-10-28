@@ -128,7 +128,7 @@ namespace Sovereign
                 string legacyPath = Path.Combine(directory, "legacy.xml");
                 using (var stream = File.Create(legacyPath)) new XmlSerializer(typeof(Campaign)).Serialize(stream, legacy.S);
                 restored.Load(legacyPath);
-                check(restored.S.Version == 12 && restored.Player.Designs.Count == legacy.S.Armies.Where(a => a.Owner == legacy.S.Player).Select(a => a.Design.Kind).Distinct().Count() + 1 && restored.S.Armies.All(a => a.DesignId > 0), "Version 1 migration creates catalogs and retains existing armies");
+                check(restored.S.Version == Campaign.CurrentVersion && restored.Player.Designs.Count == legacy.S.Armies.Where(a => a.Owner == legacy.S.Player).Select(a => a.Design.Kind).Distinct().Count() + 1 && restored.S.Armies.All(a => a.DesignId > 0), "Version 1 migration creates catalogs and retains existing armies");
                 int stock = restored.Player.Designs[0].Stock, catalogSize = restored.Player.Designs.Count; restored.Save(path); restored.Load(path);
                 check(restored.Player.Designs.Count == catalogSize && restored.Player.Designs[0].Stock == stock, "Repeated loading cannot duplicate migrated designs or equipment");
             });

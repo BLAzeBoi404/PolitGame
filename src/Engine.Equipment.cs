@@ -119,23 +119,31 @@ namespace Sovereign
             foreach (int good in new[] { 4, 5, 7 }) if (n.Stock[good] <= 1e-9) return "Дефицит: " + Rules.Goods[good];
             return "Выпуск · эффективность " + line.Efficiency.ToString("P0");
         }
-        public void TickProduction()
+        private double[] EquipmentCapacity()
         {
             // Aggregate capacity once per day, rather than scanning all provinces for every line.
             double[] capacity = new double[S.Nations.Length];
             foreach (Province p in S.Provinces) capacity[p.Owner] += p.Public[7] + p.Private[7];
             foreach (var buyer in S.Nations) foreach (var contract in buyer.Contracts) if (contract.Active && contract.Company % 8 == 7 && S.Provinces[contract.Company / 8].Owner == contract.Supplier) capacity[contract.Supplier] -= contract.Factories * ProcurementRules.CapacityUnit;
+            return capacity;
+        }
+        private double ProductionPotential(Nation n,ProductionLine line,Blueprint d,TechnologyEffects technology)
+        {
+            return line.Factories*line.Efficiency*(1+n.Tech[2]*.04)*ManpowerRules.Output(n)*GovernmentRules.CombinedEffects(n,S.Day).EquipmentFactor*(1+technology.Equipment)/d.WorkDays;
+        }
+        public void TickProduction()
+        {
+            var capacity=EquipmentCapacity();
             for (int owner = 0; owner < S.Nations.Length; owner++) {
                 Nation n = S.Nations[owner];
                 int available = Math.Min(500, (int)Math.Floor(capacity[owner]));
                 var technology = TechnologyRules.Effects(n);
-                double policyFactor = GovernmentRules.CombinedEffects(n, S.Day).EquipmentFactor * (1 + technology.Equipment);
                 foreach (var line in n.Lines) {
                     if (!line.Active) continue;
                     available -= line.Factories;
                     if (available < 0) continue;
                     Blueprint d = FindDesign(owner, line.DesignId).Blueprint;
-                    double potential = line.Factories * line.Efficiency * (1 + n.Tech[2] * 0.04) * ManpowerRules.Output(n) * policyFactor / d.WorkDays;
+                    double potential = ProductionPotential(n,line,d,technology);
                     double work = Math.Min(potential, line.Quantity - line.Completed - line.Progress);
                     work = Math.Min(work, Math.Max(0, n.Treasury) / d.Cost);
                     work = Math.Min(work, n.Stock[4] / (d.Steel * (1 + technology.EquipmentSteel)));

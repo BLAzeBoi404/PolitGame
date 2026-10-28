@@ -23,7 +23,7 @@ namespace Sovereign
             Action<Engine, int, int> active = (e, path, level) => { Learn(e.Player, path, level); e.AdoptDoctrine(path); e.S.Day = 30; };
             scenario("Doctrine rules and paid course", () => {
                 var e = fresh(); var n = e.Player; var s = n.Doctrines; double cash = n.Treasury; uint rng = e.S.RandomState;
-                check(e.S.Version == 12 && e.S.Nations.All(c => c.Doctrines.Levels.All(l => l == 0) && c.Doctrines.Active.All(p => p == -1)), "All new countries start with neutral doctrine and no free school");
+                check(e.S.Version == Campaign.CurrentVersion && e.S.Nations.All(c => c.Doctrines.Levels.All(l => l == 0) && c.Doctrines.Active.All(p => p == -1)), "All new countries start with neutral doctrine and no free school");
                 check(e.StartDoctrineTraining(-1) != null && e.StartDoctrineTraining(18) != null && e.StartDoctrineTraining(1) != null && e.AdoptDoctrine(0) != null && n.Treasury == cash && s.Training == -1 && e.S.RandomState == rng, "Unknown, skipped and unlearned doctrine orders are rejected atomically");
                 n.Treasury = 0; check(e.StartDoctrineTraining(0) != null && s.Training == -1, "Unfunded staff courses cannot start"); n.Treasury = cash;
                 check(e.StartDoctrineTraining(0) == null && s.Training == 0 && Math.Abs(cash - n.Treasury - DoctrineRules.TrainingCost(n.GDP, 0)) < 1e-8 && s.Paid > 0, "Starting a course charges its exact quoted cost once");
@@ -162,7 +162,7 @@ namespace Sovereign
                 reject("Loading rejects stale paused state without an active course atomically", s => s.Paused = true);
                 e = fresh(); e.SelectResearch(0); e.Player.ResearchProgress = 31.25; double cash = e.Player.Treasury; uint rng = e.S.RandomState;
                 e.S.Version = 8; foreach (var n in e.S.Nations) n.Doctrines = null; raw(e, file); loaded.Load(file);
-                check(loaded.S.Version == 12 && loaded.Player.Treasury == cash && loaded.S.RandomState == rng && loaded.Player.ResearchProgress == 31.25 && loaded.S.Nations.All(n => n.Doctrines.Active.All(p => p == -1) && n.Doctrines.Levels.All(l => l == 0)), "Version-eight saves migrate without free doctrines, lost research, charges or random changes"); loaded.Validate(loaded.S);
+                check(loaded.S.Version == Campaign.CurrentVersion && loaded.Player.Treasury == cash && loaded.S.RandomState == rng && loaded.Player.ResearchProgress == 31.25 && loaded.S.Nations.All(n => n.Doctrines.Active.All(p => p == -1) && n.Doctrines.Levels.All(l => l == 0)), "Version-eight saves migrate without free doctrines, lost research, charges or random changes"); loaded.Validate(loaded.S);
             });
             scenario("AI learns paid doctrines", () => {
                 var e = fresh(); int owner = world.ByCode("POL"); var n = e.S.Nations[owner]; n.Treasury = 10000; n.Education = 60; n.Military = 2.5; n.Tech[5] = 2;

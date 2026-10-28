@@ -50,7 +50,7 @@ namespace Sovereign
             // Exercise the exact tiny-population value that exposed Mono XML rounding.
             e.S.Provinces[0].Population=0.000649968829721428;long bits=BitConverter.DoubleToInt64Bits(e.S.Provinces[0].Population);
             string path=Path.Combine(directory,"scenario-roundtrip.xml");e.Save(path);var restored=new Engine(w){AutoSaveEnabled=false};restored.Load(path);
-            check(restored.S.Version==12&&BitConverter.DoubleToInt64Bits(restored.S.Provinces[0].Population)==bits,"Format twelve retains the exact bits of small regional populations");
+            check(restored.S.Version==Campaign.CurrentVersion&&BitConverter.DoubleToInt64Bits(restored.S.Provinces[0].Population)==bits,"Format twelve retains the exact bits of small regional populations");
             check(restored.S.Armies.Count==e.S.Armies.Count&&restored.S.Armies.Zip(e.S.Armies,(a,b)=>a.Personnel==b.Personnel&&a.Region==b.Region&&a.Battalions==b.Battalions).All(v=>v),"Loading preserves actual armies and locations instead of reseeding the scenario");
             for(int day=0;day<30;day++)restored.Tick();restored.Validate(restored.S);check(true,"The full 3765-formation world advances thirty days with valid stock, manpower and formations");
             var small=new Engine(w){AutoSaveEnabled=false};small.New(ukraine,2026,1);Tests.SmallPlayerForce(small);small.Player.Treasury=100;small.Player.Stock[7]=1000;

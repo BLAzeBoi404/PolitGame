@@ -17,7 +17,7 @@ namespace Sovereign
         public void Validate(Campaign s)
         {
             int nations = World.Countries.Length, regions = World.Regions.Length;
-            if (s == null || (s.Version < 1 || s.Version > 12) || s.Nations == null || s.Nations.Length != nations || s.Provinces == null || s.Provinces.Length != regions
+            if (s == null || (s.Version < 1 || s.Version > Campaign.CurrentVersion) || s.Nations == null || s.Nations.Length != nations || s.Provinces == null || s.Provinces.Length != regions
                 || s.Player < 0 || s.Player >= nations || s.StartYear < 1940 || s.StartYear > 2026 || s.Day < 0 || s.Day > 2000000 || s.RandomState == 0
                 || s.Difficulty < 0 || s.Difficulty > 2) throw new InvalidDataException("Несовместимое сохранение кампании.");
             int pairs = nations * nations;
@@ -73,6 +73,7 @@ namespace Sovereign
                     || !IsFinite(l.Efficiency) || l.Efficiency < 0.25 || l.Efficiency > 1)
                     || n.Lines.Select(l => l.Id).Distinct().Count() != n.Lines.Count || n.NextLine <= n.Lines.Select(l => l.Id).DefaultIfEmpty(0).Max()) throw new InvalidDataException("Повреждены производственные линии.");
             }
+            if(s.Version>=13)ValidateTrade(s);
             if (s.Armies == null || s.Projects == null || s.News == null || s.News.Count > 100 || s.NextArmy <= 0) throw new InvalidDataException("Повреждены списки кампании.");
             if (s.Armies.Any(a => a == null) || s.Armies.Select(a => a.Id).Distinct().Count() != s.Armies.Count) throw new InvalidDataException("Повторяются номера частей.");
             foreach (var a in s.Armies) {
