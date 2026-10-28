@@ -1,0 +1,21 @@
+{
+  "version": "0.16.0",
+  "tested_at_utc": "2026-10-28T15:41:58.097669+00:00",
+  "executable_sha256": "71579e2f0c980122f0291a695e7a5cfb12a2c4ee90e9c12d917eb9c2fc4ac008",
+  "source_sha256": "e93011fa66f881d0f3c3c2b4ac34b31ddd3deda84e5b2700d8d744e53b164647",
+  "runtime_sha256": {
+    "OpenTK.dll": "2bbd3ac9651cb1daab679da57020f1054d5c18a1b89621b92ba6ac7ab1b1b3ea",
+    "OpenTK.GLControl.dll": "92e0bf6dcf085ecbbfa82319114e228a915a57284f422f779124d363e36ea3e3",
+    "OpenTK.dll.config": "58050540744c0a3270fe38a58f0d76eeddcd8b3c34022bb5deccd7d8bcc0e461"
+  },
+  "license_sha256": "c5761cf7198ad2677ff824b1efab3b95bfaa745246e10277dfc7775abbe7fbf5",
+  "logic_passed": 695,
+  "ui_passed": 543,
+  "gpu_passed": 25,
+  "native_windows_tested": false,
+  "hardware_gpu_tested": false,
+  "build": ".NET SDK 8.0.426 / Release net472",
+  "runtime": "Mono / libgdiplus / Xvfb / Mesa llvmpipe; LP_NUM_THREADS=2",
+  "performance_baseline_commit": "69d1480b5054cd47ade7121651a2a9d28027b0f7",
+  "performance_note": "Three serial old/new pairs using unchanged SimulationProbe against original 0.15 and final 0.16. 35 warm-up + 730 measured days, all countries; no UI or autosave. Military changes alter trajectories and final force counts. This measures simulation cost, not monitor FPS."
+}

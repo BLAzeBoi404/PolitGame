@@ -128,6 +128,7 @@ namespace Sovereign
                 }
             }
             if (s.Version >= 11) ValidateOperations(s);
+            if (s.Version >= 14) ValidateReadiness(s);
             foreach (var p in s.Projects)
                 if (p == null || p.Owner < 0 || p.Owner >= nations || p.Region < 0 || p.Region >= regions || p.Sector < 0 || p.Sector > (s.Version >= 4 ? 9 : 8) || p.Days <= 0 || p.Total < p.Days || (p.Sector == 9 && p.Private))
                     throw new InvalidDataException("Повреждена очередь строительства.");

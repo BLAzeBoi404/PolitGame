@@ -28,7 +28,7 @@ namespace Sovereign
         public static int AirSize(EquipmentKind kind) => kind == EquipmentKind.Bomber ? 220 : kind == EquipmentKind.Transport ? 200 : kind == EquipmentKind.Recon ? 80 : 120;
         public static double Manning(Army army) => Math.Min(1, (double)army.Personnel / Establishment(army));
         public static double AirManning(AirWing wing) => Math.Min(1, (double)wing.Personnel / AirSize(wing.Design.Kind));
-        public static double Output(Nation n) => 1 - OutputPenalty[(int)n.Conscription];
+        public static double Output(Nation n) => (1 - OutputPenalty[(int)n.Conscription]) * (1 - ReadinessRules.Exhaustion(n) * .001);
         public static int TrainingDays(int battalions) => 30 + 6 * (battalions - 1);
     }
 }

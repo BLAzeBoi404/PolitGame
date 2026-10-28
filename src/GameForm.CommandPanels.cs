@@ -117,6 +117,7 @@ namespace Sovereign
                     Txt(g, People(a.Personnel) + " чел. / орг. " + a.Organization.ToString("0") + "%", 208, y + 36, 11, a.Organization < 40 ? Palette.Red : Palette.Teal);
                     Progress(g, 28, y + 61, w - 16, a.Strength / 100, Palette.Teal);
                 }
+                ReadinessLink(g, 20, 697, w);
                 Button(g, "Фронты и оснащение →", 20, 739, w, () => { detailPanel = true; Invalidate(); }, true);
                 DoctrineLink(g, 20, 782, w);
             } else if (page == "Дипломатия") {

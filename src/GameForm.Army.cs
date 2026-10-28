@@ -11,6 +11,7 @@ namespace Sovereign
         private int frontOffset;
         private void DrawArmy(Graphics g)
         {
+            if (readinessPage) { DrawReadiness(g); return; }
             if (deploymentPage) { DrawDeployment(g); return; }
             float x = sidebar + 34, w = VW - sidebar - 68, fw = 302, listWidth = w - fw - 28, right = x + listWidth + 28;
             var units = E.S.Armies.Where(a => a.Owner == E.S.Player).ToList();
@@ -38,8 +39,8 @@ namespace Sovereign
                 var plan = E.FrontFor(unit.Id);
                 Txt(g, DeploymentRules.Names[(int)DeploymentRules.For(unit).Specialty] + " · " + W.Regions[unit.Region].Name + (plan == null ? "" : " · " + plan.Name), x + 51, y + 35, 11, Palette.Muted, false, listWidth - 209);
                 float statW = Math.Max(80, (listWidth - 245) / 3);
-                Txt(g, "Готовность " + unit.Strength.ToString("0") + "%", x + 51, y + 58, 10, Palette.Teal);
-                Progress(g, x + 51, y + 80, statW - 15, unit.Strength / 100, Palette.Teal);
+                Txt(g, "Готовность " + ReadinessRules.Score(unit).ToString("0") + "%", x + 51, y + 58, 10, Palette.Teal);
+                Progress(g, x + 51, y + 80, statW - 15, ReadinessRules.Score(unit) / 100, Palette.Teal);
                 Txt(g, "Снабжение " + unit.Supply.ToString("0") + "%", x + 51 + statW, y + 58, 10, unit.Supply < 40 ? Palette.Red : Palette.Gold);
                 Progress(g, x + 51 + statW, y + 80, statW - 15, unit.Supply / 100, Palette.Gold);
                 string status = unit.TrainingDays > 0 ? "Обучение " + unit.TrainingDays + " д." : unit.Target >= 0 ? "Марш " + Math.Ceiling(unit.Days) + " д." : "В резерве";
@@ -52,7 +53,7 @@ namespace Sovereign
                 AvailableButton(g, "+ Поддержка", bx, y + 54, 135, () => Message(E.Refit(unit.Id, active.Id, true)), ready && active.Blueprint.Kind != EquipmentKind.Tank && active.Blueprint.Kind != EquipmentKind.IFV && unit.Attachments.Count < 3 && !unit.Attachments.Any(t => t.Blueprint.Kind == active.Blueprint.Kind), "Выберите класс поддержки в каталоге; нужны комплект и 14 дней подготовки.", false, 20);
                 Button(g, "Расформировать", bx, y + 78, 135, () => { if (Confirm("Расформировать часть №" + unit.Id + "? Личный состав вернётся в резерв, уцелевшая техника — на склад.")) Message(E.DisbandArmy(unit.Id)); }, false, "Только на стоянке в своей снабжаемой области", 20);
             }
-            Txt(g, "Отмечено " + selectedUnits.Count + " · Авиация: отдельные крылья и группы поддержки", x + 218, VH - 91, 11, Palette.Muted, false, listWidth - 218);
+            ReadinessLink(g, x + 218, VH - 103, listWidth - 218);
             DrawFrontCommand(g, right, 273, fw);
         }
         private void DrawFrontCommand(Graphics g, float x, float y, float w)

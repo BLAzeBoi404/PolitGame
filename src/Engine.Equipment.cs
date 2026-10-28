@@ -210,7 +210,7 @@ namespace Sovereign
                 if (old != null && a.Strength >= 90) old.Stock += a.Battalions;
                 a.Design = d.Blueprint.Copy(); a.DesignId = d.Id; a.Strength = 100;
             }
-            a.TrainingDays = 14; a.Organization = Math.Min(a.Organization, 60);
+            a.ExerciseRemaining = 0; a.TrainingDays = 14; a.Organization = Math.Min(a.Organization, 60);
             Notify("Соединение №" + a.Id + ": освоение «" + d.Blueprint.Name + "», 14 дней.");
             Raise(); return null;
         }

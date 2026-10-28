@@ -166,6 +166,7 @@ namespace Sovereign
             InitializeOperations(S);
             InitializeStartingForces();
             InitializeTrade(S);
+            InitializeReadiness(S);
 			Notify("Кабинет сформирован. Проверьте баланс ресурсов и выберите программу развития.");
 			Notify("Учебная модель: современная география; региональная экономика и ресурсы оценочные. Исторические границы пока не включены.");
 			ComputeEconomy(apply: false);
@@ -223,6 +224,7 @@ namespace Sovereign
 			TickProduction();
             TickContracts(); TickPublicFleets();
             bool[] network = SupplyNetwork();
+            TickReadiness(network);
             TickManpower(network);
             TickAviation();
             if (S.Day % 7 == 0) ExecuteFronts();
@@ -233,6 +235,7 @@ namespace Sovereign
 				ComputeEconomy(apply: true);
 				Research();
 				Politics();
+                PlanMilitaryPreparation();
 			}
 			if (S.Day % 30 == 0)
 			{
@@ -620,7 +623,7 @@ namespace Sovereign
 				if (list4.Count > 0)
 				{
 					int num4 = list4[(int)(S.Random() * (double)list4.Count)];
-					if (n.GDP > S.Nations[num4].GDP * 0.8)
+					if (CanPrepareWar(c, num4))
 					{
 						DeclareWar(c, num4);
 					}
@@ -652,6 +655,7 @@ namespace Sovereign
 			}
 			if (army.TrainingDays > 0) return "Соединение проходит подготовку: " + army.TrainingDays + " дн.";
 			int owner = S.Provinces[target].Owner;
+            if (AtWar(army.Owner, owner) && army.Fatigue >= 85) return "Для новой атаки нужен отдых: усталость ниже 85%.";
             if (AtWar(army.Owner, owner) && (army.Organization < 25 || ManpowerRules.Manning(army) < .25)) return "Для атаки нужна организация от 25% и укомплектованность от 25%.";
 			if (!CanEnter(army.Owner, owner) || (!hostileTransit && AtWar(army.Owner, owner)))
 			{
@@ -685,6 +689,7 @@ namespace Sovereign
 				list.Add(num4);
 			}
 			list.Reverse();
+            army.ExerciseRemaining = 0;
 			if (playerOrder) DetachFromFront(army.Id);
             army.Route = list;
 			BeginLeg(army);
@@ -751,7 +756,7 @@ namespace Sovereign
 				a.Strength = Math.Max(8.1, a.Strength - (100.0 - a.Design.Reliability) * 0.002);
                 a.Organization = Math.Max(0, a.Organization - .2);
 				int owner = S.Provinces[a.Target].Owner;
-                if (AtWar(a.Owner, owner) && (a.Organization < 15 || ManpowerRules.Manning(a) < .2)) { a.Target = -1; a.Route.Clear(); continue; }
+                if (AtWar(a.Owner, owner) && (a.Organization < 15 || ManpowerRules.Manning(a) < .2 || a.Fatigue >= 95)) { a.Target = -1; a.Route.Clear(); continue; }
 				if (!CanEnter(a.Owner, owner))
 				{
 					a.Target = -1;
@@ -768,7 +773,8 @@ namespace Sovereign
                 List<Army> list = occupants == null ? new List<Army>() : occupants.Where(d => live.Contains(d) && AtWar(a.Owner, d.Owner)).ToList();
 				if (list.Count > 0)
 				{
-					a.Experience = Math.Min(100, a.Experience + .5); foreach (var defender in list) defender.Experience = Math.Min(100, defender.Experience + .35);
+					a.Fatigue = Math.Min(100, a.Fatigue + 2.5); foreach (var defender in list) { defender.ExerciseRemaining = 0; defender.Fatigue = Math.Min(100, defender.Fatigue + 2); }
+                    a.Experience = Math.Min(100, a.Experience + .5); foreach (var defender in list) defender.Experience = Math.Min(100, defender.Experience + .35);
                     double num6 = EquipmentRules.CombatPower(a, list[0], false) * GroundCombatFactor(a.Owner, false) * (1 + AirReconBonus(a.Owner, a.Target));
 					double num7 = list.Sum(d => EquipmentRules.CombatPower(d, a, true) * GroundCombatFactor(d.Owner, true) * (1 + AirReconBonus(d.Owner, a.Target))) * 1.15;
 					DamageArmy(a, Rules.Clamp(num7 / Math.Max(1.0, num6) * 9.0, 2.0, 28.0));
@@ -879,6 +885,7 @@ namespace Sovereign
             if (s.Version == 10) InitializeOperations(s);
             if (s.Version == 11) s.Version = 12;
             if (s.Version == 12) InitializeTrade(s);
+            if (s.Version == 13) InitializeReadiness(s);
             Validate(s);
 			S = s;
 			Raise();

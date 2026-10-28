@@ -1,0 +1,7 @@
+Assembly: 0.16.0.0
+35 warm-up days; 730 measured days; UKR, 2026, difficulty 1; autosave off; no UI
+All ticks: count=730, mean_ms=12.083, p50_ms=6.744, p95_ms=37.140, max_ms=101.191
+Weekly settlement ticks: count=104, mean_ms=34.759, p50_ms=33.339, p95_ms=51.617, max_ms=101.191
+Other ticks: count=626, mean_ms=8.316, p50_ms=6.469, p95_ms=12.671, max_ms=98.686
+Total measured ms: 8820.815
+PASS Final campaign validates; countries=176, provinces=4136, formations=3719

@@ -126,7 +126,7 @@ namespace Sovereign
             InitializeAtlasColors();
 			E = new Engine(world);
 			base.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-			Text = "SOVEREIGN — Государство · 0.15";
+			Text = "SOVEREIGN — Государство · 0.16";
 			BackColor = Palette.Bg;
 			ForeColor = Palette.Text;
 			base.AutoScaleMode = AutoScaleMode.None;
@@ -263,7 +263,7 @@ namespace Sovereign
 		private void Navigate(string p)
 		{
 			page = p;
-            tradePage = false; aviationPage = false; manpowerPage = false; nationalPolicyPage = false; doctrinePage = false; governmentPage = false; procurementPage = false; deploymentPage = false;
+            readinessPage = false; tradePage = false; aviationPage = false; manpowerPage = false; nationalPolicyPage = false; doctrinePage = false; governmentPage = false; procurementPage = false; deploymentPage = false;
             detailPanel = p == "Конструктор";
 			scroll = 0;
 			hoveredTip = "";
@@ -774,8 +774,8 @@ namespace Sovereign
 				draft = Engine.CopyDesign(E.Player.Design);
 			}
 			menuScreen = "";
-			tradePage=p=="Торговля";procurementPage = p == "Госзаказы"; deploymentPage = p == "Боевой порядок";
-            page = p; detailPanel = p == "Конструктор" || procurementPage || deploymentPage || tradePage; aviationPage = p == "Авиация"; manpowerPage = p == "Резерв";
+			readinessPage=p=="Подготовка";tradePage=p=="Торговля";procurementPage = p == "Госзаказы"; deploymentPage = p == "Боевой порядок";
+            page = p; detailPanel = p == "Конструктор" || procurementPage || deploymentPage || tradePage || readinessPage; aviationPage = p == "Авиация"; manpowerPage = p == "Резерв";
             if (aviationPage || manpowerPage) page = "Армия";
             doctrinePage = p == "Доктрины";
             if (doctrinePage) { page = "Исследования"; detailPanel = true; }
@@ -783,6 +783,7 @@ namespace Sovereign
             if (governmentPage) { page = "Политика"; detailPanel = true; }
             nationalPolicyPage = p == "Решения" || p == "События";
             if (nationalPolicyPage) { page = "Политика"; detailPanel = true; policyTab = p == "События" ? 1 : 0; }
+            if(readinessPage)page="Армия";
             if(tradePage)page="Экономика";
             if (p == "Госзаказы") { page = "Производство"; procurementPage = true; }
             if (p == "Боевой порядок") { page = "Армия"; deploymentPage = true; }
@@ -1257,7 +1258,7 @@ namespace Sovereign
 			Txt(g, "государств и территорий", num2 + 22f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "областей", num2 + 175f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "ЭКОНОМИКА  /  ДИПЛОМАТИЯ  /  ТЕХНОЛОГИИ  /  СТРАТЕГИЯ", num, VH - 59f, 12f, Palette.Muted);
-			Txt(g, "0.15   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
+			Txt(g, "0.16   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
 		}
 
 

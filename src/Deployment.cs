@@ -49,7 +49,7 @@ namespace Sovereign
         public static int Stars(Army a)
         {
             if (a.TrainingDays > 0 || a.Personnel == 0) return 0;
-            double quality = (30 + Math.Min(100, Math.Max(0, a.Experience)) * .7) * Math.Min(a.Strength, a.Organization) / 100 * ManpowerRules.Manning(a) * (.5 + .5 * a.Supply / 100);
+            double quality = (30 + Math.Min(100, Math.Max(0, a.Experience)) * .7) * Math.Min(a.Strength, a.Organization) / 100 * ManpowerRules.Manning(a) * (.5 + .5 * a.Supply / 100) * ReadinessRules.FatigueFactor(a);
             return Math.Max(0, Math.Min(5, (int)Math.Floor(quality / 20)));
         }
     }

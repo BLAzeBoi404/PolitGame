@@ -204,6 +204,7 @@ namespace Sovereign
             DoctrineTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
             OperationsTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
             GovernmentTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
+            ReadinessTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
             TradeTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
             ScenarioTests.Run(w, Path.GetDirectoryName(Path.GetFullPath(path)), Check);
 			report.Add("Simulated days: " + e.S.Day + "; wall seconds: " + stopwatch.Elapsed.TotalSeconds.ToString("0.00"));

@@ -103,7 +103,7 @@ namespace Sovereign
         }
         public double GroundCombatFactor(int owner, bool defending)
         {
-            var effects = DoctrineRules.Effects(S.Nations[owner], S.Day); return GroundTechnologyFactor(owner) * (1 + (defending ? effects.Defense : effects.Attack));
+            var effects = DoctrineRules.Effects(S.Nations[owner], S.Day); return GroundTechnologyFactor(owner) * (1 + (defending ? effects.Defense : effects.Attack)) * (1 - ReadinessRules.Exhaustion(S.Nations[owner]) * .002);
         }
         public double GroundUpkeep(Army army) => GroundUpkeep(army, DoctrineRules.Effects(S.Nations[army.Owner], S.Day));
         private static double GroundUpkeep(Army army, DoctrineEffects effects)

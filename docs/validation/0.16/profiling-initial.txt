@@ -1,0 +1,4 @@
+Diagnostic pass before sharing the supply-network snapshot; temporary instrumented Mono build.
+Same 35 warm-up + 730 measured-day SimulationProbe scenario; Stopwatch per phase. Not FPS.
+preparation: samples=109, mean_ms=16.162, max_ms=65.562
+exercise-check: samples=109, mean_ms=13.817, max_ms=51.090

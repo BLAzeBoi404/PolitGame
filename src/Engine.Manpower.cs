@@ -36,7 +36,7 @@ namespace Sovereign
         public int WeeklyIntake(int owner)
         {
             var n = S.Nations[owner]; long cap = ManpowerCapacity(owner);
-            return (int)Math.Min(ManpowerHeadroom(owner), Math.Max(0, cap / 52.0 * Rules.Clamp(n.Education / 70, .5, 1.3) * Rules.Clamp(n.Military / 2.5, .4, 1.3) * (1 + TechnologyRules.Effects(n).Intake)));
+            return (int)Math.Min(ManpowerHeadroom(owner), Math.Max(0, cap / 52.0 * Rules.Clamp(n.Education / 70, .5, 1.3) * Rules.Clamp(n.Military / 2.5, .4, 1.3) * (1 + TechnologyRules.Effects(n).Intake) * (1 - ReadinessRules.Exhaustion(n) * .005)));
         }
         public FormationTemplate SelectedTemplate(int owner) => S.Nations[owner].Templates.First(t => t.Id == S.Nations[owner].ActiveTemplate);
         public string RecruitmentReason(int owner, int designId, int templateId)
@@ -110,7 +110,7 @@ namespace Sovereign
                     if (replacements > 0) a.Organization = Math.Max(0, a.Organization - replacements * 20.0 / ManpowerRules.Establishment(a));
                 }
                 if (supplied && S.Nations[a.Owner].Treasury >= GroundUpkeep(a))
-                    a.Organization = Math.Min(100, a.Organization + 2 * a.Supply / 100 * (1 + TechnologyRules.Effects(S.Nations[a.Owner]).OrganizationRecovery) * (1 + DoctrineRules.Effects(S.Nations[a.Owner], S.Day).Organization));
+                    a.Organization = Math.Min(100, a.Organization + 2 * a.Supply / 100 * (1 + TechnologyRules.Effects(S.Nations[a.Owner]).OrganizationRecovery) * (1 + DoctrineRules.Effects(S.Nations[a.Owner], S.Day).Organization) * ReadinessRules.FatigueFactor(a) * (a.ExerciseRemaining > 0 ? .25 : 1));
                 else a.Organization = Math.Max(0, a.Organization - .4);
             }
             foreach (var a in S.AirWings) if (a.Mission == AirMission.Reserve && a.TrainingDays == 0 && S.Provinces[a.BaseRegion].Owner == a.Owner && IsSupplied(a.Owner, a.BaseRegion, network))
@@ -176,7 +176,7 @@ namespace Sovereign
             if (delta > 0) { d.Stock -= delta; a.Strength = (a.Strength * a.Battalions + delta * 100) / t.Battalions; }
             else if (delta < 0) d.Stock += a.Strength >= 90 ? -delta : (int)Math.Floor(-delta * a.Strength / 100);
             a.Deployment = t.Deployment == null ? null : t.Deployment.Copy();
-            a.Battalions = t.Battalions; a.TemplateId = t.Id; a.TrainingDays = 14 + 3 * Math.Abs(delta); a.Organization = Math.Min(a.Organization, 40);
+            a.Battalions = t.Battalions; a.TemplateId = t.Id; a.ExerciseRemaining = 0; a.TrainingDays = 14 + 3 * Math.Abs(delta); a.Organization = Math.Min(a.Organization, 40);
             DetachFromFront(a.Id); TrimReserve(S.Player);
             Notify("Часть №" + id + " переходит на штат «" + t.Name + "»: " + a.TrainingDays + " дней подготовки."); Raise(); return null;
         }

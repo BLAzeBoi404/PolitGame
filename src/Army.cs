@@ -10,6 +10,8 @@ namespace Sovereign
         public int Personnel = 800;
         public int TemplateId = 1, Battalions = 1;
         public double Organization = 100;
+        public double Fatigue;
+        public int ExerciseRemaining;
 
 		public int Owner;
 

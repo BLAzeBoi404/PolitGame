@@ -10,11 +10,14 @@ namespace Sovereign
         {
             var borders = controlled.Where(r => World.Regions[r].Neighbors.Any(n => AtWar(owner, S.Provinces[n].Owner))).ToList();
             if (borders.Count == 0) return;
+            var readiness = AssessMilitary(owner);
+            bool offensive = readiness.FuelDays >= 7 && readiness.ArmsDays >= 7 && S.Nations[owner].Treasury >= readiness.DailyCommitment * 7 && S.Nations[owner].Condition.Exhaustion < 60;
             foreach (Army unit in S.Armies.Where(a => a.Owner == owner && a.Target < 0 && a.TrainingDays == 0).ToList()) {
-                if (unit.Strength < 35 || unit.Supply < 25 || unit.Organization < 40 || ManpowerRules.Manning(unit) < .4) continue; // Recover before an offensive.
+                if (unit.ExerciseRemaining > 0 || unit.Fatigue >= 70 || ReadinessRules.Score(unit) < 45 || unit.Strength < 35 || unit.Supply < 25 || unit.Organization < 40 || ManpowerRules.Manning(unit) < .4) continue; // Recover before an offensive.
                 var targets = World.Regions[unit.Region].Neighbors.Where(r => AtWar(owner, S.Provinces[r].Owner))
                     .OrderBy(r => S.Armies.Where(a => a.Region == r && AtWar(owner, a.Owner)).Sum(a => a.Strength * a.Design.Power)).ToList();
                 if (targets.Count > 0) {
+                    if (!offensive) continue;
                     int target = targets[0];
                     var defenders = S.Armies.Where(a => a.Region == target && AtWar(owner, a.Owner)).ToList();
                     if (defenders.Count == 0 || EquipmentRules.CombatPower(unit, defenders[0], false) * GroundCombatFactor(unit.Owner, false) > defenders.Sum(a => EquipmentRules.CombatPower(a, unit, true) * GroundCombatFactor(a.Owner, true)) * 1.1)

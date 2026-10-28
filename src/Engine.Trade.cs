@@ -11,7 +11,7 @@ namespace Sovereign
         {
             campaign.MarketPrices=(double[])Rules.Prices.Clone();campaign.TradeDeals=new List<TradeDeal>();campaign.TradeFlows=new List<TradeFlow>();campaign.NextTradeDeal=1;campaign.TradeDay=-1;
             foreach(var nation in campaign.Nations)nation.Trade=new TradePolicy();
-            campaign.Version=Campaign.CurrentVersion;
+            campaign.Version=13;
         }
         public double TradeNeed(int owner,int good) => S.Nations[owner].Demand[good]+S.Nations[owner].Trade.Operations[good];
         public double ImportTarget(int owner,int good) => TradeNeed(owner,good)*S.Nations[owner].Trade.ReserveWeeks;
@@ -84,7 +84,13 @@ namespace Sovereign
                 budgets[owner]=budget;
             }
             foreach(var a in S.Armies)if(a.TrainingDays==0) {
-                var n=S.Nations[a.Owner];double fuel=a.Target<0?.003*a.Battalions:a.Design.Fuel*a.Battalions+a.Attachments.Sum(t=>t.Blueprint.Fuel*.3);
+                var n=S.Nations[a.Owner];
+                if(a.ExerciseRemaining>0 && n.Treasury>=ExerciseDailyCost(a)) {
+                    double days=Math.Min(7,a.ExerciseRemaining);
+                    n.Trade.Operations[2]+=days*ReadinessRules.ExerciseFuel(a);
+                    n.Trade.Operations[7]+=days*ReadinessRules.ExerciseArms(a);
+                }
+                double fuel=a.Target<0?.003*a.Battalions:a.Design.Fuel*a.Battalions+a.Attachments.Sum(t=>t.Blueprint.Fuel*.3);
                 n.Trade.Operations[2]+=7*fuel*(1+TechnologyRules.Effects(n).GroundFuel)*(1+DoctrineRules.Effects(n,S.Day).Fuel);
                 if(a.Target<0)n.Trade.Operations[7]+=Math.Min(100-a.Strength,7*.4)*.005*a.Battalions;
             }

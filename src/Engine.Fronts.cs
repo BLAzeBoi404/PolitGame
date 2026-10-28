@@ -17,7 +17,7 @@ namespace Sovereign
             if (ids.Count == 0 || ids.Any(id => !S.Armies.Any(a => a.Id == id && a.Owner == S.Player))) return "Отметьте свои соединения в списке.";
             foreach (int id in ids) {
                 DetachFromFront(id);
-                var unit = S.Armies.First(a => a.Id == id); unit.Target = -1; unit.Route.Clear();
+                var unit = S.Armies.First(a => a.Id == id); unit.Target = -1; unit.Route.Clear(); unit.ExerciseRemaining = 0;
             }
             var plan = new FrontPlan { Id = S.NextFront++, Owner = S.Player, Enemy = enemy, Stance = stance, ArmyIds = ids,
                 Name = "Фронт " + World.Countries[enemy].Name };
@@ -31,7 +31,7 @@ namespace Sovereign
             if (plan == null || !Enum.IsDefined(typeof(FrontStance), stance)) return "Фронт не найден.";
             if (active && !AtWar(plan.Owner, plan.Enemy)) return "Для выполнения приказа нужна война с выбранной страной.";
             plan.Stance = stance; plan.Active = active;
-            foreach (var unit in S.Armies.Where(a => plan.ArmyIds.Contains(a.Id))) { unit.Target = -1; unit.Route.Clear(); }
+            foreach (var unit in S.Armies.Where(a => plan.ArmyIds.Contains(a.Id))) { unit.Target = -1; unit.Route.Clear(); unit.ExerciseRemaining = 0; }
             if (active) ExecuteFront(plan);
             Raise(); return null;
         }
@@ -39,7 +39,7 @@ namespace Sovereign
         {
             var plan = S.Fronts.FirstOrDefault(p => p.Id == id && p.Owner == S.Player);
             if (plan == null) return;
-            foreach (var unit in S.Armies.Where(a => plan.ArmyIds.Contains(a.Id))) { unit.Target = -1; unit.Route.Clear(); }
+            foreach (var unit in S.Armies.Where(a => plan.ArmyIds.Contains(a.Id))) { unit.Target = -1; unit.Route.Clear(); unit.ExerciseRemaining = 0; }
             S.Fronts.Remove(plan); Raise();
         }
         private void PruneFronts()
@@ -85,7 +85,7 @@ namespace Sovereign
                 if (!stationed.ContainsKey(r)) stationed[r] = 0; stationed[r]++;
             }
             foreach (var unit in units) {
-                if (unit.Target >= 0 || unit.TrainingDays > 0 || unit.Strength < 45 || unit.Supply < 45 || unit.Organization < 40 || ManpowerRules.Manning(unit) < .4) continue;
+                if (unit.Target >= 0 || unit.TrainingDays > 0 || unit.ExerciseRemaining > 0 || unit.Fatigue >= 70 || unit.Strength < 45 || unit.Supply < 45 || unit.Organization < 40 || ManpowerRules.Manning(unit) < .4) continue;
                 if (borderSet.Contains(unit.Region)) {
                     if (plan.Stance == FrontStance.Hold) continue;
                     foreach (int target in World.Regions[unit.Region].Neighbors.Where(r => S.Provinces[r].Owner == plan.Enemy)) {

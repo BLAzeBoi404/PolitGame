@@ -80,6 +80,9 @@ namespace Sovereign
             check(scale>oldScale&&GpuActive&&AtlasMissingTiles>0,"New zoom presents immediately using the overview while detail loads");settle();
             ToggleFullScreen();PresentGpu();ToggleFullScreen();PresentGpu();
             check(GpuActive,"Fullscreen transitions retain a working GPU context");
+            OpenReadiness();Invalidate();PresentGpu();
+            using(var frame=gpu.CaptureFrame())frame.Save(Path.Combine(directory,"gpu-readiness.png"));
+            check(GpuActive && hits.Any(h=>h.Label=="readiness:exercise"),"Readiness desk renders through the GPU HUD with active exercise controls");
             OpenTrade();Invalidate();PresentGpu();
             using(var frame=gpu.CaptureFrame())frame.Save(Path.Combine(directory,"gpu-trade.png"));
             check(GpuActive&&hits.Any(h=>h.Label=="trade:sign"),"Trade desk renders through the retained GPU HUD with active controls");

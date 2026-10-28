@@ -175,6 +175,7 @@ namespace Sovereign
             TestOperationsInterface(directory, check, click);
             TestScenarioInterface(directory, check);
             TestTradeInterface(directory,check,click);
+            TestReadinessInterface(directory,check,click);
             results.Add("Failures: " + failed); File.WriteAllLines(Path.Combine(directory, "ui-results.txt"), results);
             Console.WriteLine(string.Join(Environment.NewLine, results));
             return failed == 0 ? 0 : 2;

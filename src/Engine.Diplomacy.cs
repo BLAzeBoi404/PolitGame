@@ -113,6 +113,7 @@ namespace Sovereign
                 S.Relations[pair] = S.Relations[reverse] = -100;
                 Notify(World.Countries[attacker].Name + " — " + World.Countries[country].Name + (country == defender ? ": объявлена война." : ": вступление по оборонному союзу."), 2);
             }
+            PrepareAIForNewWar(attacker, defenders);
         }
         private void ConcludePeace(int a, int b, bool restoreBorders)
         {
