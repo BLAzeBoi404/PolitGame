@@ -24,7 +24,7 @@ namespace Sovereign
         {
             bool tooltipVisible = prefs.Tooltips && !string.IsNullOrEmpty(hoveredTip) && (DateTime.Now - hoverSince).TotalMilliseconds >= 550;
             bool toastVisible = DateTime.Now < toastUntil;
-            if (tooltipVisible != tooltipWasVisible || toastVisible != toastWasVisible) Invalidate();
+            if (tooltipVisible != tooltipWasVisible || toastVisible != toastWasVisible) InvalidateHud();
             tooltipWasVisible = tooltipVisible; toastWasVisible = toastVisible;
             PumpSimulation(uiTime.Elapsed.TotalMilliseconds);
             if (frameRequested) ScheduleFrame();

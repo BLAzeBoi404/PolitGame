@@ -23,6 +23,7 @@ namespace Sovereign
         public int Renderer; // 0: GPU when available; 1: compatibility GDI+
         public int GraphicsQuality = 2, LabelDensity = 2;
         public bool PerformanceOverlay;
+        public bool OutlinerCollapsed;
         public void NormalizeDisplay()
         {
             WindowWidth = Math.Max(1000, Math.Min(7680, WindowWidth));

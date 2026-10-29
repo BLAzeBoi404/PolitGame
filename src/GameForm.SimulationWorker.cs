@@ -45,7 +45,7 @@ namespace Sovereign
         {
             var point=Logical(e.Location);Hit chosen=null;
             if(e.Button==MouseButtons.Left)foreach(var hit in hits)if(hit.Rect.Contains(point))chosen=hit;
-            if(chosen!=null){var action=chosen.Action;pendingSimulationActions.Enqueue(action);return;}
+            if(chosen!=null){var action=chosen.Action;if(action!=null)pendingSimulationActions.Enqueue(action);return;}
             if(menuScreen!=""||showHelp||!MapInputAllowed(point))return;
             int region=FindRegion(Geo(point));if(region<0)return;
             if(e.Button==MouseButtons.Right)pendingSimulationActions.Enqueue(()=>Message(E.Order(army,region)));

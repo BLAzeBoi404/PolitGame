@@ -4,18 +4,19 @@ namespace Sovereign
 {
     public static class Palette
     {
-        // Field atlas: warm ink, aged paper and restrained brass accents.
-        public static readonly Color Bg = Color.FromArgb(29, 33, 29);
-        public static readonly Color Panel = Color.FromArgb(23, 28, 26);
-        public static readonly Color Card = Color.FromArgb(39, 45, 37);
-        public static readonly Color Hover = Color.FromArgb(55, 62, 48);
-        public static readonly Color Selected = Color.FromArgb(67, 65, 43);
-        public static readonly Color Line = Color.FromArgb(78, 85, 65);
-        public static readonly Color Text = Color.FromArgb(233, 229, 211);
-        public static readonly Color Muted = Color.FromArgb(166, 175, 158);
-        public static readonly Color Gold = Color.FromArgb(216, 190, 125);
-        public static readonly Color Teal = Color.FromArgb(124, 187, 172);
-        public static readonly Color Red = Color.FromArgb(230, 140, 122);
+        // Command desk: graphite surfaces, warm white type, brass for selection
+        // and teal for healthy operational state. Map colors remain geographic.
+        public static readonly Color Bg = Color.FromArgb(17, 23, 30);
+        public static readonly Color Panel = Color.FromArgb(22, 30, 39);
+        public static readonly Color Card = Color.FromArgb(31, 41, 52);
+        public static readonly Color Hover = Color.FromArgb(43, 56, 69);
+        public static readonly Color Selected = Color.FromArgb(62, 58, 43);
+        public static readonly Color Line = Color.FromArgb(64, 79, 92);
+        public static readonly Color Text = Color.FromArgb(235, 239, 242);
+        public static readonly Color Muted = Color.FromArgb(164, 180, 194);
+        public static readonly Color Gold = Color.FromArgb(226, 195, 129);
+        public static readonly Color Teal = Color.FromArgb(105, 205, 183);
+        public static readonly Color Red = Color.FromArgb(245, 145, 139);
         public static readonly Color Paper = Color.FromArgb(216, 220, 205);
         public static readonly Color Ink = Color.FromArgb(47, 66, 69);
         public static readonly Color[] Nations = {

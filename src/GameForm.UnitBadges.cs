@@ -11,11 +11,11 @@ namespace Sovereign
         private readonly Dictionary<int, UnitBadge> unitBadges = new Dictionary<int, UnitBadge>();
         internal int UnitBadgeBuilds;
         private void ClearUnitBadges() { foreach(var badge in unitBadges.Values) badge.Dispose(); unitBadges.Clear(); }
-        private void DrawUnitBadge(Graphics g, Army unit, RectangleF bounds, int people, int count, int stars, int readiness, int badgeId, bool chosen)
+        private void DrawUnitBadge(Graphics g, Army unit, RectangleF bounds, int people, int count, int stars, int readiness, int badgeId, bool chosen, bool overview = false)
         {
             bool own = unit.Owner == E.S.Player;
             Color affiliation = own ? Palette.Teal : E.AtWar(E.S.Player, unit.Owner) ? Palette.Red : Palette.Muted;
-            string key = people + "/" + count + "/" + stars + "/" + readiness + "/" + chosen + "/" + affiliation.ToArgb() + "/" + UiScale;
+            string key = overview + "/" + people + "/" + count + "/" + stars + "/" + readiness + "/" + chosen + "/" + affiliation.ToArgb() + "/" + UiScale;
             UnitBadge badge;
             if (!unitBadges.TryGetValue(badgeId, out badge) || badge.Key != key) {
                 if (unitBadges.Count >= 1024 && !gpuRecordingWorld) { ClearUnitBadges(); badge = null; }
@@ -26,8 +26,8 @@ namespace Sovereign
                     var local=new RectangleF(0,0,69,36);Color color=chosen?Palette.Bg:Palette.Text;
                     Round(ink,chosen?Color.FromArgb(204,185,135):Color.FromArgb(18,32,38),local,4);
                     RoundBorder(ink,chosen?Palette.Gold:Color.FromArgb(92,113,111),local,4,1);
-                    Txt(ink,people>=1000?(people/1000.0).ToString(people>=10000?"0":"0.0")+"к":people.ToString(),6,3,13,color,true,count>1?43:59);
-                    if(count>1) Txt(ink,"×"+count,46,5,9,color,false,23);
+                    Txt(ink,people>=1000?(people/1000.0).ToString(people>=10000?"0":"0.0")+"к":people.ToString(),6,3,13,color,true,count>1||overview?43:59);
+                    if(count>1 || overview) Txt(ink,(overview?"Σ":"×")+(count>99?"99+":count.ToString()),45,5,9,color,false,24);
                     DrawRankStars(ink,7,23,stars,color);Progress(ink,3,34,64,readiness/100.0,affiliation);
                 }
                 badge=new UnitBadge {Key=key,Image=bitmap};unitBadges[badgeId]=badge;UnitBadgeBuilds++;

@@ -181,7 +181,7 @@ namespace Sovereign
             if(gpuHud==null)return;
             float x=(float)ClientSize.Width/gpuHud.Width*gpuHudUiScale/UiScale,y=(float)ClientSize.Height/gpuHud.Height*gpuHudUiScale/UiScale;
             if(Math.Abs(x-1)<.0001&&Math.Abs(y-1)<.0001){hits.AddRange(gpuHudHits);return;}
-            foreach(var h in gpuHudHits)hits.Add(new Hit {Rect=new RectangleF(h.Rect.X*x,h.Rect.Y*y,h.Rect.Width*x,h.Rect.Height*y),Action=h.Action,Label=h.Label,Tip=h.Tip});
+            foreach(var h in gpuHudHits)hits.Add(new Hit {Rect=new RectangleF(h.Rect.X*x,h.Rect.Y*y,h.Rect.Width*x,h.Rect.Height*y),Action=h.Action,Label=h.Label,Tip=h.Tip,FocusTarget=h.FocusTarget});
         }
         private void PresentGpu()
         {

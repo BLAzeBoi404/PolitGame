@@ -11,7 +11,7 @@ namespace Sovereign
         private float gameCx, gameCy, gameScale, setupCx = 18, setupCy = -32, setupScale = 6;
         private int hoveredCountry = -1;
         private float ExpandedWidth => Math.Max(1100, VW - 330);
-        private RectangleF OutlinerRect => new RectangleF(VW - OutlinerWidth - 12, 115, OutlinerWidth, Math.Min(623, VH - 260));
+        private RectangleF OutlinerRect => new RectangleF(VW - OutlinerWidth - 12, 115, OutlinerWidth, prefs.OutlinerCollapsed ? 46 : Math.Min(selected >= 0 ? 623 : 410, VH - 260));
         private void SynchronizeAtlasCamera()
         {
             bool next = menuScreen == "new";
@@ -28,7 +28,7 @@ namespace Sovereign
             if (menuScreen != "") return false;
             if (page != "Карта" && point.X < (detailPanel ? ExpandedWidth : DocketWidth)) return false;
             if ((!detailPanel || page == "Карта") && OutlinerRect.Contains(point)) return false;
-            return !new RectangleF(VW - 314, VH - 118, 302, 73).Contains(point);
+            return !mapLayersExpanded && !MapPickerRect.Contains(point);
         }
         private void ClampCamera() { cx = Math.Max(-180, Math.Min(180, cx)); cy = Math.Max(-84, Math.Min(84, cy)); }
         private int FindCountry(PointF point)

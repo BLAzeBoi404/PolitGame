@@ -20,7 +20,7 @@ namespace Sovereign
         {
             var lines=new System.Collections.Generic.List<string>();int failed=0;
             Action<bool,string> check=(ok,label)=>{lines.Add((ok?"PASS ":"FAIL ")+label);Console.WriteLine(lines[lines.Count-1]);if(!ok)failed++;};
-            prefs.Renderer=0;prefs.Fullscreen=prefs.PerformanceOverlay=false;prefs.Autosave=prefs.Tutorial=false;E.AutoSaveEnabled=false;prefs.FrameLimit=0;prefs.GraphicsQuality=2;prefs.LabelDensity=2;prefs.Labels=prefs.RegionBorders=prefs.Texture=true;clock.Stop();cameraRefresh.Stop();ClientSize=new Size(1600,900);
+            prefs.OutlinerCollapsed=false;prefs.Renderer=0;prefs.Fullscreen=prefs.PerformanceOverlay=false;prefs.Autosave=prefs.Tutorial=false;E.AutoSaveEnabled=false;prefs.FrameLimit=0;prefs.GraphicsQuality=2;prefs.LabelDensity=2;prefs.Labels=prefs.RegionBorders=prefs.Texture=true;clock.Stop();cameraRefresh.Stop();ClientSize=new Size(1600,900);
             PreviewPage("Карта");showHelp=false;scale=45;cx=20;cy=-50;selected=hoveredRegion=-1;speed=0;
             forceGpu=true;Show();Application.DoEvents();
             check(GpuActive,"OpenGL context and compositor start: "+(GpuActive?GpuDriver:gpuError));if(!GpuActive)return 1;
@@ -38,6 +38,20 @@ namespace Sovereign
             check(GpuHudBuilds==hud,"Camera motion reuses the HUD without rerasterizing its text and panels");
             check(GpuUploads==uploads,"Warm camera motion performs zero bitmap uploads to the GPU");
             check(gpu.ResidentBytes<=GpuCanvas.MemoryLimit,"GPU texture cache remains within its memory budget");
+            // Enter the HUD first: leaving a highlighted region legitimately changes the world.
+            OnMouseMove(new MouseEventArgs(MouseButtons.None, 0, 20, 75, 0)); settle(); hud = GpuHudBuilds;
+            int worldBuilds = GpuWorldBuilds, tileBuilds = MapCacheBuilds;
+            var nav = hits.Last(h => h.Label == "nav:Армия");
+            OnMouseMove(new MouseEventArgs(MouseButtons.None, 0, (int)(nav.Rect.X+20), (int)(nav.Rect.Y+12), 0)); PresentGpu();
+            check(GpuHudBuilds > hud && GpuWorldBuilds == worldBuilds && MapCacheBuilds == tileBuilds, "Hovering the command bar redraws only the HUD, preserving map and world caches");
+            hits.Last(h => h.Label == "map:layers").Action(); PresentGpu();
+            check(mapLayersExpanded && GpuWorldBuilds == worldBuilds && hits.Count(h => MapLayers.Contains(h.Label)) == 7, "GPU layer popup updates only the HUD and retains all seven interactive choices");
+            HandleDeskKey(Keys.Tab); PresentGpu(); HandleDeskKey(Keys.Tab); PresentGpu();
+            check(FocusedHit() != null && FocusedHit().Label == "Дипломатия" && GpuWorldBuilds == worldBuilds, "Keyboard focus survives retained GPU HUD rebuilds without rebuilding the world");
+            HandleDeskKey(Keys.Escape); PresentGpu();
+            hits.Last(h => h.Label == "hud:outliner-toggle").Action(); PresentGpu();
+            check(prefs.OutlinerCollapsed && GpuWorldBuilds == worldBuilds, "Collapsing the operational summary reuses the GPU world");
+            hits.Last(h => h.Label == "hud:outliner-toggle").Action(); PresentGpu();
             string originalLayer=layer;float originalScale=scale;layer="Армии";scale=4;Invalidate();settle();
             check(GpuActive && armyMapGroups.Count > 0 && armyMapGroups.All(group => group.Units.All(a => E.SharesMilitaryIntel(E.S.Player,a.Owner))), "World-scale military layer retains own markers and never reveals unshared foreign troops");
             layer=originalLayer;scale=originalScale;Invalidate();settle();
@@ -54,6 +68,10 @@ namespace Sovereign
                     OnMouseUp(new MouseEventArgs(MouseButtons.Left,1,(int)((r.X+r.Width/2)*UiScale),(int)((r.Y+r.Height/2)*UiScale),0));
                     hits.Add(new Hit {Rect=new RectangleF(1,1,8,8),Label="test:queued-save",Action=()=>E.Save(queuedSave)});
                     OnMouseUp(new MouseEventArgs(MouseButtons.Left,1,(int)(4*UiScale),(int)(4*UiScale),0));
+                    hits.Add(new Hit { Rect = new RectangleF(15,1,8,8), Label = "test:readonly", Tip = "Read-only" });
+                    int queued = pendingSimulationActions.Count;
+                    OnMouseUp(new MouseEventArgs(MouseButtons.Left,1,18,4,0));
+                    check(pendingSimulationActions.Count == queued, "Read-only HUD clicks enqueue no null action while the worker owns campaign state");
                     check(!File.Exists(queuedSave),"Saving waits until the worker finishes the current day");
                     for(int i=0;i<10;i++){cx+=.02f;InvalidateCamera();PresentGpu();}
                     check(GpuPresents>=frames+10&&E.S.Day==day,"A deliberately blocked simulation worker cannot block ten camera presentations");
@@ -105,6 +123,17 @@ namespace Sovereign
             using(var frame=gpu.CaptureFrame())frame.Save(Path.Combine(directory,"gpu-intelligence.png"));
             E.S.MilitaryContacts.Clear(); Invalidate(); settle();
             check(!gpuWorldHits.Any(h => h.Hit.Label != null && h.Hit.Label.StartsWith("intel-contact:")), "Removing intelligence also invalidates retained GPU contact hit targets");
+            OpenReadiness(); PresentGpu(); int offsetBeforeDay = readinessOffset;
+            using(var gate=new System.Threading.ManualResetEventSlim(false)) {
+                BeforeSimulationStep=()=>gate.Wait(); StartSimulationDay();
+                try {
+                    OnMouseWheel(new MouseEventArgs(MouseButtons.None,0,(int)(300*UiScale),(int)(500*UiScale),-120));
+                    check(readinessOffset==offsetBeforeDay && pendingSimulationActions.Count==1, "Roster scrolling defers all army-list reads while the simulation worker owns campaign state");
+                } finally {gate.Set();}
+                var wait=System.Diagnostics.Stopwatch.StartNew();while(simulationBusy&&wait.ElapsedMilliseconds<10000){Application.DoEvents();System.Threading.Thread.Sleep(1);}
+            }
+            BeforeSimulationStep=null; PresentGpu();
+            check(!simulationBusy && readinessOffset==offsetBeforeDay+3, "Deferred readiness scrolling applies after the worker publishes the completed day");
             bool closingDeferred=false;
             using(var gate=new System.Threading.ManualResetEventSlim(false)) {
                 BeforeSimulationStep=()=>gate.Wait();StartSimulationDay();

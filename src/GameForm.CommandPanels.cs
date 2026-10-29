@@ -171,7 +171,10 @@ namespace Sovereign
         private void DrawOutliner(Graphics g)
         {
             var box = OutlinerRect; float x = box.X, y = box.Y, w = box.Width;
-            DocketFrame(g, box, "Текущие дела");
+            DocketFrame(g, box, "Оперативная сводка");
+            Button(g, prefs.OutlinerCollapsed ? "+" : "−", box.Right - 38, box.Y + 9, 28, () => { prefs.OutlinerCollapsed = !prefs.OutlinerCollapsed; prefs.Save(); InvalidateHud(); }, false, prefs.OutlinerCollapsed ? "Развернуть сводку" : "Освободить место для карты", 27);
+            hits[hits.Count - 1].Label = "hud:outliner-toggle";
+            if (prefs.OutlinerCollapsed) return;
             var n = E.Player;
             Txt(g, "ИССЛЕДОВАНИЯ", x + 14, y + 57, 9, Palette.Gold, true);
             Button(g, n.Research < 0 ? "Выбрать программу →" : TechnologyRules.CurrentName(n) + "  " + n.ResearchProgress.ToString("0") + "%", x + 12, y + 76, w - 24, () => Navigate("Исследования"), false, "Технологическая программа", 28);
@@ -188,7 +191,7 @@ namespace Sovereign
             Txt(g, "СОЕДИНЕНИЯ / " + E.S.Armies.Count(a => a.Owner == E.S.Player), x + 14, y + 246, 9, Palette.Gold, true);
             var units = E.S.Armies.Where(a => a.Owner == E.S.Player).Take(3).ToList();
             for (int i = 0; i < units.Count; i++) {
-                var a = units[i]; Button(g, "№" + a.Id + " · " + W.Regions[a.Region].Name, x + 12, y + 266 + i * 31, w - 24, () => FocusArmy(a), a.Id == army, a.Design.Name + "; готовность " + a.Strength.ToString("0") + "%, снабжение " + a.Supply.ToString("0") + "%", 27);
+                var a = units[i]; Button(g, "№" + a.Id + " · " + W.Regions[a.Region].Name, x + 12, y + 266 + i * 31, w - 24, () => FocusArmy(a), a.Id == army, a.Design.Name + "; готовность " + ReadinessRules.Score(a).ToString("0") + "%, снабжение " + a.Supply.ToString("0") + "%", 27);
             }
             Button(g, "Все войска и фронты →", x + 12, y + 365, w - 24, () => Navigate("Армия"), false, "Командование", 27);
             Line(g, Palette.Line, x + 12, y + 393, x + w - 12, y + 393);

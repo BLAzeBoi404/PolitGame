@@ -7,6 +7,7 @@ namespace Sovereign
 	{
 		public RectangleF Rect;
         public string Label;
+        public bool FocusTarget;
 
 		public Action Action;
 

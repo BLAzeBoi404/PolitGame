@@ -12,19 +12,22 @@ namespace Sovereign
         private void DrawHeader(Graphics g)
         {
             Fill(g, Palette.Panel, 0, 0, VW, 58);
-            Line(g, Palette.Gold, 0, 1, VW, 1);
+            Line(g, Palette.Line, 0, 1, VW, 1);
             Crest(g, 17, 14, 28, Palette.Gold);
-            Book(g, W.Countries[E.S.Player].Name, 58, 10, 19, Palette.Text, true, 210);
-            Txt(g, "S O V E R E I G N   /   " + W.Countries[E.S.Player].Code, 59, 37, 9, Palette.Gold);
-            float x = 285, width = (VW - 555) / 5;
+            Book(g, W.Countries[E.S.Player].Name, 56, 9, 19, Palette.Text, true, 185);
+            hits.Add(new Hit { Rect = new RectangleF(12,7,230,47), Label = "hud:country", FocusTarget = true, Action = Home, Tip = W.Countries[E.S.Player].Name + " · к своей стране" });
+            Txt(g, "SOVEREIGN  /  " + W.Countries[E.S.Player].Code, 57, 36, 10, Palette.Muted);
+            float x = 260, width = (VW - 530) / 5;
             string[] labels = { "КАЗНА", "ВВП / ГОД", "БЮДЖЕТ / НЕД.", "СТАБИЛЬНОСТЬ", "НАСЕЛЕНИЕ" };
             string[] values = { Money(E.Player.Treasury), Money(E.Player.GDP), (E.Player.Revenue >= E.Player.Spending ? "+" : "") + Money(E.Player.Revenue - E.Player.Spending), Num(E.Player.Stability) + "%", Num(E.Player.Population) + " млн" };
             for (int i = 0; i < 5; i++) {
                 int index = i; float sx = x + i * width;
-                Line(g, Palette.Line, sx - 12, 11, sx - 12, 46);
-                Txt(g, labels[i], sx, 10, 9, Palette.Muted, true);
+                var stat = new RectangleF(sx - 7, 7, width - 7, 46);
+                if (stat.Contains(mouse)) Round(g, Palette.Card, stat, 4);
+                Line(g, Palette.Line, sx - 14, 14, sx - 14, 43);
+                Txt(g, labels[i], sx, 10, 10, Palette.Muted, true);
                 Txt(g, values[i], sx, 27, 16, i == 2 ? (E.Player.Revenue >= E.Player.Spending ? Palette.Teal : Palette.Red) : Palette.Text, true, width - 18);
-                hits.Add(new Hit { Rect = new RectangleF(sx - 4, 4, width - 6, 49), Action = () => Navigate(index == 3 ? "Политика" : index == 0 || index == 2 ? "Экономика" : "Сводка"), Tip = labels[i] + ": открыть ведомость. Деньги в млрд расчётных долларов." });
+                hits.Add(new Hit { Rect = new RectangleF(sx - 4, 4, width - 6, 49), Label = "hud:stat:" + index, FocusTarget = true, Action = () => Navigate(index == 3 ? "Политика" : index == 0 || index == 2 ? "Экономика" : "Сводка"), Tip = labels[i] + ": открыть ведомость. Деньги в млрд расчётных долларов." });
             }
             float dateX = VW - 250;
             Txt(g, E.S.Date.ToString("dd MMMM yyyy", new CultureInfo("ru-RU")), dateX, 10, 16, Palette.Gold, true);
@@ -36,16 +39,16 @@ namespace Sovereign
         }
         private void DrawNav(Graphics g)
         {
-            Fill(g, Palette.Card, 0, 58, VW, 41); Line(g, Palette.Line, 0, 58, VW, 58); Line(g, Palette.Gold, 0, 98, VW, 98);
+            Fill(g, Palette.Panel, 0, 58, VW, 41); Line(g, Palette.Line, 0, 58, VW, 58); Line(g, Palette.Line, 0, 98, VW, 98);
             float tab = (VW - 177) / Navigation.Length;
             for (int i = 0; i < Navigation.Length; i++) {
                 string target = Navigation[i]; float x = 8 + i * tab;
                 bool active = page == target; var rect = new RectangleF(x, 61, tab - 2, 34);
-                if (active || rect.Contains(mouse)) Fill(g, active ? Palette.Selected : Palette.Hover, x, 61, tab - 2, 34);
+                if (active || rect.Contains(mouse)) Round(g, active ? Palette.Selected : Palette.Hover, rect, 4);
                 NavIcon(g, i == 0 ? 8 : i - 1, x + 8, 68, 19, active ? Palette.Gold : Palette.Muted);
-                Txt(g, target, x + 35, 72, 12, active ? Palette.Gold : Palette.Text, active, tab - 38);
+                Txt(g, target, x + 35, 72, 12, active ? Palette.Gold : Palette.Muted, active, tab - 38);
                 if (active) Line(g, Palette.Gold, x + 5, 95, x + tab - 7, 95, 2);
-                hits.Add(new Hit { Rect = rect, Label = "nav:" + target, Action = () => Navigate(page == target && target != "Карта" ? "Карта" : target), Tip = target + (i < 9 ? " · " + prefs.KeyLabel("Page" + i) : "") });
+                hits.Add(new Hit { Rect = rect, Label = "nav:" + target, FocusTarget = true, Action = () => Navigate(page == target && target != "Карта" ? "Карта" : target), Tip = target + (i < 9 ? " · " + prefs.KeyLabel("Page" + i) : "") });
             }
             Button(g, "Сохранить", VW - 164, 64, 94, Save, false, "Сохранить · " + prefs.KeyLabel("Save"), 29);
             Button(g, "?", VW - 60, 64, 44, () => { speed = 0; showHelp = !showHelp; Invalidate(); }, false, "Справочник", 29);
@@ -66,13 +69,13 @@ namespace Sovereign
         // receives clicks or drag starts through a management panel.
         private void DocketFrame(Graphics g, RectangleF box, string title)
         {
-            Fill(g, Color.FromArgb(65, 0, 0, 0), box.X + 5, box.Y + 5, box.Width, box.Height);
+            Fill(g, Color.FromArgb(45, 0, 0, 0), box.X + 3, box.Y + 3, box.Width, box.Height);
             Fill(g, Palette.Panel, box.X, box.Y, box.Width, box.Height);
-            Fill(g, Palette.Card, box.X + 1, box.Y + 1, box.Width - 2, 42);
-            Line(g, Palette.Gold, box.X, box.Y, box.Right, box.Y);
+            Fill(g, Palette.Bg, box.X + 1, box.Y + 1, box.Width - 2, 42);
+            Line(g, Palette.Line, box.X, box.Y, box.Right, box.Y);
             Line(g, Palette.Line, box.Right, box.Y, box.Right, box.Bottom);
             Line(g, Palette.Line, box.X, box.Bottom, box.Right, box.Bottom);
-            Book(g, title, box.X + 17, box.Y + 12, 18, Palette.Text, true, box.Width - 75);
+            Book(g, title, box.X + 17, box.Y + 12, 16, Palette.Text, true, box.Width - 58);
             Line(g, Palette.Line, box.X + 10, box.Y + 42, box.Right - 10, box.Y + 42);
             hits.Add(new Hit { Rect = box, Action = () => {}, Tip = "" });
         }

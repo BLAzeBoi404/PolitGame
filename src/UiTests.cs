@@ -41,7 +41,7 @@ namespace Sovereign
             Action<bool, string> check = (ok, name) => { results.Add((ok ? "PASS " : "FAIL ") + name); if (!ok) { failed++; Console.Error.WriteLine("FAIL " + name); } };
             Action<string> preview = p => { PreviewPage(p); detailPanel = menuScreen == "" && page != "Карта"; };
             prefs.Labels = prefs.RegionBorders = prefs.Texture = true; prefs.LabelDensity = 2; prefs.GraphicsQuality = 2; prefs.FrameLimit = 60; prefs.PerformanceOverlay = false;
-            prefs.Autosave = false; prefs.Tutorial = false; prefs.Fullscreen = false; prefs.Bindings = Preferences.DefaultBindings();
+            prefs.OutlinerCollapsed = false; prefs.Autosave = false; prefs.Tutorial = false; prefs.Fullscreen = false; prefs.Bindings = Preferences.DefaultBindings();
             E.AutoSaveEnabled = false;
             Show(); Application.DoEvents();
             menuCountry = W.ByCode("FRA"); BeginCampaign();
@@ -117,7 +117,7 @@ namespace Sovereign
             check(MapCacheBuilds > cached, "Moving beyond prefetched tiles builds newly visible geography");
             cx -= AtlasTiles.Size * 2 / scale / UiScale + 2;
             foreach (string mode in MapLayers) {
-                click(mode);
+                click("map:layers"); click(mode);
                 using (var frame = RenderFrame()) frame.Save(Path.Combine(directory, "map-" + Array.IndexOf(MapLayers, mode) + ".png"));
                 check(layer == mode, "Map mode click selects " + mode);
             }
@@ -177,6 +177,7 @@ namespace Sovereign
             TestTradeInterface(directory,check,click);
             TestReadinessInterface(directory,check,click);
             TestIntelligenceInterface(directory,check,click);
+            TestModernInterface(directory,check,click);
             results.Add("Failures: " + failed); File.WriteAllLines(Path.Combine(directory, "ui-results.txt"), results);
             Console.WriteLine(string.Join(Environment.NewLine, results));
             return failed == 0 ? 0 : 2;

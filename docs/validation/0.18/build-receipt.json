@@ -1,0 +1,23 @@
+{
+  "version": "0.18.0",
+  "tested_at_utc": "2026-10-29T16:42:15.582535+00:00",
+  "executable_sha256": "1c23eca94c6e98f7fdb6916bab776ea2231e457413b75ae6549ab290c20bb9a6",
+  "source_sha256": "3b6887541cf57fa4aab322908ff00086e480b28c6aacc2bde6e65cdcf237a9a5",
+  "runtime_sha256": {
+    "OpenTK.dll": "2bbd3ac9651cb1daab679da57020f1054d5c18a1b89621b92ba6ac7ab1b1b3ea",
+    "OpenTK.GLControl.dll": "92e0bf6dcf085ecbbfa82319114e228a915a57284f422f779124d363e36ea3e3",
+    "OpenTK.dll.config": "58050540744c0a3270fe38a58f0d76eeddcd8b3c34022bb5deccd7d8bcc0e461",
+    "Sovereign.exe.config": "435ea23443d8dd98eeb707aad9d3a5c1fe6046f8d76647a44d495d94ea4597ef"
+  },
+  "license_sha256": "c5761cf7198ad2677ff824b1efab3b95bfaa745246e10277dfc7775abbe7fbf5",
+  "logic_passed": 736,
+  "ui_passed": 602,
+  "gpu_passed": 36,
+  "native_windows_tested": false,
+  "hardware_gpu_tested": false,
+  "build": ".NET SDK 8.0.426 / Release net472",
+  "runtime": "Mono / libgdiplus / Xvfb / Mesa llvmpipe; LP_NUM_THREADS=2",
+  "performance_baseline_commit": "3a5594e1ada0b503d24c73e8e416bb8096062ca3",
+  "performance_baseline_executable_sha256": "e34647396d1847cca1b10ccb7aa06603c4269aa2526c940b8c97d8bac0e3a285",
+  "performance_note": "Serial original-release 0.17 / final 0.18 pairs, military map, requested 165, two 6-second traversals per run. Zoom 45 paused and live 7x, zoom 14 paused. No concurrent tests. Software presentation intervals, not physical monitor FPS."
+}

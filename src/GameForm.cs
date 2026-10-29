@@ -63,7 +63,7 @@ namespace Sovereign
         private float workspaceWidth;
         private bool detailPanel;
         private const float DocketWidth = 396;
-        private const float OutlinerWidth = 262;
+        private const float OutlinerWidth = 282;
 
 		private Blueprint draft = new Blueprint();
 
@@ -126,7 +126,7 @@ namespace Sovereign
             InitializeAtlasColors();
 			E = new Engine(world);
 			base.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-			Text = "SOVEREIGN — Государство · 0.17";
+			Text = "SOVEREIGN — Государство · 0.18";
 			BackColor = Palette.Bg;
 			ForeColor = Palette.Text;
 			base.AutoScaleMode = AutoScaleMode.None;
@@ -220,19 +220,19 @@ namespace Sovereign
 
         private void Card(Graphics g, float x, float y, float w, float h)
         {
-            Fill(g, Palette.Card, x, y, w, h);
-            Line(g, Palette.Line, x, y + h, x + w, y + h);
+            Round(g, Palette.Card, new RectangleF(x, y, w, h), 5);
+            RoundBorder(g, Palette.Line, new RectangleF(x + .5f, y + .5f, w - 1, h - 1), 5, 1);
         }
 
         private void Button(Graphics g, string text, float x, float y, float w, Action action, bool active = false, string tooltip = null, float h = 34f)
         {
             var rect = new RectangleF(x, y, w, h);
             bool hover = rect.Contains(mouse);
-            Fill(g, active ? Palette.Selected : hover ? Palette.Hover : Palette.Card, x, y, w, h);
-            Line(g, active ? Palette.Gold : hover ? Palette.Muted : Palette.Line, x, y + h, x + w, y + h);
-            if (active) Fill(g, Palette.Gold, x, y + 6, 2, h - 12);
+            Round(g, active ? Palette.Selected : hover ? Palette.Hover : Palette.Card, rect, 4);
+            RoundBorder(g, active ? Palette.Gold : hover ? Palette.Muted : Palette.Line, new RectangleF(x + .5f, y + .5f, w - 1, h - 1), 4, 1);
+            if (active) Fill(g, Palette.Gold, x + 1, y + 7, 2, Math.Max(2, h - 14));
             Txt(g, text, x + 10, y + (h - 18) / 2, 13, active ? Palette.Gold : Palette.Text, active, w - 18);
-            hits.Add(new Hit { Rect = rect, Label = text, Action = action, Tip = tooltip ?? text });
+            hits.Add(new Hit { Rect = rect, Label = text, Action = action, Tip = tooltip ?? text, FocusTarget = true });
         }
 
 		private void Progress(Graphics g, float x, float y, float w, double fraction, Color color)
@@ -264,6 +264,7 @@ namespace Sovereign
 		private void Navigate(string p)
 		{
 			page = p;
+            mapLayersExpanded = false; keyboardFocusKey = null;
             readinessPage = false; tradePage = false; aviationPage = false; manpowerPage = false; nationalPolicyPage = false; doctrinePage = false; governmentPage = false; procurementPage = false; deploymentPage = false;
             detailPanel = p == "Конструктор";
 			scroll = 0;
@@ -308,6 +309,7 @@ namespace Sovereign
 				Fill(graphics, Color.FromArgb(42, 55, 65), (VW - num2) / 2f, num - 65f, num2, 50f);
 				Para(graphics, toast, (VW - num2) / 2f + 16f, num - 56f, num2 - 32f, 42f, 14f, Palette.Gold);
 			}
+            DrawKeyboardFocus(graphics);
             DrawPerformance(graphics, paintBegan);
 		}
 
@@ -600,6 +602,7 @@ namespace Sovereign
 		protected override void OnMouseMove(MouseEventArgs e)
 		{
 			base.OnMouseMove(e);
+            if (keyboardFocusKey != null && Logical(e.Location) != mouse) { keyboardFocusKey = null; InvalidateHud(); }
             if (ResearchMouseMove(e)) return;
             int priorRegion = hoveredRegion, priorCountry = hoveredCountry;
             Hit priorHit = hits.LastOrDefault(h => h.Rect.Contains(mouse));
@@ -626,10 +629,12 @@ namespace Sovereign
                 ClampCamera();
 				last = Logical(e.Location);
 			}
-			Cursor = hit != null ? Cursors.Hand : Cursors.Default;
+			Cursor = hit != null && hit.Action != null ? Cursors.Hand : Cursors.Default;
             if(panning) {hoveredTip="";InvalidateCamera(priorRegion!=hoveredRegion);}
-            else if(priorHit!=hit || (prefs.Tooltips && !string.IsNullOrEmpty(hoveredTip) && (DateTime.Now-hoverSince).TotalMilliseconds>=550))Invalidate();
-            else if(priorRegion!=hoveredRegion||priorCountry!=hoveredCountry)InvalidateCamera(true);
+            else {
+                if(priorHit!=hit || (prefs.Tooltips && !string.IsNullOrEmpty(hoveredTip) && (DateTime.Now-hoverSince).TotalMilliseconds>=550))InvalidateHud();
+                if(priorRegion!=hoveredRegion||priorCountry!=hoveredCountry)InvalidateCamera(true);
+            }
 		}
 
 		protected override void OnMouseDown(MouseEventArgs e)
@@ -649,6 +654,8 @@ namespace Sovereign
 		{
 			base.OnMouseUp(e);
             if (ResearchMouseUp()) return;
+            if (keyboardFocusKey != null) { keyboardFocusKey = null; InvalidateHud(); }
+            if (DismissLayerPicker(Logical(e.Location))) return;
 			panning = false;
 			CapturePointer(false);
 			if (moved)
@@ -663,7 +670,7 @@ namespace Sovereign
 				Hit hit = hits.LastOrDefault((Hit h) => h.Rect.Contains(Logical(e.Location)));
 				if (hit != null)
 				{
-					hit.Action();
+					if (hit.Action != null) hit.Action();
 					return;
 				}
 			}
@@ -700,6 +707,8 @@ namespace Sovereign
 		{
 			base.OnMouseWheel(e);
             if (ResearchMouseWheel(e)) return;
+            if (mapLayersExpanded) { mapLayersExpanded = false; InvalidateHud(); return; }
+            if (ScrollReadiness(e)) return;
 			if (showHelp)
 			{
 				return;
@@ -731,6 +740,7 @@ namespace Sovereign
         {
             if(simulationBusy){var key=e.KeyData;pendingSimulationActions.Enqueue(()=>KeysDown(sender,new KeyEventArgs(key)));e.Handled=true;return;}
             if (CaptureBinding(e)) return;
+            if (HandleDeskKey(e.KeyData)) { e.Handled = e.SuppressKeyPress = true; return; }
             if (e.KeyData == prefs.Binding("Fullscreen")) { ToggleFullScreen(); e.Handled = true; return; }
             if (menuScreen != "") {
                 if (e.KeyCode == Keys.Escape) { if (menuScreen == "main" && campaignStarted) ContinueGame(); else OpenMenu(menuScreen == "controls" ? "settings" : "main"); e.Handled = true; }
@@ -1259,7 +1269,7 @@ namespace Sovereign
 			Txt(g, "государств и территорий", num2 + 22f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "областей", num2 + 175f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "ЭКОНОМИКА  /  ДИПЛОМАТИЯ  /  ТЕХНОЛОГИИ  /  СТРАТЕГИЯ", num, VH - 59f, 12f, Palette.Muted);
-			Txt(g, "0.17   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
+			Txt(g, "0.18   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
 		}
 
 
@@ -1535,37 +1545,35 @@ namespace Sovereign
         }
 
 
-		private void DrawTooltip(Graphics g)
-		{
-			if (prefs.Tooltips && !(hoveredTip == "") && !(DateTime.Now.Subtract(hoverSince).TotalMilliseconds < 550.0) && !showHelp)
-			{
-				float num = 290f;
-				float num2 = Math.Min(VW - num - 12f, mouse.X + 18);
-				float num3 = mouse.Y + 24;
-				float num4 = Math.Min(110f, g.MeasureString(hoveredTip, F(13f), (int)(num - 26f)).Height + 25f);
-				if (num3 + num4 > VH - 15f)
-				{
-					num3 = (float)mouse.Y - num4 - 10f;
-				}
-				Round(g, Color.FromArgb(249, 37, 50, 57), new RectangleF(num2, num3, num, num4), 6f);
-				RoundBorder(g, Color.FromArgb(111, 122, 105), new RectangleF(num2, num3, num, num4), 6f, 1f);
-				Para(g, hoveredTip, num2 + 13f, num3 + 11f, num - 26f, num4 - 16f, 13f, Palette.Text);
-			}
-		}
+        private void DrawTooltip(Graphics g)
+        {
+            lastTooltipBounds = RectangleF.Empty;
+            if (!prefs.Tooltips || string.IsNullOrEmpty(hoveredTip) || (DateTime.Now - hoverSince).TotalMilliseconds < 550 || showHelp || panning) return;
+            float width = Math.Min(410, VW - 32), padding = 14;
+            float height = Math.Min(VH - 140, g.MeasureString(hoveredTip, F(13), (int)(width - padding * 2)).Height + padding * 2);
+            var focus = FocusedHit();
+            float anchorX = focus == null ? mouse.X : focus.Rect.X, anchorY = focus == null ? mouse.Y + 20 : focus.Rect.Bottom + 4;
+            float x = Math.Max(12, Math.Min(VW - width - 12, anchorX + 16));
+            float y = anchorY + height > VH - 42 ? (focus == null ? mouse.Y : focus.Rect.Top) - height - 12 : anchorY;
+            y = Math.Max(106, Math.Min(VH - height - 40, y));
+            lastTooltipBounds = new RectangleF(x, y, width, height);
+            Round(g, Palette.Panel, lastTooltipBounds, 5); RoundBorder(g, Palette.Muted, lastTooltipBounds, 5, 1);
+            Para(g, hoveredTip, x + padding, y + padding - 1, width - padding * 2, height - padding * 2 + 5, 13, Palette.Text);
+        }
 
 		private void Section(Graphics g, string name, float x, float y, float w)
 		{
-			Txt(g, name, x, y, 11f, Palette.Gold, bold: true);
+			Txt(g, name, x, y, 11f, Palette.Muted, bold: true);
 			Line(g, Palette.Line, x, y + 26f, x + w, y + 26f);
 		}
 
         private void AvailableButton(Graphics g, string label, float x, float y, float w, Action action, bool enabled, string reason, bool active = false, float h = 34f)
         {
             if (enabled) { Button(g, label, x, y, w, action, active, reason, h); return; }
-            Fill(g, Palette.Panel, x, y, w, h);
-            Line(g, Palette.Line, x, y + h, x + w, y + h);
+            Round(g, Palette.Panel, new RectangleF(x,y,w,h), 4);
+            RoundBorder(g, Palette.Line, new RectangleF(x+.5f,y+.5f,w-1,h-1), 4, 1);
             Txt(g, label, x + 10, y + (h - 18) / 2, 13, Palette.Muted, false, w - 18);
-            hits.Add(new Hit { Rect = new RectangleF(x, y, w, h), Label = label, Action = () => Message(reason), Tip = reason });
+            hits.Add(new Hit { Rect = new RectangleF(x, y, w, h), Label = label, Action = () => Message(reason), Tip = reason, FocusTarget = true });
         }
 
 		private void DrawOverview(Graphics g)
@@ -1721,7 +1729,7 @@ namespace Sovereign
 			string key = "book/" + size + "/" + bold;
 			if (!fonts.ContainsKey(key))
 			{
-				fonts[key] = new Font("Georgia", size, bold ? FontStyle.Bold : FontStyle.Regular, GraphicsUnit.Pixel);
+				fonts[key] = new Font("Segoe UI", size, bold ? FontStyle.Bold : FontStyle.Regular, GraphicsUnit.Pixel);
 			}
 			return fonts[key];
 		}

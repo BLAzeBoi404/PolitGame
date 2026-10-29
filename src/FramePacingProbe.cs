@@ -31,7 +31,7 @@ namespace Sovereign
             string settings=(string)gameType.Assembly.GetType("Sovereign.Preferences").GetProperty("PathName").GetValue(null,null);
             byte[] original=File.Exists(settings)?File.ReadAllBytes(settings):null;
             try {using(var form=(Form)Activator.CreateInstance(gameType,new[]{world})) {
-                var prefs=Get(form,"prefs");Set(prefs,"Autosave",false);Optional(prefs,"PerformanceOverlay",false);Set(prefs,"Tutorial",false);Set(prefs,"Fullscreen",false);Optional(prefs,"Renderer",1);
+                var prefs=Get(form,"prefs");Set(prefs,"Autosave",false);Optional(prefs,"PerformanceOverlay",false);Set(prefs,"Tutorial",false);Set(prefs,"Fullscreen",false);Optional(prefs,"Renderer",1);Optional(prefs,"OutlinerCollapsed",false);
                 Set(prefs,"GraphicsQuality",2);Set(prefs,"FrameLimit",frameLimit);Set(prefs,"Labels",true);Set(prefs,"LabelDensity",2);Set(prefs,"RegionBorders",true);Set(prefs,"Texture",true);
                 form.ClientSize=new Size(1600,900);Call(form,"PreviewPage","Карта");Set(form,"showHelp",false);Set(form,"speed",0);
                 var clock=(System.Windows.Forms.Timer)Get(form,"clock");clock.Stop();((System.Windows.Forms.Timer)Get(form,"cameraRefresh")).Stop();

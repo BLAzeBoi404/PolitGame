@@ -2,6 +2,7 @@
 """Emit the same frame pacing harness for both releases, selecting the army layer.
 
 python3 scripts/military-map-probe.py artifacts/military-map/Probe.cs
+# Append --overview to generate the zoom-14 variant.
 mcs -langversion:7.2 -r:System.Windows.Forms -r:System.Drawing -out:artifacts/military-map/Probe.exe artifacts/military-map/Probe.cs
 # Run serially, without concurrent tests. OpenTK must be beside each target EXE.
 bash scripts/with-display.sh mono artifacts/military-map/Probe.exe /absolute/Sovereign.exe /absolute/report.txt --165 --live
@@ -15,6 +16,9 @@ needle = 'Set(form,"scale",45f);'
 assert source.count(needle) == 1
 source = source.replace(needle, needle + 'Set(form,"layer","Армии");')
 source = source.replace('medium zoom 45; ', 'military map; medium zoom 45; ')
+if '--overview' in sys.argv:
+    source = source.replace('Set(form,"scale",45f);', 'Set(form,"scale",14f);').replace('medium zoom 45;', 'overview zoom 14;')
+source = source.replace('int pass=0,sent=0', 'report.Add("Known marker groups at start: "+Counter(form,"ArmyMapGroupCount"));int pass=0,sent=0')
 source += '''
 namespace Sovereign {
     internal static class MilitaryMapProbe {
