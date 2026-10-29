@@ -11,11 +11,10 @@ namespace Sovereign
         private readonly Dictionary<int, UnitBadge> unitBadges = new Dictionary<int, UnitBadge>();
         internal int UnitBadgeBuilds;
         private void ClearUnitBadges() { foreach(var badge in unitBadges.Values) badge.Dispose(); unitBadges.Clear(); }
-        private void DrawUnitBadge(Graphics g, Army unit, RectangleF bounds, int people, int count, int stars, int badgeId, bool chosen)
+        private void DrawUnitBadge(Graphics g, Army unit, RectangleF bounds, int people, int count, int stars, int readiness, int badgeId, bool chosen)
         {
             bool own = unit.Owner == E.S.Player;
             Color affiliation = own ? Palette.Teal : E.AtWar(E.S.Player, unit.Owner) ? Palette.Red : Palette.Muted;
-            int readiness = (int)Math.Round(unit.Strength);
             string key = people + "/" + count + "/" + stars + "/" + readiness + "/" + chosen + "/" + affiliation.ToArgb() + "/" + UiScale;
             UnitBadge badge;
             if (!unitBadges.TryGetValue(badgeId, out badge) || badge.Key != key) {

@@ -51,7 +51,8 @@ namespace Sovereign
                     var d = designs[kind];
                     S.Armies.Add(new Army { Id = S.NextArmy++, Owner = owner, Region = regions[slot], DesignId = d.Id, Design = d.Blueprint.Copy(),
                         Battalions = battalions, TemplateId = templates[battalions].Id, Deployment = layout, Personnel = people,
-                        Experience = 15 + (owner * 7 + serial * 11) % 36, Organization = 80 + (owner + serial * 3) % 21 });
+                        Proficiency = UnitQualityRules.ScenarioTraining(country, serial),
+                        Experience = serial % 10 == 0 ? 35 : 10 + serial % 3 * 5, Organization = 80 + (owner + serial * 3) % 21 });
                     remaining -= people; deployed[slot] += people; serial++;
                 }
                 // Select a law able to sustain the seeded ground force and a small reserve.

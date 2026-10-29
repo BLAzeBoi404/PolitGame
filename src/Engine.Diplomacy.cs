@@ -42,7 +42,7 @@ namespace Sovereign
         public string DiplomacyReason(int other, int action)
         {
             int me = S.Player;
-            if (other < 0 || other >= S.Nations.Length || other == me || action < 0 || action > 8) return "Выберите другую страну и действие.";
+            if (other < 0 || other >= S.Nations.Length || other == me || action < 0 || action > 9) return "Выберите другую страну и действие.";
             int pair = Pair(me, other);
             if (action == 0) return Player.Treasury >= 0.1 ? null : "Нужно 0,10 млрд для дипломатической миссии.";
             if (action == 2) return null;
@@ -62,6 +62,7 @@ namespace Sovereign
                 for (int c = 0; c < S.Nations.Length; c++)
                     if (AtWar(me, c) || AtWar(other, c)) return "Оборонный союз заключается в мирное время.";
             }
+            if (action == 9 && !S.IntelligenceSharing[pair] && S.Relations[pair] < 50) return "Для обмена разведданными нужны отношения +50.";
             if (action == 6 && !S.Access[pair] && S.Relations[pair] < 30) return "Для военного доступа нужны отношения +30.";
             return null;
         }
@@ -91,6 +92,9 @@ namespace Sovereign
                 case 6:
                     S.Access[pair] = !S.Access[pair]; RepatriateStranded();
                     Notify("Военный доступ в " + country + (S.Access[pair] ? " получен." : " прекращён.")); break;
+                case 9:
+                    S.IntelligenceSharing[pair] = S.IntelligenceSharing[reverse] = !S.IntelligenceSharing[pair];
+                    Notify("Обмен разведданными: " + country + (S.IntelligenceSharing[pair] ? " · согласован. Позиции партнёра и его наблюдения доступны." : " · прекращён.")); break;
                 case 7:
                     S.Access[reverse] = !S.Access[reverse]; RepatriateStranded();
                     Notify("Доступ для армии " + country + (S.Access[reverse] ? " предоставлен." : " отозван.")); break;
@@ -110,10 +114,12 @@ namespace Sovereign
                 S.TruceUntil[pair] = S.TruceUntil[reverse] = 0;
                 S.Agreements[pair] = S.Agreements[reverse] = false;
                 S.Access[pair] = S.Access[reverse] = false;
+                S.IntelligenceSharing[pair] = S.IntelligenceSharing[reverse] = false;
                 S.Relations[pair] = S.Relations[reverse] = -100;
                 Notify(World.Countries[attacker].Name + " — " + World.Countries[country].Name + (country == defender ? ": объявлена война." : ": вступление по оборонному союзу."), 2);
             }
             PrepareAIForNewWar(attacker, defenders);
+            RefreshGroundIntelligence();
         }
         private void ConcludePeace(int a, int b, bool restoreBorders)
         {
@@ -137,7 +143,7 @@ namespace Sovereign
                 int home = Enumerable.Range(0, S.Provinces.Length).Where(r => S.Provinces[r].Owner == unit.Owner)
                     .OrderBy(r => StrategicDistance(unit.Region, r)).DefaultIfEmpty(-1).First();
                 unit.Target = -1; unit.Route.Clear();
-                if (home >= 0) { unit.Region = home; unit.TrainingDays = Math.Max(14, unit.TrainingDays); unit.Supply = Math.Min(50, unit.Supply); }
+                if (home >= 0) { unit.Region = home; unit.ExerciseRemaining = 0; unit.TrainingDays = Math.Max(14, unit.TrainingDays); unit.Supply = Math.Min(50, unit.Supply); }
                 // No home territory: the force is interned and cannot receive orders.
             }
         }

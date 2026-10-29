@@ -13,7 +13,7 @@ namespace Sovereign
                 n.Condition = new MilitaryCondition { AccountedLosses = n.PersonnelLosses };
             foreach (var a in campaign.Armies) { a.Fatigue = 0; a.ExerciseRemaining = 0; }
             campaign.ReadinessDay = -1;
-            campaign.Version = Campaign.CurrentVersion;
+            campaign.Version = 14;
         }
 
         private bool CountryAtWar(int owner)
@@ -23,7 +23,8 @@ namespace Sovereign
             return false;
         }
 
-        public double ExerciseDailyCost(Army army) => ReadinessRules.ExerciseCash(army) + GroundUpkeep(army) * .15;
+        public double ExerciseDailyCost(Army army) => (ReadinessRules.ExerciseCash(army) + GroundUpkeep(army) * .15) * (1 + Math.Max(0, army.Proficiency - 50) / 20);
+        private static bool ExerciseLimitReached(Army army) => army.Experience >= ReadinessRules.ExerciseExperienceLimit && army.Proficiency >= UnitQualityRules.ExerciseTrainingLimit;
 
         private string ExerciseEnvironmentReason(Army army, bool[] network)
         {
@@ -47,7 +48,7 @@ namespace Sovereign
         private string ExerciseReason(Army army, bool[] network)
         {
             if (army.ExerciseRemaining > 0) return "Курс учений уже назначен.";
-            if (army.Experience >= ReadinessRules.ExerciseExperienceLimit) return "Достигнут предел опыта от учений (35); дальнейший опыт приобретается в бою.";
+            if (ExerciseLimitReached(army)) return "Достигнут предел учений: подготовка 90, опыт 35; дальнейший опыт приобретается в бою.";
             if (army.Fatigue > 50) return "Перед новым курсом нужен отдых: усталость не выше 50%.";
             string reason = ExerciseEnvironmentReason(army, network);
             return reason ?? ExerciseFundingReason(army);
@@ -107,13 +108,14 @@ namespace Sovereign
                 serving[army.Owner] += army.Personnel;
                 bool exercised = false;
                 if (army.ExerciseRemaining > 0) {
-                    if (army.Experience >= ReadinessRules.ExerciseExperienceLimit) army.ExerciseRemaining = 0;
+                    if (ExerciseLimitReached(army)) army.ExerciseRemaining = 0;
                     else if (army.Fatigue < 65 && ExerciseEnvironmentReason(army, network) == null && ExerciseFundingReason(army) == null) {
                         var n = S.Nations[army.Owner];
                         n.Treasury -= ExerciseDailyCost(army);
                         n.Stock[2] -= ReadinessRules.ExerciseFuel(army);
                         n.Stock[7] -= ReadinessRules.ExerciseArms(army);
-                        army.Experience = Math.Min(ReadinessRules.ExerciseExperienceLimit, army.Experience + .65 * (.7 + .3 * Rules.Clamp(n.Education, 0, 100) / 100));
+                        if (army.Experience < ReadinessRules.ExerciseExperienceLimit) army.Experience = Math.Min(ReadinessRules.ExerciseExperienceLimit, army.Experience + .65 * (.7 + .3 * Rules.Clamp(n.Education, 0, 100) / 100));
+                        if (army.Proficiency < UnitQualityRules.ExerciseTrainingLimit) army.Proficiency = Math.Min(UnitQualityRules.ExerciseTrainingLimit, army.Proficiency + .45 * (1 - army.Proficiency / 150) * (.7 + .3 * Rules.Clamp(n.Education, 0, 100) / 100));
                         army.ExerciseRemaining--;
                         army.Fatigue = Math.Min(100, army.Fatigue + 1.1);
                         army.Organization = Math.Max(0, army.Organization - 1.5);
@@ -195,7 +197,7 @@ namespace Sovereign
                     fuel -= ReadinessRules.ExerciseFuel(a) * a.ExerciseRemaining; arms -= ReadinessRules.ExerciseArms(a) * a.ExerciseRemaining;
                 }
                 foreach (var a in units[owner].Where(a => a.ExerciseRemaining == 0).OrderBy(a => a.Experience).ThenBy(a => a.Id)) {
-                    double cashCost = ExerciseDailyCost(a) * ReadinessRules.ExerciseLength;
+                    double cashCost = ExerciseDailyCost(a) * ReadinessRules.ExerciseLength * 1.5;
                     double fuelCost = ReadinessRules.ExerciseFuel(a) * ReadinessRules.ExerciseLength, armsCost = ReadinessRules.ExerciseArms(a) * ReadinessRules.ExerciseLength;
                     if (capacity < a.Battalions || budget < cashCost || fuel < fuelCost || arms < armsCost) continue;
                     if (StartExercise(a, network) != null) continue;
@@ -220,10 +222,10 @@ namespace Sovereign
                 || n.Condition.Exhaustion >= 30 || n.Treasury < report.DailyCommitment * 30) return false;
             double own = 0, opposition = 0;
             foreach (var a in S.Armies) {
-                double power = a.Battalions * a.Design.Power * ReadinessRules.Score(a) / 100;
-                if (a.Owner == owner && a.ExerciseRemaining == 0) own += power;
-                else if (a.Owner == enemy || Allied(a.Owner, enemy)) opposition += power;
+                if (a.Owner == owner && a.ExerciseRemaining == 0) own += PlanningPower(a);
             }
+            for (int other = 0; other < S.Nations.Length; other++)
+                if (other == enemy || Allied(other, enemy)) opposition += EstimatedPersonnelPower(other, World.Countries[other].StartingGroundPersonnel);
             return own > opposition * 1.3 && own > 0;
         }
 

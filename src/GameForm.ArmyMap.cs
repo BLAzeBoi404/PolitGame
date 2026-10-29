@@ -10,7 +10,7 @@ namespace Sovereign
         private sealed class ArmyMapGroup
         {
             internal readonly List<Army> Units = new List<Army>();
-            internal int Personnel, Stars;
+            internal int Personnel, Stars, Readiness;
             internal string Tip;
         }
         private readonly List<ArmyMapGroup> armyMapGroups = new List<ArmyMapGroup>();
@@ -19,18 +19,17 @@ namespace Sovereign
         internal int ArmyMapGroupCount => armyMapGroups.Count;
         private void PrepareArmyGroups()
         {
-            bool foreignVisible = layer == "Армии" || scale >= 70;
-            long fingerprint = foreignVisible ? 17 : 19;
+            long fingerprint = 17;
             unchecked { foreach (var a in E.S.Armies) {
-                if (!foreignVisible && a.Owner != E.S.Player && !E.AtWar(a.Owner,E.S.Player)) continue;
+                if (!E.SharesMilitaryIntel(E.S.Player, a.Owner)) continue;
                 fingerprint = fingerprint * 31 + a.Id; fingerprint = fingerprint * 31 + a.Owner; fingerprint = fingerprint * 31 + a.Region;
-                fingerprint = fingerprint * 31 + a.Target; fingerprint = fingerprint * 31 + a.Personnel; fingerprint = fingerprint * 31 + DeploymentRules.Stars(a);
+                fingerprint = fingerprint * 31 + a.Target; fingerprint = fingerprint * 31 + a.Personnel; fingerprint = fingerprint * 31 + DeploymentRules.Stars(a); fingerprint = fingerprint * 31 + (int)ReadinessRules.Score(a);
             } }
             if (armyMapCampaign == E.S && armyMapFingerprint == fingerprint) return;
             armyMapCampaign = E.S; armyMapFingerprint = fingerprint; armyMapGroups.Clear();
             var stationary = new Dictionary<long,ArmyMapGroup>();
             foreach (var a in E.S.Armies) {
-                if (!foreignVisible && a.Owner != E.S.Player && !E.AtWar(a.Owner,E.S.Player)) continue;
+                if (!E.SharesMilitaryIntel(E.S.Player, a.Owner)) continue;
                 ArmyMapGroup group;
                 long key = (long)a.Owner * W.Regions.Length + a.Region;
                 if (a.Target >= 0 || !stationary.TryGetValue(key,out group)) {
@@ -40,15 +39,17 @@ namespace Sovereign
                 group.Units.Add(a); group.Personnel += a.Personnel;
             }
             foreach (var group in armyMapGroups) {
-                long weighted = 0; foreach (var a in group.Units) weighted += (long)DeploymentRules.Stars(a) * a.Personnel;
+                long weighted = 0; double readiness = 0; foreach (var a in group.Units) { weighted += (long)DeploymentRules.Stars(a) * a.Personnel; readiness += ReadinessRules.Score(a) * a.Personnel; }
+                group.Readiness = (int)Math.Round(readiness / Math.Max(1,group.Personnel));
                 group.Stars = (int)Math.Round((double)weighted / Math.Max(1,group.Personnel));
                 group.Tip = W.Countries[group.Units[0].Owner].Name + " · " + People(group.Personnel) + " чел. · соединений: " + group.Units.Count + ". "
-                    + (group.Units.Count > 1 ? "Повторный щелчок переключает части. " : "") + "ПКМ по области — приказ выбранной части.";
+                    + (group.Units.Count > 1 ? "Повторный щелчок переключает части. " : "") + (group.Units[0].Owner == E.S.Player ? "ПКМ по области — приказ выбранной части. " : "Позиции переданы партнёром. ") + "Подготовка: " + UnitQualityRules.Names[group.Stars] + ". Звёзды — квалификация; полоска — текущая готовность.";
             }
         }
         private void DrawArmyMap(Graphics g)
         {
             PrepareArmyGroups();
+            if (army >= 0 && !E.S.Armies.Exists(a => a.Id == army && E.SharesMilitaryIntel(E.S.Player, a.Owner))) army = -1;
             foreach (var group in armyMapGroups) {
                 var unit = group.Units[0]; bool chosen = false;
                 foreach (var member in group.Units) if (member.Id == army) { unit = member; chosen = true; break; }
@@ -68,13 +69,15 @@ namespace Sovereign
                 if (!(gpuRecordingWorld?GpuWorldVisible(position):mapRect.Contains(position))) continue;
                 var bounds = new RectangleF(position.X-34,position.Y-18,70,37);
                 int badgeId = group.Units.Count == 1 ? unit.Id : -1-unit.Owner*W.Regions.Length-unit.Region;
-                DrawUnitBadge(g,unit,bounds,group.Personnel,group.Units.Count,group.Stars,badgeId,chosen);
+                DrawUnitBadge(g,unit,bounds,group.Personnel,group.Units.Count,group.Stars,group.Readiness,badgeId,chosen);
                 var captured = group;
                 hits.Add(new Hit { Rect = gpuRecordingWorld?bounds:RectangleF.Intersect(bounds,mapRect), Label = "army-group:"+badgeId, Tip = group.Tip, Action = () => {
+                    if (!E.SharesMilitaryIntel(E.S.Player, captured.Units[0].Owner)) return;
                     int index = captured.Units.FindIndex(a => a.Id == army); var next = captured.Units[(index + 1) % captured.Units.Count];
                     army = next.Id; selected = next.Region; foreign = next.Owner; Invalidate();
                 } });
             }
+            DrawIntelligenceContacts(g);
         }
     }
 }

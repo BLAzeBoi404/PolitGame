@@ -5,13 +5,15 @@ namespace Sovereign
 {
 	public class Campaign
 	{
-		public const int CurrentVersion = 14;
+		public const int CurrentVersion = 15;
         public int Version = 1;
         public double[] MarketPrices;
         public List<TradeDeal> TradeDeals;
         public List<TradeFlow> TradeFlows;
         public int NextTradeDeal = 1, TradeDay = -1;
         public int ReadinessDay = -1;
+        public bool[] IntelligenceSharing;
+        public List<MilitaryContact> MilitaryContacts;
 
 		public int Player;
 

@@ -44,8 +44,8 @@ namespace Sovereign
                 check(a.ExerciseRemaining == 21 && a.Experience == xp && e.Player.Stock[2] == 100, "An unfunded course consumes neither materials nor training time");
                 e.Player.Treasury = 100; e.Player.Stock[7] = 0; e.S.Day++; e.TickReadiness();
                 check(a.ExerciseRemaining == 21 && a.Experience == xp && e.Player.Treasury == 100, "An arms shortage also pauses a fully fueled course atomically");
-                e.Player.Stock[7] = 100; a.Experience = 34.9; e.S.Day++; e.TickReadiness(); e.S.Day++; e.TickReadiness();
-                check(a.Experience == 35 && a.ExerciseRemaining == 0 && e.StartExercise(a.Id) != null, "Exercises stop at experience 35 and cannot farm combat-veteran proficiency");
+                e.Player.Stock[7] = 100; a.Proficiency = 90; a.Experience = 34.9; e.S.Day++; e.TickReadiness(); e.S.Day++; e.TickReadiness();
+                check(a.Experience == 35 && a.ExerciseRemaining == 0 && e.StartExercise(a.Id) != null, "Exercises stop once both training 90 and experience 35 are reached");
                 a.Experience = 0; a.Fatigue = 51; check(e.StartExercise(a.Id) != null, "Exhausted formations must rest before starting another course");
                 a.Fatigue = 0; a.TrainingDays = 14; check(e.StartExercise(a.Id) != null, "Initial formation and refit training cannot overlap exercises"); a.TrainingDays = 0;
                 var foreign = e.S.Armies.First(x => x.Owner != e.S.Player); check(e.StartExercise(foreign.Id) != null && foreign.ExerciseRemaining == 0, "A player cannot assign exercises to another country's formation");

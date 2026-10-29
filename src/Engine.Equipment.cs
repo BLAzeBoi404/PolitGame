@@ -203,7 +203,8 @@ namespace Sovereign
             if (Player.Recruits < added) return "Для нового штата нужно дополнительно людей: " + added + ".";
             double cost = d.Blueprint.Cost * 0.15 * kits;
             if (Player.Treasury < cost) return "Недостаточно средств на переоснащение.";
-            Player.Treasury -= cost; d.Stock -= kits; Player.Recruits += released - added; a.Personnel += added - released;
+            Player.Treasury -= cost; d.Stock -= kits; Player.Recruits += released - added;
+            UnitQualityRules.IncorporateRecruits(a, added); a.Personnel += added - released;
             if (support) a.Attachments.Add(new EquipmentAttachment { DesignId = d.Id, Blueprint = d.Blueprint.Copy() });
             else {
                 var old = FindDesign(S.Player, a.DesignId);

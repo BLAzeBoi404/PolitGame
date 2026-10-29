@@ -167,6 +167,8 @@ namespace Sovereign
             InitializeStartingForces();
             InitializeTrade(S);
             InitializeReadiness(S);
+            InitializeIntelligence(S, true);
+            RefreshGroundIntelligence();
 			Notify("Кабинет сформирован. Проверьте баланс ресурсов и выберите программу развития.");
 			Notify("Учебная модель: современная география; региональная экономика и ресурсы оценочные. Исторические границы пока не включены.");
 			ComputeEconomy(apply: false);
@@ -242,6 +244,7 @@ namespace Sovereign
 				AI();
                 PlanAviation();
 			}
+            RefreshGroundIntelligence();
 			if (S.Day % 90 == 0 && AutoSaveEnabled)
 			{
 				Autosave();
@@ -731,7 +734,7 @@ namespace Sovereign
                 double upkeep = GroundUpkeep(a, doctrine);
                 bool funded = nation.Treasury >= upkeep;
                 if (funded) nation.Treasury -= upkeep;
-                if (a.TrainingDays > 0) { if (funded) { a.Organization = Math.Min(100, a.Organization + (100 - a.Organization) / a.TrainingDays); a.TrainingDays--; } continue; }
+                if (a.TrainingDays > 0) { if (funded) { a.Organization = Math.Min(100, a.Organization + (100 - a.Organization) / a.TrainingDays); a.TrainingDays--; if (a.Proficiency < 45) a.Proficiency = Math.Min(45, a.Proficiency + .5); } continue; }
                 foreach (var attachment in a.Attachments)
                     attachment.Condition = Rules.Clamp(attachment.Condition + (funded && a.Target < 0 ? 0.2 + attachment.Blueprint.Support * 0.06 : -(100 - attachment.Blueprint.Reliability) * 0.008 / (1 + attachment.Blueprint.Protection / 100)), 0, 100);
 				double num = ((a.Target < 0) ? 0.003 * a.Battalions : a.Design.Fuel * a.Battalions + a.Attachments.Sum(x => x.Blueprint.Fuel * 0.3));
@@ -886,6 +889,7 @@ namespace Sovereign
             if (s.Version == 11) s.Version = 12;
             if (s.Version == 12) InitializeTrade(s);
             if (s.Version == 13) InitializeReadiness(s);
+            if (s.Version == 14) InitializeIntelligence(s, false);
             Validate(s);
 			S = s;
 			Raise();

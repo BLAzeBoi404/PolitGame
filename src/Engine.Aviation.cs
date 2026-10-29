@@ -55,7 +55,7 @@ namespace Sovereign
             if (target < 0 || target >= S.Provinces.Length) return "Выберите целевую область на карте.";
             if (AirDistance(wing.BaseRegion, target) > wing.Design.Range) return "Цель вне боевого радиуса: " + wing.Design.Range.ToString("0") + " км.";
             int owner = S.Provinces[target].Owner;
-            bool enemy = AtWar(wing.Owner, owner) || S.Armies.Any(a => a.Region == target && AtWar(wing.Owner, a.Owner));
+            bool enemy = AtWar(wing.Owner, owner) || KnownMilitaryContacts(wing.Owner).Any(c => c.Region == target && AtWar(wing.Owner, c.Owner));
             if ((mission == AirMission.Strike || mission == AirMission.Recon) && !enemy) return "Для этой задачи требуется военная цель.";
             if (mission == AirMission.Superiority && !enemy && !HasAccess(wing.Owner, owner)) return "Нейтральное воздушное пространство закрыто.";
             if (mission == AirMission.Supply && !S.Armies.Any(a => a.Owner == wing.Owner && a.Region == target)) return "В области нет своих частей для снабжения.";
@@ -160,6 +160,7 @@ namespace Sovereign
                 } else if (wing.Mission == AirMission.Recon) {
                     long key = AirKey(wing.Owner, wing.Target); double prior; airRecon.TryGetValue(key, out prior);
                     airRecon[key] = Math.Min(.15, prior + effect * (.04 + wing.Design.Electronics * .01));
+                    if (effect >= .1 && wing.Strength > 0) RecordAirIntelligence(wing.Owner, wing.Target, targets);
                 }
             }
             foreach (var lost in S.AirWings.Where(a => a.Strength <= 0).ToList()) {
@@ -191,7 +192,7 @@ namespace Sovereign
                     }
                     if (wing.Strength < 45) { SetAirMission(wing.Id, AirMission.Reserve, -1, owner); continue; }
                     var mission = kind == EquipmentKind.Fighter ? AirMission.Superiority : AirMission.Strike;
-                    int target = S.Armies.Where(a => AtWar(owner, a.Owner)).Select(a => a.Region).Distinct().Where(r => AirTargetReason(wing, mission, r) == null).OrderBy(r => AirDistance(wing.BaseRegion, r)).DefaultIfEmpty(-1).First();
+                    int target = KnownMilitaryContacts(owner).Where(c => AtWar(owner, c.Owner)).Select(c => c.Region).Distinct().Where(r => AirTargetReason(wing, mission, r) == null).OrderBy(r => AirDistance(wing.BaseRegion, r)).DefaultIfEmpty(-1).First();
                     if (target >= 0) SetAirMission(wing.Id, mission, target, owner);
                 }
             }

@@ -31,7 +31,7 @@ namespace Sovereign
         }
         private void CompleteSimulationDay(Exception error)
         {
-            simulationBusy=false;simulationTask=null;AsyncSimulationSteps++;
+            simulationBusy=false;simulationTask=null;AsyncSimulationSteps++; hoveredTip = "";
             if(IsDisposed)return;
             if(error!=null){speed=0;pendingSimulationActions.Clear();Message("Расчёт остановлен: "+error.Message);}
             else {

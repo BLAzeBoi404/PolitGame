@@ -78,7 +78,7 @@ namespace Sovereign
             var borderSet = new HashSet<int>(border);
             var assigned = new HashSet<int>(plan.ArmyIds);
             var units = S.Armies.Where(a => assigned.Contains(a.Id)).ToList();
-            var occupancy = S.Armies.GroupBy(a => a.Region).ToDictionary(g => g.Key, g => g.ToList());
+            var known = KnownEnemyPower(plan.Owner);
             var stationed = new Dictionary<int, int>();
             foreach (var unit in units) {
                 int r = unit.Route.Count > 0 ? unit.Route[unit.Route.Count - 1] : unit.Target >= 0 ? unit.Target : unit.Region;
@@ -89,10 +89,8 @@ namespace Sovereign
                 if (borderSet.Contains(unit.Region)) {
                     if (plan.Stance == FrontStance.Hold) continue;
                     foreach (int target in World.Regions[unit.Region].Neighbors.Where(r => S.Provinces[r].Owner == plan.Enemy)) {
-                        List<Army> defenders;
-                        occupancy.TryGetValue(target, out defenders);
-                        defenders = defenders == null ? new List<Army>() : defenders.Where(a => AtWar(unit.Owner, a.Owner)).ToList();
-                        if (defenders.Count > 0 && EquipmentRules.CombatPower(unit, defenders[0], false) * GroundCombatFactor(unit.Owner, false) < defenders.Sum(a => EquipmentRules.CombatPower(a, unit, true) * GroundCombatFactor(a.Owner, true)) * 1.2) continue;
+                        double defenders; known.TryGetValue(target, out defenders);
+                        if (PlanningPower(unit) < defenders * 1.2) continue;
                         Order(unit.Id, target, false); break;
                     }
                     continue;

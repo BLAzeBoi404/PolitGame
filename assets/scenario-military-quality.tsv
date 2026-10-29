@@ -1,0 +1,177 @@
+code	training_baseline	funding_per_person_usd	expenditure_year	gdp_year	basis
+FJI	51	20443	2024	2024	modeled funding proxy; not an observed military skill rating
+TZA	56	40966	2024	2024	modeled funding proxy; not an observed military skill rating
+SAH	45	0	0	0	neutral fallback; insufficient compatible source data
+CAN	70	448200	2024	2024	modeled funding proxy; not an observed military skill rating
+USA	70	729625	2024	2024	modeled funding proxy; not an observed military skill rating
+KAZ	57	51913	2024	2024	modeled funding proxy; not an observed military skill rating
+UZB	45	0	2019	2024	neutral fallback; insufficient compatible source data
+PNG	52	24403	2024	2024	modeled funding proxy; not an observed military skill rating
+IDN	53	27920	2024	2024	modeled funding proxy; not an observed military skill rating
+ARG	57	50661	2024	2024	modeled funding proxy; not an observed military skill rating
+CHL	60	70772	2024	2024	modeled funding proxy; not an observed military skill rating
+COD	43	6792	2024	2024	modeled funding proxy; not an observed military skill rating
+SOM	45	0	2021	2024	neutral fallback; insufficient compatible source data
+KEN	58	54780	2024	2024	modeled funding proxy; not an observed military skill rating
+SDN	45	0	2021	2024	neutral fallback; insufficient compatible source data
+TCD	49	16501	2024	2024	modeled funding proxy; not an observed military skill rating
+HTI	45	0	0	0	neutral fallback; insufficient compatible source data
+DOM	50	17291	2024	2024	modeled funding proxy; not an observed military skill rating
+RUS	64	132330	2024	2024	modeled funding proxy; not an observed military skill rating
+BHS	59	67170	2024	2024	modeled funding proxy; not an observed military skill rating
+FLK	45	0	0	0	neutral fallback; insufficient compatible source data
+NOR	70	412064	2024	2024	modeled funding proxy; not an observed military skill rating
+GRL	45	0	0	0	neutral fallback; insufficient compatible source data
+ATF	45	0	0	0	neutral fallback; insufficient compatible source data
+TLS	52	23512	2024	2024	modeled funding proxy; not an observed military skill rating
+ZAF	56	41509	2024	2024	modeled funding proxy; not an observed military skill rating
+LSO	50	17040	2024	2024	modeled funding proxy; not an observed military skill rating
+MEX	59	64142	2024	2024	modeled funding proxy; not an observed military skill rating
+URY	60	73922	2024	2024	modeled funding proxy; not an observed military skill rating
+BRA	59	66581	2024	2024	modeled funding proxy; not an observed military skill rating
+BOL	50	18339	2024	2024	modeled funding proxy; not an observed military skill rating
+PER	53	27221	2024	2024	modeled funding proxy; not an observed military skill rating
+COL	58	54732	2024	2024	modeled funding proxy; not an observed military skill rating
+PAN	45	0	0	0	neutral fallback; insufficient compatible source data
+CRI	45	0	0	0	neutral fallback; insufficient compatible source data
+NIC	45	8206	2024	2024	modeled funding proxy; not an observed military skill rating
+HND	55	37094	2024	2024	modeled funding proxy; not an observed military skill rating
+SLV	50	16975	2024	2024	modeled funding proxy; not an observed military skill rating
+GTM	52	22640	2024	2024	modeled funding proxy; not an observed military skill rating
+BLZ	52	23440	2024	2024	modeled funding proxy; not an observed military skill rating
+VEN	41	5069	2023	2023	modeled funding proxy; not an observed military skill rating
+GUY	59	63864	2024	2024	modeled funding proxy; not an observed military skill rating
+SUR	45	0	2019	2024	neutral fallback; insufficient compatible source data
+FRA	70	316200	2024	2024	modeled funding proxy; not an observed military skill rating
+ECU	59	68572	2024	2024	modeled funding proxy; not an observed military skill rating
+PRI	45	0	0	0	neutral fallback; insufficient compatible source data
+JAM	59	69755	2024	2024	modeled funding proxy; not an observed military skill rating
+CUB	45	0	2020	2024	neutral fallback; insufficient compatible source data
+ZWE	42	5892	2024	2024	modeled funding proxy; not an observed military skill rating
+BWA	58	58203	2024	2024	modeled funding proxy; not an observed military skill rating
+NAM	54	31201	2024	2024	modeled funding proxy; not an observed military skill rating
+SEN	51	20651	2024	2024	modeled funding proxy; not an observed military skill rating
+MLI	54	30488	2024	2024	modeled funding proxy; not an observed military skill rating
+MRT	49	15200	2024	2024	modeled funding proxy; not an observed military skill rating
+BEN	48	13671	2024	2024	modeled funding proxy; not an observed military skill rating
+NER	45	8597	2024	2024	modeled funding proxy; not an observed military skill rating
+NGA	44	8047	2024	2024	modeled funding proxy; not an observed military skill rating
+CMR	47	11406	2024	2024	modeled funding proxy; not an observed military skill rating
+TGO	47	10919	2024	2024	modeled funding proxy; not an observed military skill rating
+GHA	50	18931	2024	2024	modeled funding proxy; not an observed military skill rating
+CIV	52	25175	2024	2024	modeled funding proxy; not an observed military skill rating
+GIN	57	48365	2024	2024	modeled funding proxy; not an observed military skill rating
+GNB	43	6360	2024	2024	modeled funding proxy; not an observed military skill rating
+LBR	50	16625	2024	2024	modeled funding proxy; not an observed military skill rating
+SLE	39	3774	2024	2024	modeled funding proxy; not an observed military skill rating
+BFA	57	52312	2024	2024	modeled funding proxy; not an observed military skill rating
+CAF	42	5504	2024	2024	modeled funding proxy; not an observed military skill rating
+COG	49	14511	2024	2024	modeled funding proxy; not an observed military skill rating
+GAB	56	44715	2024	2024	modeled funding proxy; not an observed military skill rating
+GNQ	59	63830	2024	2024	modeled funding proxy; not an observed military skill rating
+ZMB	51	21390	2024	2024	modeled funding proxy; not an observed military skill rating
+MWI	45	8807	2024	2024	modeled funding proxy; not an observed military skill rating
+MOZ	55	37362	2024	2024	modeled funding proxy; not an observed military skill rating
+SWZ	52	22829	2024	2024	modeled funding proxy; not an observed military skill rating
+AGO	44	8040	2024	2024	modeled funding proxy; not an observed military skill rating
+BDI	37	2752	2024	2024	modeled funding proxy; not an observed military skill rating
+ISR	68	254296	2024	2024	modeled funding proxy; not an observed military skill rating
+LBN	45	8318	2022	2023	modeled funding proxy; not an observed military skill rating
+MDG	46	9381	2024	2024	modeled funding proxy; not an observed military skill rating
+PSX	45	0	0	0	neutral fallback; insufficient compatible source data
+GMB	40	4299	2024	2024	modeled funding proxy; not an observed military skill rating
+TUN	55	38150	2024	2024	modeled funding proxy; not an observed military skill rating
+DZA	62	105448	2024	2024	modeled funding proxy; not an observed military skill rating
+JOR	52	24008	2024	2024	modeled funding proxy; not an observed military skill rating
+ARE	70	330510	2024	2024	modeled funding proxy; not an observed military skill rating
+QAT	70	726610	2023	2024	modeled funding proxy; not an observed military skill rating
+KWT	70	461831	2024	2024	modeled funding proxy; not an observed military skill rating
+IRQ	55	34955	2024	2024	modeled funding proxy; not an observed military skill rating
+OMN	65	160414	2024	2024	modeled funding proxy; not an observed military skill rating
+VUT	45	0	0	0	neutral fallback; insufficient compatible source data
+KHM	39	3476	2024	2024	modeled funding proxy; not an observed military skill rating
+THA	49	16544	2024	2024	modeled funding proxy; not an observed military skill rating
+LAO	45	0	2019	2024	neutral fallback; insufficient compatible source data
+MMR	51	19261	2023	2024	modeled funding proxy; not an observed military skill rating
+VNM	50	19056	2023	2024	modeled funding proxy; not an observed military skill rating
+PRK	45	0	0	0	neutral fallback; insufficient compatible source data
+KOR	61	82224	2023	2023	modeled funding proxy; not an observed military skill rating
+MNG	47	11007	2024	2024	modeled funding proxy; not an observed military skill rating
+IND	57	52173	2024	2024	modeled funding proxy; not an observed military skill rating
+BGD	52	23830	2024	2024	modeled funding proxy; not an observed military skill rating
+BTN	45	0	0	0	neutral fallback; insufficient compatible source data
+NPL	40	4517	2024	2024	modeled funding proxy; not an observed military skill rating
+PAK	49	14349	2024	2024	modeled funding proxy; not an observed military skill rating
+AFG	45	0	2019	2023	neutral fallback; insufficient compatible source data
+TJK	53	25569	2024	2024	modeled funding proxy; not an observed military skill rating
+KGZ	56	41947	2024	2024	modeled funding proxy; not an observed military skill rating
+TKM	45	0	2019	2024	neutral fallback; insufficient compatible source data
+IRN	49	14564	2024	2024	modeled funding proxy; not an observed military skill rating
+SYR	45	0	2019	2023	neutral fallback; insufficient compatible source data
+ARM	54	31517	2024	2024	modeled funding proxy; not an observed military skill rating
+SWE	70	561309	2024	2024	modeled funding proxy; not an observed military skill rating
+BLR	53	27623	2024	2024	modeled funding proxy; not an observed military skill rating
+UKR	45	0	2021	2024	neutral fallback; insufficient compatible source data
+POL	65	147908	2024	2024	modeled funding proxy; not an observed military skill rating
+AUT	68	237110	2024	2024	modeled funding proxy; not an observed military skill rating
+HUN	65	156034	2024	2024	modeled funding proxy; not an observed military skill rating
+MDA	50	16800	2024	2024	modeled funding proxy; not an observed military skill rating
+ROU	63	120299	2024	2024	modeled funding proxy; not an observed military skill rating
+LTU	64	131547	2024	2024	modeled funding proxy; not an observed military skill rating
+LVA	65	164413	2024	2024	modeled funding proxy; not an observed military skill rating
+EST	67	193868	2024	2024	modeled funding proxy; not an observed military skill rating
+DEU	70	503784	2024	2024	modeled funding proxy; not an observed military skill rating
+BGR	60	80151	2024	2024	modeled funding proxy; not an observed military skill rating
+GRC	59	61990	2024	2024	modeled funding proxy; not an observed military skill rating
+TUR	58	56127	2024	2024	modeled funding proxy; not an observed military skill rating
+ALB	59	61603	2024	2024	modeled funding proxy; not an observed military skill rating
+HRV	63	117200	2024	2024	modeled funding proxy; not an observed military skill rating
+CHE	56	45213	2024	2024	modeled funding proxy; not an observed military skill rating
+LUX	70	1242627	2024	2024	modeled funding proxy; not an observed military skill rating
+BEL	70	375623	2024	2024	modeled funding proxy; not an observed military skill rating
+NLD	70	571163	2024	2024	modeled funding proxy; not an observed military skill rating
+PRT	67	197557	2024	2024	modeled funding proxy; not an observed military skill rating
+ESP	67	201017	2024	2024	modeled funding proxy; not an observed military skill rating
+IRL	65	153970	2024	2024	modeled funding proxy; not an observed military skill rating
+NCL	45	0	0	0	neutral fallback; insufficient compatible source data
+SLB	45	0	0	0	neutral fallback; insufficient compatible source data
+NZL	70	354867	2024	2024	modeled funding proxy; not an observed military skill rating
+AUS	70	584000	2024	2024	modeled funding proxy; not an observed military skill rating
+LKA	44	7069	2024	2024	modeled funding proxy; not an observed military skill rating
+CHN	64	140580	2024	2024	modeled funding proxy; not an observed military skill rating
+TWN	61	89910	2023	2023	modeled funding proxy; not an observed military skill rating
+ITA	67	209382	2024	2024	modeled funding proxy; not an observed military skill rating
+DNK	70	581030	2024	2024	modeled funding proxy; not an observed military skill rating
+GBR	70	607333	2024	2024	modeled funding proxy; not an observed military skill rating
+ISL	45	0	0	0	neutral fallback; insufficient compatible source data
+AZE	55	37901	2024	2024	modeled funding proxy; not an observed military skill rating
+GEO	49	15519	2024	2024	modeled funding proxy; not an observed military skill rating
+PHL	58	54121	2024	2024	modeled funding proxy; not an observed military skill rating
+MYS	55	38361	2024	2024	modeled funding proxy; not an observed military skill rating
+BRN	59	66270	2023	2024	modeled funding proxy; not an observed military skill rating
+SVN	66	169132	2024	2024	modeled funding proxy; not an observed military skill rating
+FIN	68	232131	2024	2024	modeled funding proxy; not an observed military skill rating
+SVK	66	166795	2024	2024	modeled funding proxy; not an observed military skill rating
+CZE	69	258778	2024	2024	modeled funding proxy; not an observed military skill rating
+ERI	45	0	2019	2024	neutral fallback; insufficient compatible source data
+JPN	68	239847	2024	2024	modeled funding proxy; not an observed military skill rating
+PRY	52	23711	2024	2024	modeled funding proxy; not an observed military skill rating
+YEM	45	0	0	0	neutral fallback; insufficient compatible source data
+SAU	70	351592	2024	2024	modeled funding proxy; not an observed military skill rating
+CYN	45	0	0	0	neutral fallback; insufficient compatible source data
+CYP	57	45753	2024	2024	modeled funding proxy; not an observed military skill rating
+MAR	53	28078	2024	2024	modeled funding proxy; not an observed military skill rating
+EGY	43	6052	2024	2024	modeled funding proxy; not an observed military skill rating
+LBY	45	0	0	0	neutral fallback; insufficient compatible source data
+ETH	46	9578	2022	2022	modeled funding proxy; not an observed military skill rating
+DJI	45	0	2019	2024	neutral fallback; insufficient compatible source data
+SOL	45	0	2021	2024	neutral fallback; insufficient compatible source data
+UGA	52	23845	2023	2024	modeled funding proxy; not an observed military skill rating
+RWA	42	5701	2024	2024	modeled funding proxy; not an observed military skill rating
+BIH	52	22674	2024	2024	modeled funding proxy; not an observed military skill rating
+MKD	58	52836	2024	2024	modeled funding proxy; not an observed military skill rating
+SRB	61	89084	2024	2024	modeled funding proxy; not an observed military skill rating
+MNE	59	68595	2024	2024	modeled funding proxy; not an observed military skill rating
+KOS	57	50677	2024	2024	modeled funding proxy; not an observed military skill rating
+TTO	57	47572	2024	2024	modeled funding proxy; not an observed military skill rating
+SDS	30	529	2023	2023	modeled funding proxy; not an observed military skill rating

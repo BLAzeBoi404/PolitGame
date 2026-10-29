@@ -39,7 +39,7 @@ namespace Sovereign
             check(GpuUploads==uploads,"Warm camera motion performs zero bitmap uploads to the GPU");
             check(gpu.ResidentBytes<=GpuCanvas.MemoryLimit,"GPU texture cache remains within its memory budget");
             string originalLayer=layer;float originalScale=scale;layer="Армии";scale=4;Invalidate();settle();
-            check(GpuActive&&gpuWorldHits.Count>100,"World-scale military layer retains many markers without disposing in-use badges");
+            check(GpuActive && armyMapGroups.Count > 0 && armyMapGroups.All(group => group.Units.All(a => E.SharesMilitaryIntel(E.S.Player,a.Owner))), "World-scale military layer retains own markers and never reveals unshared foreign troops");
             layer=originalLayer;scale=originalScale;Invalidate();settle();
             var worldHit=hits.FirstOrDefault(h=>h.Label.StartsWith("army-group:"));
             if(worldHit!=null){worldHit.Action();PresentGpu();check(army>=0,"Retained world hit targets still select actual formations");}
@@ -92,6 +92,19 @@ namespace Sovereign
             check(gpuHud.Width==1280&&gpuHud.Height==720,"Resize rebuilds the retained HUD at the real pixel dimensions");
             StopGpu();check(!GpuActive,"Compatibility renderer can be restored without replacing the campaign");
             StartGpu();menuScreen="";Navigate("Карта");settle();check(GpuActive&&E.S.Day==day+1,"Recreated renderer restores resources without replacing the campaign");
+            int sharingPartner = W.ByCode("POL");
+            E.S.Relations[E.Pair(E.S.Player, sharingPartner)] = E.S.Relations[E.Pair(sharingPartner, E.S.Player)] = 80;
+            E.Diplomacy(sharingPartner, 9); layer = "Армии"; scale = 4; Invalidate(); settle();
+            check(armyMapGroups.Any(group => group.Units.Any(a => a.Owner == sharingPartner)), "GPU retained markers include an explicitly sharing partner");
+            army = E.S.Armies.First(a => a.Owner == sharingPartner).Id; E.Diplomacy(sharingPartner, 9); Invalidate(); settle();
+            check(army == -1 && armyMapGroups.All(group => group.Units.All(a => a.Owner == E.S.Player)), "GPU cache rebuild immediately removes revoked partner markers and selection");
+            int observedOwner = W.ByCode("RUS"), observedRegion = W.Countries[observedOwner].CapitalRegion;
+            E.S.MilitaryContacts.Add(IntelligenceRules.Observe(E.S.Player, observedOwner, observedRegion, E.S.Day, 4200, IntelSource.AirRecon));
+            cx = (float)W.Regions[observedRegion].X; cy = (float)W.Regions[observedRegion].Y; scale = 50; Invalidate(); settle();
+            check(gpuWorldHits.Any(h => h.Hit.Label != null && h.Hit.Label.StartsWith("intel-contact:")) && armyMapGroups.All(group => group.Units.All(a => a.Owner == E.S.Player)), "GPU contacts render uncertainty without retaining any actual enemy formation");
+            using(var frame=gpu.CaptureFrame())frame.Save(Path.Combine(directory,"gpu-intelligence.png"));
+            E.S.MilitaryContacts.Clear(); Invalidate(); settle();
+            check(!gpuWorldHits.Any(h => h.Hit.Label != null && h.Hit.Label.StartsWith("intel-contact:")), "Removing intelligence also invalidates retained GPU contact hit targets");
             bool closingDeferred=false;
             using(var gate=new System.Threading.ManualResetEventSlim(false)) {
                 BeforeSimulationStep=()=>gate.Wait();StartSimulationDay();

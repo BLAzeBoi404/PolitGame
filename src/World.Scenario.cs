@@ -31,6 +31,11 @@ namespace Sovereign
                 c.MilitaryYear = int.Parse(row[5], culture); c.GroundStrengthEstimated = row[6] != "reported ground strength" && row[6] != "no standing army";
                 c.CapitalRegion = int.Parse(row[7], culture);
             }
+            foreach (var row in ScenarioRows("scenario-military-quality.tsv")) {
+                var c = Countries.First(country => country.Code == row[0]);
+                c.TrainingBaseline = double.Parse(row[1], culture); c.ReferenceFundingPerPerson = double.Parse(row[2], culture);
+                c.FundingYear = int.Parse(row[3], culture); c.FundingGdpYear = int.Parse(row[4], culture);
+            }
             for (int i = 0; i < regions.Length; i++) {
                 var row = regions[i]; var r = Regions[i];
                 if (int.Parse(row[0], culture) != i || row[1] != Countries[r.Country].Code) throw new InvalidDataException("Нарушен порядок областей в сценарии.");

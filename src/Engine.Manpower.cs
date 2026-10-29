@@ -105,7 +105,7 @@ namespace Sovereign
                 bool supplied = IsSupplied(a.Owner, a.Region, network);
                 if (supplied && a.Supply >= 60 && S.Provinces[a.Region].Owner == a.Owner) {
                     int replacements = DrawReplacements(a.Owner, ManpowerRules.Establishment(a) - a.Personnel, Math.Max(1, (int)(ManpowerRules.Establishment(a) / 100.0 * (1 + TechnologyRules.Effects(S.Nations[a.Owner]).Replacements))));
-                    if (replacements > 0) a.Experience *= (double)a.Personnel / (a.Personnel + replacements);
+                    UnitQualityRules.IncorporateRecruits(a, replacements);
                     a.Personnel += replacements;
                     if (replacements > 0) a.Organization = Math.Max(0, a.Organization - replacements * 20.0 / ManpowerRules.Establishment(a));
                 }
@@ -171,7 +171,7 @@ namespace Sovereign
             var d = FindDesign(S.Player, a.DesignId); int delta = t.Battalions - a.Battalions;
             int size = ManpowerRules.GroundSize(a.Design.Kind, t.Battalions, a.Attachments.Count);
             int added = Math.Max(0, size - ManpowerRules.Establishment(a)), released = Math.Max(0, a.Personnel - size);
-            if (added > 0) a.Experience *= (double)a.Personnel / (a.Personnel + added);
+            UnitQualityRules.IncorporateRecruits(a, added);
             Player.Treasury -= ReorganizationCost(a, t); Player.Recruits += released - added; a.Personnel += added - released;
             if (delta > 0) { d.Stock -= delta; a.Strength = (a.Strength * a.Battalions + delta * 100) / t.Battalions; }
             else if (delta < 0) d.Stock += a.Strength >= 90 ? -delta : (int)Math.Floor(-delta * a.Strength / 100);

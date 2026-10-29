@@ -40,15 +40,28 @@ namespace Sovereign
                     else if (layer == "Настроения") theme = theme * 31 + p.Unrest.GetHashCode();
                     else if (layer == "Экономика") { double plants = 0; for (int i = 0; i < 8; i++) plants += p.Public[i] + p.Private[i]; theme = theme * 31 + (plants / Math.Max(.001, p.Population)).GetHashCode(); }
                 }
-                if (!setup && layer == "Армии") foreach (var a in E.S.Armies) theme = theme * 31 + a.Region * 397 + a.Strength.GetHashCode();
+                if (!setup && layer == "Армии") {
+                    UpdateMilitaryIntensity();
+                    // Hash the rendered aggregate, not every changing troop count.
+                    // Small replacements in an already saturated area do not change
+                    // a pixel and must not invalidate thousands of cached tiles.
+                    for (int region = 0; region < W.Regions.Length; region++) theme = theme * 31 + RegionColor(region).ToArgb();
+                }
                 if (!setup && layer == "Дипломатия") for (int i = 0; i < E.S.Nations.Length; i++) { int p = E.Pair(E.S.Player, i); diplomacy = diplomacy * 31 + (E.AtWar(E.S.Player, i) ? 1 : 0) + (E.S.Agreements[p] ? 2 : 0) + (E.Allied(E.S.Player, i) ? 4 : 0) + (E.S.Access[p] ? 8 : 0); }
             }
             return stableAtlasKey = (setup ? "setup" : E.S.GetHashCode().ToString()) + "/" + layer + "/" + ownership + "/" + theme + "/" + diplomacy + "/" + prefs.Labels + "/" + prefs.RegionBorders + "/" + prefs.Texture + "/" + prefs.GraphicsQuality + "/" + prefs.LabelDensity;
         }
+        private void UpdateMilitaryIntensity()
+        {
+            if (militaryIntensity == null) militaryIntensity = new double[W.Regions.Length];
+            Array.Clear(militaryIntensity, 0, militaryIntensity.Length);
+            foreach (var a in E.S.Armies) if (E.SharesMilitaryIntel(E.S.Player, a.Owner)) militaryIntensity[a.Region] += a.Personnel / 8.0;
+            foreach (var c in E.KnownMilitaryContacts(E.S.Player)) militaryIntensity[c.Region] += ((double)c.LowerPersonnel + c.UpperPersonnel) / 16.0;
+        }
         private AtlasScene CaptureAtlas(string key, bool overview)
         {
             bool setup = menuScreen == "new"; float resolution = prefs.GraphicsQuality == 0 ? .65f : prefs.GraphicsQuality == 1 ? .85f : 1;
-            if (layer == "Армии" && !setup) { if (militaryIntensity == null) militaryIntensity = new double[W.Regions.Length]; Array.Clear(militaryIntensity, 0, militaryIntensity.Length); foreach (var a in E.S.Armies) militaryIntensity[a.Region] += a.Strength; }
+            if (layer == "Армии" && !setup && militaryIntensity == null) UpdateMilitaryIntensity();
             var scene = new AtlasScene { Countries = W.Countries, Regions = W.Regions, CountryColors = new Color[W.Countries.Length], RegionColors = new Color[W.Regions.Length], FillRegions = new bool[W.Regions.Length], Key = key,
                 X = overview ? 0 : cx, Y = overview ? 0 : cy, Zoom = overview ? 4 : scale, PixelScale = overview ? 4 : scale * UiScale * resolution,
                 Width = overview ? 1440 : (int)Math.Ceiling(mapRect.Width * UiScale * resolution) + CameraMargin * 2,

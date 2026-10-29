@@ -10,6 +10,9 @@
     "regional-weights.csv": "18dfecbcd1d16d5e5daa9255c041d846c215b4141589d09769e0b6bcb7a082c6",
     "russian-towns-2020.tsv": "92add759c2afa36f666474c3460f556a181a26eefb7fd491bdb9ff512c7af98f",
     "settlements.tsv": "60577c39ad415612f16426722cba8d66c658775182aa3ea14b60d86c33a10e55",
-    "us-state-population-2014.csv": "408071e1a553d550ae01ee5c7654df233301c880f09aa110d165563e19b010a9"
-  }
+    "us-state-population-2014.csv": "408071e1a553d550ae01ee5c7654df233301c880f09aa110d165563e19b010a9",
+    "military-funding.json": "6403e193532e62dfa6339210d06cc18ab88978a330a8089afbe17d8dbd58a313"
+  },
+  "military_funding_retrieved_utc": "2026-10-28",
+  "military_funding_commit": "144d6977b2b01ac1cbd220de754c0a005616760b"
 }

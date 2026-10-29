@@ -49,7 +49,7 @@ namespace Sovereign
                 Fill(g, a.Id == army ? Palette.Selected : Palette.Card, x, y - 4, leftW, 56);
                 Txt(g, "№" + a.Id + " · " + W.Regions[a.Region].Name, x + 10, y + 3, 14, Palette.Text, true, leftW - 130);
                 Txt(g, ReadinessRules.Score(a).ToString("0") + "%", x + leftW - 100, y + 3, 16, ReadinessRules.Score(a) < 50 ? Palette.Red : Palette.Teal, true, 90);
-                Txt(g, "Опыт " + a.Experience.ToString("0.0") + " · усталость " + a.Fatigue.ToString("0") + "% · " + (a.ExerciseRemaining > 0 ? "учения " + a.ExerciseRemaining + " д." : a.TrainingDays > 0 ? "начальная подготовка" : a.Target >= 0 ? "марш" : "отдых / служба"), x + 10, y + 29, 11, Palette.Muted, false, leftW - 20);
+                Txt(g, UnitQualityRules.Name(a) + " · усталость " + a.Fatigue.ToString("0") + "% · " + (a.ExerciseRemaining > 0 ? "учения " + a.ExerciseRemaining + " д." : a.TrainingDays > 0 ? "начальная подготовка" : a.Target >= 0 ? "марш" : "отдых / служба"), x + 10, y + 29, 11, Palette.Muted, false, leftW - 20);
                 hits.Add(new Hit { Rect = new RectangleF(x, y - 4, leftW, 56), Label = "readiness:unit:" + a.Id, Action = () => { army = a.Id; Invalidate(); }, Tip = "Выбрать соединение для учений и просмотра условий" });
             }
             ReadinessButton(g, "readiness:previous", "←", x, 772, 45, () => { readinessOffset = Math.Max(0, readinessOffset - 6); Invalidate(); });
@@ -65,14 +65,18 @@ namespace Sovereign
             Txt(g, "Техника " + unit.Strength.ToString("0") + "% · организация " + unit.Organization.ToString("0") + "%", rx, 449, 13, Palette.Text, false, rightW);
             Txt(g, "Снабжение " + unit.Supply.ToString("0") + "% · опыт " + unit.Experience.ToString("0.0"), rx, 476, 13, Palette.Teal, false, rightW);
             Txt(g, "Усталость " + unit.Fatigue.ToString("0.0") + "% · сила боя ×" + ReadinessRules.FatigueFactor(unit).ToString("0.00"), rx, 503, 13, Palette.Gold, false, rightW);
+            Txt(g, UnitQualityRules.Name(unit) + " · подготовка " + unit.Proficiency.ToString("0.0") + "/100", rx, 528, 13, Palette.Gold, true, rightW);
+            var country = W.Countries[unit.Owner];
+            string basis = country.ReferenceFundingPerPerson > 0 ? "Стартовая оценка возможностей: расходы / численность, " + country.FundingYear + "; ВВП " + country.FundingGdpYear + "." : "Для страны нет совместимых данных: нейтральная стартовая оценка.";
+            hits.Add(new Hit { Rect = new RectangleF(rx,525,rightW,22), Label = "quality:detail", Tip = "Звёзды — квалификация, отдельно от готовности. Пороги подготовки: 30 / 50 / 70 / 85. Элита: подготовка от 85 и опыт от 35. Подготовка влияет на боевую силу (×0,70–1,30). Пополнения имеют подготовку 30 и снижают среднюю квалификацию. " + basis + " Это игровая модель, не рейтинг реальных частей. Любая страна может обучать войска при наличии денег и снабжения." });
             Section(g, "КУРС УЧЕНИЙ · ДО 21 ДНЯ", rx, 546, rightW);
             Txt(g, "Доп. расходы в день: " + (E.ExerciseDailyCost(unit) * 1000).ToString("0.00") + " млн", rx, 582, 14, Palette.Text, true, rightW);
             Txt(g, "Топливо " + ReadinessRules.ExerciseFuel(unit).ToString("0.000") + " · вооружение " + ReadinessRules.ExerciseArms(unit).ToString("0.000") + " ед.", rx, 609, 12, Palette.Muted, false, rightW);
             string reason = unit.ExerciseRemaining > 0 ? null : E.ExerciseReason(unit.Id);
-            string status = unit.ExerciseRemaining > 0 ? E.ExerciseStatus(unit) : reason ?? "Курс доступен. Опыт до 35; дальнейший рост — в бою. После учений потребуется отдых.";
+            string status = unit.ExerciseRemaining > 0 ? E.ExerciseStatus(unit) : reason ?? "Курс доступен: подготовка до 90, опыт до 35. Высокая квалификация дороже; после учений нужен отдых.";
             Para(g, status, rx, 644, rightW, 78, 13, reason == null ? Palette.Teal : Palette.Gold);
             ReadinessButton(g, "readiness:exercise", unit.ExerciseRemaining > 0 ? "Прекратить учения" : "Начать учения", rx, 733, rightW, () => Message(unit.ExerciseRemaining > 0 ? E.StopExercise(unit.Id) : E.StartExercise(unit.Id)), reason);
-            Para(g, "Учения снимают часть с фронта. Оплата по факту дня, без возврата. Приказ на марш прекращает курс; опыт и усталость сохраняются.", rx, 782, rightW, 74, 11, Palette.Muted);
+            Para(g, "Цена растёт с подготовкой выше 50. Оплата ежедневно; курс снимает часть с фронта. Приказ на марш прекращает учения, сохраняя результат.", rx, 782, rightW, 74, 11, Palette.Muted);
         }
     }
 }

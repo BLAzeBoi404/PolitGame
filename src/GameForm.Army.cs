@@ -37,7 +37,7 @@ namespace Sovereign
                 Button(g, chosen ? "✓" : "+", x + 10, y + 11, 30, () => { if (!selectedUnits.Add(unit.Id)) selectedUnits.Remove(unit.Id); Invalidate(); }, chosen, "Выбрать часть №" + unit.Id + " для фронта", 29);
                 Txt(g, "№" + unit.Id + "  /  " + unit.Design.Name + " · " + unit.Battalions + " бат.", x + 51, y + 11, 14, Palette.Text, true, listWidth - 209);
                 var plan = E.FrontFor(unit.Id);
-                Txt(g, DeploymentRules.Names[(int)DeploymentRules.For(unit).Specialty] + " · " + W.Regions[unit.Region].Name + (plan == null ? "" : " · " + plan.Name), x + 51, y + 35, 11, Palette.Muted, false, listWidth - 209);
+                Txt(g, UnitQualityRules.Name(unit) + " · " + DeploymentRules.Names[(int)DeploymentRules.For(unit).Specialty] + " · " + W.Regions[unit.Region].Name + (plan == null ? "" : " · " + plan.Name), x + 51, y + 35, 11, Palette.Muted, false, listWidth - 209);
                 float statW = Math.Max(80, (listWidth - 245) / 3);
                 Txt(g, "Готовность " + ReadinessRules.Score(unit).ToString("0") + "%", x + 51, y + 58, 10, Palette.Teal);
                 Progress(g, x + 51, y + 80, statW - 15, ReadinessRules.Score(unit) / 100, Palette.Teal);

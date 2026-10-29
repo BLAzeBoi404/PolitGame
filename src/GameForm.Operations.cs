@@ -25,7 +25,7 @@ namespace Sovereign
         }
         private void DrawBattleMarkers(Graphics g)
         {
-            var enemies = E.S.Armies.Where(a => E.AtWar(E.S.Player, a.Owner)).GroupBy(a => a.Region).ToDictionary(group => group.Key, group => group.ToList());
+            var enemies = E.KnownMilitaryContacts(E.S.Player).Where(c => E.AtWar(E.S.Player, c.Owner) && c.Day == E.S.Day).GroupBy(c => c.Region).ToDictionary(group => group.Key, group => group.ToList());
             foreach (var unit in E.S.Armies.Where(a => a.Owner == E.S.Player && a.Target >= 0 && a.Days <= 1.1)) {
                 if (!enemies.ContainsKey(unit.Target)) continue;
                 PointF point = Screen(W.Regions[unit.Target].X, W.Regions[unit.Target].Y);
@@ -35,7 +35,7 @@ namespace Sovereign
                 Line(g, Palette.Red, box.X + 5, box.Y + 5, box.Right - 5, box.Bottom - 5, 2);
                 Line(g, Palette.Red, box.X + 5, box.Bottom - 5, box.Right - 5, box.Y + 5, 2);
                 int region = unit.Target;
-                hits.Add(new Hit { Rect = box, Label = "battle:" + unit.Id, Action = () => { selected = region; army = unit.Id; Invalidate(); }, Tip = "Бой: соединение №" + unit.Id + " · обороняющихся частей " + enemies[region].Count });
+                hits.Add(new Hit { Rect = box, Label = "battle:" + unit.Id, Action = () => { selected = region; army = unit.Id; Invalidate(); }, Tip = "Ожидаемый контакт: соединение №" + unit.Id + ". Есть сегодняшнее наблюдение противника; его точный состав неизвестен." });
             }
         }
     }

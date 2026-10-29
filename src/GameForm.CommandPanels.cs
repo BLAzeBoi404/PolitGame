@@ -112,10 +112,10 @@ namespace Sovereign
                 int offset = Math.Min(scroll, Math.Max(0, units.Count - 6));
                 for (int i = offset; i < Math.Min(units.Count, offset + 6); i++) {
                     var a = units[i]; float y = 209 + (i - offset) * 80;
-                    Button(g, "№" + a.Id + " · " + a.Design.Name, 20, y, w, () => FocusArmy(a), a.Id == army, "Выбрать на карте; ПКМ по области — приказ", 30);
+                    Button(g, "№" + a.Id + " · " + a.Design.Name, 20, y, w, () => FocusArmy(a), a.Id == army, "Выбрать на карте; ПКМ по области — приказ. Подготовка: " + UnitQualityRules.Name(a) + " (" + a.Proficiency.ToString("0") + "/100).", 30);
                     Txt(g, W.Regions[a.Region].Name, 28, y + 36, 11, Palette.Muted, false, 190);
                     Txt(g, People(a.Personnel) + " чел. / орг. " + a.Organization.ToString("0") + "%", 208, y + 36, 11, a.Organization < 40 ? Palette.Red : Palette.Teal);
-                    Progress(g, 28, y + 61, w - 16, a.Strength / 100, Palette.Teal);
+                    Progress(g, 28, y + 61, w - 16, ReadinessRules.Score(a) / 100, Palette.Teal);
                 }
                 ReadinessLink(g, 20, 697, w);
                 Button(g, "Фронты и оснащение →", 20, 739, w, () => { detailPanel = true; Invalidate(); }, true);
@@ -128,7 +128,8 @@ namespace Sovereign
                 LedgerRow(g, "Отношения", E.S.Relations[pair].ToString("+0;-0;0"), 385);
                 LedgerRow(g, "Статус", E.AtWar(E.S.Player, foreign) ? "ВОЙНА" : E.Allied(E.S.Player, foreign) ? "Союз" : "Мир", 419);
                 LedgerRow(g, "Торговый договор", E.S.Agreements[pair] ? "Есть" : "Нет", 453);
-                Para(g, "Выберите государство щелчком по карте. Переговоры, доступ, союзы и условия мира — в подробном досье.", 20, 511, w, 100, 14);
+                LedgerRow(g, "Разведданные", E.SharesMilitaryIntel(E.S.Player,foreign) ? "Обмен" : "Нет", 487);
+                Para(g, "Выберите государство щелчком по карте. Переговоры, доступ, союзы и разведданные — в подробном досье.", 20, 532, w, 78, 14);
                 Button(g, "Найти государство…", 20, 636, w, ChooseForeign);
                 Button(g, "Переговоры и договоры →", 20, 688, w, () => { detailPanel = true; Invalidate(); }, true);
             } else if (page == "Хроника") {

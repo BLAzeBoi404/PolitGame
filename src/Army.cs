@@ -11,6 +11,7 @@ namespace Sovereign
         public int TemplateId = 1, Battalions = 1;
         public double Organization = 100;
         public double Fatigue;
+        public double Proficiency = UnitQualityRules.ReplacementTraining;
         public int ExerciseRemaining;
 
 		public int Owner;

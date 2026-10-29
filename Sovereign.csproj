@@ -3,7 +3,7 @@
     <TargetFramework>net472</TargetFramework>
     <OutputType>WinExe</OutputType>
     <AssemblyName>Sovereign</AssemblyName>
-    <Version>0.16.0</Version>
+    <Version>0.17.0</Version>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <LangVersion>7.2</LangVersion>
     <ApplicationIcon>assets/app.ico</ApplicationIcon>
@@ -18,6 +18,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <EmbeddedResource Include="assets/world.bin" LogicalName="world.bin" />
+    <EmbeddedResource Include="assets/scenario-military-quality.tsv" LogicalName="scenario-military-quality.tsv" />
     <EmbeddedResource Include="assets/scenario-countries.tsv" LogicalName="scenario-countries.tsv" />
     <EmbeddedResource Include="assets/scenario-regions.tsv" LogicalName="scenario-regions.tsv" />
     <EmbeddedResource Include="assets/scenario-adjacency.tsv" LogicalName="scenario-adjacency.tsv" />

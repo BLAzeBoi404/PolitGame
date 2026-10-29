@@ -1,0 +1,3969 @@
+{
+  "commit": "144d6977b2b01ac1cbd220de754c0a005616760b",
+  "retrieved_utc": "2026-10-28",
+  "countries": {
+    "FJI": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/fj.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$5.841 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "TZA": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/tz.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.3% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.1% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.2% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$78.78 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SAH": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/wi.json",
+      "expenditure": {},
+      "nominal_gdp": {
+        "text": "NA"
+      }
+    },
+    "CAN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/north-america/ca.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "1.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.3% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$2.241 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "USA": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/north-america/us.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "3.2% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "3.2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "3.1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "3.2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "3.5% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$29.185 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "KAZ": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/kz.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.9% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.9% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.1% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$288.406 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "UZB": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/uz.json",
+      "expenditure": {
+        "Military Expenditures 2019": {
+          "text": "2.8% of GDP (2019 est.)"
+        },
+        "Military Expenditures 2018": {
+          "text": "2.9% of GDP (2018 est.)"
+        },
+        "Military Expenditures 2017": {
+          "text": "2.7% of GDP (2017 est.)"
+        },
+        "Military Expenditures 2016": {
+          "text": "2.5% of GDP (2016 est.)"
+        },
+        "Military Expenditures 2015": {
+          "text": "2.5% of GDP (2015 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$114.965 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "PNG": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/pp.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.3% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$32.538 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "IDN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/id.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.8% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.8% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.8% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.8% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$1.396 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "ARG": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/ar.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.6% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.8% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.8% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$633.267 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "CHL": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/ci.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$330.267 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "COD": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/cg.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.7% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.7% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.7% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$70.749 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SOM": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/so.json",
+      "expenditure": {
+        "Military Expenditures 2021": {
+          "text": "6% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "6% of GDP (2020 est.)"
+        },
+        "Military Expenditures 2019": {
+          "text": "5.6% of GDP (2019 est.)"
+        },
+        "Military Expenditures 2018": {
+          "text": "6% of GDP (2018 est.)"
+        },
+        "Military Expenditures 2017": {
+          "text": "5.9% of GDP (2017 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$12.109 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "KEN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ke.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.1% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.2% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.2% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$124.499 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SDN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/su.json",
+      "expenditure": {
+        "Military Expenditures 2021": {
+          "text": "1% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1% of GDP (2020 est.)"
+        },
+        "Military Expenditures 2019": {
+          "text": "2.4% of GDP (2019 est.)"
+        },
+        "Military Expenditures 2018": {
+          "text": "2% of GDP (2018 est.)"
+        },
+        "Military Expenditures 2017": {
+          "text": "3.6% of GDP (2017 est.)"
+        },
+        "note": "<strong>note:</strong> many defense expenditures are probably off-budget"
+      },
+      "nominal_gdp": {
+        "text": "$49.91 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "TCD": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/cd.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "3% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.9% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2.9% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$20.626 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "HTI": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/ha.json",
+      "expenditure": {},
+      "nominal_gdp": {
+        "text": "$25.224 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "DOM": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/dr.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.8% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.7% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.7% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.7% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.8% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$124.282 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "RUS": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/rs.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "7% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "4.5% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$2.174 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "BHS": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/bf.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.7% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.8% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.9% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.9% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$15.833 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "FLK": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/fk.json",
+      "expenditure": {},
+      "nominal_gdp": {
+        "text": "$206.4 million (2015 est.)"
+      }
+    },
+    "NOR": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/no.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "3.4% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "2.3% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.8% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.5% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.7% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$483.727 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "GRL": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/north-america/gl.json",
+      "expenditure": {},
+      "nominal_gdp": {
+        "text": "$3.327 billion (2023 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "ATF": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/antarctica/fs.json",
+      "expenditure": {},
+      "nominal_gdp": {}
+    },
+    "TLS": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/tt.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.2% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.8% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$1.881 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "ZAF": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/sf.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.7% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.7% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.8% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.1% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$400.261 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "LSO": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/lt.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.6% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.6% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$2.272 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "MEX": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/north-america/mx.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.9% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.7% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.7% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.7% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.6% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$1.853 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "URY": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/uy.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2.1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$80.962 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "BRA": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/br.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$2.179 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "BOL": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/bl.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$49.668 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "PER": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/pe.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.8% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.1% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.1% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.2% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$289.222 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "COL": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/co.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "3.4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "3.2% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "3.4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$418.542 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "PAN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/pm.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$86.26 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "CRI": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/cs.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.6% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.6% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.7% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.7% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$95.35 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "NIC": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/nu.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.6% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.6% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.6% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$19.694 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "HND": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/ho.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.6% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$37.094 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SLV": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/es.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.2% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$35.365 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "GTM": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/gt.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.4% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$113.2 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "BLZ": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/bh.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.9% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.1% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$3.516 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "VEN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/ve.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.6% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.6% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$139.395 billion (2023 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "GUY": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/gy.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.9% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.6% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.2% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$24.836 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SUR": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/ns.json",
+      "expenditure": {
+        "Military Expenditures 2019": {
+          "text": "1.2% of GDP (2019 est.)"
+        },
+        "Military Expenditures 2018": {
+          "text": "1.1% of GDP (2018 est.)"
+        },
+        "Military Expenditures 2017": {
+          "text": "1.1% of GDP (2017 est.)"
+        },
+        "Military Expenditures 2016": {
+          "text": "1.2% of GDP (2016 est.)"
+        },
+        "Military Expenditures 2015": {
+          "text": "1.4% of GDP (2015 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$4.714 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "FRA": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/fr.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2.1% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.9% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.9% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.9% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$3.162 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "ECU": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/ec.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2.2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2.3% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$124.676 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "PRI": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/rq.json",
+      "expenditure": {},
+      "nominal_gdp": {
+        "text": "$125.842 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "JAM": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/jm.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.7% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$19.93 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "CUB": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/cu.json",
+      "expenditure": {
+        "Military Expenditures 2020": {
+          "text": "4.2% of GDP (2020 est.)"
+        },
+        "Military Expenditures 2019": {
+          "text": "3.2% of GDP (2019 est.)"
+        },
+        "Military Expenditures 2018": {
+          "text": "2.9% of GDP (2018 est.)"
+        },
+        "Military Expenditures 2017": {
+          "text": "2.9% of GDP (2017 est.)"
+        },
+        "Military Expenditures 2016": {
+          "text": "3.1% of GDP (2016 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$259.781 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "ZWE": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/zi.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.9% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$44.188 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "BWA": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/bc.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "3% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.6% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "3% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$19.401 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "NAM": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/wa.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2.8% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.8% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "3.4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$13.372 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SEN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/sg.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.6% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.7% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$32.267 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "MLI": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ml.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "4.3% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "4% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "3.5% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "3.4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "3.4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$26.588 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "MRT": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/mr.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2.4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.5% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2.5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$10.767 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "BEN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/bn.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.7% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.7% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.7% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$21.483 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "NER": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ng.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2.2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.7% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.8% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$19.538 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "NGA": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ni.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.6% of GDP (2024)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.7% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.6% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.6% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$187.76 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "CMR": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/cm.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$51.327 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "TGO": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/to.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2.2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.8% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2.8% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$9.926 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "GHA": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/gh.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.4% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$82.825 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "CIV": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/iv.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.8% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.9% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.9% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.1% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.1% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$86.538 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "GIN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/gv.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2.1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$25.334 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "GNB": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/pu.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$2.12 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "LBR": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/li.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.7% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.8% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$4.75 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SLE": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/sl.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.6% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.3% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$7.548 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "BFA": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/uv.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "4.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "4% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.9% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2.4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$23.25 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "CAF": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ct.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.8% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.7% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.8% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.8% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$2.752 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "COG": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/cf.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2.8% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$15.72 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "GAB": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/gb.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.7% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.8% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$20.867 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "GNQ": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ek.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1% of GDP (2024)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.6% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.6% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$12.766 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "ZMB": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/za.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.3% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.1% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.1% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.2% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$26.326 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "MWI": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/mi.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.8% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.9% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.9% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$11.009 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "MOZ": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/mz.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$22.417 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SWZ": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/wz.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.4% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.7% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.8% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$4.892 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "AGO": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ao.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$80.397 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "BDI": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/by.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "3.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2.1% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$2.162 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "ISR": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/is.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "8% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "4.5% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$540.38 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "LBN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/le.json",
+      "expenditure": {
+        "Military Expenditures 2022": {
+          "text": "2.9% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "3.2% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "3% of GDP (2020 est.)"
+        },
+        "Military Expenditures 2019": {
+          "text": "4.7% of GDP (2019 est.)"
+        },
+        "Military Expenditures 2018": {
+          "text": "5.1% of GDP (2018 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$20.079 billion (2023 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "MDG": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ma.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.7% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.7% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.7% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.7% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.7% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$17.421 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "PSX": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/we.json",
+      "expenditure": {
+        "text": "not available"
+      },
+      "nominal_gdp": {
+        "text": "$13.711 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate; entry includes West Bank and Gaza Strip"
+      }
+    },
+    "GMB": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ga.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.6% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.6% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.7% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.8% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.8% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$2.508 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "TUN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ts.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.7% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "3% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$53.41 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "DZA": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ag.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "8% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "8% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "4.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "5.6% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "6.7% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$263.62 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "JOR": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/jo.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "4.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "4.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "4.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$53.352 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "ARE": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/ae.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "4.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "4.5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "6.1% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$537.079 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "QAT": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/qa.json",
+      "expenditure": {
+        "Military Expenditures 2023": {
+          "text": "5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "5% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "4% of GDP (2020 est.)"
+        },
+        "Military Expenditures 2019": {
+          "text": "3.4% of GDP (2019 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$217.983 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "KWT": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/ku.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "4.9% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "4.8% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "4.5% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "6.5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "6.3% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$160.227 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "IRQ": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/iz.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "3.2% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$279.641 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "OMN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/mu.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "6% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "5.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "5.5% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "8% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "11% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$106.943 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "VUT": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/nh.json",
+      "expenditure": {},
+      "nominal_gdp": {
+        "text": "$1.161 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "KHM": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/cb.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.1% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2.3% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$46.353 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "THA": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/th.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$526.411 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "LAO": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/la.json",
+      "expenditure": {
+        "Military Expenditures 2019": {
+          "text": "0.2% of GDP (2019 est.)"
+        },
+        "Military Expenditures 2018": {
+          "text": "0.2% of GDP (2018 est.)"
+        },
+        "Military Expenditures 2017": {
+          "text": "0.2% of GDP (2017 est.)"
+        },
+        "Military Expenditures 2016": {
+          "text": "0.2% of GDP (2016 est.)"
+        },
+        "Military Expenditures 2015": {
+          "text": "0.2% of GDP (2015 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$16.503 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "MMR": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/bm.json",
+      "expenditure": {
+        "Military Expenditures 2023": {
+          "text": "3.9% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "3.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "3.5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "3% of GDP (2020 est.)"
+        },
+        "Military Expenditures 2019": {
+          "text": "4.1% of GDP (2019 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$74.08 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "VNM": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/vm.json",
+      "expenditure": {
+        "Military Expenditures 2023": {
+          "text": "1.8% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2.4% of GDP (2020 est.)"
+        },
+        "Military Expenditures 2019": {
+          "text": "2.3% of GDP (2019 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$476.388 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "PRK": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/kn.json",
+      "expenditure": {
+        "text": "defense spending is a regime priority; between 2010 and 2020, military expenditures accounted for an estimated 20-30% of North Korea's GDP annually; spending estimates ranged from $7 billion to $11 billion annually; in 2024, North Korea announced that it would spend nearly 16% of state expenditures on defense; North Korea in the 2010s and 2020s has increasingly relied on illicit activities &mdash; including cybercrime &mdash; to generate revenue for its weapons of mass destruction and ballistic missile programs to evade US and UN sanctions"
+      },
+      "nominal_gdp": {
+        "text": "$16.447 billion (2023 est.)",
+        "note": "<strong>note:</strong> data in current dollars at official exchange rate"
+      }
+    },
+    "KOR": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/ks.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2.3% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "2.4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.4% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.4% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$1.713 trillion (2023 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "MNG": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/mg.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.7% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.6% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.8% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.8% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$23.586 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "IND": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-asia/in.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.1% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.2% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2.5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$3.913 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "BGD": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-asia/bg.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.9% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.1% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.2% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.3% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$450.119 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "BTN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-asia/bt.json",
+      "expenditure": {},
+      "nominal_gdp": {
+        "text": "$3.019 billion (2023 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "NPL": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-asia/np.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.1% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.3% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$42.914 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "PAK": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-asia/pk.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$373.072 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "AFG": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-asia/af.json",
+      "expenditure": {
+        "Military Expenditures 2019": {
+          "text": "3.3% of GDP (2019)"
+        },
+        "Military Expenditures 2018": {
+          "text": "3.2% of GDP (2018)"
+        },
+        "Military Expenditures 2017": {
+          "text": "3.3% of GDP (2017)"
+        },
+        "Military Expenditures 2016": {
+          "text": "3.1% of GDP (2016)"
+        },
+        "Military Expenditures 2015": {
+          "text": "2.9% of GDP (2015)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$17.152 billion (2023 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "TJK": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/ti.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.8% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.9% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.2% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.1% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$14.205 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "KGZ": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/kg.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "3% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "3.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.8% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "3% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$17.478 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "TKM": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/tx.json",
+      "expenditure": {
+        "Military Expenditures 2019": {
+          "text": "1.9% of GDP (2019 est.)"
+        },
+        "Military Expenditures 2018": {
+          "text": "1.8% of GDP (2018 est.)"
+        },
+        "Military Expenditures 2017": {
+          "text": "1.8% of GDP (2017 est.)"
+        },
+        "Military Expenditures 2016": {
+          "text": "1.8% of GDP (2016 est.)"
+        },
+        "Military Expenditures 2015": {
+          "text": "1.5% of GDP (2015 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$64.24 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "IRN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/ir.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.5% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2.1% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$436.906 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SYR": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/sy.json",
+      "expenditure": {
+        "Military Expenditures 2019": {
+          "text": "6.5% of GDP (2019 est.)"
+        },
+        "Military Expenditures 2018": {
+          "text": "6.7% of GDP (2018 est.)"
+        },
+        "Military Expenditures 2017": {
+          "text": "6.8% of GDP (2017 est.)"
+        },
+        "Military Expenditures 2016": {
+          "text": "6.9% of GDP (2016 est.)"
+        },
+        "Military Expenditures 2015": {
+          "text": "7.2% of GDP (2015 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$19.993 billion (2023 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "ARM": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/am.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "5.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "5.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "4.3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "4.4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$25.787 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SWE": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/sw.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2.5% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "2.3% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.7% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.5% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.4% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$610.118 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "BLR": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/bo.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.8% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.7% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$75.962 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "UKR": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/up.json",
+      "expenditure": {
+        "Military Expenditures 2021": {
+          "text": "4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "4.4% of GDP (2020 est.)"
+        },
+        "Military Expenditures 2019": {
+          "text": "3.4% of GDP (2019 est.)"
+        },
+        "Military Expenditures 2018": {
+          "text": "3.1% of GDP (2018 est.)"
+        },
+        "Military Expenditures 2017": {
+          "text": "3.1% of GDP (2017 est.)"
+        },
+        "note": "<strong>note:</strong> since Russia's invasion of the country in early 2022, annual defense spending has increased to more than 30% of GDP according to some estimates"
+      },
+      "nominal_gdp": {
+        "text": "$190.741 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "POL": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/pl.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "4.5% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "3.8% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "3.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.2% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$914.696 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "AUT": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/au.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.9% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.7% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.8% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.7% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$521.642 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "HUN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/hu.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2.1% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "2.1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.7% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$222.905 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "MDA": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/md.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.6% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.6% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.4% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$18.2 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "ROU": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/ro.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2.3% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "2.2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.6% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.9% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$382.768 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "LTU": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/lh.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "4% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "3.1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.7% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$84.869 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "LVA": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/lg.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "3.7% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "3.4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.2% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$43.521 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "EST": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/en.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "3.4% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "3.4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$42.765 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "DEU": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/gm.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2.4% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.6% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.5% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.4% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$4.66 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "BGR": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/bu.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2.1% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.9% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.6% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$112.212 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "GRC": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/gr.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2.9% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "2.7% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.8% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "3.9% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "3.7% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$257.145 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "TUR": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/tu.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2.3% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "2.1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.6% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$1.323 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "ALB": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/al.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "1.7% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.7% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.2% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$27.178 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "HRV": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/hr.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "1.9% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.7% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$92.526 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "CHE": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/sz.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.7% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.7% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.7% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.7% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.7% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$936.564 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "LUX": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/lu.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "1.2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.5% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$93.197 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "BEL": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/be.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "1.3% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.1% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$664.564 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "NLD": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/nl.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2.5% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.6% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.3% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$1.228 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "PRT": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/po.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "1.6% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.5% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$308.683 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "ESP": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/sp.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "1.4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.1% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$1.723 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "IRL": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/ei.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.3% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$577.389 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "NCL": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/nc.json",
+      "expenditure": {},
+      "nominal_gdp": {
+        "text": "$10.129 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SLB": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/bp.json",
+      "expenditure": {},
+      "nominal_gdp": {
+        "text": "$1.761 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "NZL": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/nz.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$260.236 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "AUS": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/australia-oceania/as.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$1.752 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "LKA": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-asia/ce.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.6% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.7% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.9% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$98.963 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "CHN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/ch.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.5% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.7% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$18.744 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "TWN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/tw.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2.4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.1% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.1% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2.1% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$611.391 billion (2023 est.)",
+        "note": "<strong>note:</strong> data in current dollars at official exchange rate"
+      }
+    },
+    "ITA": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/it.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "1.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.5% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.5% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$2.373 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "DNK": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/da.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "3.2% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "2.3% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.3% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$429.457 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "GBR": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/uk.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2.4% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "2.3% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.3% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$3.644 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "ISL": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/ic.json",
+      "expenditure": {},
+      "nominal_gdp": {
+        "text": "$33.463 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "AZE": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/aj.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "5.1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "4.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "4.5% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$74.316 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "GEO": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-asia/gg.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.7% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.7% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.6% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$33.776 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "PHL": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/rp.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.7% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.2% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.1% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$461.618 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "MYS": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/my.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.9% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.1% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.1% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$421.972 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "BRN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/bx.json",
+      "expenditure": {
+        "Military Expenditures 2023": {
+          "text": "3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "3.1% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "3.7% of GDP (2020 est.)"
+        },
+        "Military Expenditures 2019": {
+          "text": "3.1% of GDP (2019 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$15.463 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SVN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/si.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "1.4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.2% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$72.485 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "FIN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/fi.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2.8% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "2.4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.7% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.4% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$299.836 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SVK": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/lo.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.8% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.7% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$141.776 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "CZE": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/ez.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "2.1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.3% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.4% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$345.037 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "ERI": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/er.json",
+      "expenditure": {
+        "Military Expenditures 2019": {
+          "text": "10% of GDP (2019 est.)"
+        },
+        "Military Expenditures 2018": {
+          "text": "10.2% of GDP (2018 est.)"
+        },
+        "Military Expenditures 2017": {
+          "text": "10.3% of GDP (2017 est.)"
+        },
+        "Military Expenditures 2016": {
+          "text": "10.4% of GDP (2016 est.)"
+        },
+        "Military Expenditures 2015": {
+          "text": "10.6% of GDP (2015 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$2.535 billion (2024 est.)",
+        "note": "<strong>note:</strong> data in current dollars at official exchange rate"
+      }
+    },
+    "JPN": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/east-n-southeast-asia/ja.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.1% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$4.026 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "PRY": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/south-america/pa.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.8% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.8% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$44.458 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "YEM": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/ym.json",
+      "expenditure": {},
+      "nominal_gdp": {
+        "text": "$8.278 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SAU": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/middle-east/sa.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "7.1% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "7% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "6.5% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "7% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "8% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$1.238 trillion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "CYP": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/cy.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.7% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.8% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.8% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.8% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$36.333 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "MAR": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/mo.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "4% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "4% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "4.5% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "4.5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "4.5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$154.431 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "EGY": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/eg.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.7% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.3% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.3% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$389.06 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "LBY": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ly.json",
+      "expenditure": {
+        "text": "not available"
+      },
+      "nominal_gdp": {
+        "text": "$46.636 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "ETH": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/et.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.7% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.7% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.5% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$126.773 billion (2022 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "DJI": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/dj.json",
+      "expenditure": {
+        "Military Expenditures 2019": {
+          "text": "3.5% of GDP (2019 est.)"
+        },
+        "Military Expenditures 2018": {
+          "text": "3.5% of GDP (2018 est.)"
+        },
+        "Military Expenditures 2017": {
+          "text": "3.3% of GDP (2017 est.)"
+        },
+        "Military Expenditures 2016": {
+          "text": "2.7% of GDP (2016 est.)"
+        },
+        "Military Expenditures 2015": {
+          "text": "2.5% of GDP (2015 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$4.086 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SOL": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/so.json",
+      "expenditure": {
+        "Military Expenditures 2021": {
+          "text": "6% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "6% of GDP (2020 est.)"
+        },
+        "Military Expenditures 2019": {
+          "text": "5.6% of GDP (2019 est.)"
+        },
+        "Military Expenditures 2018": {
+          "text": "6% of GDP (2018 est.)"
+        },
+        "Military Expenditures 2017": {
+          "text": "5.9% of GDP (2017 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$12.109 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "UGA": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/ug.json",
+      "expenditure": {
+        "Military Expenditures 2023": {
+          "text": "2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.5% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2.5% of GDP (2020 est.)"
+        },
+        "Military Expenditures 2019": {
+          "text": "1.7% of GDP (2019 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$53.652 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "RWA": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/rw.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.3% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.4% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1.3% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$14.252 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "BIH": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/bk.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.8% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "0.8% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "0.8% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "0.9% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "0.9% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$28.343 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "MKD": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/mk.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "1.9% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.7% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.6% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.5% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$16.685 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SRB": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/ri.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2.4% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2.2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2.2% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$89.084 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "MNE": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/mj.json",
+      "expenditure": {
+        "Military Expenditures 2025": {
+          "text": "2% of GDP (2025 est.)"
+        },
+        "Military Expenditures 2024": {
+          "text": "1.7% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.5% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.4% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.6% of GDP (2021 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$8.07 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "KOS": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/europe/kv.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "1.5% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1.3% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1.1% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1.1% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$11.149 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "TTO": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/central-america-n-caribbean/td.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "0.9% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "1% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "1% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "1% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "1% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$26.429 billion (2024 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    },
+    "SDS": {
+      "source": "https://raw.githubusercontent.com/factbook/factbook.json/144d6977b2b01ac1cbd220de754c0a005616760b/africa/od.json",
+      "expenditure": {
+        "Military Expenditures 2024": {
+          "text": "2% of GDP (2024 est.)"
+        },
+        "Military Expenditures 2023": {
+          "text": "2% of GDP (2023 est.)"
+        },
+        "Military Expenditures 2022": {
+          "text": "2% of GDP (2022 est.)"
+        },
+        "Military Expenditures 2021": {
+          "text": "2% of GDP (2021 est.)"
+        },
+        "Military Expenditures 2020": {
+          "text": "2% of GDP (2020 est.)"
+        }
+      },
+      "nominal_gdp": {
+        "text": "$4.629 billion (2023 est.)",
+        "note": "<b>note:</b> data in current dollars at official exchange rate"
+      }
+    }
+  }
+}

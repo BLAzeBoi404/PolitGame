@@ -44,13 +44,8 @@ namespace Sovereign
                 case FormationSpecialty.Entrenched: value *= defending ? 1.16 : .88; break;
             }
             // Experience is earned in combat, never inferred from the equipment silhouette.
-            return value * (1 + Math.Min(100, Math.Max(0, a.Experience)) * .0015);
+            return value * UnitQualityRules.CombatFactor(a) * (1 + Math.Min(100, Math.Max(0, a.Experience)) * .0015);
         }
-        public static int Stars(Army a)
-        {
-            if (a.TrainingDays > 0 || a.Personnel == 0) return 0;
-            double quality = (30 + Math.Min(100, Math.Max(0, a.Experience)) * .7) * Math.Min(a.Strength, a.Organization) / 100 * ManpowerRules.Manning(a) * (.5 + .5 * a.Supply / 100) * ReadinessRules.FatigueFactor(a);
-            return Math.Max(0, Math.Min(5, (int)Math.Floor(quality / 20)));
-        }
+        public static int Stars(Army a) => UnitQualityRules.Grade(a);
     }
 }

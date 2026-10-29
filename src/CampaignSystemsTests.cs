@@ -65,6 +65,7 @@ namespace Sovereign
                 int border = world.Countries[me].Regions.First(r => world.Regions[r].Neighbors.Any(n => e.S.Provinces[n].Owner == pol));
                 int target = world.Regions[border].Neighbors.First(n => e.S.Provinces[n].Owner == pol);
                 foreach (var removed in e.S.Armies.Where(a => a.Region == target).ToList()) e.DestroyArmy(removed); unit.Region = border;
+                e.RefreshGroundIntelligence(); // A local scan confirms the area is now empty.
                 check(e.Order(unit.Id, target, false, false) != null && unit.Target < 0, "Defensive repositioning forbids hostile transit");
                 check(e.CreateFront(pol, new int[0], FrontStance.Hold) != null && e.S.Fronts.Count == 0, "An empty front is rejected");
                 check(e.CreateFront(pol, new[] { unit.Id }, FrontStance.Hold) == null && unit.Target < 0, "Hold order occupies a border without launching an attack");
