@@ -1,0 +1,2 @@
+# Two flag rows intentionally retain an empty final TSV column.
+assets/flag-codes.tsv whitespace=-blank-at-eol
