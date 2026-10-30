@@ -212,7 +212,7 @@ namespace Sovereign
                     }
                     AddGpuHudHits();
                 } else {hits.Clear();AddGpuHudHits();}
-                gpu.Clip(null);if(gpuHud!=null)gpu.Image(gpuHud,new RectangleF(0,0,ClientSize.Width,ClientSize.Height),new RectangleF(0,0,gpuHud.Width,gpuHud.Height),true);
+                gpu.Clip(null);DrawGpuMiniMap();if(gpuHud!=null)gpu.Image(gpuHud,new RectangleF(0,0,ClientSize.Width,ClientSize.Height),new RectangleF(0,0,gpuHud.Width,gpuHud.Height),true);
                 double swapBegan=uiTime.Elapsed.TotalMilliseconds;GpuLongestWorkMs=Math.Max(GpuLongestWorkMs,swapBegan-began);
                 gpu.End();GpuLongestSwapMs=Math.Max(GpuLongestSwapMs,uiTime.Elapsed.TotalMilliseconds-swapBegan);RecordFrameTiming(began);
                 if(FramePresented!=null)FramePresented();if(gpu.NeedsUpload||panning)InvalidateCamera();

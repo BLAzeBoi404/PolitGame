@@ -15,7 +15,11 @@ namespace Sovereign
         {
             bool own = unit.Owner == E.S.Player;
             Color affiliation = own ? Palette.Teal : E.AtWar(E.S.Player, unit.Owner) ? Palette.Red : Palette.Muted;
-            string key = overview + "/" + people + "/" + count + "/" + stars + "/" + readiness + "/" + chosen + "/" + affiliation.ToArgb() + "/" + UiScale;
+            string peopleText = people>=1000?(people/1000.0).ToString(people>=10000?"0":"0.0")+"к":people.ToString();
+            string countText = count>99?"99+":count.ToString();
+            // Cache the visible label, not personnel hidden by rounding. Exact totals
+            // remain in the group/tooltip; a one-person replacement need not upload a bitmap.
+            string key = unit.Owner + "/" + overview + "/" + peopleText + "/" + countText + "/" + stars + "/" + readiness + "/" + chosen + "/" + affiliation.ToArgb() + "/" + UiScale;
             UnitBadge badge;
             if (!unitBadges.TryGetValue(badgeId, out badge) || badge.Key != key) {
                 if (unitBadges.Count >= 1024 && !gpuRecordingWorld) { ClearUnitBadges(); badge = null; }
@@ -26,9 +30,9 @@ namespace Sovereign
                     var local=new RectangleF(0,0,69,36);Color color=chosen?Palette.Bg:Palette.Text;
                     Round(ink,chosen?Color.FromArgb(204,185,135):Color.FromArgb(18,32,38),local,4);
                     RoundBorder(ink,chosen?Palette.Gold:Color.FromArgb(92,113,111),local,4,1);
-                    Txt(ink,people>=1000?(people/1000.0).ToString(people>=10000?"0":"0.0")+"к":people.ToString(),6,3,13,color,true,count>1||overview?43:59);
-                    if(count>1 || overview) Txt(ink,(overview?"Σ":"×")+(count>99?"99+":count.ToString()),45,5,9,color,false,24);
-                    DrawRankStars(ink,7,23,stars,color);Progress(ink,3,34,64,readiness/100.0,affiliation);
+                    Txt(ink,peopleText,6,3,13,color,true,count>1||overview?43:59);
+                    if(count>1 || overview) Txt(ink,(overview?"Σ":"×")+countText,45,5,9,color,false,24);
+                    DrawRankStars(ink,5,23,stars,color);CountryFlag(ink,unit.Owner,new RectangleF(56,22,12,9));Progress(ink,3,34,64,readiness/100.0,affiliation);
                 }
                 badge=new UnitBadge {Key=key,Image=bitmap};unitBadges[badgeId]=badge;UnitBadgeBuilds++;
             }

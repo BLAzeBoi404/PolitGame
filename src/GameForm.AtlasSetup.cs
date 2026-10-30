@@ -11,7 +11,7 @@ namespace Sovereign
         private float gameCx, gameCy, gameScale, setupCx = 18, setupCy = -32, setupScale = 6;
         private int hoveredCountry = -1;
         private float ExpandedWidth => Math.Max(1100, VW - 330);
-        private RectangleF OutlinerRect => new RectangleF(VW - OutlinerWidth - 12, 115, OutlinerWidth, prefs.OutlinerCollapsed ? 46 : Math.Min(selected >= 0 ? 623 : 410, VH - 260));
+        private RectangleF OutlinerRect => new RectangleF(VW - OutlinerWidth - 12, 115, OutlinerWidth, prefs.OutlinerCollapsed ? 46 : Math.Min(410, VH - 260));
         private void SynchronizeAtlasCamera()
         {
             bool next = menuScreen == "new";
@@ -28,7 +28,8 @@ namespace Sovereign
             if (menuScreen != "") return false;
             if (page != "Карта" && point.X < (detailPanel ? ExpandedWidth : DocketWidth)) return false;
             if ((!detailPanel || page == "Карта") && OutlinerRect.Contains(point)) return false;
-            return !mapLayersExpanded && !MapPickerRect.Contains(point);
+            if (RegionInspectorVisible && RegionInspectorRect.Contains(point)) return false;
+            return !mapLayersExpanded && !MapPickerRect.Contains(point) && !MiniMapRect.Contains(point);
         }
         private void ClampCamera() { cx = Math.Max(-180, Math.Min(180, cx)); cy = Math.Max(-84, Math.Min(84, cy)); }
         private int FindCountry(PointF point)
@@ -109,7 +110,7 @@ namespace Sovereign
             Txt(g, "ВВП базы     " + Money(country.GDP / 1000), x + 20, 344, 14, Palette.Text);
             Txt(g, "НАЧАЛЬНЫЙ ГОД", x + 20, 371, 10, Palette.Muted, true);
             Button(g, experimentalYear ? "✓ Экспериментальная эпоха" : "○ Экспериментальная эпоха", x + 20, 435, 258, () => {
-                experimentalYear = !experimentalYear; if (!experimentalYear) { newYear = 2026; startYear.Value = 2026; } LayoutMenuControls(); Invalidate();
+                experimentalYear = !experimentalYear; if (!experimentalYear) { newYear = 2020; startYear.Value = 2020; } LayoutMenuControls(); Invalidate();
             }, experimentalYear, "Меняет дату и технологии; границы остаются современными.", 30);
             Para(g, "Современные границы. Региональное население, состав и размещение войск — оценки сценария; численность ВС основана на открытых данных.", x + 20, 479, 258, 53, 12, Palette.Muted);
             Txt(g, "ПОВЕДЕНИЕ ДРУГИХ СТРАН", x + 20, 544, 10, Palette.Gold, true);

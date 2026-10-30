@@ -45,6 +45,7 @@ namespace Sovereign
             E.AutoSaveEnabled = false;
             Show(); Application.DoEvents();
             menuCountry = W.ByCode("FRA"); BeginCampaign();
+            check(E.S.StartYear == 2020, "New campaigns default to 1 January 2020");
             check(E.S.Player == W.ByCode("FRA") && speed == 0, "Country selection starts a paused campaign");
             menuCountry = W.ByCode("UKR"); BeginCampaign();
             check(E.S.Player == W.ByCode("UKR") && E.S.Day == 0, "Starting another country resets campaign state");
@@ -178,6 +179,7 @@ namespace Sovereign
             TestReadinessInterface(directory,check,click);
             TestIntelligenceInterface(directory,check,click);
             TestModernInterface(directory,check,click);
+            TestAtlasRedesign(directory,check,click);
             results.Add("Failures: " + failed); File.WriteAllLines(Path.Combine(directory, "ui-results.txt"), results);
             Console.WriteLine(string.Join(Environment.NewLine, results));
             return failed == 0 ? 0 : 2;

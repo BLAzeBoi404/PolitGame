@@ -41,8 +41,8 @@ namespace Sovereign
                 using (var ink = Graphics.FromImage(bitmap)) using (var transform = new Matrix(pixels, 0, 0, pixels, -bounds.X * pixels, -bounds.Y * pixels)) {
                     ink.Transform = transform; ink.SmoothingMode = SmoothingMode.AntiAlias;
                     using (var fill = new SolidBrush(selectedRegion ? Color.FromArgb(43, 246, 238, 181) : Color.FromArgb(65, 255, 245, 199))) ink.FillPath(fill, path);
-                    if (selectedRegion) using (var outer = new Pen(Color.FromArgb(120, 100, 98, 64), 4 / scale)) ink.DrawPath(outer, path);
-                    using (var pen = new Pen(selectedRegion ? Color.FromArgb(99, 93, 54) : Color.FromArgb(85, 91, 70), 1.6f / scale)) ink.DrawPath(pen, path);
+                    if (selectedRegion) using (var outer = new Pen(Color.FromArgb(160, 13, 15, 25), 4 / scale)) ink.DrawPath(outer, path);
+                    using (var pen = new Pen(selectedRegion ? Palette.Gold : Color.FromArgb(226, 223, 211), 1.6f / scale)) ink.DrawPath(pen, path);
                 }
                 cached = new HighlightSurface { Image = bitmap, Bounds = bounds }; highlightSurfaces[key] = cached;
             }

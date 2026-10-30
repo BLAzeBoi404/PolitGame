@@ -3,7 +3,7 @@
     <TargetFramework>net472</TargetFramework>
     <OutputType>WinExe</OutputType>
     <AssemblyName>Sovereign</AssemblyName>
-    <Version>0.18.0</Version>
+    <Version>0.19.0</Version>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <LangVersion>7.2</LangVersion>
     <ApplicationIcon>assets/app.ico</ApplicationIcon>
@@ -17,6 +17,8 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
+    <EmbeddedResource Include="assets/flags.png" LogicalName="flags.png" />
+    <EmbeddedResource Include="assets/flag-codes.tsv" LogicalName="flag-codes.tsv" />
     <EmbeddedResource Include="assets/world.bin" LogicalName="world.bin" />
     <EmbeddedResource Include="assets/scenario-military-quality.tsv" LogicalName="scenario-military-quality.tsv" />
     <EmbeddedResource Include="assets/scenario-countries.tsv" LogicalName="scenario-countries.tsv" />

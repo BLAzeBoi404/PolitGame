@@ -1,0 +1,24 @@
+{
+  "version": "0.19.0",
+  "tested_at_utc": "2026-10-30T09:19:22.857052+00:00",
+  "executable_sha256": "b8731e24d924cbc11aaadbf0778e80a9088131e29af7c275edd5c87cf9f21544",
+  "source_sha256": "7097e6bb32dfff9a7aef4573d3a18b9186edf3701173b1d4a95c61c351865b1b",
+  "runtime_sha256": {
+    "OpenTK.dll": "2bbd3ac9651cb1daab679da57020f1054d5c18a1b89621b92ba6ac7ab1b1b3ea",
+    "OpenTK.GLControl.dll": "92e0bf6dcf085ecbbfa82319114e228a915a57284f422f779124d363e36ea3e3",
+    "OpenTK.dll.config": "58050540744c0a3270fe38a58f0d76eeddcd8b3c34022bb5deccd7d8bcc0e461",
+    "Sovereign.exe.config": "435ea23443d8dd98eeb707aad9d3a5c1fe6046f8d76647a44d495d94ea4597ef"
+  },
+  "license_sha256": "c5761cf7198ad2677ff824b1efab3b95bfaa745246e10277dfc7775abbe7fbf5",
+  "flag_license_sha256": "8f1195d55a2fd315a07d812328470ca9ba2abb78c8d317ff19619d5125e00cea",
+  "logic_passed": 736,
+  "ui_passed": 633,
+  "gpu_passed": 40,
+  "native_windows_tested": false,
+  "hardware_gpu_tested": false,
+  "build": ".NET SDK 8.0.426 / Release net472",
+  "runtime": "Mono / libgdiplus / Xvfb / Mesa llvmpipe; LP_NUM_THREADS=2",
+  "performance_baseline_commit": "36281a289b9a5a95fa3981845dd656ae8b512476",
+  "performance_baseline_executable_sha256": "1c23eca94c6e98f7fdb6916bab776ea2231e457413b75ae6549ab290c20bb9a6",
+  "performance_note": "Serial original-release 0.18 / final 0.19 pairs, military map, requested 165, two 6-second traversals per run. Zoom 45 paused and live 7x, zoom 14 paused. No concurrent tests. Software presentation intervals, not physical monitor FPS."
+}

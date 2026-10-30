@@ -20,7 +20,7 @@ namespace Sovereign
         {
             var lines=new System.Collections.Generic.List<string>();int failed=0;
             Action<bool,string> check=(ok,label)=>{lines.Add((ok?"PASS ":"FAIL ")+label);Console.WriteLine(lines[lines.Count-1]);if(!ok)failed++;};
-            prefs.OutlinerCollapsed=false;prefs.Renderer=0;prefs.Fullscreen=prefs.PerformanceOverlay=false;prefs.Autosave=prefs.Tutorial=false;E.AutoSaveEnabled=false;prefs.FrameLimit=0;prefs.GraphicsQuality=2;prefs.LabelDensity=2;prefs.Labels=prefs.RegionBorders=prefs.Texture=true;clock.Stop();cameraRefresh.Stop();ClientSize=new Size(1600,900);
+            prefs.Tooltips=false;prefs.OutlinerCollapsed=false;prefs.Renderer=0;prefs.Fullscreen=prefs.PerformanceOverlay=false;prefs.Autosave=prefs.Tutorial=false;E.AutoSaveEnabled=false;prefs.FrameLimit=0;prefs.GraphicsQuality=2;prefs.LabelDensity=2;prefs.Labels=prefs.RegionBorders=prefs.Texture=true;clock.Stop();cameraRefresh.Stop();ClientSize=new Size(1600,900);
             PreviewPage("Карта");showHelp=false;scale=45;cx=20;cy=-50;selected=hoveredRegion=-1;speed=0;
             forceGpu=true;Show();Application.DoEvents();
             check(GpuActive,"OpenGL context and compositor start: "+(GpuActive?GpuDriver:gpuError));if(!GpuActive)return 1;
@@ -45,13 +45,26 @@ namespace Sovereign
             OnMouseMove(new MouseEventArgs(MouseButtons.None, 0, (int)(nav.Rect.X+20), (int)(nav.Rect.Y+12), 0)); PresentGpu();
             check(GpuHudBuilds > hud && GpuWorldBuilds == worldBuilds && MapCacheBuilds == tileBuilds, "Hovering the command bar redraws only the HUD, preserving map and world caches");
             hits.Last(h => h.Label == "map:layers").Action(); PresentGpu();
-            check(mapLayersExpanded && GpuWorldBuilds == worldBuilds && hits.Count(h => MapLayers.Contains(h.Label)) == 7, "GPU layer popup updates only the HUD and retains all seven interactive choices");
+            check(mapLayersExpanded && GpuWorldBuilds == worldBuilds && hits.Count(h => MapLayers.Contains(h.Label)) == MapLayers.Length, "GPU layer popup updates only the HUD and retains all interactive choices");
             HandleDeskKey(Keys.Tab); PresentGpu(); HandleDeskKey(Keys.Tab); PresentGpu();
             check(FocusedHit() != null && FocusedHit().Label == "Дипломатия" && GpuWorldBuilds == worldBuilds, "Keyboard focus survives retained GPU HUD rebuilds without rebuilding the world");
             HandleDeskKey(Keys.Escape); PresentGpu();
             hits.Last(h => h.Label == "hud:outliner-toggle").Action(); PresentGpu();
             check(prefs.OutlinerCollapsed && GpuWorldBuilds == worldBuilds, "Collapsing the operational summary reuses the GPU world");
             hits.Last(h => h.Label == "hud:outliner-toggle").Action(); PresentGpu();
+            var viewportBefore = MiniMapViewRect(); hud = GpuHudBuilds; uploads = GpuUploads;
+            cx += .2f; InvalidateCamera(); PresentGpu();
+            check(MiniMapViewRect().X != viewportBefore.X && GpuHudBuilds == hud && GpuUploads == uploads, "The live GPU minimap viewport tracks camera movement with no HUD rebuild or texture upload");
+            var mini = MiniMapImageRect; float miniZoom = scale; int priorSelection = selected;
+            OnMouseUp(new MouseEventArgs(MouseButtons.Left,1,(int)((mini.X+mini.Width*.75)*UiScale),(int)((mini.Y+mini.Height*.5)*UiScale),0));
+            check(Math.Abs(cx-90)<2 && Math.Abs(cy)<2 && scale==miniZoom && selected==priorSelection,"GPU minimap click changes only geographic camera coordinates");
+            cx=20;cy=-50;InvalidateCamera(true);settle();
+            prefs.Tooltips=true;hoveredTip="Мини-карта показывает положение камеры. "+new string('·',160);mouse=new Point((int)VW-40,(int)VH-130);hoverSince=DateTime.Now.AddSeconds(-1);InvalidateHud();PresentGpu();
+            using(var frame=gpu.CaptureFrame()) {
+                var tip=lastTooltipBounds;int tx=(int)((MiniMapImageRect.Right-30)*UiScale),ty=(int)((tip.Bottom-8)*UiScale);
+                check(tip.IntersectsWith(MiniMapImageRect) && ty>=MiniMapImageRect.Top*UiScale && ColorDistance(frame.GetPixel(tx,ty),Palette.Panel)<20,"A tooltip remains above the live minimap instead of being overwritten by its GPU image");
+            }
+            prefs.Tooltips=false;hoveredTip="";InvalidateHud();PresentGpu();
             string originalLayer=layer;float originalScale=scale;layer="Армии";scale=4;Invalidate();settle();
             check(GpuActive && armyMapGroups.Count > 0 && armyMapGroups.All(group => group.Units.All(a => E.SharesMilitaryIntel(E.S.Player,a.Owner))), "World-scale military layer retains own markers and never reveals unshared foreign troops");
             layer=originalLayer;scale=originalScale;Invalidate();settle();
@@ -123,6 +136,9 @@ namespace Sovereign
             using(var frame=gpu.CaptureFrame())frame.Save(Path.Combine(directory,"gpu-intelligence.png"));
             E.S.MilitaryContacts.Clear(); Invalidate(); settle();
             check(!gpuWorldHits.Any(h => h.Hit.Label != null && h.Hit.Label.StartsWith("intel-contact:")), "Removing intelligence also invalidates retained GPU contact hit targets");
+            Navigate("Карта"); selected=E.S.Armies.First(a=>a.Owner==E.S.Player).Region; dismissedRegion=-1; Invalidate(); settle();
+            check(hits.Any(h=>h.Label=="region:manage") && hits.Any(h=>h.Label=="region:population-layer"),"GPU HUD retains real region-inspector actions and offline flags");
+            using(var frame=gpu.CaptureFrame())frame.Save(Path.Combine(directory,"gpu-region.png"));
             OpenReadiness(); PresentGpu(); int offsetBeforeDay = readinessOffset;
             using(var gate=new System.Threading.ManualResetEventSlim(false)) {
                 BeforeSimulationStep=()=>gate.Wait(); StartSimulationDay();

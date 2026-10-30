@@ -195,15 +195,7 @@ namespace Sovereign
             }
             Button(g, "Все войска и фронты →", x + 12, y + 365, w - 24, () => Navigate("Армия"), false, "Командование", 27);
             Line(g, Palette.Line, x + 12, y + 393, x + w - 12, y + 393);
-            if (selected >= 0) {
-                var p = E.S.Provinces[selected];
-                Txt(g, "ВЫБРАННАЯ ОБЛАСТЬ", x + 14, y + 407, 9, Palette.Gold, true);
-                Para(g, W.Regions[selected].Name, x + 14, y + 429, w - 28, 45, 18, Palette.Text);
-                Txt(g, W.Countries[p.Owner].Name, x + 14, y + 481, 12, Palette.Muted, false, w - 28);
-                Txt(g, People((long)Math.Round(p.Population * 1000000)) + " чел. · дороги " + p.Infrastructure.ToString("0") + "%", x + 14, y + 508, 12, Palette.Text);
-                Txt(g, "Спокойствие " + (100 - p.Unrest).ToString("0") + "%", x + 14, y + 535, 12, Palette.Teal);
-                Button(g, p.Owner == E.S.Player ? "Развивать область →" : "Дипломатия →", x + 12, y + 570, w - 24, () => { foreign = p.Owner; Navigate(p.Owner == E.S.Player ? "Производство" : "Дипломатия"); }, false, "Управление выбранной территорией", 30);
-            }
+
         }
     }
 }

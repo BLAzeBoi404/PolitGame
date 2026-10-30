@@ -1,0 +1,9 @@
+1600x900; high quality; frame limit 165; military map; overview zoom 14; paused; requested 500 Hz input, at most one queued callback; original mouse handler and real message loop.
+Runtime: Unix 6.18.55.0 / Mono. Present/paint delivery intervals; NOT physical monitor FPS.
+Renderer: llvmpipe (LLVM 19.1.7, 256 bits) / 4.5 (Compatibility Profile) Mesa 25.0.7-2+deb13u1; starting armies: 3765
+Known marker groups at start: 5
+First traversal: frames=406; camera-changing frames=344; inputs=354; interval mean=14.77 p95=20.72 max=37.00 ms; >33ms=1; >50ms=0; raster builds=20; fallback paints=6; HUD builds=0; GPU uploads=20; GC0=2
+Longest GPU submission=3.25 ms; longest buffer swap=32.56 ms
+Repeated traversal: frames=382; camera-changing frames=344; inputs=354; interval mean=15.73 p95=20.23 max=54.89 ms; >33ms=1; >50ms=1; raster builds=0; fallback paints=0; HUD builds=0; GPU uploads=0; GC0=0
+Longest GPU submission=1.98 ms; longest buffer swap=54.51 ms
+Campaign days advanced: 0; event panels returned to map: 0

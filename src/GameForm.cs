@@ -83,7 +83,7 @@ namespace Sovereign
 
 		private int menuScroll;
 
-		private int newYear = 2026;
+		private int newYear = 2020;
 
 		private int newDifficulty = 1;
 
@@ -126,7 +126,7 @@ namespace Sovereign
             InitializeAtlasColors();
 			E = new Engine(world);
 			base.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-			Text = "SOVEREIGN — Государство · 0.18";
+			Text = "SOVEREIGN — Государство · 0.19";
 			BackColor = Palette.Bg;
 			ForeColor = Palette.Text;
 			base.AutoScaleMode = AutoScaleMode.None;
@@ -229,9 +229,9 @@ namespace Sovereign
             var rect = new RectangleF(x, y, w, h);
             bool hover = rect.Contains(mouse);
             Round(g, active ? Palette.Selected : hover ? Palette.Hover : Palette.Card, rect, 4);
-            RoundBorder(g, active ? Palette.Gold : hover ? Palette.Muted : Palette.Line, new RectangleF(x + .5f, y + .5f, w - 1, h - 1), 4, 1);
-            if (active) Fill(g, Palette.Gold, x + 1, y + 7, 2, Math.Max(2, h - 14));
-            Txt(g, text, x + 10, y + (h - 18) / 2, 13, active ? Palette.Gold : Palette.Text, active, w - 18);
+            RoundBorder(g, active ? Palette.Accent : hover ? Palette.Muted : Palette.Line, new RectangleF(x + .5f, y + .5f, w - 1, h - 1), 4, 1);
+            if (active) Fill(g, Palette.Accent, x + 1, y + 7, 2, Math.Max(2, h - 14));
+            Txt(g, text, x + 10, y + (h - 18) / 2, 13, Palette.Text, active, w - 18);
             hits.Add(new Hit { Rect = rect, Label = text, Action = action, Tip = tooltip ?? text, FocusTarget = true });
         }
 
@@ -294,6 +294,7 @@ namespace Sovereign
             mapRect = new RectangleF(0, 99, VW, num - 99);
             DrawMap(graphics);
             DrawCommandPanel(graphics);
+            DrawRegionInspector(graphics);
             if (!detailPanel || page == "Карта") DrawOutliner(graphics);
             DrawHeader(graphics);
             DrawNav(graphics);
@@ -329,6 +330,7 @@ namespace Sovereign
 		private Color RegionColor(int i)
 		{
 			Province province = E.S.Provinces[i];
+            if (layer == "Население") return PopulationColor(i);
             if (layer == "Дипломатия") return DiplomaticColor(province.Owner);
             if (layer == "Армии") return Mix(Color.FromArgb(119, 131, 130), Color.FromArgb(234, 195, 131), (float)Math.Min(1, militaryIntensity[i] / 300));
             if (layer == "Экономика") return Mix(Color.FromArgb(125, 119, 104), Color.FromArgb(192, 213, 169), (float)Math.Min(1, (province.Public.Sum() + province.Private.Sum()) / Math.Max(0.001, province.Population) / 4));
@@ -656,6 +658,7 @@ namespace Sovereign
             if (ResearchMouseUp()) return;
             if (keyboardFocusKey != null) { keyboardFocusKey = null; InvalidateHud(); }
             if (DismissLayerPicker(Logical(e.Location))) return;
+            if (MiniMapClick(e)) return;
 			panning = false;
 			CapturePointer(false);
 			if (moved)
@@ -692,7 +695,7 @@ namespace Sovereign
 					Message(E.Order(army, num));
 					return;
 				}
-				selected = num;
+				selected = num; dismissedRegion = -1;
 				foreign = E.S.Provinces[num].Owner;
 				Invalidate();
 			}
@@ -709,6 +712,7 @@ namespace Sovereign
             if (ResearchMouseWheel(e)) return;
             if (mapLayersExpanded) { mapLayersExpanded = false; InvalidateHud(); return; }
             if (ScrollReadiness(e)) return;
+            if (menuScreen == "" && MiniMapRect.Contains(Logical(e.Location))) return;
 			if (showHelp)
 			{
 				return;
@@ -803,22 +807,19 @@ namespace Sovereign
 			Invalidate();
 		}
 
-		public void Home()
-		{
-			int num = (from i in Enumerable.Range(0, W.Regions.Length)
-				where E.S.Provinces[i].Owner == E.S.Player
-				orderby E.S.Provinces[i].Population descending
-				select i).FirstOrDefault();
-			selected = num;
-			CountryInfo countryInfo = W.Countries[E.S.Player];
-			cx = (float)W.Regions[countryInfo.CapitalRegion].X;
-			cy = (float)W.Regions[countryInfo.CapitalRegion].Y;
-			scale = (float)Math.Max(12.0, Math.Min(45.0, 680.0 / Math.Max(6.0, (double)countryInfo.Bounds.Width * 1.5)));
-			army = (from a in E.S.Armies
-				where a.Owner == E.S.Player
-				select a.Id).FirstOrDefault();
-			Invalidate();
-		}
+        public void Home()
+        {
+            dismissedRegion = -1;
+            var country = W.Countries[E.S.Player];
+            int capital = country.CapitalRegion;
+            selected = E.S.Provinces[capital].Owner == E.S.Player ? capital : Enumerable.Range(0,W.Regions.Length)
+                .Where(i=>E.S.Provinces[i].Owner==E.S.Player).OrderByDescending(i=>E.S.Provinces[i].Population).DefaultIfEmpty(-1).First();
+            var focus = W.Regions[selected >= 0 ? selected : capital];
+            cx = (float)focus.X; cy = (float)focus.Y;
+            scale = (float)Math.Max(12,Math.Min(45,680/Math.Max(6,country.Bounds.Width*1.5)));
+            army = E.S.Armies.Where(a=>a.Owner==E.S.Player&&a.Region==selected).Select(a=>a.Id).DefaultIfEmpty(-1).First();
+            Invalidate();
+        }
 
 		private void Save()
 		{
@@ -880,6 +881,7 @@ namespace Sovereign
                 DisposeFrameTiming();
                 DisposeAtlas();
                 cameraRefresh.Dispose();
+                if (flagSheet != null) flagSheet.Dispose();
                 ClearHighlights();
                 ClearUnitBadges();
 
@@ -921,7 +923,7 @@ namespace Sovereign
 			{
 				Minimum = 1940m,
 				Maximum = 2026m,
-				Value = 2026m,
+				Value = 2020m,
 				BackColor = Palette.Card,
 				ForeColor = Palette.Text,
 				BorderStyle = BorderStyle.None,
@@ -1269,7 +1271,7 @@ namespace Sovereign
 			Txt(g, "государств и территорий", num2 + 22f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "областей", num2 + 175f, VH - 188f, 11f, Palette.Muted);
 			Txt(g, "ЭКОНОМИКА  /  ДИПЛОМАТИЯ  /  ТЕХНОЛОГИИ  /  СТРАТЕГИЯ", num, VH - 59f, 12f, Palette.Muted);
-			Txt(g, "0.18   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
+			Txt(g, "0.19   •   ОФЛАЙН   •   РАННЯЯ ВЕРСИЯ", VW - 354f, VH - 59f, 11f, Palette.Gold, bold: true);
 		}
 
 
@@ -1343,6 +1345,7 @@ namespace Sovereign
 
 		private GraphicsPath Rounded(RectangleF r, float radius)
 		{
+            if (radius <= 0) { var rectangle = new GraphicsPath(); rectangle.AddRectangle(r); return rectangle; }
 			float num = Math.Min(radius * 2f, Math.Min(r.Width, r.Height));
 			GraphicsPath graphicsPath = new GraphicsPath();
 			graphicsPath.AddArc(r.X, r.Y, num, num, 180f, 90f);

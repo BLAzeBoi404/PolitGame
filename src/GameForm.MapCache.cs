@@ -33,9 +33,11 @@ namespace Sovereign
             atlasStateDirty=false;
             int ownership = 17, theme = 17, diplomacy = 17;
             unchecked {
-                if (!setup) foreach (var p in E.S.Provinces) {
+                if (!setup) for (int regionId=0;regionId<E.S.Provinces.Length;regionId++) {
+                    var p=E.S.Provinces[regionId];
                     ownership = ownership * 31 + p.Owner;
-                    if (layer == "Ресурсы") theme = theme * 31 + (p.Oil + p.Ore + p.Soil).GetHashCode();
+                    if (layer == "Население") theme = theme * 31 + PopulationColor(regionId).ToArgb();
+                    else if (layer == "Ресурсы") theme = theme * 31 + (p.Oil + p.Ore + p.Soil).GetHashCode();
                     else if (layer == "Инфраструктура") theme = theme * 31 + p.Infrastructure.GetHashCode();
                     else if (layer == "Настроения") theme = theme * 31 + p.Unrest.GetHashCode();
                     else if (layer == "Экономика") { double plants = 0; for (int i = 0; i < 8; i++) plants += p.Public[i] + p.Private[i]; theme = theme * 31 + (plants / Math.Max(.001, p.Population)).GetHashCode(); }
@@ -160,8 +162,8 @@ namespace Sovereign
             atlasTiles.Request(currentTileRequests, synchronousAtlas);
             var state = g.Save(); g.ResetTransform();
             g.InterpolationMode = InterpolationMode.Bilinear; g.PixelOffsetMode = PixelOffsetMode.Half;
-            if(gpuPaintingMap)gpu.Fill(Color.FromArgb(122,148,154),Physical(mapRect));
-            else using (var sea = new SolidBrush(Color.FromArgb(122,148,154))) g.FillRectangle(sea, mapRect.X * UiScale, mapRect.Y * UiScale, mapRect.Width * UiScale, mapRect.Height * UiScale);
+            if(gpuPaintingMap)gpu.Fill(Palette.Sea,Physical(mapRect));
+            else using (var sea = new SolidBrush(Palette.Sea)) g.FillRectangle(sea, mapRect.X * UiScale, mapRect.Y * UiScale, mapRect.Width * UiScale, mapRect.Height * UiScale);
             int missing = 0;
             foreach (var id in currentTileRequests) if (AtlasTiles.Bounds(id).IntersectsWith(view)) {
                 var tile=atlasTiles.Find(id);if(tile==null||(gpuPaintingMap&&!gpu.HasTexture(tile.Image)))missing++;

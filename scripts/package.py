@@ -5,7 +5,7 @@ import json
 import zipfile
 
 root = Path(__file__).resolve().parent.parent
-output = root / 'releases' / 'Sovereign-0.18-windows.zip'
+output = root / 'releases' / 'Sovereign-0.19-windows.zip'
 files = {
     'Sovereign.exe': root / 'bin/Release/net472/Sovereign.exe',
     'OpenTK.dll': root / 'bin/Release/net472/OpenTK.dll',
@@ -33,6 +33,9 @@ files = {
     'docs/CHANGES-0.17.md': root / 'docs/CHANGES-0.17.md',
     'docs/UI-DESIGN.md': root / 'docs/UI-DESIGN.md',
     'docs/CHANGES-0.18.md': root / 'docs/CHANGES-0.18.md',
+    'docs/ECONOMIC-SIMULATION-BRIEF.md': root / 'docs/ECONOMIC-SIMULATION-BRIEF.md',
+    'FLAGS-LICENSE.txt': root / 'assets/FLAGS-LICENSE.txt',
+    'docs/CHANGES-0.19.md': root / 'docs/CHANGES-0.19.md',
     'docs/MILITARY-INTELLIGENCE.md': root / 'docs/MILITARY-INTELLIGENCE.md',
     'docs/CHANGES-0.5.md': root / 'docs/CHANGES-0.5.md',
     'docs/TECHNOLOGIES.md': root / 'docs/TECHNOLOGIES.md',
@@ -41,23 +44,23 @@ files = {
     'docs/CHANGES-0.6.md': root / 'docs/CHANGES-0.6.md',
     'docs/REQUIREMENTS-STATUS.md': root / 'docs/REQUIREMENTS-STATUS.md',
     'docs/PRODUCT-BRIEF.md': root / 'docs/PRODUCT-BRIEF.md',
-    'docs/validation/0.18/README.md': root / 'docs/validation/0.18/README.md',
+    'docs/validation/0.19/README.md': root / 'docs/validation/0.19/README.md',
     'ИСТОЧНИКИ.txt': root / 'docs/archive-0.2/ИСТОЧНИКИ.txt',
-    'ПРОВЕРКИ-СИМУЛЯЦИИ.txt': root / 'docs/validation/0.18/tests-sdk.txt',
-    'ПРОВЕРКИ-ВИДЕОРЕНДЕРА.txt': root / 'docs/validation/0.18/gpu-results.txt',
-    'ПРОВЕРКИ-ИНТЕРФЕЙСА.txt': root / 'docs/validation/0.18/ui-results.txt',
+    'ПРОВЕРКИ-СИМУЛЯЦИИ.txt': root / 'docs/validation/0.19/tests-sdk.txt',
+    'ПРОВЕРКИ-ВИДЕОРЕНДЕРА.txt': root / 'docs/validation/0.19/gpu-results.txt',
+    'ПРОВЕРКИ-ИНТЕРФЕЙСА.txt': root / 'docs/validation/0.19/ui-results.txt',
 }
-for evidence in (root / 'docs/validation/0.18').iterdir():
+for evidence in (root / 'docs/validation/0.19').iterdir():
     if evidence.suffix in ('.txt', '.json', '.png'):
         files[evidence.relative_to(root).as_posix()] = evidence
-receipt = json.loads((root / 'docs/validation/0.18/build-receipt.json').read_text())
+receipt = json.loads((root / 'docs/validation/0.19/build-receipt.json').read_text())
 exe = files['Sovereign.exe']
 if hashlib.sha256(exe.read_bytes()).hexdigest() != receipt['executable_sha256']:
     raise SystemExit('Executable differs from the tested build')
 for name, checksum in receipt['runtime_sha256'].items():
     if hashlib.sha256(files[name].read_bytes()).hexdigest() != checksum:
         raise SystemExit(f'Runtime dependency differs from tested build: {name}')
-source_files = sorted([*root.glob('src/*.cs'), *root.glob('lib/*'), *root.glob('assets/scenario-*.tsv'), root / 'Sovereign.csproj', root / 'assets/world.bin', root / 'assets/app.ico'], key=lambda p: p.relative_to(root).as_posix())
+source_files = sorted([*root.glob('src/*.cs'), *root.glob('lib/*'), *root.glob('assets/scenario-*.tsv'), *root.glob('assets/flag*'), root / 'assets/FLAGS-LICENSE.txt', root / 'Sovereign.csproj', root / 'assets/world.bin', root / 'assets/app.ico'], key=lambda p: p.relative_to(root).as_posix())
 digest = hashlib.sha256()
 for source in source_files:
     digest.update(source.relative_to(root).as_posix().encode() + b'\0' + source.read_bytes() + b'\0')
@@ -73,7 +76,7 @@ for name in ('ПРОВЕРКИ-СИМУЛЯЦИИ.txt', 'ПРОВЕРКИ-ИНТ
 output.parent.mkdir(exist_ok=True)
 with zipfile.ZipFile(output, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
     for name, source in files.items():
-        archive.write(source, 'Sovereign-0.18/' + name)
+        archive.write(source, 'Sovereign-0.19/' + name)
 with zipfile.ZipFile(output) as archive:
     if archive.testzip() is not None:
         raise SystemExit('ZIP integrity check failed')

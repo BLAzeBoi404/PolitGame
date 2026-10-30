@@ -1,0 +1,42 @@
+PASS OpenGL context and compositor start: llvmpipe (LLVM 19.1.7, 256 bits) / 4.5 (Compatibility Profile) Mesa 25.0.7-2+deb13u1
+PASS GPU framebuffer preserves geography, colors and overlays (5x5 color averages, 676/693)
+PASS Camera motion reuses the HUD without rerasterizing its text and panels
+PASS Warm camera motion performs zero bitmap uploads to the GPU
+PASS GPU texture cache remains within its memory budget
+PASS Hovering the command bar redraws only the HUD, preserving map and world caches
+PASS GPU layer popup updates only the HUD and retains all interactive choices
+PASS Keyboard focus survives retained GPU HUD rebuilds without rebuilding the world
+PASS Collapsing the operational summary reuses the GPU world
+PASS The live GPU minimap viewport tracks camera movement with no HUD rebuild or texture upload
+PASS GPU minimap click changes only geographic camera coordinates
+PASS A tooltip remains above the live minimap instead of being overwritten by its GPU image
+PASS World-scale military layer retains own markers and never reveals unshared foreign troops
+PASS Retained world hit targets still select actual formations
+PASS Simulation runs off the window thread
+PASS Read-only HUD clicks enqueue no null action while the worker owns campaign state
+PASS Saving waits until the worker finishes the current day
+PASS A deliberately blocked simulation worker cannot block ten camera presentations
+PASS UI actions wait while the worker owns mutable campaign state
+PASS Completed day publishes state, then executes queued UI actions in order (day=1, page=Экономика, pending=0)
+PASS Worker day produces exactly the same campaign as the synchronous engine
+PASS Queued save contains the completed day and passes validation
+PASS GPU child input selects the starting country directly on the map
+PASS Country-selection atlas also pans without rerasterizing the HUD
+PASS New zoom presents immediately using the overview while detail loads
+PASS Fullscreen transitions retain a working GPU context
+PASS Readiness desk renders through the GPU HUD with active exercise controls
+PASS Trade desk renders through the retained GPU HUD with active controls
+PASS Renderer selection remains reachable in settings
+PASS Resize rebuilds the retained HUD at the real pixel dimensions
+PASS Compatibility renderer can be restored without replacing the campaign
+PASS Recreated renderer restores resources without replacing the campaign
+PASS GPU retained markers include an explicitly sharing partner
+PASS GPU cache rebuild immediately removes revoked partner markers and selection
+PASS GPU contacts render uncertainty without retaining any actual enemy formation
+PASS Removing intelligence also invalidates retained GPU contact hit targets
+PASS GPU HUD retains real region-inspector actions and offline flags
+PASS Roster scrolling defers all army-list reads while the simulation worker owns campaign state
+PASS Deferred readiness scrolling applies after the worker publishes the completed day
+PASS Closing waits for the worker and releases the renderer safely
+Driver: no renderer errors
+Failures: 0

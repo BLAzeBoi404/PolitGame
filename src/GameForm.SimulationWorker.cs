@@ -49,7 +49,7 @@ namespace Sovereign
             if(menuScreen!=""||showHelp||!MapInputAllowed(point))return;
             int region=FindRegion(Geo(point));if(region<0)return;
             if(e.Button==MouseButtons.Right)pendingSimulationActions.Enqueue(()=>Message(E.Order(army,region)));
-            else pendingSimulationActions.Enqueue(()=>{selected=region;foreign=E.S.Provinces[region].Owner;Invalidate();});
+            else pendingSimulationActions.Enqueue(()=>{selected=region;dismissedRegion=-1;foreign=E.S.Provinces[region].Owner;Invalidate();});
         }
         private void FinishSimulation()
         {

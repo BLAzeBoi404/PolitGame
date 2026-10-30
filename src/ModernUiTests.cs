@@ -23,11 +23,11 @@ namespace Sovereign
             using (var frame = RenderFrame()) frame.Save(Path.Combine(directory, "modern-map.png"));
             string marker = hits.First(h => h.Label != null && h.Label.StartsWith("army-group:")).Label;
             click(marker); draw();
-            check(scale == 45 && army >= 0 && armyMapGroups.All(g => !g.Overview) && E.S.Armies.Any(a => a.Id == army && a.Region == selected), "Clicking a sector zooms to an actual formation and restores detailed markers");
+            check(scale == 80 && army >= 0 && armyMapGroups.All(g => !g.Overview) && E.S.Armies.Any(a => a.Id == army && a.Region == selected), "Clicking a sector zooms to an actual formation and restores detailed markers");
             Home(); scale = 14; draw();
             float oldScale = scale, oldCx = cx; int oldSelection = selected;
             click("map:layers"); draw();
-            check(mapLayersExpanded && MapLayers.All(name => hits.Any(h => h.Label == name)) && !MapInputAllowed(new Point(700, 450)), "Layer picker exposes all seven named modes and blocks map interaction underneath");
+            check(mapLayersExpanded && MapLayers.All(name => hits.Any(h => h.Label == name)) && !MapInputAllowed(new Point(700, 450)), "Layer picker exposes all named modes and blocks map interaction underneath");
             OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, 700, 450, 0));
             OnMouseMove(new MouseEventArgs(MouseButtons.Left, 0, 740, 450, 0));
             OnMouseUp(new MouseEventArgs(MouseButtons.Left, 1, 740, 450, 0));

@@ -49,15 +49,17 @@ namespace Sovereign
             var bitmap = new Bitmap(scene.Width, scene.Height, PixelFormat.Format32bppPArgb);
             try {
                 using (var g = Graphics.FromImage(bitmap)) {
-                    g.Clear(Color.FromArgb(122, 148, 154));
+                    g.Clear(Palette.Sea);
                     var view = scene.Coverage; var clip = view; clip.Inflate(2 / scene.PixelScale, 2 / scene.PixelScale);
                     using (var matrix = new Matrix(scene.PixelScale, 0, 0, scene.PixelScale, scene.Width / 2f - scene.X * scene.PixelScale, scene.Height / 2f - scene.Y * scene.PixelScale)) {
-                        g.Transform = matrix; g.SmoothingMode = scene.Quality == 2 ? SmoothingMode.AntiAlias : SmoothingMode.None;
+                        g.Transform = matrix;
+                        using (var sea = new LinearGradientBrush(new RectangleF(-180,-90,360,180), Color.FromArgb(12,22,44), Color.FromArgb(23,43,66), 90)) g.FillRectangle(sea, view);
+                        g.SmoothingMode = scene.Quality == 2 ? SmoothingMode.AntiAlias : SmoothingMode.None;
                         using (var countries = new GraphicsPath()) using (var regions = new GraphicsPath()) {
                             for (int i = 0; i < scene.Countries.Length; i++) if (scene.Countries[i].Bounds.IntersectsWith(view)) {
                                 using (var path = scene.Countries[i].RasterPath(clip, scene.Overview ? 4 : scene.Zoom)) {
                                     if (path.PointCount == 0) continue;
-                                    using (var brush = new SolidBrush(scene.CountryColors[i])) g.FillPath(brush, path);
+                                    FillLand(g, path, scene.Countries[i].Bounds, scene.CountryColors[i], scene.Overview);
                                     if (!scene.Overview) countries.AddPath(path, false);
                                 }
                             }
@@ -67,20 +69,23 @@ namespace Sovereign
                                 if (!scene.FillRegions[i] && !border) continue;
                                 using (var path = land.RasterPath(clip, scene.Overview ? 4 : scene.Zoom)) {
                                     if (path.PointCount == 0) continue;
-                                    if (scene.FillRegions[i]) using (var brush = new SolidBrush(scene.RegionColors[i])) g.FillPath(brush, path);
+                                    if (scene.FillRegions[i]) FillLand(g, path, land.Bounds, scene.RegionColors[i], scene.Overview);
                                     if (border) regions.AddPath(path, false);
                                 }
                             }
                             g.SmoothingMode = SmoothingMode.None;
-                            using (var pen = new Pen(Color.FromArgb(64, 64, 79, 76), .65f / scene.PixelScale)) if (regions.PointCount > 0) g.DrawPath(pen, regions);
-                            using (var pen = new Pen(Color.FromArgb(91, 103, 91), 1.1f / scene.PixelScale)) if (countries.PointCount > 0) g.DrawPath(pen, countries);
+                            using (var pen = new Pen(Color.FromArgb(160, 21, 25, 34), 1.05f / scene.PixelScale)) if (regions.PointCount > 0) g.DrawPath(pen, regions);
+                            if (countries.PointCount > 0) {
+                                using (var outer = new Pen(Color.FromArgb(125, 6, 12, 23), 5.2f / scene.PixelScale)) { outer.LineJoin = LineJoin.Round; g.DrawPath(outer, countries); }
+                                using (var pen = new Pen(Color.FromArgb(12, 16, 24), 1.7f / scene.PixelScale)) { pen.LineJoin = LineJoin.Round; g.DrawPath(pen, countries); }
+                            }
                         }
                     }
                     g.ResetTransform();
                     if (scene.Texture && !scene.Overview) {
                         using (var tile = new Bitmap(32, 32)) {
                             for (int y = 0; y < 32; y++) for (int x = 0; x < 32; x++) tile.SetPixel(x, y, Color.FromArgb((x * 17 + y * 13) % 9, 35, 30, 20));
-                            using (var brush = new TextureBrush(tile)) g.FillRectangle(brush, 0, 0, scene.Width, scene.Height);
+                            using (var brush = new TextureBrush(tile)) { brush.TranslateTransform(-scene.Coverage.X*scene.PixelScale,-scene.Coverage.Y*scene.PixelScale); g.FillRectangle(brush, 0, 0, scene.Width, scene.Height); }
                         }
                     }
 
@@ -88,6 +93,14 @@ namespace Sovereign
                 scene.BuildMilliseconds = timer.Elapsed.TotalMilliseconds;
                 return bitmap;
             } catch { bitmap.Dispose(); throw; }
+        }
+        private static void FillLand(Graphics g, GraphicsPath path, RectangleF bounds, Color color, bool overview)
+        {
+            if (overview || bounds.Width <= 0 || bounds.Height <= 0) { using(var brush = new SolidBrush(color)) g.FillPath(brush,path); return; }
+            Color light = Color.FromArgb(Math.Min(255,color.R+12),Math.Min(255,color.G+12),Math.Min(255,color.B+12));
+            Color dark = Color.FromArgb((int)(color.R*.82),(int)(color.G*.82),(int)(color.B*.82));
+            // World-anchored shading is identical on either side of a tile boundary.
+            using(var brush = new LinearGradientBrush(bounds,light,dark,60)) g.FillPath(brush,path);
         }
         // Choose labels once in world-pixel space. Per-tile collision filtering could
         // keep a label in one tile and reject its other half in the neighbouring tile.
@@ -128,15 +141,17 @@ namespace Sovereign
             using(var g=Graphics.FromImage(bitmap))
             using(var countryFont=new Font("Georgia",12*ratio,FontStyle.Bold,GraphicsUnit.Pixel))
             using(var regionFont=new Font("Segoe UI",11*ratio,FontStyle.Regular,GraphicsUnit.Pixel))
-            using(var ink=new SolidBrush(Color.FromArgb(52,66,59)))
-            using(var halo=new SolidBrush(Color.FromArgb(150,246,243,221)))
+            using(var ink=new SolidBrush(Color.FromArgb(240,234,219)))
+            using(var halo=new SolidBrush(Color.FromArgb(235,13,17,27)))
             using(var format=new StringFormat {Trimming=StringTrimming.EllipsisCharacter,FormatFlags=StringFormatFlags.NoWrap}) {
                 g.TextRenderingHint=TextRenderingHint.AntiAliasGridFit;
                 foreach(var label in labels) {
                     var box=label.Bounds;box.Offset(s.Width/2f-s.X*s.PixelScale,s.Height/2f-s.Y*s.PixelScale);
                     if(box.Right<0||box.Bottom<0||box.Left>s.Width||box.Top>s.Height)continue;
                     var shadow=box;shadow.Offset(ratio,ratio);var font=label.Country?countryFont:regionFont;
-                    g.DrawString(label.Text,font,halo,shadow,format);g.DrawString(label.Text,font,ink,box,format);
+                    g.DrawString(label.Text,font,halo,shadow,format);
+                    shadow.Offset(-2*ratio,-2*ratio);g.DrawString(label.Text,font,halo,shadow,format);
+                    g.DrawString(label.Text,font,ink,box,format);
                 }
             }
         }

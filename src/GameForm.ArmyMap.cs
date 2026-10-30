@@ -22,7 +22,7 @@ namespace Sovereign
         private void PrepareArmyGroups()
         {
             // Fixed world sectors do not shuffle as the camera pans. Detail stays exact.
-            int cell = scale < 3 ? 48 : scale < 6 ? 24 : scale < 12 ? 12 : scale < 24 ? 6 : 0;
+            int cell = scale < 3 ? 48 : scale < 6 ? 24 : scale < 12 ? 12 : scale < 24 ? 6 : scale < 48 ? 3 : 0;
             long fingerprint = 17 + cell;
             unchecked { foreach (var a in E.S.Armies) {
                 if (!E.SharesMilitaryIntel(E.S.Player, a.Owner)) continue;
@@ -39,7 +39,7 @@ namespace Sovereign
                 int column = cell == 0 ? 0 : (int)Math.Floor((region.X + 180) / cell);
                 int row = cell == 0 ? 0 : (int)Math.Floor((region.Y + 90) / cell);
                 int sector = row * 128 + column;
-                long key = cell == 0 ? (long)a.Owner * W.Regions.Length + a.Region : (long)a.Owner * 4096 + sector;
+                long key = cell == 0 ? (long)a.Owner * W.Regions.Length + a.Region : (long)a.Owner * 16384 + sector;
                 if ((cell == 0 && a.Target >= 0) || !stationary.TryGetValue(key,out group)) {
                     group = new ArmyMapGroup { Overview = cell > 0, Sector = sector };
                     armyMapGroups.Add(group);
@@ -83,17 +83,17 @@ namespace Sovereign
                 }
                 if (!(gpuRecordingWorld?GpuWorldVisible(position):mapRect.Contains(position))) continue;
                 var bounds = new RectangleF(position.X-34,position.Y-18,70,37);
-                int badgeId = group.Overview ? -2000000-unit.Owner*4096-group.Sector : group.Units.Count == 1 ? unit.Id : -1-unit.Owner*W.Regions.Length-unit.Region;
+                int badgeId = group.Overview ? -2000000-unit.Owner*16384-group.Sector : group.Units.Count == 1 ? unit.Id : -1-unit.Owner*W.Regions.Length-unit.Region;
                 DrawUnitBadge(g,unit,bounds,group.Personnel,group.Units.Count,group.Stars,group.Readiness,badgeId,chosen,group.Overview);
                 var captured = group;
                 hits.Add(new Hit { Rect = gpuRecordingWorld?bounds:RectangleF.Intersect(bounds,mapRect), Label = "army-group:"+badgeId, Tip = group.Tip, Action = () => {
                     if (!E.SharesMilitaryIntel(E.S.Player, captured.Units[0].Owner)) return;
                     int index = captured.Units.FindIndex(a => a.Id == army); var next = captured.Units[(index + 1) % captured.Units.Count];
-                    army = next.Id; selected = next.Region; foreign = next.Owner;
+                    army = next.Id; selected = next.Region; dismissedRegion = -1; foreign = next.Owner;
                     if (captured.Overview) {
                         var origin = W.Regions[next.Region]; cx = (float)origin.X; cy = (float)origin.Y;
                         if (next.Target >= 0) { var target = W.Regions[next.Target]; float progress = (float)(1 - Rules.Clamp(next.Days / next.TotalDays, 0, 1)); cx += ((float)target.X-cx)*progress; cy += ((float)target.Y-cy)*progress; }
-                        scale = 45; ClampCamera();
+                        scale = 80; ClampCamera();
                     }
                     Invalidate();
                 } });
